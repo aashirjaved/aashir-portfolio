@@ -48,6 +48,8 @@ export function generateMetadata({ params, pathname }: { params: any; pathname: 
   return {
     title: metadata.title,
     description: metadata.description,
+    // Set the metadataBase to resolve relative URLs for OG and Twitter images
+    metadataBase: new URL('https://aashir.net'),
     // Open Graph metadata for social media sharing
     openGraph: {
       title: metadata.title,

@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Sidebar } from "@/components/sidebar"
 import { FloatingTags } from "@/components/floating-tags"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { Suspense } from "react"
 
 const skills = [
   {
@@ -67,7 +68,8 @@ const achievements = [
   },
 ]
 
-export default function About() {
+// About page content component that uses hooks
+function AboutContent() {
   const isMobile = useIsMobile()
   
   return (
@@ -282,5 +284,18 @@ export default function About() {
         </div>
       </div>
     </div>
+  )
+}
+
+// Main export wrapped in Suspense
+export default function About() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+        <p className="text-slate-600">Loading...</p>
+      </div>
+    }>
+      <AboutContent />
+    </Suspense>
   )
 }

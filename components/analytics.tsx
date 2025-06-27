@@ -12,8 +12,24 @@ export default function Analytics() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    // Make sure we're in the browser environment
+    if (typeof window === 'undefined') return;
+    
     if (pathname && window.gtag) {
-      const url = pathname + searchParams.toString();
+      let url = pathname;
+      
+      // Safely handle searchParams
+      try {
+        if (searchParams && searchParams.toString) {
+          const paramsString = searchParams.toString();
+          if (paramsString) {
+            url += `?${paramsString}`;
+          }
+        }
+      } catch (e) {
+        console.error("Error with search params:", e);
+      }
+      
       // Track page views
       window.gtag("config", GA_MEASUREMENT_ID, {
         page_path: url,

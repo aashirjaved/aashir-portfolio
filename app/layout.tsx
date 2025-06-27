@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import Analytics from '@/components/analytics'
 import { generateMetadata as getMetadata } from './layout-metadata'
 import './globals.css'
+import { Suspense } from 'react'
 
 // Load Inter font with subsets
 const inter = Inter({ subsets: ['latin'] })
@@ -33,7 +34,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Analytics />
+          <Suspense fallback={null}>
+            <Analytics />
+          </Suspense>
           {children}
         </ThemeProvider>
       </body>

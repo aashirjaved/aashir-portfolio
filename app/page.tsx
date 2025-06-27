@@ -8,8 +8,10 @@ import { Sidebar } from "@/components/sidebar"
 import { FloatingTags } from "@/components/floating-tags"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { PersonSchema, WebsiteSchema } from "@/components/structured-data"
+import { Suspense } from "react"
 
-export default function Home() {
+// Main content component that uses hooks
+function HomeContent() {
   const isMobile = useIsMobile()
   
   return (
@@ -125,5 +127,18 @@ export default function Home() {
         </div>
       </div>
     </div>
+  )
+}
+
+// Main export wrapped in Suspense
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+        <p className="text-slate-600">Loading...</p>
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   )
 }

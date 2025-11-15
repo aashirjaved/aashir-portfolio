@@ -7,6 +7,7 @@ import { useIsMobile } from "@/hooks/use-mobile"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const navigationItems = [
   { name: "Home", href: "/", key: "home" },
@@ -63,6 +64,7 @@ export function TopNavigation({ activeSection }: TopNavigationProps) {
           <div className="flex items-center gap-3">
             {!isMobile && (
               <>
+                <ThemeToggle />
                 <Button variant="ghost" size="icon" className="h-9 w-9" asChild>
                   <Link href="https://github.com/aashirjaved" target="_blank" aria-label="GitHub">
                     <Github className="h-4 w-4" />
@@ -118,6 +120,9 @@ export function TopNavigation({ activeSection }: TopNavigationProps) {
                 </Link>
               ))}
               <div className="flex items-center gap-2 pt-4 border-t border-border mt-2">
+                <div className="flex-1">
+                  <ThemeToggle />
+                </div>
                 <Button variant="ghost" size="sm" className="flex-1" asChild>
                   <Link href="https://github.com/aashirjaved" target="_blank">
                     <Github className="h-4 w-4 mr-2" />

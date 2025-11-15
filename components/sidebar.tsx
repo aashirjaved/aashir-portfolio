@@ -4,6 +4,8 @@ import { Github, Linkedin, User, Menu, X } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { motion, AnimatePresence } from "framer-motion"
+import { ScaleOnHover } from "@/components/animations"
 
 const navigationItems = [
   { name: "Home", href: "/", key: "home" },
@@ -70,20 +72,27 @@ export function Sidebar({ activeSection }: SidebarProps) {
       {/* Navigation */}
       <nav className="flex-1 p-6">
         <ul className="space-y-2">
-          {navigationItems.map((item) => (
-            <li key={item.name}>
-              <Link
-                href={item.href}
-                className={`block px-4 py-3 text-sm rounded-xl transition-all duration-200 font-medium ${
-                  activeSection === item.key
-                    ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 hover:shadow-sm"
-                }`}
-                onClick={isMobile ? () => setIsMenuOpen(false) : undefined}
-              >
-                {item.name}
-              </Link>
-            </li>
+          {navigationItems.map((item, index) => (
+            <motion.li
+              key={item.name}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.3 }}
+            >
+              <ScaleOnHover scale={1.02}>
+                <Link
+                  href={item.href}
+                  className={`block px-4 py-3 text-sm rounded-xl transition-all duration-200 font-medium ${
+                    activeSection === item.key
+                      ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 hover:shadow-sm"
+                  }`}
+                  onClick={isMobile ? () => setIsMenuOpen(false) : undefined}
+                >
+                  {item.name}
+                </Link>
+              </ScaleOnHover>
+            </motion.li>
           ))}
         </ul>
       </nav>
@@ -91,22 +100,26 @@ export function Sidebar({ activeSection }: SidebarProps) {
       {/* Footer Links */}
       <div className="p-6 border-t border-slate-200/50">
         <div className="space-y-3">
-          <Link
-            href="https://github.com/aashirjaved"
-            target="_blank"
-            className="flex items-center text-sm text-slate-600 hover:text-slate-900 transition-colors p-2 rounded-lg hover:bg-slate-50"
-          >
-            <Github className="w-4 h-4 mr-3" />
-            GitHub
-          </Link>
-          <Link
-            href="https://www.linkedin.com/in/aashirjaved/"
-            target="_blank"
-            className="flex items-center text-sm text-slate-600 hover:text-slate-900 transition-colors p-2 rounded-lg hover:bg-slate-50"
-          >
-            <Linkedin className="w-4 h-4 mr-3" />
-            LinkedIn
-          </Link>
+          <ScaleOnHover>
+            <Link
+              href="https://github.com/aashirjaved"
+              target="_blank"
+              className="flex items-center text-sm text-slate-600 hover:text-slate-900 transition-colors p-2 rounded-lg hover:bg-slate-50"
+            >
+              <Github className="w-4 h-4 mr-3" />
+              GitHub
+            </Link>
+          </ScaleOnHover>
+          <ScaleOnHover>
+            <Link
+              href="https://www.linkedin.com/in/aashirjaved/"
+              target="_blank"
+              className="flex items-center text-sm text-slate-600 hover:text-slate-900 transition-colors p-2 rounded-lg hover:bg-slate-50"
+            >
+              <Linkedin className="w-4 h-4 mr-3" />
+              LinkedIn
+            </Link>
+          </ScaleOnHover>
         </div>
       </div>
     </>
@@ -124,24 +137,32 @@ export function Sidebar({ activeSection }: SidebarProps) {
       )}
 
       {/* Mobile sidebar (slide-in) */}
-      {isMobile && (
-        <div
-          className={`fixed inset-0 z-40 ${isMenuOpen ? 'block' : 'hidden'}`}
-          onClick={() => setIsMenuOpen(false)}
-        >
-          <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" />
-          <div
-            className={`fixed top-0 right-0 h-full w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out ${
-              isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-            }`}
-            onClick={(e) => e.stopPropagation()}
+      <AnimatePresence>
+        {isMobile && isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40"
+            onClick={() => setIsMenuOpen(false)}
           >
-            <div className="pt-16 h-full flex flex-col overflow-y-auto">
-              {sidebarContent}
-            </div>
-          </div>
-        </div>
-      )}
+            <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" />
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 h-full w-64 bg-white shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="pt-16 h-full flex flex-col overflow-y-auto">
+                {sidebarContent}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }

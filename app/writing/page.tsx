@@ -1,9 +1,13 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import { Input } from "@/components/ui/input"
 import { Github, ExternalLink, Calendar, BookOpen, Sparkles, TrendingUp, Clock } from "lucide-react"
 import Link from "next/link"
-import { Sidebar } from "@/components/sidebar"
+import { TopNavigation } from "@/components/top-navigation"
 import { FloatingTags } from "@/components/floating-tags"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -11,6 +15,7 @@ import { blogPosts, contentCalendar } from "@/data/blog-data"
 import { ArticleSchema } from "@/components/structured-data"
 import Image from "next/image"
 import { Suspense } from "react"
+import { FadeIn, CardHover, StaggerContainer, StaggerItem, ScaleOnHover } from "@/components/animations"
 
 // WritingContent component with the actual content
 function WritingContent() {
@@ -19,38 +24,46 @@ function WritingContent() {
   const isMobile = useIsMobile()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex">
+    <div className="min-h-screen bg-background">
       <FloatingTags />
-      <Sidebar activeSection="writing" />
+      <TopNavigation activeSection="writing" />
 
-      {/* Main Content */}
-      <div className={`flex-1 ${isMobile ? 'ml-0 pt-16' : 'ml-64'}`}>
-        <div className={`max-w-4xl mx-auto ${isMobile ? 'p-6' : 'p-12'}`}>
-          
-          {/* Add structured data for the first featured article */}
-          {featuredArticles.length > 0 && (
-            <ArticleSchema
-              title={featuredArticles[0].title}
-              description={featuredArticles[0].description}
-              url={`https://aashir.net/writing/${featuredArticles[0].slug}`}
-              image={featuredArticles[0].image || "/me.png"}
-              datePublished={featuredArticles[0].date}
-              keywords={featuredArticles[0].tags}
-            />
-          )}
-          
-          <div className="mb-12">
-            <h1 className={`${isMobile ? 'text-3xl' : 'text-4xl'} font-bold bg-gradient-to-r from-slate-900 via-blue-800 to-purple-800 bg-clip-text text-transparent mb-4`}>
-              Writing
-            </h1>
-            <p className={`${isMobile ? 'text-lg' : 'text-xl'} text-slate-600 leading-relaxed`}>
-              Technical insights on AI, full-stack development, infrastructure, and engineering leadership from
-              real-world production experience.
-            </p>
-          </div>
+      {/* Add structured data for the first featured article */}
+      {featuredArticles.length > 0 && (
+        <ArticleSchema
+          title={featuredArticles[0].title}
+          description={featuredArticles[0].description}
+          url={`https://aashir.net/writing/${featuredArticles[0].slug}`}
+          image={featuredArticles[0].image || "/me.png"}
+          datePublished={featuredArticles[0].date}
+          keywords={featuredArticles[0].tags}
+        />
+      )}
 
-          {/* Tabs for Articles and Content Calendar */}
-          <Tabs defaultValue="articles" className="mb-8">
+      {/* Hero Header */}
+      <section className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 border-b">
+        <div className="max-w-7xl mx-auto">
+          <FadeIn delay={0.1} direction="up">
+            <div className="text-center max-w-3xl mx-auto">
+              <h1 className={`${isMobile ? 'text-4xl' : 'text-5xl'} font-bold mb-4`}>
+                <span className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                  Writing
+                </span>
+              </h1>
+              <p className={`${isMobile ? 'text-lg' : 'text-xl'} text-muted-foreground leading-relaxed`}>
+                Technical insights on AI, full-stack development, infrastructure, and engineering leadership from
+                real-world production experience.
+              </p>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* Content */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+
+          <Tabs defaultValue="articles">
             <TabsList>
               <TabsTrigger value="articles">Articles</TabsTrigger>
               <TabsTrigger value="upcoming">Upcoming Content</TabsTrigger>
@@ -59,247 +72,264 @@ function WritingContent() {
             <TabsContent value="articles" className="mt-6">
               {/* Featured Articles */}
               <div className="mb-16">
-                <div className="flex items-center gap-3 mb-8">
-                  <Sparkles className="w-5 h-5 text-yellow-500" />
-                  <h2 className="text-sm font-bold text-purple-600 uppercase tracking-wider">Featured Articles</h2>
-                </div>
+                <FadeIn delay={0.2} direction="up">
+                  <div className="flex items-center gap-3 mb-8 justify-center">
+                    <Sparkles className="w-5 h-5 text-yellow-500" />
+                    <h2 className="text-sm font-bold text-primary uppercase tracking-wider">Featured Articles</h2>
+                  </div>
+                </FadeIn>
 
-                <div className="space-y-8">
+                <StaggerContainer className="space-y-8" staggerDelay={0.1}>
                   {featuredArticles.map((post, index) => (
-                    <div
-                      key={index}
-                      className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden hover:shadow-2xl transition-all duration-300 group"
-                    >
-                      <div className={`h-1 bg-gradient-to-r from-blue-500 to-indigo-600`}></div>
-
-                      <div className={`${isMobile ? 'p-6' : 'p-8'}`}>
-                        <div className={`flex ${isMobile ? 'flex-col' : 'items-start justify-between'} mb-4`}>
-                          <div className="flex-1">
-                            <h3 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-slate-900 mb-3 group-hover:text-blue-700 transition-colors`}>
-                              <Link href={`/writing/${post.slug}`}>
-                                {post.title}
-                              </Link>
-                            </h3>
-                            <div className={`flex ${isMobile ? 'flex-wrap' : 'items-center'} gap-${isMobile ? '4' : '6'} text-sm text-slate-500 mb-4`}>
-                              <div className="flex items-center gap-2">
-                                <Calendar className="w-4 h-4" />
-                                {post.date}
+                    <StaggerItem key={index}>
+                      <CardHover>
+                        <Card className="border-2 overflow-hidden hover:shadow-xl transition-all">
+                          <div className="h-1.5 bg-gradient-to-r from-blue-500 to-indigo-600" />
+                          <CardHeader>
+                            <div className={`flex ${isMobile ? 'flex-col' : 'items-start justify-between'} gap-4`}>
+                              <div className="flex-1">
+                                <CardTitle className={`${isMobile ? 'text-xl' : 'text-2xl'} mb-3`}>
+                                  <Link href={`/writing/${post.slug}`} className="hover:text-primary transition-colors">
+                                    {post.title}
+                                  </Link>
+                                </CardTitle>
+                                <div className={`flex ${isMobile ? 'flex-wrap' : 'items-center'} gap-4 text-sm text-muted-foreground mb-4`}>
+                                  <div className="flex items-center gap-2">
+                                    <Calendar className="w-4 h-4" />
+                                    {post.date}
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <BookOpen className="w-4 h-4" />
+                                    {post.readingTime}
+                                  </div>
+                                  <Badge variant="secondary">{post.category}</Badge>
+                                </div>
                               </div>
-                              <div className="flex items-center gap-2">
-                                <BookOpen className="w-4 h-4" />
-                                {post.readingTime}
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-xs font-medium bg-blue-100 text-blue-800 rounded-full px-2 py-1">{post.category}</span>
-                              </div>
-                            </div>
-                          </div>
-                          <Link
-                            href={`/writing/${post.slug}`}
-                            className={`text-slate-400 hover:text-blue-600 transition-colors p-2 rounded-lg hover:bg-blue-50 ${isMobile ? 'self-end' : ''}`}
-                          >
-                            <ExternalLink className="w-5 h-5" />
-                          </Link>
-                        </div>
-
-                        <p className="text-slate-600 mb-4">{post.description}</p>
-
-                        <div className="flex items-center justify-between">
-                          <div className="flex flex-wrap gap-2">
-                            {post.tags.slice(0, 3).map((tag, i) => (
-                              <span
-                                key={i}
-                                className="text-xs font-medium bg-slate-100 text-slate-700 rounded-full px-2 py-1"
+                              <Link
+                                href={`/writing/${post.slug}`}
+                                className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-lg hover:bg-muted"
                               >
-                                {tag}
-                              </span>
-                            ))}
-                            {post.tags.length > 3 && (
-                              <span className="text-xs font-medium bg-slate-100 text-slate-500 rounded-full px-2 py-1">
-                                +{post.tags.length - 3}
-                              </span>
-                            )}
-                          </div>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="text-slate-500 hover:text-blue-600 hover:bg-blue-50"
-                            asChild
-                          >
-                            <Link href={`/writing/${post.slug}`}>
-                              Read more
-                              <ExternalLink className="w-3 h-3 ml-1" />
-                            </Link>
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
+                                <ExternalLink className="w-5 h-5" />
+                              </Link>
+                            </div>
+                          </CardHeader>
+                          <CardContent>
+                            <CardDescription className="mb-4">{post.description}</CardDescription>
+
+                            <div className="flex items-center justify-between">
+                              <div className="flex flex-wrap gap-2">
+                                {post.tags.slice(0, 3).map((tag, i) => (
+                                  <Badge key={i} variant="outline" className="text-xs">
+                                    {tag}
+                                  </Badge>
+                                ))}
+                                {post.tags.length > 3 && (
+                                  <Badge variant="outline" className="text-xs text-muted-foreground">
+                                    +{post.tags.length - 3}
+                                  </Badge>
+                                )}
+                              </div>
+                              <ScaleOnHover>
+                                <Button size="sm" variant="ghost" asChild>
+                                  <Link href={`/writing/${post.slug}`}>
+                                    Read more
+                                    <ExternalLink className="w-3 h-3 ml-1" />
+                                  </Link>
+                                </Button>
+                              </ScaleOnHover>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </CardHover>
+                    </StaggerItem>
                   ))}
-                </div>
+                </StaggerContainer>
               </div>
 
               {/* Other Articles */}
               <div className="mb-16">
-                <div className="flex items-center gap-3 mb-8">
-                  <TrendingUp className="w-5 h-5 text-blue-500" />
-                  <h2 className="text-sm font-bold text-blue-600 uppercase tracking-wider">More Articles</h2>
-                </div>
+                <FadeIn delay={0.3} direction="up">
+                  <div className="flex items-center gap-3 mb-8 justify-center">
+                    <TrendingUp className="w-5 h-5 text-primary" />
+                    <h2 className="text-sm font-bold text-primary uppercase tracking-wider">More Articles</h2>
+                  </div>
+                </FadeIn>
 
-                <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-2 gap-8'}`}>
+                <StaggerContainer className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'} gap-6`} staggerDelay={0.1}>
                   {otherArticles.map((post, index) => (
-                    <div
-                      key={index}
-                      className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 overflow-hidden hover:shadow-xl transition-all duration-300 group"
-                    >
-                      <div className={`p-6`}>
-                        <h3 className={`text-lg font-bold text-slate-900 mb-2 group-hover:text-blue-700 transition-colors`}>
-                          <Link href={`/writing/${post.slug}`}>{post.title}</Link>
-                        </h3>
-                        <div className={`flex flex-wrap gap-4 text-xs text-slate-500 mb-3`}>
-                          <div className="flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
-                            {post.date}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {post.readingTime}
-                          </div>
-                        </div>
-                        <p className="text-slate-600 text-sm mb-4 line-clamp-2">{post.description}</p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium bg-blue-100 text-blue-800 rounded-full px-2 py-1">
-                            {post.category}
-                          </span>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="text-xs text-slate-500 hover:text-blue-600 hover:bg-blue-50 p-2 h-auto"
-                            asChild
-                          >
-                            <Link href={`/writing/${post.slug}`}>
-                              Read
-                              <ExternalLink className="w-3 h-3 ml-1" />
-                            </Link>
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
+                    <StaggerItem key={index}>
+                      <CardHover>
+                        <Card className="border-2 hover:shadow-xl transition-all h-full">
+                          <CardHeader>
+                            <CardTitle className="text-lg mb-2">
+                              <Link href={`/writing/${post.slug}`} className="hover:text-primary transition-colors">
+                                {post.title}
+                              </Link>
+                            </CardTitle>
+                            <div className="flex flex-wrap gap-4 text-xs text-muted-foreground mb-3">
+                              <div className="flex items-center gap-1">
+                                <Calendar className="w-3 h-3" />
+                                {post.date}
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Clock className="w-3 h-3" />
+                                {post.readingTime}
+                              </div>
+                            </div>
+                          </CardHeader>
+                          <CardContent>
+                            <CardDescription className="text-sm mb-4 line-clamp-2">{post.description}</CardDescription>
+                            <div className="flex items-center justify-between">
+                              <Badge variant="secondary" className="text-xs">{post.category}</Badge>
+                              <ScaleOnHover>
+                                <Button size="sm" variant="ghost" className="text-xs p-2 h-auto" asChild>
+                                  <Link href={`/writing/${post.slug}`}>
+                                    Read
+                                    <ExternalLink className="w-3 h-3 ml-1" />
+                                  </Link>
+                                </Button>
+                              </ScaleOnHover>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </CardHover>
+                    </StaggerItem>
                   ))}
-                </div>
+                </StaggerContainer>
               </div>
             </TabsContent>
             
             <TabsContent value="upcoming" className="mt-6">
-              <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 mb-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <Sparkles className="w-5 h-5 text-yellow-500" />
-                  <h2 className="text-sm font-bold text-purple-600 uppercase tracking-wider">Content Calendar</h2>
-                </div>
-                
-                <p className="text-slate-600 mb-8">
-                  Here's what I'm currently working on. Topics may evolve as I research and write, but this gives you an idea of what's coming up next.
-                </p>
-                
-                <div className="space-y-6">
-                  {contentCalendar.map((item, index) => (
-                    <div key={index} className="flex gap-6 pb-6 border-b border-slate-100">
-                      <div className="w-24 shrink-0">
-                        <div className="text-sm font-medium text-slate-500">{item.targetDate}</div>
-                        <div className={`mt-1 text-xs font-semibold px-2 py-1 rounded-full inline-block
-                          ${item.status === 'published' ? 'bg-green-100 text-green-800' : 
-                            item.status === 'in-progress' ? 'bg-blue-100 text-blue-800' : 
-                            'bg-slate-100 text-slate-800'}`}
-                        >
-                          {item.status.replace('-', ' ')}
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-medium text-slate-900 mb-1">{item.title}</h3>
-                        {item.description && <p className="text-sm text-slate-600 mb-2">{item.description}</p>}
-                        <div className="flex flex-wrap gap-2">
-                          {item.topics.slice(0, 3).map((topic, i) => (
-                            <span key={i} className="text-xs font-medium bg-slate-100 text-slate-700 rounded-full px-2 py-1">
-                              {topic}
-                            </span>
-                          ))}
-                          {item.topics.length > 3 && (
-                            <span className="text-xs font-medium bg-slate-100 text-slate-500 rounded-full px-2 py-1">
-                              +{item.topics.length - 3}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="w-20 shrink-0 text-center">
-                        <div className={`text-xs font-semibold px-2 py-1 rounded-full
-                          ${item.type === 'blog' ? 'bg-indigo-100 text-indigo-800' : 
-                            item.type === 'tutorial' ? 'bg-emerald-100 text-emerald-800' : 
-                            item.type === 'video' ? 'bg-red-100 text-red-800' : 
-                            'bg-amber-100 text-amber-800'}`}
-                        >
-                          {item.type}
-                        </div>
-                      </div>
+              <FadeIn delay={0.2} direction="up">
+                <Card className="border-2 mb-12">
+                  <CardHeader>
+                    <div className="flex items-center gap-3">
+                      <Sparkles className="w-5 h-5 text-yellow-500" />
+                      <CardTitle className="text-sm font-bold text-primary uppercase tracking-wider">Content Calendar</CardTitle>
                     </div>
-                  ))}
-                </div>
-              </div>
+                    <Separator />
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="mb-8">
+                      Here's what I'm currently working on. Topics may evolve as I research and write, but this gives you an idea of what's coming up next.
+                    </CardDescription>
+                    
+                    <div className="space-y-6">
+                      {contentCalendar.map((item, index) => (
+                        <div key={index} className="flex gap-6 pb-6 border-b last:border-0">
+                          <div className="w-24 shrink-0">
+                            <div className="text-sm font-medium text-muted-foreground">{item.targetDate}</div>
+                            <Badge 
+                              variant={item.status === 'published' ? 'default' : item.status === 'in-progress' ? 'secondary' : 'outline'}
+                              className="mt-1 text-xs"
+                            >
+                              {item.status.replace('-', ' ')}
+                            </Badge>
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="font-medium mb-1">{item.title}</h3>
+                            {item.description && <CardDescription className="mb-2">{item.description}</CardDescription>}
+                            <div className="flex flex-wrap gap-2">
+                              {item.topics.slice(0, 3).map((topic, i) => (
+                                <Badge key={i} variant="outline" className="text-xs">
+                                  {topic}
+                                </Badge>
+                              ))}
+                              {item.topics.length > 3 && (
+                                <Badge variant="outline" className="text-xs text-muted-foreground">
+                                  +{item.topics.length - 3}
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                          <div className="w-20 shrink-0 text-center">
+                            <Badge variant="secondary" className="text-xs">
+                              {item.type}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </FadeIn>
               
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100">
-                <h3 className="text-lg font-bold text-blue-800 mb-4">Have a topic suggestion?</h3>
-                <p className="text-slate-700 mb-6">
-                  If there's a specific topic you'd like me to cover in a future article, tutorial or talk, I'd love to hear your suggestions!
-                </p>
-                <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700" asChild>
-                  <Link href="/contact">
-                    Suggest a Topic
-                  </Link>
-                </Button>
-              </div>
+              <FadeIn delay={0.3} direction="up">
+                <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-100">
+                  <CardHeader>
+                    <CardTitle className="text-lg text-blue-800">Have a topic suggestion?</CardTitle>
+                    <CardDescription>
+                      If there's a specific topic you'd like me to cover in a future article, tutorial or talk, I'd love to hear your suggestions!
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ScaleOnHover>
+                      <Button asChild>
+                        <Link href="/contact">
+                          Suggest a Topic
+                        </Link>
+                      </Button>
+                    </ScaleOnHover>
+                  </CardContent>
+                </Card>
+              </FadeIn>
             </TabsContent>
           </Tabs>
 
           {/* Newsletter Banner */}
-          <div className="mb-12">
-            <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-8 text-white shadow-2xl">
-              <div className="text-center">
-                <h3 className="text-2xl font-bold mb-4">Subscribe to My Newsletter</h3>
-                <p className="text-slate-300 mb-6">
-                  Get notified when I publish new articles, tutorials, and insights on AI, engineering, and technology trends.
-                </p>
-                <div className="max-w-md mx-auto">
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <input
-                      type="email"
-                      placeholder="Your email address"
-                      className="flex-1 px-4 py-2 rounded-lg border border-slate-700 bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <Button className="bg-blue-600 hover:bg-blue-700">Subscribe</Button>
-                  </div>
-                  <p className="text-xs text-slate-400 mt-3">
-                    I respect your privacy. No spam, just valuable content. Unsubscribe anytime.
-                  </p>
-                </div>
-              </div>
+          <section className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/30">
+            <div className="max-w-4xl mx-auto">
+              <FadeIn delay={0.4} direction="up">
+                <Card className="bg-gradient-to-r from-slate-900 to-slate-800 border-0 text-white">
+                  <CardHeader className="text-center">
+                    <CardTitle className="text-2xl mb-4 text-white">Subscribe to My Newsletter</CardTitle>
+                    <CardDescription className="text-slate-300">
+                      Get notified when I publish new articles, tutorials, and insights on AI, engineering, and technology trends.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="max-w-md mx-auto">
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <Input
+                          type="email"
+                          placeholder="Your email address"
+                          className="flex-1 bg-slate-800 border-slate-700 text-white placeholder:text-slate-400"
+                        />
+                        <Button className="bg-blue-600 hover:bg-blue-700">Subscribe</Button>
+                      </div>
+                      <p className="text-xs text-slate-400 mt-3 text-center">
+                        I respect your privacy. No spam, just valuable content. Unsubscribe anytime.
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </FadeIn>
             </div>
-          </div>
+          </section>
+        </div>
+      </section>
 
-          {/* Footer */}
-          <div className="pt-12 mt-12 border-t border-slate-200">
-            <div className={`${isMobile ? 'flex flex-col space-y-4' : 'flex items-center justify-between'} text-sm text-slate-500`}>
+      {/* Footer */}
+      <footer className="py-12 px-4 sm:px-6 lg:px-8 border-t">
+        <div className="max-w-7xl mx-auto">
+          <FadeIn delay={0.5} direction="up">
+            <div className={`${isMobile ? 'flex flex-col space-y-4' : 'flex items-center justify-between'} text-sm text-muted-foreground`}>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                 <span>Last updated: June 27, 2025</span>
               </div>
-              <Button variant="ghost" size="sm" className="text-slate-500 hover:text-slate-700" asChild>
-                <Link href="https://github.com/aashirjaved" target="_blank">
-                  <Github className="w-4 h-4 mr-2" />
-                  View Source
-                </Link>
-              </Button>
+              <ScaleOnHover>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="https://github.com/aashirjaved" target="_blank">
+                    <Github className="w-4 h-4 mr-2" />
+                    View Source
+                  </Link>
+                </Button>
+              </ScaleOnHover>
             </div>
-          </div>
+          </FadeIn>
         </div>
-      </div>
+      </footer>
     </div>
   )
 }
@@ -308,8 +338,8 @@ function WritingContent() {
 export default function Writing() {
   return (
     <Suspense fallback={
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-        <p className="text-slate-600">Loading...</p>
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <p className="text-muted-foreground">Loading...</p>
       </div>
     }>
       <WritingContent />

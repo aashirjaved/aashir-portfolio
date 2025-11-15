@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { motion } from "framer-motion"
 
 const floatingTags = [
   // LLM & AI
@@ -55,22 +56,27 @@ function FloatingTag({
   }, [delay])
 
   return (
-    <div
-      className={`fixed z-10 transition-all duration-1000 ${
-        isVisible ? "opacity-40 translate-y-0" : "opacity-0 translate-y-4"
-      }`}
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.8 }}
+      animate={isVisible ? { opacity: 0.4, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.8 }}
+      transition={{ 
+        duration: 0.8, 
+        delay: delay / 1000,
+        ease: [0.21, 1.11, 0.81, 0.99]
+      }}
+      whileHover={{ opacity: 0.7, scale: 1.05 }}
+      className="fixed z-10"
       style={{ 
         top, 
         right: isMobile ? `calc(${right} * 0.8)` : right,
-        transform: isMobile ? 'scale(0.8)' : 'none'
       }}
     >
       <div
-        className={`bg-gradient-to-r ${color} text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg backdrop-blur-sm border border-white/20 hover:opacity-60 transition-opacity`}
+        className={`bg-gradient-to-r ${color} text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg backdrop-blur-sm border border-white/20 transition-opacity cursor-pointer`}
       >
         {text}
       </div>
-    </div>
+    </motion.div>
   )
 }
 

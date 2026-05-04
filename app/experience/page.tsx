@@ -22,10 +22,31 @@ type Experience = {
 
 const experiences: Experience[] = [
   {
+    title: "Senior Software Engineer",
+    company: "MoonPay",
+    location: "London, UK · Remote",
+    period: "Present",
+    team: "Consumer Product",
+    year: "now",
+    description: [
+      "Shipping consumer crypto products at scale across iOS, Android, web",
+      "Polygon transaction path · 8.5× faster after rebuild (Moonlog Vol 02)",
+      "Balance experience rebuilt with ACH / SEPA / Faster Payments rails",
+      "Refreshed Buy/Sell + Liquid Glass UI; tighter device security flows",
+      "Cross-functional product engineering; complex problems, shipped at pace",
+    ],
+    metrics: [
+      { label: "Polygon", value: "8.5×" },
+      { label: "Rails", value: "ACH·SEPA·FPS" },
+      { label: "Surface", value: "iOS·Android·Web" },
+    ],
+    technologies: ["react", "next.js", "go", "python", "aws", "typescript", "ai"],
+  },
+  {
     title: "Senior Backend Engineer",
     company: "Motorway",
     location: "London, UK",
-    period: "Jun 2024 – Present",
+    period: "Jun 2024 – 2026",
     team: "Core Engineering",
     year: "2024",
     description: [
@@ -170,7 +191,7 @@ export default function Experience() {
           items={[
             { label: "page", value: "/experience" },
             { label: "span", value: "8 yrs", tone: "accent" },
-            { label: "current", value: "motorway · core eng lead", tone: "ok" },
+            { label: "current", value: "moonpay · sse", tone: "ok" },
           ]}
         />
 

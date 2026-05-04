@@ -13,11 +13,22 @@ import {
 
 const positions = [
   {
+    co: "MoonPay",
+    role: "Senior Software Engineer · Consumer Product",
+    when: "Present · London, UK",
+    pts: [
+      "Shipping consumer crypto products at scale across iOS, Android, web.",
+      "Polygon transaction path → 8.5× faster after rebuild.",
+      "Balance experience rebuilt with ACH / SEPA / Faster Payments rails.",
+      "Buy/Sell screens redesigned · Liquid Glass UI refresh · onboarding rework.",
+    ],
+  },
+  {
     co: "Motorway",
     role: "Senior Backend Engineer · Core Engineering Lead",
-    when: "Jun 2024 – Present · London, UK",
+    when: "Jun 2024 – 2026 · London, UK",
     pts: [
-      "Lead Core Engineering: foundational services + platform primitives.",
+      "Led Core Engineering: foundational services + platform primitives.",
       "Decoupled AuthN/AuthZ migration → +7% conversion.",
       "Operational excellence working group → −15% AWS spend.",
       "AI incident management with LLM categorisation → −40% MTTR.",
@@ -89,7 +100,7 @@ export default function Resume() {
           <p>
             $ aashir [--lead] [--build] [--ship] [--mentor]{"\n"}
             $ aashir --area={"{full-stack | cloud | ai-ml}"} --location=london{"\n"}
-            $ aashir --currently=motorway --status=active
+            $ aashir --currently=moonpay --status=active
           </p>
         </Terminal>
 

@@ -84,10 +84,10 @@ export default function About() {
             that survive Monday.
           </p>
           <p className="mt-3">
-            Based in <span className="text-accent">London</span>, currently Senior Backend Engineer
-            at <span className="text-accent">Motorway</span>, leading Core Engineering — the
-            foundational services that let product teams ship quickly and reliably. Recent focus:
-            integrating LLMs into production systems without lighting them on fire.
+            Based in <span className="text-accent">London</span>, currently Senior Software Engineer
+            at <span className="text-accent">MoonPay</span> — shipping consumer crypto products at
+            scale across iOS, Android, and web. Previously led Core Engineering at Motorway,
+            built customer-care AI at Deliveroo, and warehouse gateways at Zalando.
           </p>
           <p className="mt-3">
             I work end-to-end. Pixel-perfect React, distributed Go services, AWS infra, AI agents —

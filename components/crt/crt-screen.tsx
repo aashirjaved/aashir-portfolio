@@ -12,6 +12,7 @@ export function CRTScreen({
 }) {
   return (
     <main
+      id="main"
       className={cn(
         "mx-auto px-5 sm:px-8 pt-20 pb-24",
         width === "narrow" ? "max-w-[760px]" : "max-w-[920px]",

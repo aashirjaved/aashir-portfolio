@@ -18,7 +18,7 @@ export function generateMetadata({ params, pathname }: { params: any; pathname: 
     },
     "/experience": {
       title: baseTitle + " | Experience",
-      description: "8+ years of experience at companies like Motorway, Deliveroo, and Zalando building scalable systems.",
+      description: "8+ years shipping at MoonPay, Motorway, Deliveroo, Zalando, and IBM/Nordcloud — backend, infra, full-stack, AI.",
     },
     "/projects": {
       title: baseTitle + " | Projects",

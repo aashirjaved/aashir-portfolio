@@ -10,30 +10,51 @@ import {
   PageFooter,
   AsciiDivider,
   Cursor,
+  Reveal,
+  NotableCard,
 } from "@/components/crt";
 import { PersonSchema, WebsiteSchema } from "@/components/structured-data";
 import { blogPosts } from "@/data/blog-data";
 
 const recentWork = [
   {
+    co: "MoonPay",
+    role: "Senior Software Engineer",
+    year: "now",
+    pts: [
+      "Shipping consumer crypto products at scale across iOS, Android, web",
+      "Polygon transaction path · 8.5× faster after rebuild",
+      "Balance experience rebuilt with ACH / SEPA / Faster Payments",
+    ],
+    stack: "react · next.js · go · python · aws",
+  },
+  {
     co: "Motorway",
     role: "Senior Backend Engineer · Core Eng Lead",
-    year: "2024 — now",
-    pts: ["Decoupled AuthN/AuthZ → +7% conversion", "AI incident mgmt → −40% MTTR", "−15% AWS spend"],
+    year: "2024",
+    pts: [
+      "Decoupled AuthN/AuthZ → +7% conversion",
+      "AI incident mgmt → −40% MTTR",
+      "−15% AWS spend",
+    ],
     stack: "go · python · react · aws · llm",
   },
   {
     co: "Deliveroo",
     role: "SWE II · Customer Care Platform",
-    year: "2022 — 2024",
-    pts: ["Production AI agents · 10k+ cases/day at 95% accuracy", "2× CSAT, 50% lower handling time", "£2M annual savings"],
+    year: "2022",
+    pts: [
+      "Production AI agents · 10k+ cases/day at 95% accuracy",
+      "2× CSAT · 50% lower handling time",
+      "£2M annual savings",
+    ],
     stack: "go · react · llm fine-tune · k8s",
   },
   {
     co: "Zalando",
     role: "Software Engineer · Customer Fulfillment",
-    year: "2021 — 2022",
-    pts: ["1000+ RPS Java APIs, −15% latency", "ML demand forecast · +25% inventory accuracy"],
+    year: "2021",
+    pts: ["1000+ RPS Java APIs · −15% latency", "ML demand forecast · +25% inventory accuracy"],
     stack: "java · react · postgres · k8s",
   },
 ];
@@ -52,7 +73,8 @@ export default function Home() {
           items={[
             { label: "node", value: "online", tone: "ok" },
             { label: "loc", value: "london, uk" },
-            { label: "open to", value: "senior · staff · founding eng", tone: "accent" },
+            { label: "now", value: "moonpay · sse", tone: "accent" },
+            { label: "open to", value: "staff · founding eng" },
             { label: "uptime", value: "8 yrs" },
           ]}
         />
@@ -67,14 +89,14 @@ export default function Home() {
             <Cursor />
           </h1>
           <p className="mt-4 font-mono text-[1.05rem] sm:text-[1.15rem] text-bright leading-relaxed max-w-[60ch]">
-            Senior backend engineer building <span className="text-accent">production systems</span>{" "}
-            that survive Monday morning. <span className="text-accent">LLMs</span> in places they
-            have to behave. <span className="text-accent">Cloud</span> that does not page you at 3am.
+            Senior software engineer{" "}
+            <span className="text-accent">shipping products at scale</span> and building solutions
+            to complex problems. AI in the loop where it earns its keep. Systems that survive
+            Monday morning.
           </p>
           <p className="mt-3 font-mono text-sm text-dim max-w-[60ch]">
-            Currently leading Core Engineering at{" "}
-            <span className="text-fg">Motorway</span>. Previously Deliveroo, Zalando, IBM/Nordcloud.
-            Eight years across full-stack, infra, and AI.
+            Currently at <span className="text-bright">MoonPay</span>. Previously Motorway,
+            Deliveroo, Zalando, IBM/Nordcloud. Eight years across full-stack, infra, and AI.
           </p>
 
           {/* Stats — anchored first numbers a hiring manager sees */}
@@ -100,7 +122,7 @@ export default function Home() {
         <AsciiDivider variant="rule" className="my-12" />
 
         {/* WHAT I SHIP — compact grid, not 3 stacked terminals */}
-        <section>
+        <Reveal><section>
           <div className="font-mono text-[10px] sm:text-xs text-dim uppercase tracking-[0.25em] mb-2">
             {"> 01. what i ship"}
           </div>
@@ -142,12 +164,12 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </section></Reveal>
 
         <AsciiDivider variant="rule" className="my-12" />
 
         {/* RECENT WORK — teasers, not full case files */}
-        <section>
+        <Reveal><section>
           <div className="flex items-baseline justify-between mb-5">
             <div>
               <div className="font-mono text-[10px] sm:text-xs text-dim uppercase tracking-[0.25em]">
@@ -188,16 +210,72 @@ export default function Home() {
               </article>
             ))}
           </div>
-        </section>
+        </section></Reveal>
+
+        <AsciiDivider variant="rule" className="my-12" />
+
+        {/* NOTABLE — surfaced from LinkedIn / X / live builds */}
+        <Reveal><section>
+          <div className="flex items-baseline justify-between mb-5">
+            <div>
+              <div className="font-mono text-[10px] sm:text-xs text-dim uppercase tracking-[0.25em]">
+                {"> 03. notable"}
+              </div>
+              <h2 className="font-display text-[clamp(1rem,2.6vw,1.4rem)] uppercase glow leading-tight">
+                IN THE WILD
+              </h2>
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-3">
+            <NotableCard
+              kind="ship"
+              title="MOONLOG · VOL 02"
+              href="https://www.linkedin.com/pulse/moonlog-volume-02-moonpay-vo1ae/"
+              meta="MoonPay · 2026"
+              description="Latest consumer-app product release: redesigned Buy/Sell, 8.5× faster Polygon transactions, rebuilt Balance with ACH/SEPA/Faster Payments, refreshed Liquid Glass UI."
+              stats={[
+                { label: "Polygon", value: "8.5×" },
+                { label: "Rails", value: "ACH·SEPA·FPS" },
+              ]}
+            />
+            <NotableCard
+              kind="win"
+              title="AI HACKATHON · 1ST"
+              href="https://www.linkedin.com/posts/adam-ferguson-7259b6121_two-months-ago-aashir-javed-omer-bresinski-share-7437869877543129088-3Z8q"
+              meta="2026 · w/ Omer Bresinski"
+              description="Built a winning AI product over a weekend. Two engineers, one idea, hardware to model to demo in under 48 hours."
+              stats={[{ label: "Place", value: "1st" }]}
+            />
+            <NotableCard
+              kind="post"
+              title="GROK · RADIO PRODUCT"
+              href="https://x.com/aasjav/status/2013716104271536622"
+              meta="X · @aasjav"
+              description="Spec, prototype, and product thinking for a Grok-powered radio interface. Voice as the new keyboard."
+            />
+            <NotableCard
+              kind="build"
+              title="WHATIFY · FINANCIAL SIM"
+              href="https://whatify.ai"
+              meta="side build · 2026"
+              description="Stop guessing, start deciding. Side-by-side scenario simulation for major life decisions — homes, careers, family — stress-tested against rate spikes and cost overruns."
+              stats={[
+                { label: "Waitlist", value: "3.8k+" },
+                { label: "Setup", value: "2 min" },
+                { label: "Forecast", value: "5 yr" },
+              ]}
+            />
+          </div>
+        </section></Reveal>
 
         <AsciiDivider variant="rule" className="my-12" />
 
         {/* WRITING — 3 latest, link out */}
-        <section>
+        <Reveal><section>
           <div className="flex items-baseline justify-between mb-5">
             <div>
               <div className="font-mono text-[10px] sm:text-xs text-dim uppercase tracking-[0.25em]">
-                {"> 03. writing"}
+                {"> 04. writing"}
               </div>
               <h2 className="font-display text-[clamp(1rem,2.6vw,1.4rem)] uppercase glow leading-tight">
                 NOTES FROM PRODUCTION
@@ -225,18 +303,19 @@ export default function Home() {
               </li>
             ))}
           </ul>
-        </section>
+        </section></Reveal>
 
         <AsciiDivider variant="rule" className="my-12" />
 
         {/* CLOSING CTA — peak-end rule, strong end */}
-        <section className="frame frame-amber p-5 sm:p-6 bg-screen/40">
+        <Reveal><section className="frame frame-amber p-5 sm:p-6 bg-screen/40">
           <div className="font-mono text-xs uppercase tracking-[0.25em] text-dim mb-2">
             $ ./ready-when-you-are
           </div>
           <p className="font-mono text-fg/95 max-w-[58ch]">
-            Hiring senior backend / staff / founding-eng for something serious? Building with LLMs
-            in production? Drop a line — fastest replies via email.
+            Hiring staff / founding eng for something serious? Building with AI in production?
+            Want a second pair of eyes on a hard product problem? Drop a line — fastest replies via
+            email.
           </p>
           <div className="flex flex-wrap gap-3 mt-4">
             <PixelButton href="mailto:me@aashir.net" external>
@@ -244,7 +323,7 @@ export default function Home() {
             </PixelButton>
             <PixelButton href="/resume" variant="ghost">$ man aashir</PixelButton>
           </div>
-        </section>
+        </section></Reveal>
 
         <PageFooter />
       </CRTScreen>

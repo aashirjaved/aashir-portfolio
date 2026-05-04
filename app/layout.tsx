@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import Analytics from '@/components/analytics'
 import { generateMetadata as getMetadata } from './layout-metadata'
 import { display, body, mono } from './fonts'
+import { ScrollProgress } from '@/components/crt'
 import './globals.css'
 import { Suspense } from 'react'
 
@@ -29,8 +30,15 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body className="font-body bg-bg text-fg antialiased">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:px-3 focus:py-1 focus:bg-bg focus:border focus:border-accent focus:text-bright focus:font-mono focus:text-xs focus:uppercase focus:tracking-widest"
+        >
+          skip to content
+        </a>
         <div className="crt-noise" aria-hidden />
         <div className="crt-overlay" aria-hidden />
+        <ScrollProgress />
         <Suspense fallback={null}>
           <Analytics />
         </Suspense>

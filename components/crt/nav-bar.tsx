@@ -52,9 +52,12 @@ export function NavBar() {
               <Link
                 key={it.href}
                 href={it.href}
+                aria-current={active ? "page" : undefined}
                 className={cn(
                   "px-2 py-1 uppercase text-xs tracking-widest",
-                  active ? "bg-accent text-bg" : "text-fg hover:text-bright hover:bg-screen",
+                  active
+                    ? "bg-accent text-bg shadow-glow"
+                    : "text-fg hover:text-bright hover:bg-screen",
                 )}
               >
                 <span aria-hidden className="text-dim">[</span>
@@ -101,9 +104,10 @@ export function NavBar() {
                 <Link
                   key={it.href}
                   href={it.href}
+                  aria-current={active ? "page" : undefined}
                   className={cn(
                     "px-2 py-1.5 uppercase text-xs tracking-widest",
-                    active ? "bg-accent text-bg" : "text-fg hover:bg-screen",
+                    active ? "bg-accent text-bg shadow-glow" : "text-fg hover:bg-screen",
                   )}
                 >
                   <span aria-hidden className="text-dim">[</span>

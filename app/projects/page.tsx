@@ -24,6 +24,83 @@ type Project = {
 
 const projects: Project[] = [
   {
+    title: "MoonPay Consumer App · Product Engineering",
+    company: "MoonPay",
+    period: "Present",
+    category: "Product · Crypto",
+    status: "Production",
+    description:
+      "Shipping consumer crypto products at scale across iOS, Android, and web. Buy/Sell, balances, payment rails, security.",
+    details: [
+      "Polygon transaction path · 8.5× faster after rebuild",
+      "Balance experience rebuilt with ACH / SEPA / Faster Payments rails",
+      "Buy/Sell screens redesigned · Liquid Glass UI refresh",
+      "Tighter device security flows + onboarding rework",
+    ],
+    technologies: ["react", "next.js", "go", "python", "aws", "typescript"],
+    metrics: [
+      { label: "Polygon", value: "8.5×" },
+      { label: "Rails", value: "ACH·SEPA·FPS" },
+      { label: "Surface", value: "iOS·Android·Web" },
+    ],
+    featured: true,
+  },
+  {
+    title: "Whatify · Financial Simulation Engine",
+    company: "Side build",
+    period: "2026 — Present",
+    category: "Product · Build",
+    status: "Beta",
+    description:
+      "Stop guessing, start deciding. Side-by-side scenario simulation for major life decisions — homes, careers, family — stress-tested against rate spikes and cost overruns.",
+    details: [
+      "5-year net worth projections: best / expected / worst case",
+      "Stress-testing against interest-rate spikes and cost overruns",
+      "2-minute setup; data-driven decisions, not guesswork",
+      "3,847+ on the waitlist",
+    ],
+    technologies: ["next.js", "typescript", "ai", "postgres"],
+    metrics: [
+      { label: "Waitlist", value: "3.8k+" },
+      { label: "Setup", value: "2 min" },
+      { label: "Forecast", value: "5 yr" },
+    ],
+    featured: true,
+  },
+  {
+    title: "AI Hackathon · 1st place",
+    company: "w/ Omer Bresinski",
+    period: "2026",
+    category: "AI · Hackathon",
+    status: "Beta",
+    description:
+      "Won an AI hackathon over a weekend. Two engineers, one idea, hardware → model → demo in under 48 hours.",
+    details: [
+      "End-to-end build under tight time pressure",
+      "Cross-stack: device, backend, model, UI",
+      "Wrote spec, prototyped, and demoed live",
+    ],
+    technologies: ["python", "ai", "next.js"],
+    metrics: [{ label: "Place", value: "1st" }],
+    featured: true,
+  },
+  {
+    title: "Grok · Radio Product",
+    company: "Side prototype",
+    period: "2026",
+    category: "AI · Voice",
+    status: "Beta",
+    description:
+      "Spec, prototype, and product thinking for a Grok-powered radio interface. Voice as the new keyboard.",
+    details: [
+      "Voice-first product framing",
+      "Live AI radio host concept; latency budget under 500ms",
+      "Public thread on X (@aasjav)",
+    ],
+    technologies: ["ai", "audio", "next.js"],
+    metrics: [],
+  },
+  {
     title: "AI-Powered Customer Care Platform",
     company: "Deliveroo",
     period: "2022 — 2024",
@@ -202,8 +279,8 @@ export default function Projects() {
             CASE FILES
           </h1>
           <p className="mt-3 font-mono text-fg/90 max-w-[60ch]">
-            Five projects, four employers, one freelance. Metrics where they existed; honesty where
-            they did not. Hiring? <CRTLink href="/contact">$ mail me</CRTLink>.
+            Shipped products, won hackathons, side builds. Metrics where they existed; honesty
+            where they did not. Hiring? <CRTLink href="/contact">$ mail me</CRTLink>.
           </p>
         </section>
 

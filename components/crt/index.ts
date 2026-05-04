@@ -17,3 +17,6 @@ export { NavBar } from "./nav-bar";
 export { PageFooter } from "./page-footer";
 export { LogoStrip } from "./logo-strip";
 export { StatusBar } from "./status-bar";
+export { Reveal } from "./reveal";
+export { ScrollProgress } from "./scroll-progress";
+export { NotableCard } from "./notable-card";

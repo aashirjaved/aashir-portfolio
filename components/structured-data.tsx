@@ -36,18 +36,17 @@ export function PersonSchema() {
         name: "Aashir Javed",
         url: "https://aashir.net",
         image: "/me.png",
-        jobTitle: "Software Engineer",
+        jobTitle: "Senior Software Engineer",
         worksFor: {
           "@type": "Organization",
-          name: "[Your Current Company]", // Replace with actual company
+          name: "MoonPay",
         },
         sameAs: [
           "https://github.com/aashirjaved",
-          "https://linkedin.com/in/aashirjaved",
-          "https://twitter.com/aashirjaved",
-          // Add other relevant profiles
+          "https://www.linkedin.com/in/aashirjaved",
+          "https://x.com/aasjav",
         ],
-        description: "Senior software engineer specializing in full-stack development, AI/ML integration, and cloud infrastructure.",
+        description: "Senior software engineer shipping products at scale and building solutions to complex problems. AI in the loop where it earns its keep.",
       }}
     />
   );

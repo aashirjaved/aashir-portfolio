@@ -88,15 +88,13 @@ export default function Home() {
             AASHIR JAVED
             <Cursor />
           </h1>
-          <p className="mt-4 font-mono text-[1.05rem] sm:text-[1.15rem] text-bright leading-relaxed max-w-[60ch]">
-            Senior software engineer{" "}
-            <span className="text-accent">shipping products at scale</span> and building solutions
-            to complex problems. AI in the loop where it earns its keep. Systems that survive
-            Monday morning.
+          <p className="mt-4 font-mono text-[1.05rem] sm:text-[1.15rem] text-bright leading-relaxed max-w-[58ch]">
+            Senior software engineer <span className="text-accent">shipping products at scale</span>.
+            AI in the loop where it earns its keep.
           </p>
-          <p className="mt-3 font-mono text-sm text-dim max-w-[60ch]">
-            Currently at <span className="text-bright">MoonPay</span>. Previously Motorway,
-            Deliveroo, Zalando, IBM/Nordcloud. Eight years across full-stack, infra, and AI.
+          <p className="mt-3 font-mono text-sm text-dim max-w-[58ch]">
+            Currently <span className="text-bright">MoonPay</span> · prev. Motorway, Deliveroo,
+            Zalando, IBM/Nordcloud.
           </p>
 
           {/* Stats — anchored first numbers a hiring manager sees */}
@@ -130,34 +128,28 @@ export default function Home() {
             BUILT, SHIPPED, MEASURED
           </h2>
           <div className="grid sm:grid-cols-3 gap-3">
-            <div className="frame frame-amber p-4 bg-screen/40">
-              <div className="font-display text-[10px] text-accent glow uppercase mb-2">FULL-STACK</div>
-              <p className="font-mono text-sm text-fg/95 leading-relaxed mb-3">
-                React/Next on the front. Go, Python on the back. TypeScript end-to-end where it earns it.
-              </p>
-              <div className="flex flex-wrap gap-1">
-                {["react", "next.js", "go", "python", "typescript"].map((t) => (
+            <div className="frame frame-amber p-5 bg-screen/40 flex flex-col gap-3">
+              <div className="font-display text-[10px] text-accent glow uppercase">FULL-STACK</div>
+              <p className="font-mono text-sm text-fg/95">React · Next · Go · Python end-to-end.</p>
+              <div className="flex flex-wrap gap-1 mt-auto">
+                {["react", "next.js", "go", "python", "ts"].map((t) => (
                   <Tag key={t}>{t}</Tag>
                 ))}
               </div>
             </div>
-            <div className="frame frame-amber p-4 bg-screen/40">
-              <div className="font-display text-[10px] text-accent glow uppercase mb-2">CLOUD / DEVOPS</div>
-              <p className="font-mono text-sm text-fg/95 leading-relaxed mb-3">
-                AWS by trade. Terraform for everything reproducible. Kubernetes when state demands it.
-              </p>
-              <div className="flex flex-wrap gap-1">
+            <div className="frame frame-amber p-5 bg-screen/40 flex flex-col gap-3">
+              <div className="font-display text-[10px] text-accent glow uppercase">CLOUD / DEVOPS</div>
+              <p className="font-mono text-sm text-fg/95">AWS · Terraform · K8s when state demands it.</p>
+              <div className="flex flex-wrap gap-1 mt-auto">
                 {["aws", "terraform", "k8s", "docker", "ci/cd"].map((t) => (
                   <Tag key={t}>{t}</Tag>
                 ))}
               </div>
             </div>
-            <div className="frame frame-amber p-4 bg-screen/40">
-              <div className="font-display text-[10px] text-accent glow uppercase mb-2">AI / ML</div>
-              <p className="font-mono text-sm text-fg/95 leading-relaxed mb-3">
-                Production LLM agents. RAG, evals, fine-tuning when the off-the-shelf falls short.
-              </p>
-              <div className="flex flex-wrap gap-1">
+            <div className="frame frame-amber p-5 bg-screen/40 flex flex-col gap-3">
+              <div className="font-display text-[10px] text-accent glow uppercase">AI / ML</div>
+              <p className="font-mono text-sm text-fg/95">Agents in production. RAG, evals, fine-tuning.</p>
+              <div className="flex flex-wrap gap-1 mt-auto">
                 {["llm", "agents", "rag", "fine-tune", "mlops"].map((t) => (
                   <Tag key={t}>{t}</Tag>
                 ))}
@@ -197,8 +189,8 @@ export default function Home() {
                     {w.co} <span className="text-rule">·</span>{" "}
                     <span className="text-fg">{w.role}</span>
                   </div>
-                  <ul className="mt-1.5 space-y-0.5">
-                    {w.pts.map((p) => (
+                  <ul className="mt-1.5 space-y-0.5 max-w-[64ch]">
+                    {w.pts.slice(0, 2).map((p) => (
                       <li key={p} className="font-mono text-sm text-fg/90">
                         <span className="text-accent select-none mr-2">▸</span>
                         {p}
@@ -313,9 +305,7 @@ export default function Home() {
             $ ./ready-when-you-are
           </div>
           <p className="font-mono text-fg/95 max-w-[58ch]">
-            Hiring staff / founding eng for something serious? Building with AI in production?
-            Want a second pair of eyes on a hard product problem? Drop a line — fastest replies via
-            email.
+            Hiring staff / founding eng? Shipping AI in production? Drop a line.
           </p>
           <div className="flex flex-wrap gap-3 mt-4">
             <PixelButton href="mailto:me@aashir.net" external>

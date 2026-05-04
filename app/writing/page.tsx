@@ -83,7 +83,9 @@ export default function Writing() {
                   </CRTLink>
                   {p.featured && <Tag tone="accent">★ featured</Tag>}
                 </div>
-                <p className="font-mono text-fg/70 text-sm mt-0.5">{p.description}</p>
+                <p className="font-mono text-fg/70 text-sm mt-0.5 line-clamp-1 max-w-[60ch]">
+                  {p.description}
+                </p>
                 <div className="flex flex-wrap gap-1 mt-1.5">
                   {p.tags.slice(0, 4).map((t) => (
                     <Tag key={t} tone="dim">

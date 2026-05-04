@@ -6,6 +6,7 @@ import {
   PageFooter,
   PixelButton,
   CRTLink,
+  Expandable,
 } from "@/components/crt";
 
 type Experience = {
@@ -164,14 +165,29 @@ function TimelineNode({ e, last }: { e: Experience; last: boolean }) {
         ))}
       </div>
 
-      <ul className="space-y-1 mb-3">
-        {e.description.map((d) => (
+      <ul className="space-y-1 mb-3 max-w-[64ch]">
+        {e.description.slice(0, 3).map((d) => (
           <li key={d} className="font-mono text-sm text-fg/90 leading-relaxed">
             <span className="text-accent select-none mr-2">▸</span>
             {d}
           </li>
         ))}
       </ul>
+
+      {e.description.length > 3 && (
+        <div className="mb-3">
+          <Expandable summary="MORE">
+            <ul className="space-y-1 max-w-[64ch]">
+              {e.description.slice(3).map((d) => (
+                <li key={d} className="font-mono text-sm text-fg/90 leading-relaxed">
+                  <span className="text-accent select-none mr-2">▸</span>
+                  {d}
+                </li>
+              ))}
+            </ul>
+          </Expandable>
+        </div>
+      )}
 
       <div className="flex flex-wrap gap-1">
         {e.technologies.map((t) => (

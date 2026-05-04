@@ -20,3 +20,4 @@ export { StatusBar } from "./status-bar";
 export { Reveal } from "./reveal";
 export { ScrollProgress } from "./scroll-progress";
 export { NotableCard } from "./notable-card";
+export { Expandable } from "./expandable";

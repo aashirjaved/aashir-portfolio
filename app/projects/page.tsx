@@ -7,6 +7,7 @@ import {
   DataRow,
   CRTLink,
   PixelButton,
+  Expandable,
 } from "@/components/crt";
 
 type Project = {
@@ -210,50 +211,59 @@ function ProjectCard({ p, index }: { p: Project; index: number }) {
   const num = String(index + 1).padStart(2, "0");
   return (
     <article className="frame frame-amber p-5 sm:p-6 bg-screen/40">
-      <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
-        <div className="flex items-baseline gap-3">
-          <span className="font-display text-[10px] text-accent glow">{num}</span>
-          <h2 className="font-mono text-bright text-base sm:text-lg uppercase tracking-wider">
-            {p.title}
-          </h2>
-        </div>
-        <div className="flex flex-wrap gap-1">
-          <Tag tone="accent">{p.category}</Tag>
-          <Tag tone={p.status === "Production" ? "ok" : "dim"}>{p.status}</Tag>
-          {p.featured && <Tag tone="accent">★ featured</Tag>}
-        </div>
+      {/* Header: number + title */}
+      <div className="flex items-baseline gap-3 mb-3">
+        <span className="font-display text-[10px] text-accent glow">{num}</span>
+        <h2 className="font-mono text-bright text-base sm:text-xl uppercase tracking-wider leading-tight">
+          {p.title}
+        </h2>
       </div>
 
-      <div className="grid sm:grid-cols-[minmax(0,1fr)_auto] gap-x-6 gap-y-3 mb-4 items-start">
-        <div className="space-y-1">
-          <DataRow label="Client" value={p.company} />
-          <DataRow label="Period" value={p.period} />
-        </div>
-        <div className="flex flex-wrap gap-2 sm:justify-end">
+      {/* One-line tagline */}
+      <p className="font-mono text-sm sm:text-base text-fg/95 mb-4 max-w-[68ch]">
+        {p.description}
+      </p>
+
+      {/* Meta row: company · period · category · status */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-mono text-dim mb-4 pb-3 border-b border-rule/40">
+        <span className="text-bright">{p.company}</span>
+        <span aria-hidden>·</span>
+        <span>{p.period}</span>
+        <span aria-hidden>·</span>
+        <Tag tone="accent">{p.category}</Tag>
+        <Tag tone={p.status === "Production" ? "ok" : "dim"}>{p.status}</Tag>
+        {p.featured && <Tag tone="accent">★ featured</Tag>}
+      </div>
+
+      {/* Metric chips (visual anchor) */}
+      {p.metrics.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-4">
           {p.metrics.map((m) => (
             <Tag key={m.label} tone="ok" className="text-[11px]">
               {m.label} {m.value}
             </Tag>
           ))}
         </div>
-      </div>
+      )}
 
-      <p className="font-mono text-sm text-fg/95 mb-3">{p.description}</p>
-
-      <ul className="space-y-1 mb-4">
-        {p.details.map((d) => (
-          <li key={d} className="font-mono text-sm text-fg/90">
-            <span className="text-accent select-none mr-2">▸</span>
-            {d}
-          </li>
-        ))}
-      </ul>
-
-      <div className="flex flex-wrap gap-1">
+      {/* Tech stack */}
+      <div className="flex flex-wrap gap-1 mb-4">
         {p.technologies.map((t) => (
           <Tag key={t}>{t}</Tag>
         ))}
       </div>
+
+      {/* Drill-down — hidden by default */}
+      <Expandable summary="MORE_DETAILS">
+        <ul className="space-y-1.5 max-w-[68ch]">
+          {p.details.map((d) => (
+            <li key={d} className="font-mono text-sm text-fg/90 leading-relaxed">
+              <span className="text-accent select-none mr-2">▸</span>
+              {d}
+            </li>
+          ))}
+        </ul>
+      </Expandable>
     </article>
   );
 }
@@ -284,7 +294,7 @@ export default function Projects() {
           </p>
         </section>
 
-        <div className="space-y-5">
+        <div className="space-y-6 sm:space-y-8">
           {projects.map((p, i) => (
             <ProjectCard key={p.title} p={p} index={i} />
           ))}

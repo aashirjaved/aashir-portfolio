@@ -1,28 +1,17 @@
-import type { Metadata } from 'next'
-import { Press_Start_2P, Share_Tech_Mono } from 'next/font/google'
-import { ThemeProvider } from '@/components/theme-provider'
+import type { Metadata, Viewport } from 'next'
 import Analytics from '@/components/analytics'
 import { generateMetadata as getMetadata } from './layout-metadata'
-import { CRTOverlay } from '@/components/crt/crt-overlay'
+import { display, body, mono } from './fonts'
 import './globals.css'
 import { Suspense } from 'react'
 
-const pressStart = Press_Start_2P({
-  subsets: ['latin'],
-  weight: '400',
-  variable: '--font-press-start',
-  display: 'swap',
-})
+export const viewport: Viewport = {
+  themeColor: '#1a0e00',
+  colorScheme: 'dark',
+};
 
-const shareTechMono = Share_Tech_Mono({
-  subsets: ['latin'],
-  weight: '400',
-  variable: '--font-share-tech',
-  display: 'swap',
-})
-
-export const generateMetadata = ({ params, pathname = '' }: { params?: any; pathname?: string }): Metadata => {
-  return getMetadata({ params, pathname });
+export const generateMetadata = (): Metadata => {
+  return getMetadata({ params: undefined, pathname: '/' });
 };
 
 export default function RootLayout({
@@ -31,27 +20,21 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`dark ${pressStart.variable} ${shareTechMono.variable}`}>
+    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable} dark`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#1a0e00" />
         <link rel="icon" href="/me.png" />
         <link rel="apple-touch-icon" href="/me.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
-      <body className={`${shareTechMono.className} crt-scanlines crt-vignette crt-noise crt-sweep crt-flicker`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          forcedTheme="dark"
-          disableTransitionOnChange
-        >
-          <CRTOverlay />
-          <Suspense fallback={null}>
-            <Analytics />
-          </Suspense>
-          {children}
-        </ThemeProvider>
+      <body className="font-body bg-bg text-fg antialiased">
+        <div className="crt-noise" aria-hidden />
+        <div className="crt-overlay" aria-hidden />
+        <Suspense fallback={null}>
+          <Analytics />
+        </Suspense>
+        <div className="crt-flicker">{children}</div>
       </body>
     </html>
   )

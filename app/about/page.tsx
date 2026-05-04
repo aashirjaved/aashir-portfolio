@@ -1,254 +1,177 @@
-"use client"
+import {
+  CRTScreen,
+  NavBar,
+  Terminal,
+  SectionHeader,
+  AsciiDivider,
+  Tag,
+  PageFooter,
+  PixelButton,
+  CRTLink,
+  FigCaption,
+  CRTImage,
+  DataRow,
+} from "@/components/crt";
 
-import Link from "next/link"
-import { Suspense } from "react"
-import { TopNavigation } from "@/components/top-navigation"
-import { RetroFooter } from "@/components/retro-footer"
-import { TerminalWindow } from "@/components/crt/terminal-window"
-import { GlitchText } from "@/components/crt/glitch-text"
-import { RetroTag } from "@/components/crt/retro-tag"
-import { RetroButton } from "@/components/crt/retro-button"
-import { AsciiArt } from "@/components/crt/ascii-art"
-
-const ROBOT_ART = `
-       ___________
-      |  _______  |
-      | |       | |
-      | |  >_   | |
-      | |_______| |
-      |___________|
-     ___|_______|___
-    |               |
-    | [O] [O] [O]   |
-    |_______________|
-        ||     ||
-        ||     ||
-       _||_   _||_
-`
-
-const skillGroups: { category: string; variant: "green" | "amber" | "magenta" | "cyan"; skills: string[] }[] = [
+const skills = [
   {
-    category: "AI / ML",
-    variant: "magenta",
-    skills: ["LLM Integration", "Prompt Eng", "Agentic AI", "Fine-tuning", "Vector DBs", "MLOps"],
+    category: "AI & Machine Learning",
+    items: ["LLM Integration", "Prompt Engineering", "Agentic AI", "Fine-tuning", "Vector DBs", "MLOps"],
   },
   {
-    category: "FULL_STACK",
-    variant: "green",
-    skills: ["React/Next.js", "TypeScript", "Go", "Python", "Java", "Node.js"],
+    category: "Full-Stack Development",
+    items: ["React/Next.js", "TypeScript", "Go", "Python", "Java", "Node.js"],
   },
   {
-    category: "CLOUD / INFRA",
-    variant: "amber",
-    skills: ["AWS", "Terraform", "Kubernetes", "Docker", "CI/CD", "Monitoring"],
+    category: "Cloud & Infrastructure",
+    items: ["AWS", "Terraform", "Kubernetes", "Docker", "CI/CD", "Monitoring"],
   },
   {
-    category: "DATA",
-    variant: "cyan",
-    skills: ["PostgreSQL", "MongoDB", "Redis", "DynamoDB", "Modeling", "Optimization"],
+    category: "Data & Databases",
+    items: ["PostgreSQL", "MongoDB", "Redis", "DynamoDB", "Modeling", "Query Opt"],
   },
   {
-    category: "LEADERSHIP",
-    variant: "green",
-    skills: ["Team Lead", "Project Mgmt", "Stakeholders", "Mentoring", "Strategy"],
+    category: "Leadership",
+    items: ["Team Lead", "Project Mgmt", "Stakeholders", "Mentoring", "Tech Strategy"],
   },
-]
-
-const sysInfo = [
-  ["OS", "Aashir.OS v8.4.2"],
-  ["KERNEL", "Linux/Unix Native"],
-  ["UPTIME", "8+ years"],
-  ["LOCATION", "London, UK"],
-  ["LANGUAGE", "Go, Python, TS, Java"],
-  ["SHELL", "zsh + tmux"],
-  ["EDITOR", "Neovim / VSCode"],
-  ["CURRENT_ROLE", "Sr Backend @ Motorway"],
-  ["FOCUS", "AI agents, infra, scale"],
-  ["MENTORED", "100+ engineers"],
-  ["SAVINGS_DELIVERED", "£7M+"],
-  ["AGENTS_SHIPPED", "10K+ cases/day"],
-]
+];
 
 const achievements = [
-  { title: "AI INNOVATION LEAD", desc: "Production AI agents — 10K+ cases/day @ 95% accuracy", variant: "magenta" as const },
-  { title: "COST OPTIMIZATION", desc: "£2M+ annual savings via AI automation + infra optimization", variant: "amber" as const },
-  { title: "TECHNICAL MENTOR", desc: "Led cross-functional teams, mentored 100+ engineers", variant: "green" as const },
-  { title: "PERFORMANCE ENG", desc: "1000+ RPS systems, 15% latency improvements, 99.9% uptime", variant: "cyan" as const },
-]
-
-function AboutContent() {
-  return (
-    <div className="min-h-screen">
-      <TopNavigation activeSection="about" />
-
-      <section className="pt-24 pb-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="font-mono text-xs uppercase text-muted-foreground mb-2">
-            <span className="text-primary">$&gt;</span> cat /etc/aashir.cfg
-          </div>
-          <h1 className="font-pixel text-3xl sm:text-5xl phosphor-glow mb-3">
-            <GlitchText text="ABOUT.SYS" />
-          </h1>
-          <p className="font-mono text-sm sm:text-base text-card-foreground max-w-2xl">
-            <span className="text-primary">// </span>
-            System info, journey log, and what makes this engineer tick.
-          </p>
-        </div>
-      </section>
-
-      {/* Sysinfo + ASCII */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-6">
-          <TerminalWindow title="neofetch" variant="green" prompt="aashir@portfolio">
-            <div className="grid grid-cols-[auto_auto] gap-x-4 gap-y-1.5 font-mono text-xs sm:text-sm">
-              {sysInfo.map(([k, v]) => (
-                <div key={k} className="contents">
-                  <span className="text-primary phosphor-glow uppercase tracking-wider">{k}:</span>
-                  <span className="text-card-foreground">{v}</span>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 pt-4 border-t border-primary/30 flex gap-1">
-              {[...Array(8)].map((_, i) => (
-                <span
-                  key={i}
-                  className="w-4 h-4 inline-block"
-                  style={{
-                    background: ["#00ff41", "#ffb000", "#ff0080", "#0080ff", "#00ffff", "#ff00ff", "#ffff00", "#ffffff"][i],
-                    boxShadow: `0 0 8px currentColor`,
-                  }}
-                />
-              ))}
-            </div>
-          </TerminalWindow>
-
-          <TerminalWindow title="ascii.art" variant="amber" prompt="rendered">
-            <div className="flex items-center justify-center min-h-[280px]">
-              <AsciiArt art={ROBOT_ART} variant="amber" className="text-xs sm:text-sm" />
-            </div>
-            <div className="mt-2 text-center font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-              ◆ engineering unit — operational ◆
-            </div>
-          </TerminalWindow>
-        </div>
-      </section>
-
-      {/* Bio terminal */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="max-w-4xl mx-auto">
-          <TerminalWindow title="cat ./journey.md" variant="cyan">
-            <div className="font-mono text-sm sm:text-base leading-relaxed space-y-4 text-card-foreground">
-              <p>
-                <span className="phosphor-glow-cyan">$&gt; </span>
-                I'm a versatile engineer with{" "}
-                <span className="text-primary phosphor-glow">8+ years</span> of experience building
-                scalable systems across the entire technology spectrum. Started solving complex problems
-                with elegant code, evolved into leading teams and architecting solutions that drive real
-                business impact.
-              </p>
-              <p>
-                <span className="phosphor-glow-cyan">$&gt; </span>
-                Based in <RetroTag variant="cyan">LONDON</RetroTag>, currently Senior Backend Engineer at{" "}
-                <RetroTag variant="amber">MOTORWAY</RetroTag> — leading Core Engineering, building
-                foundational services that empower product teams to ship quickly and reliably. Recent
-                focus: integrating cutting-edge AI and LLMs into production systems.
-              </p>
-              <p>
-                <span className="phosphor-glow-cyan">$&gt; </span>
-                What sets me apart: ability to work across the entire stack — pixel-perfect React
-                interfaces, distributed backends, cloud infra, intelligent AI agents. End-to-end ownership.
-              </p>
-              <p>
-                <span className="phosphor-glow-cyan">$&gt; </span>
-                Beyond technical work — passionate about{" "}
-                <span className="text-primary phosphor-glow">mentoring engineers</span>, leading
-                cross-functional teams, and establishing engineering practices that promote both
-                innovation and operational excellence. Trained 100+ engineers, led initiatives delivering
-                millions in cost savings.
-              </p>
-            </div>
-          </TerminalWindow>
-        </div>
-      </section>
-
-      {/* Achievements */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="font-pixel text-xs sm:text-sm uppercase tracking-widest mb-4 phosphor-glow">
-            <span className="text-primary">[</span> ACHIEVEMENTS.LOG <span className="text-primary">]</span>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-4">
-            {achievements.map((a, i) => (
-              <TerminalWindow key={i} title={a.title} variant={a.variant} controls={false} prompt="">
-                <p className="font-mono text-sm text-card-foreground leading-relaxed">{a.desc}</p>
-              </TerminalWindow>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Skills */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="font-pixel text-xs sm:text-sm uppercase tracking-widest mb-4 phosphor-glow">
-            <span className="text-primary">[</span> SKILLS.MATRIX <span className="text-primary">]</span>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {skillGroups.map((g, i) => (
-              <TerminalWindow key={i} title={`./${g.category.toLowerCase().replace(/[ /]/g, "_")}.dat`} variant={g.variant}>
-                <div className="flex flex-wrap gap-1.5">
-                  {g.skills.map((s, j) => (
-                    <RetroTag key={j} variant={g.variant}>
-                      {s}
-                    </RetroTag>
-                  ))}
-                </div>
-              </TerminalWindow>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="max-w-4xl mx-auto">
-          <TerminalWindow title="connect.sh" variant="magenta">
-            <div className="text-center space-y-4">
-              <div className="font-pixel text-base sm:text-xl phosphor-glow-magenta">
-                <GlitchText text="OPEN_CHANNEL" />
-              </div>
-              <p className="font-mono text-sm text-card-foreground">
-                <span className="text-accent">// </span>
-                Want to talk? Engineer-to-engineer, founder-to-founder, human-to-human.
-              </p>
-              <div className="flex justify-center gap-3 flex-wrap">
-                <Link href="/contact">
-                  <RetroButton variant="magenta">CONTACT_ME</RetroButton>
-                </Link>
-                <Link href="/projects">
-                  <RetroButton variant="green">SEE_WORK</RetroButton>
-                </Link>
-              </div>
-            </div>
-          </TerminalWindow>
-        </div>
-      </section>
-
-      <RetroFooter />
-    </div>
-  )
-}
+  {
+    title: "AI Innovation Lead",
+    body: "Built production AI agents processing 10,000+ customer-service cases daily at 95% accuracy.",
+  },
+  {
+    title: "Cost Optimisation",
+    body: "£2M+ annual savings via AI automation and infrastructure optimisation. Another £5M earlier in cloud migrations.",
+  },
+  {
+    title: "Technical Mentor",
+    body: "Led cross-functional teams and mentored 100+ engineers across multiple organisations.",
+  },
+  {
+    title: "Performance",
+    body: "Architected systems handling 1000+ RPS with 15% latency improvements and 99.9% uptime.",
+  },
+];
 
 export default function About() {
   return (
-    <Suspense
-      fallback={
-        <div className="flex items-center justify-center min-h-screen bg-background font-mono text-primary phosphor-glow">
-          LOADING...
+    <>
+      <NavBar />
+      <CRTScreen>
+        <div className="font-mono text-sm text-dim uppercase tracking-widest mb-2">
+          {"> open about.txt"}
         </div>
-      }
-    >
-      <AboutContent />
-    </Suspense>
-  )
+        <h1 className="font-display text-[clamp(1.4rem,4vw,2.2rem)] uppercase glow-strong leading-tight">
+          ABOUT.TXT
+        </h1>
+        <p className="mt-3 text-fg/90 font-mono">
+          The longer version. Who, where, why I do this — and what I&apos;d like to do next.
+        </p>
+
+        <FigCaption index={2} title="OPERATOR">
+          <CRTImage src="/me.png" alt="Aashir Javed" width={720} height={720} priority />
+        </FigCaption>
+
+        <SectionHeader index={1} title="JOURNEY" />
+        <Terminal command="cat journey.md">
+          <p>
+            I&apos;m a versatile engineer with{" "}
+            <span className="text-bright">8+ years</span> building scalable systems that span the
+            entire stack. The journey began with the cliché — solve hard problems with elegant code —
+            and turned into the more grown-up version: lead teams, own outcomes, and make systems
+            that survive Monday.
+          </p>
+          <p className="mt-3">
+            Based in <span className="text-accent">London</span>, currently Senior Backend Engineer
+            at <span className="text-accent">Motorway</span>, leading Core Engineering — the
+            foundational services that let product teams ship quickly and reliably. Recent focus:
+            integrating LLMs into production systems without lighting them on fire.
+          </p>
+          <p className="mt-3">
+            I work end-to-end. Pixel-perfect React, distributed Go services, AWS infra, AI agents —
+            I like understanding how the pieces fit. Beyond the code I care about{" "}
+            <span className="text-accent">mentoring engineers</span> and building practices that
+            promote both speed and operational sanity.
+          </p>
+        </Terminal>
+
+        <SectionHeader index={2} title="ACHIEVEMENTS" />
+        <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+          {achievements.map((a, i) => (
+            <div key={a.title} className="frame frame-amber p-4 bg-screen/40">
+              <div className="font-display text-[10px] sm:text-xs uppercase text-accent glow mb-1">
+                {">>>"} ACHIEVEMENT_{String(i + 1).padStart(2, "0")}
+              </div>
+              <div className="font-mono text-bright text-sm uppercase tracking-wider mb-2">
+                {a.title}
+              </div>
+              <p className="font-mono text-sm text-fg/90 leading-relaxed">{a.body}</p>
+            </div>
+          ))}
+        </div>
+
+        <SectionHeader index={3} title="STACK" />
+        <Terminal command="cat skills.dat">
+          <div className="space-y-4">
+            {skills.map((s) => (
+              <div key={s.category}>
+                <DataRow label={s.category} value={`${s.items.length} entries`} />
+                <div className="flex flex-wrap gap-1 mt-1.5 pl-1">
+                  {s.items.map((it) => (
+                    <Tag key={it}>{it.toLowerCase()}</Tag>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Terminal>
+
+        <SectionHeader index={4} title="CURRENT FOCUS" />
+        <Terminal command="cat focus.now">
+          <p>
+            The intersection of traditional engineering and AI. <Tag tone="accent">production-ready agents</Tag>{" "}
+            <Tag tone="accent">LLM automation</Tag> <Tag tone="accent">MLOps at scale</Tag> — the
+            unsexy plumbing that keeps a clever demo from collapsing in production.
+          </p>
+          <p className="mt-3">
+            Also: <Tag>infra optimisation</Tag> and cost discipline. Methodical analysis cut AWS
+            spend 15% at Motorway while improving reliability — not by buying more, by buying right.
+          </p>
+          <p className="mt-3">
+            On the leadership side: building high-performing teams, setting technical standards,
+            and creating environments where engineers can do their best work.
+          </p>
+        </Terminal>
+
+        <SectionHeader index={5} title="BEYOND WORK" />
+        <Terminal command="cat after-hours.txt">
+          <p>
+            When not coding: reading the latest in AI/ML, contributing to open source, writing
+            things on this site that I hope one engineer somewhere finds useful.
+          </p>
+          <p className="mt-3">
+            I attend conferences, hang around engineering communities, and enjoy mentoring people
+            starting out. Always interested in the gap between technology and business — the place
+            where good engineering becomes real impact.
+          </p>
+        </Terminal>
+
+        <SectionHeader index={6} title="CONNECT" />
+        <p className="font-mono text-fg/90">
+          If any of this resonates, the door is open.{" "}
+          <CRTLink href="/contact">$ mail aashir</CRTLink> or{" "}
+          <CRTLink href="/projects">$ ls projects</CRTLink>.
+        </p>
+        <div className="flex gap-3 mt-5 flex-wrap">
+          <PixelButton href="/contact">$ get in touch</PixelButton>
+          <PixelButton href="/projects" variant="ghost">$ view work</PixelButton>
+        </div>
+
+        <AsciiDivider variant="block" className="mt-16" />
+        <PageFooter />
+      </CRTScreen>
+    </>
+  );
 }

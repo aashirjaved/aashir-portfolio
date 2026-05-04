@@ -1,71 +1,51 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
+import { Cursor } from "./cursor";
 
 const lines = [
-  { text: "AASHIR.OS v8.4.2 — PHOSPHOR EDITION", delay: 60 },
-  { text: "Copyright (C) 1990-2026 AASHIR JAVED SYSTEMS", delay: 80 },
-  { text: "", delay: 100 },
-  { text: "Initializing memory... 640K OK", delay: 200 },
-  { text: "Loading kernel modules.................[ OK ]", delay: 300 },
-  { text: "Mounting /experience.................[ OK ]", delay: 350 },
-  { text: "Mounting /projects...................[ OK ]", delay: 400 },
-  { text: "Detecting AI subsystem...............[ ONLINE ]", delay: 500 },
-  { text: "Phosphor display calibrated..........[ 50Hz ]", delay: 600 },
-  { text: "", delay: 700 },
-  { text: "READY.", delay: 750 },
-]
+  { text: "AASHIR.SYS v8.0  ───────────────  READY", delay: 50 },
+  { text: "> POST  ............................. OK", delay: 220 },
+  { text: "> RAM   ............................. 8 YEARS DETECTED", delay: 220 },
+  { text: "> DISK  ............................. £7M+ DELIVERED", delay: 220 },
+  { text: "> NET   ............................. CONNECTED [LDN]", delay: 220 },
+  { text: "> LOADING IDENTITY ........... Aashir Javed", delay: 320 },
+  { text: "> MODE: ENGINEER · BUILDER · OPERATOR", delay: 380 },
+  { text: "", delay: 200 },
+  { text: "[PRESS ANY KEY TO CONTINUE]", delay: 100, blink: true },
+];
 
-const SEEN_KEY = "aashir-boot-seen-v1"
-
-export function BootSequence({ onDone }: { onDone: () => void }) {
-  const [visible, setVisible] = useState<string[]>([])
-  const [active, setActive] = useState(true)
+export function BootSequence() {
+  const [shown, setShown] = useState(0);
+  const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return
-    if (sessionStorage.getItem(SEEN_KEY)) {
-      setActive(false)
-      onDone()
-      return
+    const m = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduced(m.matches);
+  }, []);
+
+  useEffect(() => {
+    if (reduced) {
+      setShown(lines.length);
+      return;
     }
-
-    const timers: ReturnType<typeof setTimeout>[] = []
-    let acc = 0
-    lines.forEach((l, i) => {
-      acc += l.delay
-      timers.push(
-        setTimeout(() => {
-          setVisible((v) => [...v, l.text])
-        }, acc),
-      )
-    })
-    timers.push(
-      setTimeout(() => {
-        sessionStorage.setItem(SEEN_KEY, "1")
-        setActive(false)
-        onDone()
-      }, acc + 700),
-    )
-
-    return () => timers.forEach(clearTimeout)
-  }, [onDone])
-
-  if (!active) return null
+    if (shown >= lines.length) return;
+    const t = setTimeout(() => setShown((n) => n + 1), lines[shown].delay);
+    return () => clearTimeout(t);
+  }, [shown, reduced]);
 
   return (
-    <div className="fixed inset-0 z-[200] bg-background flex items-start justify-start p-6 sm:p-12 overflow-hidden">
-      <div className="font-mono text-sm sm:text-base phosphor-glow w-full max-w-3xl">
-        {visible.map((line, i) => (
-          <div key={i} className="leading-relaxed">
-            {line === "" ? " " : line}
-          </div>
-        ))}
-        <div className="mt-2 inline-flex items-center gap-1">
-          <span>&gt;</span>
-          <span className="typewriter-caret" aria-hidden />
-        </div>
-      </div>
-    </div>
-  )
+    <pre
+      className="font-mono text-[0.92rem] sm:text-[1rem] leading-snug text-fg whitespace-pre-wrap break-words m-0"
+      aria-label="System boot sequence"
+    >
+      {lines.slice(0, shown).map((l, i) => (
+        <span key={i} className={l.blink ? "text-accent" : i === 0 ? "text-bright glow" : ""}>
+          {l.text}
+          {"\n"}
+        </span>
+      ))}
+      {shown < lines.length && <Cursor />}
+    </pre>
+  );
 }

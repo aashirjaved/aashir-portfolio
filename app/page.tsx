@@ -1,237 +1,253 @@
-"use client"
+import {
+  CRTScreen,
+  NavBar,
+  StatusBar,
+  LogoStrip,
+  LcdStat,
+  PixelButton,
+  Tag,
+  CRTLink,
+  PageFooter,
+  AsciiDivider,
+  Cursor,
+} from "@/components/crt";
+import { PersonSchema, WebsiteSchema } from "@/components/structured-data";
+import { blogPosts } from "@/data/blog-data";
 
-import Link from "next/link"
-import { Suspense, useState } from "react"
-import { ArrowRight, Cpu, Cloud, Brain, Code2, Briefcase } from "lucide-react"
-import { TopNavigation } from "@/components/top-navigation"
-import { RetroFooter } from "@/components/retro-footer"
-import { TerminalWindow } from "@/components/crt/terminal-window"
-import { Typewriter } from "@/components/crt/typewriter"
-import { GlitchText } from "@/components/crt/glitch-text"
-import { BlinkingCursor } from "@/components/crt/blinking-cursor"
-import { RetroButton } from "@/components/crt/retro-button"
-import { RetroTag } from "@/components/crt/retro-tag"
-import { MarqueeTicker } from "@/components/crt/marquee-ticker"
-import { BootSequence } from "@/components/crt/boot-sequence"
-import { PersonSchema, WebsiteSchema } from "@/components/structured-data"
-
-const stats = [
-  { label: "YRS_EXP", value: "8+", color: "primary" },
-  { label: "SAVINGS", value: "£7M+", color: "secondary" },
-  { label: "ENGS_MENTORED", value: "100+", color: "accent" },
-  { label: "AGENTS_SHIPPED", value: "10K+/D", color: "crt-cyan" },
-]
-
-const expertise: { icon: React.ReactNode; title: string; desc: string; tag: "green" | "amber" | "magenta" | "cyan" }[] = [
+const recentWork = [
   {
-    icon: <Code2 className="w-5 h-5" />,
-    title: "FULL_STACK.exe",
-    desc: "React, Next.js, Go, Python — production systems end to end",
-    tag: "green",
+    co: "Motorway",
+    role: "Senior Backend Engineer · Core Eng Lead",
+    year: "2024 — now",
+    pts: ["Decoupled AuthN/AuthZ → +7% conversion", "AI incident mgmt → −40% MTTR", "−15% AWS spend"],
+    stack: "go · python · react · aws · llm",
   },
   {
-    icon: <Cloud className="w-5 h-5" />,
-    title: "CLOUD_OPS.exe",
-    desc: "AWS, Kubernetes, Terraform — multi-region infra at scale",
-    tag: "amber",
+    co: "Deliveroo",
+    role: "SWE II · Customer Care Platform",
+    year: "2022 — 2024",
+    pts: ["Production AI agents · 10k+ cases/day at 95% accuracy", "2× CSAT, 50% lower handling time", "£2M annual savings"],
+    stack: "go · react · llm fine-tune · k8s",
   },
   {
-    icon: <Brain className="w-5 h-5" />,
-    title: "AI_AGENTS.exe",
-    desc: "LLMs, RAG, fine-tuning, prompt engineering, MLOps",
-    tag: "magenta",
+    co: "Zalando",
+    role: "Software Engineer · Customer Fulfillment",
+    year: "2021 — 2022",
+    pts: ["1000+ RPS Java APIs, −15% latency", "ML demand forecast · +25% inventory accuracy"],
+    stack: "java · react · postgres · k8s",
   },
-  {
-    icon: <Briefcase className="w-5 h-5" />,
-    title: "LEADERSHIP.exe",
-    desc: "Cross-functional teams, technical strategy, mentoring",
-    tag: "cyan",
-  },
-]
-
-function HomeContent() {
-  const [booted, setBooted] = useState(false)
-
-  return (
-    <div className="min-h-screen">
-      <PersonSchema />
-      <WebsiteSchema />
-      <BootSequence onDone={() => setBooted(true)} />
-
-      <TopNavigation activeSection="home" />
-
-      <MarqueeTicker
-        items={[
-          "AASHIR.OS v8.4.2 ONLINE",
-          "STATUS: AVAILABLE",
-          "BUILDING AI AGENTS",
-          "8+ YEARS UPTIME",
-          "PHOSPHOR DISPLAY CALIBRATED",
-          "LAST DEPLOY: 2026-05-04",
-        ]}
-      />
-
-      {/* Hero */}
-      <section className="pt-20 sm:pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <TerminalWindow title="~/aashir.javed/index.tsx" prompt="MAIN BOOT" variant="green">
-            <div className="font-mono text-sm sm:text-base space-y-3">
-              <div>
-                <span className="text-primary">user@aashir:~$</span>{" "}
-                <Typewriter text="whoami" speed={40} caret={false} />
-              </div>
-              <div className="pl-4 phosphor-glow">
-                <Typewriter text="LOADING AASHIR.JAVED..." speed={30} delay={500} caret={false} />
-              </div>
-              <div className="pt-4">
-                <h1 className="font-pixel text-2xl sm:text-4xl lg:text-5xl leading-tight phosphor-glow">
-                  <GlitchText text="AASHIR JAVED" />
-                </h1>
-                <h2 className="font-pixel text-sm sm:text-lg mt-3 phosphor-glow-amber">
-                  &gt; VERSATILE_ENGINEER<BlinkingCursor char="_" />
-                </h2>
-              </div>
-              <div className="pt-4 max-w-2xl text-card-foreground leading-relaxed text-sm sm:text-base">
-                <span className="text-primary">// </span>
-                Building next-gen systems across full-stack, cloud, and AI. Specialized in LLMs,
-                production agents, and architectures that drive business impact.
-              </div>
-              <div className="pt-2 flex flex-wrap items-center gap-2 text-xs sm:text-sm">
-                <span className="phosphor-glow-amber">●</span>
-                <span className="text-card-foreground">Currently leading Core Engineering at</span>
-                <RetroTag variant="amber">MOTORWAY</RetroTag>
-              </div>
-              <div className="pt-6 flex flex-wrap gap-3">
-                <Link href="/contact">
-                  <RetroButton variant="green">
-                    INITIATE_CONTACT
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </RetroButton>
-                </Link>
-                <Link href="/projects">
-                  <RetroButton variant="amber">VIEW_WORK.dir</RetroButton>
-                </Link>
-              </div>
-            </div>
-          </TerminalWindow>
-        </div>
-      </section>
-
-      {/* Stats grid */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {stats.map((s, i) => (
-            <div
-              key={i}
-              className="pixel-border-thin p-4 text-center retro-hover bg-card"
-            >
-              <div
-                className={`font-pixel text-2xl sm:text-3xl mb-2 ${
-                  s.color === "primary"
-                    ? "text-primary phosphor-glow"
-                    : s.color === "secondary"
-                      ? "phosphor-glow-amber"
-                      : s.color === "accent"
-                        ? "phosphor-glow-magenta"
-                        : "phosphor-glow-cyan"
-                }`}
-              >
-                {s.value}
-              </div>
-              <div className="font-mono text-[10px] sm:text-xs uppercase tracking-wider text-muted-foreground">
-                {s.label}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Expertise grid */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="font-pixel text-xs sm:text-sm uppercase tracking-widest mb-4 phosphor-glow">
-            <span className="text-primary">[</span> EXPERTISE.MODULES <span className="text-primary">]</span>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {expertise.map((e, i) => (
-              <TerminalWindow key={i} title={e.title} variant={e.tag} controls={false} prompt="">
-                <div className="space-y-3">
-                  <div className="text-primary">{e.icon}</div>
-                  <div className="font-mono text-sm text-card-foreground leading-relaxed">{e.desc}</div>
-                </div>
-              </TerminalWindow>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* What I do */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="max-w-4xl mx-auto">
-          <TerminalWindow title="cat ./bio.txt" variant="amber" prompt="readonly">
-            <div className="font-mono text-sm sm:text-base leading-relaxed space-y-4 text-card-foreground">
-              <p>
-                <span className="phosphor-glow-amber">$&gt; </span>
-                I'm a versatile engineer with{" "}
-                <span className="text-primary phosphor-glow">8+ years</span> building scalable systems
-                across the entire technology stack. Currently at{" "}
-                <RetroTag variant="amber">MOTORWAY</RetroTag>, leading backend engineering, AI integration,
-                and cross-functional teams.
-              </p>
-              <p>
-                <span className="phosphor-glow-amber">$&gt; </span>
-                Expertise spans React/Next.js frontends, Go/Python backends, AWS infrastructure, and
-                cutting-edge AI implementations. Delivered{" "}
-                <span className="text-primary phosphor-glow">millions in cost savings</span>, built
-                production AI agents processing{" "}
-                <span className="text-primary phosphor-glow">10,000+ cases daily</span>, and led teams that
-                shipped mission-critical systems.
-              </p>
-            </div>
-          </TerminalWindow>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="max-w-4xl mx-auto">
-          <TerminalWindow title="connect.sh" variant="magenta">
-            <div className="text-center space-y-4">
-              <div className="font-pixel text-xl sm:text-3xl phosphor-glow-magenta">
-                <GlitchText text="LET'S CONNECT" />
-              </div>
-              <p className="font-mono text-sm sm:text-base text-card-foreground max-w-xl mx-auto">
-                <span className="text-accent">// </span>
-                Interested in collaborating or discussing opportunities? Open a channel.
-              </p>
-              <div className="flex flex-wrap justify-center gap-3 pt-2">
-                <Link href="/contact">
-                  <RetroButton variant="magenta">SEND_TRANSMISSION</RetroButton>
-                </Link>
-                <Link href="/projects">
-                  <RetroButton variant="green">BROWSE_PROJECTS</RetroButton>
-                </Link>
-              </div>
-            </div>
-          </TerminalWindow>
-        </div>
-      </section>
-
-      <RetroFooter />
-    </div>
-  )
-}
+];
 
 export default function Home() {
+  const recentPosts = [...blogPosts].sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 3);
+
   return (
-    <Suspense
-      fallback={
-        <div className="flex items-center justify-center min-h-screen bg-background font-mono text-primary phosphor-glow">
-          LOADING...
-        </div>
-      }
-    >
-      <HomeContent />
-    </Suspense>
-  )
+    <>
+      <PersonSchema />
+      <WebsiteSchema />
+      <NavBar />
+      <CRTScreen>
+        {/* Status bar — replaces boot sequence, instant value */}
+        <StatusBar
+          items={[
+            { label: "node", value: "online", tone: "ok" },
+            { label: "loc", value: "london, uk" },
+            { label: "open to", value: "senior · staff · founding eng", tone: "accent" },
+            { label: "uptime", value: "8 yrs" },
+          ]}
+        />
+
+        {/* HERO — name, value prop, stats, logos, CTA all above fold */}
+        <section className="pt-8 pb-2">
+          <div className="font-mono text-xs sm:text-sm text-dim uppercase tracking-[0.25em] mb-3">
+            {"> whoami"}
+          </div>
+          <h1 className="font-display text-[clamp(1.4rem,4.6vw,2.4rem)] uppercase glow-strong leading-[1.15]">
+            AASHIR JAVED
+            <Cursor />
+          </h1>
+          <p className="mt-4 font-mono text-[1.05rem] sm:text-[1.15rem] text-bright leading-relaxed max-w-[60ch]">
+            Senior backend engineer building <span className="text-accent">production systems</span>{" "}
+            that survive Monday morning. <span className="text-accent">LLMs</span> in places they
+            have to behave. <span className="text-accent">Cloud</span> that does not page you at 3am.
+          </p>
+          <p className="mt-3 font-mono text-sm text-dim max-w-[60ch]">
+            Currently leading Core Engineering at{" "}
+            <span className="text-fg">Motorway</span>. Previously Deliveroo, Zalando, IBM/Nordcloud.
+            Eight years across full-stack, infra, and AI.
+          </p>
+
+          {/* Stats — anchored first numbers a hiring manager sees */}
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-7">
+            <LcdStat value="£7M+" label="Cost saved" />
+            <LcdStat value="10k+" label="AI cases / day" />
+            <LcdStat value="100+" label="Engineers mentored" />
+          </div>
+
+          {/* Logo strip — authority bias */}
+          <LogoStrip />
+
+          {/* Single primary CTA + one secondary */}
+          <div className="flex flex-wrap items-center gap-3 mt-7">
+            <PixelButton href="/contact">$ hire me →</PixelButton>
+            <PixelButton href="/projects" variant="ghost">$ see work</PixelButton>
+            <span className="ml-auto font-mono text-xs text-dim hidden sm:inline">
+              avg reply: 24 — 48h
+            </span>
+          </div>
+        </section>
+
+        <AsciiDivider variant="rule" className="my-12" />
+
+        {/* WHAT I SHIP — compact grid, not 3 stacked terminals */}
+        <section>
+          <div className="font-mono text-[10px] sm:text-xs text-dim uppercase tracking-[0.25em] mb-2">
+            {"> 01. what i ship"}
+          </div>
+          <h2 className="font-display text-[clamp(1rem,2.6vw,1.4rem)] uppercase glow leading-tight mb-5">
+            BUILT, SHIPPED, MEASURED
+          </h2>
+          <div className="grid sm:grid-cols-3 gap-3">
+            <div className="frame frame-amber p-4 bg-screen/40">
+              <div className="font-display text-[10px] text-accent glow uppercase mb-2">FULL-STACK</div>
+              <p className="font-mono text-sm text-fg/95 leading-relaxed mb-3">
+                React/Next on the front. Go, Python on the back. TypeScript end-to-end where it earns it.
+              </p>
+              <div className="flex flex-wrap gap-1">
+                {["react", "next.js", "go", "python", "typescript"].map((t) => (
+                  <Tag key={t}>{t}</Tag>
+                ))}
+              </div>
+            </div>
+            <div className="frame frame-amber p-4 bg-screen/40">
+              <div className="font-display text-[10px] text-accent glow uppercase mb-2">CLOUD / DEVOPS</div>
+              <p className="font-mono text-sm text-fg/95 leading-relaxed mb-3">
+                AWS by trade. Terraform for everything reproducible. Kubernetes when state demands it.
+              </p>
+              <div className="flex flex-wrap gap-1">
+                {["aws", "terraform", "k8s", "docker", "ci/cd"].map((t) => (
+                  <Tag key={t}>{t}</Tag>
+                ))}
+              </div>
+            </div>
+            <div className="frame frame-amber p-4 bg-screen/40">
+              <div className="font-display text-[10px] text-accent glow uppercase mb-2">AI / ML</div>
+              <p className="font-mono text-sm text-fg/95 leading-relaxed mb-3">
+                Production LLM agents. RAG, evals, fine-tuning when the off-the-shelf falls short.
+              </p>
+              <div className="flex flex-wrap gap-1">
+                {["llm", "agents", "rag", "fine-tune", "mlops"].map((t) => (
+                  <Tag key={t}>{t}</Tag>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <AsciiDivider variant="rule" className="my-12" />
+
+        {/* RECENT WORK — teasers, not full case files */}
+        <section>
+          <div className="flex items-baseline justify-between mb-5">
+            <div>
+              <div className="font-mono text-[10px] sm:text-xs text-dim uppercase tracking-[0.25em]">
+                {"> 02. recent work"}
+              </div>
+              <h2 className="font-display text-[clamp(1rem,2.6vw,1.4rem)] uppercase glow leading-tight">
+                IMPACT, NOT JOB TITLES
+              </h2>
+            </div>
+            <CRTLink href="/projects" className="font-mono text-sm whitespace-nowrap">
+              all work →
+            </CRTLink>
+          </div>
+          <div className="space-y-3">
+            {recentWork.map((w) => (
+              <article
+                key={w.co}
+                className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 py-3 border-b border-rule/50 last:border-0"
+              >
+                <div className="font-display text-[10px] text-accent glow uppercase pt-0.5">
+                  {w.year}
+                </div>
+                <div>
+                  <div className="font-mono text-bright text-sm sm:text-base uppercase tracking-wider">
+                    {w.co} <span className="text-rule">·</span>{" "}
+                    <span className="text-fg">{w.role}</span>
+                  </div>
+                  <ul className="mt-1.5 space-y-0.5">
+                    {w.pts.map((p) => (
+                      <li key={p} className="font-mono text-sm text-fg/90">
+                        <span className="text-accent select-none mr-2">▸</span>
+                        {p}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-2 font-mono text-xs text-dim">{w.stack}</div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <AsciiDivider variant="rule" className="my-12" />
+
+        {/* WRITING — 3 latest, link out */}
+        <section>
+          <div className="flex items-baseline justify-between mb-5">
+            <div>
+              <div className="font-mono text-[10px] sm:text-xs text-dim uppercase tracking-[0.25em]">
+                {"> 03. writing"}
+              </div>
+              <h2 className="font-display text-[clamp(1rem,2.6vw,1.4rem)] uppercase glow leading-tight">
+                NOTES FROM PRODUCTION
+              </h2>
+            </div>
+            <CRTLink href="/writing" className="font-mono text-sm whitespace-nowrap">
+              archive →
+            </CRTLink>
+          </div>
+          <ul className="space-y-2">
+            {recentPosts.map((p, i) => (
+              <li
+                key={p.slug}
+                className="grid grid-cols-[2.5rem_1fr_auto] gap-3 py-2 border-b border-rule/50 last:border-0"
+              >
+                <span className="font-display text-[10px] text-accent">
+                  {String(i + 1).padStart(3, "0")}
+                </span>
+                <CRTLink href={`/writing/${p.slug}`} className="text-bright no-underline hover:text-accent font-mono">
+                  {p.title}
+                </CRTLink>
+                <span className="font-mono text-xs text-dim whitespace-nowrap">
+                  {p.readingTime.replace(" min read", "m")}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <AsciiDivider variant="rule" className="my-12" />
+
+        {/* CLOSING CTA — peak-end rule, strong end */}
+        <section className="frame frame-amber p-5 sm:p-6 bg-screen/40">
+          <div className="font-mono text-xs uppercase tracking-[0.25em] text-dim mb-2">
+            $ ./ready-when-you-are
+          </div>
+          <p className="font-mono text-fg/95 max-w-[58ch]">
+            Hiring senior backend / staff / founding-eng for something serious? Building with LLMs
+            in production? Drop a line — fastest replies via email.
+          </p>
+          <div className="flex flex-wrap gap-3 mt-4">
+            <PixelButton href="mailto:me@aashir.net" external>
+              $ mail me@aashir.net
+            </PixelButton>
+            <PixelButton href="/resume" variant="ghost">$ man aashir</PixelButton>
+          </div>
+        </section>
+
+        <PageFooter />
+      </CRTScreen>
+    </>
+  );
 }

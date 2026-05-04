@@ -1,245 +1,255 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Suspense, useState } from "react"
-import { Github, Linkedin, Mail, MapPin, ExternalLink } from "lucide-react"
-import { TopNavigation } from "@/components/top-navigation"
-import { RetroFooter } from "@/components/retro-footer"
-import { TerminalWindow } from "@/components/crt/terminal-window"
-import { GlitchText } from "@/components/crt/glitch-text"
-import { RetroTag } from "@/components/crt/retro-tag"
-import { RetroButton } from "@/components/crt/retro-button"
-import { BlinkingCursor } from "@/components/crt/blinking-cursor"
+import { useState } from "react";
+import {
+  CRTScreen,
+  NavBar,
+  Terminal,
+  SectionHeader,
+  AsciiDivider,
+  PageFooter,
+  PixelButton,
+  CRTLink,
+  Cursor,
+  Tag,
+} from "@/components/crt";
+import Newsletter from "@/components/newsletter";
 
 const channels = [
   {
-    title: "EMAIL",
-    desc: "Best channel for professional inquiries and collaborations",
+    cmd: "$ mail aashir",
+    label: "EMAIL",
     value: "me@aashir.net",
     href: "mailto:me@aashir.net",
-    icon: <Mail className="w-5 h-5" />,
-    variant: "green" as const,
+    note: "Best route. Reply in 1–2 days.",
   },
   {
-    title: "LINKEDIN",
-    desc: "Professional network — endorsements, updates, news",
-    value: "/in/aashirjaved",
+    cmd: "$ open linkedin",
+    label: "LINKEDIN",
+    value: "linkedin.com/in/aashirjaved",
     href: "https://www.linkedin.com/in/aashirjaved/",
-    icon: <Linkedin className="w-5 h-5" />,
-    variant: "cyan" as const,
+    external: true,
+    note: "Professional updates and DMs.",
   },
   {
-    title: "GITHUB",
-    desc: "Code, contributions, open-source projects",
-    value: "@aashirjaved",
+    cmd: "$ ssh github",
+    label: "GITHUB",
+    value: "github.com/aashirjaved",
     href: "https://github.com/aashirjaved",
-    icon: <Github className="w-5 h-5" />,
-    variant: "magenta" as const,
+    external: true,
+    note: "Code, contributions, occasional rants.",
   },
-]
+];
 
 const availability = [
   {
-    type: "FULL_TIME",
-    status: "OPEN",
-    desc: "Senior engineering, technical leadership, AI/ML focused roles at innovative companies",
-    variant: "green" as const,
+    type: "FULL-TIME",
+    status: "OPEN" as const,
+    body: "Senior eng / tech leadership / AI-ML focused at companies that ship.",
   },
   {
     type: "CONSULTING",
-    status: "LIMITED",
-    desc: "Strategic technical consulting, AI integration, infrastructure optimization",
-    variant: "amber" as const,
+    status: "LIMITED" as const,
+    body: "Strategic technical consulting, AI integration, infra optimisation.",
   },
   {
     type: "SPEAKING / MENTOR",
-    status: "ALWAYS",
-    desc: "Conferences, mentoring, technical guidance for growing teams",
-    variant: "magenta" as const,
+    status: "OPEN" as const,
+    body: "Conferences, mentoring, technical guidance to growing teams.",
   },
-]
+];
 
-function ContactForm() {
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [subject, setSubject] = useState("")
-  const [message, setMessage] = useState("")
-
-  const inputClass =
-    "w-full bg-background border-2 border-primary/40 px-3 py-2 font-mono text-sm text-foreground focus:border-primary focus:outline-none focus:ring-0 placeholder:text-muted-foreground/60"
-
+function StatusGlyph({ s }: { s: "OPEN" | "LIMITED" | "CLOSED" }) {
+  const map = {
+    OPEN: { glyph: "●", tone: "ok" as const },
+    LIMITED: { glyph: "◐", tone: "accent" as const },
+    CLOSED: { glyph: "○", tone: "danger" as const },
+  };
+  const { glyph, tone } = map[s];
   return (
-    <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-      <div className="grid sm:grid-cols-2 gap-4">
-        <label className="block">
-          <span className="font-mono text-xs uppercase text-primary phosphor-glow">&gt; NAME</span>
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="your_handle"
-            className={inputClass}
-          />
-        </label>
-        <label className="block">
-          <span className="font-mono text-xs uppercase text-primary phosphor-glow">&gt; EMAIL</span>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="your@email.address"
-            className={inputClass}
-          />
-        </label>
-      </div>
-      <label className="block">
-        <span className="font-mono text-xs uppercase text-primary phosphor-glow">&gt; SUBJECT</span>
-        <input
-          value={subject}
-          onChange={(e) => setSubject(e.target.value)}
-          placeholder="re: opportunity"
-          className={inputClass}
-        />
-      </label>
-      <label className="block">
-        <span className="font-mono text-xs uppercase text-primary phosphor-glow">&gt; MESSAGE</span>
-        <textarea
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          rows={6}
-          placeholder="type message here..."
-          className={inputClass}
-        />
-      </label>
-      <RetroButton type="submit" variant="green">
-        TRANSMIT_MESSAGE
-      </RetroButton>
-    </form>
-  )
-}
-
-function ContactContent() {
-  return (
-    <div className="min-h-screen">
-      <TopNavigation activeSection="contact" />
-
-      <section className="pt-24 pb-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="font-mono text-xs uppercase text-muted-foreground mb-2">
-            <span className="text-primary">$&gt;</span> connect --target=aashir
-          </div>
-          <h1 className="font-pixel text-3xl sm:text-5xl phosphor-glow mb-3">
-            <GlitchText text="CONTACT.SYS" />
-          </h1>
-          <p className="font-mono text-sm sm:text-base text-card-foreground max-w-2xl">
-            <span className="text-primary">// </span>
-            Open a channel<BlinkingCursor /> Multiple frequencies available.
-          </p>
-        </div>
-      </section>
-
-      {/* Channels */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="font-pixel text-xs sm:text-sm uppercase tracking-widest mb-4 phosphor-glow">
-            <span className="text-primary">[</span> CHANNELS <span className="text-primary">]</span>
-          </div>
-          <div className="grid md:grid-cols-3 gap-4">
-            {channels.map((c, i) => (
-              <TerminalWindow key={i} title={`${c.title.toLowerCase()}.sock`} variant={c.variant}>
-                <div className="space-y-3">
-                  <div className="text-primary">{c.icon}</div>
-                  <div className="font-pixel text-sm phosphor-glow">{c.title}</div>
-                  <p className="font-mono text-xs text-card-foreground leading-relaxed">{c.desc}</p>
-                  <Link
-                    href={c.href}
-                    target={c.href.startsWith("http") ? "_blank" : undefined}
-                    className="inline-flex items-center gap-2 font-mono text-sm text-primary hover:underline"
-                  >
-                    <span>{c.value}</span>
-                    {c.href.startsWith("http") && <ExternalLink className="w-3 h-3" />}
-                  </Link>
-                </div>
-              </TerminalWindow>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Availability */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="font-pixel text-xs sm:text-sm uppercase tracking-widest mb-4 phosphor-glow">
-            <span className="text-primary">[</span> AVAILABILITY <span className="text-primary">]</span>
-          </div>
-          <div className="grid md:grid-cols-3 gap-4">
-            {availability.map((a, i) => (
-              <TerminalWindow key={i} title={a.type} variant={a.variant} controls={false}>
-                <div className="space-y-2">
-                  <RetroTag variant={a.variant}>{a.status}</RetroTag>
-                  <p className="font-mono text-xs text-card-foreground leading-relaxed">{a.desc}</p>
-                </div>
-              </TerminalWindow>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Form */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="max-w-4xl mx-auto">
-          <TerminalWindow title="compose_message.sh" variant="green" prompt="awaiting input">
-            <ContactForm />
-          </TerminalWindow>
-        </div>
-      </section>
-
-      {/* Location */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="max-w-4xl mx-auto">
-          <TerminalWindow title="locate.sh" variant="cyan">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-crt-cyan" />
-                <span className="font-pixel text-sm phosphor-glow-cyan">LONDON, UNITED KINGDOM</span>
-              </div>
-              <p className="font-mono text-sm text-card-foreground">
-                <span className="phosphor-glow-cyan">// </span>
-                Based in London. Working with clients globally. Open to remote, occasional travel.
-              </p>
-              <div className="font-mono text-xs text-muted-foreground grid grid-cols-2 gap-x-4 gap-y-1 pt-2 border-t border-primary/30">
-                <span>
-                  <span className="text-primary">LAT:</span> 51.5074°N
-                </span>
-                <span>
-                  <span className="text-primary">LON:</span> 0.1278°W
-                </span>
-                <span>
-                  <span className="text-primary">TZ:</span> GMT/BST
-                </span>
-                <span>
-                  <span className="text-primary">PING:</span> ~LOW
-                </span>
-              </div>
-            </div>
-          </TerminalWindow>
-        </div>
-      </section>
-
-      <RetroFooter />
-    </div>
-  )
+    <span className="inline-flex items-center gap-2">
+      <span
+        className={
+          tone === "ok"
+            ? "text-ok"
+            : tone === "accent"
+              ? "text-accent"
+              : "text-danger"
+        }
+        aria-hidden
+      >
+        {glyph}
+      </span>
+      <Tag tone={tone}>{s}</Tag>
+    </span>
+  );
 }
 
 export default function Contact() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+  const [sent, setSent] = useState(false);
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const body = encodeURIComponent(
+      `From: ${name} <${email}>\n\n${message}\n\n— sent via aashir.net`,
+    );
+    const subj = encodeURIComponent(subject || "hello from aashir.net");
+    window.location.href = `mailto:me@aashir.net?subject=${subj}&body=${body}`;
+    setSent(true);
+  };
+
   return (
-    <Suspense
-      fallback={
-        <div className="flex items-center justify-center min-h-screen bg-background font-mono text-primary phosphor-glow">
-          LOADING...
+    <>
+      <NavBar />
+      <CRTScreen>
+        <div className="font-mono text-sm text-dim uppercase tracking-widest mb-2">
+          {"> establishing connection..."}
         </div>
-      }
-    >
-      <ContactContent />
-    </Suspense>
-  )
+        <h1 className="font-display text-[clamp(1.4rem,4vw,2.2rem)] uppercase glow-strong leading-tight">
+          CONTACT.DAT
+        </h1>
+        <p className="mt-3 text-fg/90 font-mono">
+          Three reliable channels and a form. Pick whichever feels right — they all reach me.
+        </p>
+
+        <SectionHeader index={1} title="CHANNELS" />
+        <div className="space-y-3">
+          {channels.map((c) => (
+            <Terminal key={c.label} command={c.cmd}>
+              <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2">
+                <div className="font-mono">
+                  <span className="text-bright uppercase tracking-wider mr-3">{c.label}</span>
+                  <CRTLink href={c.href} external={c.external}>
+                    {c.value}
+                  </CRTLink>
+                </div>
+                <span className="text-dim font-mono text-sm">{c.note}</span>
+              </div>
+            </Terminal>
+          ))}
+        </div>
+
+        <SectionHeader index={2} title="AVAILABILITY" />
+        <Terminal command="cat status.now">
+          <div className="space-y-3">
+            {availability.map((a) => (
+              <div key={a.type} className="flex flex-col sm:flex-row sm:items-start sm:gap-4">
+                <div className="w-full sm:w-44 flex items-center gap-2">
+                  <StatusGlyph s={a.status} />
+                </div>
+                <div className="flex-1">
+                  <div className="font-mono text-bright text-sm uppercase tracking-wider">
+                    {a.type}
+                  </div>
+                  <p className="font-mono text-sm text-fg/90">{a.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Terminal>
+
+        <SectionHeader index={3} title="MESSAGE" />
+        <form onSubmit={onSubmit} className="frame frame-amber p-4 sm:p-5 bg-screen/40">
+          <div className="font-mono text-xs uppercase tracking-widest text-dim mb-3">
+            $ compose --to=aashir
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-3 mb-3">
+            <label className="block">
+              <span className="font-mono text-xs text-dim uppercase tracking-widest">
+                {"> name"}
+              </span>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="mt-1 w-full bg-bg border border-rule px-2 py-2 font-mono text-fg outline-none focus:border-accent"
+              />
+            </label>
+            <label className="block">
+              <span className="font-mono text-xs text-dim uppercase tracking-widest">
+                {"> email"}
+              </span>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="mt-1 w-full bg-bg border border-rule px-2 py-2 font-mono text-fg outline-none focus:border-accent"
+              />
+            </label>
+          </div>
+
+          <label className="block mb-3">
+            <span className="font-mono text-xs text-dim uppercase tracking-widest">
+              {"> subject"}
+            </span>
+            <input
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              className="mt-1 w-full bg-bg border border-rule px-2 py-2 font-mono text-fg outline-none focus:border-accent"
+            />
+          </label>
+
+          <label className="block mb-4">
+            <span className="font-mono text-xs text-dim uppercase tracking-widest">
+              {"> message"}
+            </span>
+            <div className="mt-1 relative">
+              <textarea
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                rows={6}
+                required
+                className="w-full bg-bg border border-rule px-2 py-2 font-mono text-fg outline-none focus:border-accent resize-y"
+              />
+              {!message && (
+                <div className="absolute top-2 left-2 font-mono text-dim pointer-events-none">
+                  type message <Cursor />
+                </div>
+              )}
+            </div>
+          </label>
+
+          <div className="flex items-center gap-3">
+            <PixelButton type="submit">$ send</PixelButton>
+            {sent && (
+              <span className="font-mono text-sm text-ok">
+                [OK] mail client launched. fall back to <CRTLink href="mailto:me@aashir.net">me@aashir.net</CRTLink>.
+              </span>
+            )}
+          </div>
+        </form>
+
+        <SectionHeader index={4} title="SUBSCRIBE" />
+        <Newsletter />
+
+        <SectionHeader index={5} title="LOCATION" />
+        <Terminal command="whereis aashir">
+          <pre className="font-mono text-xs sm:text-sm leading-tight text-fg whitespace-pre overflow-x-auto m-0">
+{`  ┌─────────────────────────────┐
+  │  ░░░░░░░░░░░░░░░░░░░░░░░░░  │
+  │  ░░░░██░░░░░░░░░░░░░░░░░░░  │
+  │  ░░░████░░░░░░░░░░░░░░░░░░  │
+  │  ░░░░██░░░██░░░░░░░░░░░░░░  │
+  │  ░░░░░░░░████░░░░░░░░░░░░░  │
+  │  ░░░░░░░░░██░░░░░░ ◉ ░░░░░  │   ◉  LONDON
+  │  ░░░░░░░░░░░░░░░░░░░░░░░░░  │      51.5074°N 0.1278°W
+  │  ░░░░░░░░░░░░░░░░░░░░░░░░░  │      GMT/BST
+  └─────────────────────────────┘`}
+          </pre>
+          <p className="mt-3 font-mono text-sm text-fg/90">
+            Based in London. Open to remote and occasional travel.
+          </p>
+        </Terminal>
+
+        <AsciiDivider variant="block" className="mt-16" />
+        <PageFooter />
+      </CRTScreen>
+    </>
+  );
 }

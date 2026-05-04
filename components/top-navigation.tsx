@@ -1,25 +1,41 @@
 "use client"
 
-import { Github, Linkedin, Menu, X } from "lucide-react"
+import { Github, Linkedin, Menu, X, Terminal } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useIsMobile } from "@/hooks/use-mobile"
-import { motion, AnimatePresence } from "framer-motion"
-import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { BlinkingCursor } from "@/components/crt/blinking-cursor"
 
 const navigationItems = [
-  { name: "Home", href: "/", key: "home" },
-  { name: "Experience", href: "/experience", key: "experience" },
-  { name: "Projects", href: "/projects", key: "projects" },
-  { name: "Writing", href: "/writing", key: "writing" },
-  { name: "About", href: "/about", key: "about" },
-  { name: "Contact", href: "/contact", key: "contact" },
+  { name: "HOME", href: "/", key: "home" },
+  { name: "WORK", href: "/experience", key: "experience" },
+  { name: "PROJECTS", href: "/projects", key: "projects" },
+  { name: "WRITING", href: "/writing", key: "writing" },
+  { name: "ABOUT", href: "/about", key: "about" },
+  { name: "RESUME", href: "/resume", key: "resume" },
+  { name: "CONTACT", href: "/contact", key: "contact" },
 ]
 
 interface TopNavigationProps {
   activeSection: string
+}
+
+function Clock() {
+  const [time, setTime] = useState<string>("")
+  useEffect(() => {
+    const update = () => {
+      const d = new Date()
+      const hh = String(d.getUTCHours()).padStart(2, "0")
+      const mm = String(d.getUTCMinutes()).padStart(2, "0")
+      const ss = String(d.getUTCSeconds()).padStart(2, "0")
+      setTime(`${hh}:${mm}:${ss} UTC`)
+    }
+    update()
+    const id = setInterval(update, 1000)
+    return () => clearInterval(id)
+  }, [])
+  return <span className="font-mono text-[10px] sm:text-xs text-muted-foreground">{time}</span>
 }
 
 export function TopNavigation({ activeSection }: TopNavigationProps) {
@@ -27,120 +43,128 @@ export function TopNavigation({ activeSection }: TopNavigationProps) {
   const isMobile = useIsMobile()
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border shadow-sm">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur border-b-2 border-primary">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo/Brand */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-              <span className="text-white font-bold text-sm">AJ</span>
+        <div className="flex items-center justify-between h-14 sm:h-16 gap-4">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 group shrink-0">
+            <div className="w-8 h-8 border-2 border-primary bg-background flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <Terminal className="w-4 h-4" />
             </div>
-            <span className="font-bold text-lg bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-              Aashir Javed
+            <span className="font-pixel text-[10px] sm:text-xs uppercase tracking-wider phosphor-glow hidden sm:inline">
+              AASHIR.JAVED
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop nav */}
           {!isMobile && (
-            <div className="flex items-center gap-1">
-              {navigationItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    "px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200",
-                    activeSection === item.key
-                      ? "bg-primary text-primary-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                  )}
-                >
-                  {item.name}
-                </Link>
-              ))}
+            <div className="flex items-center gap-1 font-mono text-sm">
+              {navigationItems.map((item) => {
+                const isActive = activeSection === item.key
+                return (
+                  <Link
+                    key={item.key}
+                    href={item.href}
+                    className={cn(
+                      "px-3 py-1.5 uppercase tracking-wider border border-transparent transition-colors flex items-center gap-1",
+                      isActive
+                        ? "border-primary text-primary phosphor-glow bg-primary/10"
+                        : "text-muted-foreground hover:text-primary hover:border-primary/50",
+                    )}
+                  >
+                    <span className={isActive ? "phosphor-glow" : ""}>&gt;</span>
+                    {item.name}
+                    {isActive && <BlinkingCursor char="_" className="ml-0.5" />}
+                  </Link>
+                )
+              })}
             </div>
           )}
 
-          {/* Social Links & Mobile Menu */}
-          <div className="flex items-center gap-3">
+          {/* Right side */}
+          <div className="flex items-center gap-2 shrink-0">
             {!isMobile && (
               <>
-                <ThemeToggle />
-                <Button variant="ghost" size="icon" className="h-9 w-9" asChild>
-                  <Link href="https://github.com/aashirjaved" target="_blank" aria-label="GitHub">
-                    <Github className="h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button variant="ghost" size="icon" className="h-9 w-9" asChild>
-                  <Link href="https://www.linkedin.com/in/aashirjaved/" target="_blank" aria-label="LinkedIn">
-                    <Linkedin className="h-4 w-4" />
-                  </Link>
-                </Button>
+                <Clock />
+                <span className="text-muted-foreground mx-1">|</span>
+                <Link
+                  href="https://github.com/aashirjaved"
+                  target="_blank"
+                  aria-label="GitHub"
+                  className="p-1.5 border border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+                >
+                  <Github className="w-3.5 h-3.5" />
+                </Link>
+                <Link
+                  href="https://www.linkedin.com/in/aashirjaved/"
+                  target="_blank"
+                  aria-label="LinkedIn"
+                  className="p-1.5 border border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+                >
+                  <Linkedin className="w-3.5 h-3.5" />
+                </Link>
               </>
             )}
-            
+
             {isMobile && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9"
+              <button
+                className="p-2 border border-primary text-primary"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 aria-label="Toggle menu"
               >
-                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </Button>
+                {isMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+              </button>
             )}
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobile && isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="border-t border-border bg-background/95 backdrop-blur-xl"
-          >
-            <div className="px-4 py-4 space-y-1">
-              {navigationItems.map((item) => (
+      {/* Mobile menu */}
+      {isMobile && isMenuOpen && (
+        <div className="border-t-2 border-primary bg-background">
+          <div className="px-4 py-3 space-y-1 font-mono text-sm">
+            {navigationItems.map((item) => {
+              const isActive = activeSection === item.key
+              return (
                 <Link
-                  key={item.name}
+                  key={item.key}
                   href={item.href}
                   onClick={() => setIsMenuOpen(false)}
                   className={cn(
-                    "block px-4 py-2 text-sm font-medium rounded-lg transition-all",
-                    activeSection === item.key
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    "flex items-center gap-2 px-3 py-2 uppercase tracking-wider border",
+                    isActive
+                      ? "border-primary text-primary bg-primary/10 phosphor-glow"
+                      : "border-transparent text-muted-foreground",
                   )}
                 >
+                  <span>&gt;</span>
                   {item.name}
+                  {isActive && <BlinkingCursor char="_" />}
                 </Link>
-              ))}
-              <div className="flex items-center gap-2 pt-4 border-t border-border mt-2">
-                <div className="flex-1">
-                  <ThemeToggle />
-                </div>
-                <Button variant="ghost" size="sm" className="flex-1" asChild>
-                  <Link href="https://github.com/aashirjaved" target="_blank">
-                    <Github className="h-4 w-4 mr-2" />
-                    GitHub
-                  </Link>
-                </Button>
-                <Button variant="ghost" size="sm" className="flex-1" asChild>
-                  <Link href="https://www.linkedin.com/in/aashirjaved/" target="_blank">
-                    <Linkedin className="h-4 w-4 mr-2" />
-                    LinkedIn
-                  </Link>
-                </Button>
+              )
+            })}
+            <div className="flex items-center justify-between gap-2 pt-3 mt-3 border-t border-primary/40">
+              <Clock />
+              <div className="flex items-center gap-2">
+                <Link
+                  href="https://github.com/aashirjaved"
+                  target="_blank"
+                  className="p-1.5 border border-primary/40 text-primary"
+                >
+                  <Github className="w-3.5 h-3.5" />
+                </Link>
+                <Link
+                  href="https://www.linkedin.com/in/aashirjaved/"
+                  target="_blank"
+                  className="p-1.5 border border-primary/40 text-primary"
+                >
+                  <Linkedin className="w-3.5 h-3.5" />
+                </Link>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      )}
     </nav>
   )
 }
-

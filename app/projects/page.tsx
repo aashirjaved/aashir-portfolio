@@ -1,126 +1,126 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { Github, TrendingUp, Users, Target, Zap, Sparkles, Calendar } from "lucide-react"
 import Link from "next/link"
-import { TopNavigation } from "@/components/top-navigation"
-import { FloatingTags } from "@/components/floating-tags"
-import { useIsMobile } from "@/hooks/use-mobile"
 import { Suspense } from "react"
-import { FadeIn, CardHover, StaggerContainer, StaggerItem, ScaleOnHover } from "@/components/animations"
+import { TopNavigation } from "@/components/top-navigation"
+import { RetroFooter } from "@/components/retro-footer"
+import { TerminalWindow } from "@/components/crt/terminal-window"
+import { GlitchText } from "@/components/crt/glitch-text"
+import { RetroTag } from "@/components/crt/retro-tag"
+import { RetroButton } from "@/components/crt/retro-button"
 
-const projects = [
+type Variant = "green" | "amber" | "magenta" | "cyan"
+
+interface Project {
+  title: string
+  company: string
+  period: string
+  description: string
+  details: string[]
+  technologies: string[]
+  metrics: { label: string; value: string }[]
+  category: string
+  status: string
+  variant: Variant
+  filename: string
+}
+
+const projects: Project[] = [
   {
     title: "AI-Powered Customer Care Platform",
     company: "Deliveroo",
     period: "2022-2024",
     description:
-      "Revolutionary customer care automation platform combining React frontends, Go backend APIs, and fine-tuned LLM agents for intelligent customer service.",
-    impact: "2x CSAT increase, £2M annual savings, 60% automation rate",
+      "Customer care automation combining React frontends, Go backend APIs, and fine-tuned LLM agents for intelligent customer service.",
     details: [
-      "Developed AI agents processing 10,000+ cases daily with 95% accuracy",
-      "Created advanced prompt engineering frameworks for customer service LLMs",
-      "Built real-time React interface with seamless agent-human handoff",
-      "Implemented Go backend APIs with PostgreSQL for high-availability processing",
-      "Designed multi-region Kubernetes infrastructure with Terraform automation",
+      "AI agents processing 10,000+ cases daily with 95% accuracy",
+      "Advanced prompt engineering frameworks for customer service LLMs",
+      "Real-time React interface with seamless agent-human handoff",
+      "Go backend APIs with PostgreSQL for high-availability processing",
+      "Multi-region Kubernetes infrastructure with Terraform automation",
     ],
-    technologies: [
-      "React",
-      "Go",
-      "Python",
-      "LLM Fine-tuning",
-      "Prompt Engineering",
-      "PostgreSQL",
-      "Kubernetes",
-      "Terraform",
-    ],
+    technologies: ["React", "Go", "Python", "LLM", "Prompt Eng", "PostgreSQL", "K8s", "Terraform"],
     metrics: [
-      { label: "CSAT Increase", value: "2x", icon: <Users className="w-4 h-4" />, color: "text-emerald-600" },
-      { label: "Cost Savings", value: "£2M", icon: <TrendingUp className="w-4 h-4" />, color: "text-green-600" },
-      { label: "Automation", value: "60%", icon: <Target className="w-4 h-4" />, color: "text-blue-600" },
+      { label: "CSAT", value: "2x" },
+      { label: "SAVED", value: "£2M" },
+      { label: "AUTO", value: "60%" },
     ],
-    category: "AI + Full-Stack",
-    status: "Production",
-    gradient: "from-teal-500 to-cyan-600",
-    featured: true,
+    category: "AI + FULL_STACK",
+    status: "PROD",
+    variant: "magenta",
+    filename: "ai-care.proj",
   },
   {
     title: "Core Engineering Infrastructure",
     company: "Motorway",
-    period: "2024-Present",
+    period: "2024–Present",
     description:
-      "Mission-critical infrastructure platform powering Motorway's core services with advanced monitoring, AI-powered alerting, and seamless auth systems.",
-    impact: "15% volume increase, 7% conversion boost, 15% AWS cost reduction",
+      "Mission-critical infrastructure platform powering Motorway's core services with monitoring, AI alerting, and seamless auth.",
     details: [
-      "Led migration to decoupled AuthN/AuthZ services resolving customer pain points",
-      "Built comprehensive monitoring dashboards with React and Next.js",
-      "Implemented AI-powered incident management using LLMs for categorization",
-      "Established operational excellence practices reducing technical debt",
-      "Managed cross-functional teams across multiple microservices",
+      "Migration to decoupled AuthN/AuthZ services resolving customer pain points",
+      "Comprehensive monitoring dashboards with React and Next.js",
+      "AI-powered incident management using LLMs for categorization",
+      "Operational excellence practices reducing technical debt",
+      "Cross-functional team management across microservices",
     ],
-    technologies: ["Go", "Python", "React", "Next.js", "AWS", "Terraform", "LLM Integration", "OAuth2.0"],
+    technologies: ["Go", "Python", "React", "Next.js", "AWS", "Terraform", "LLM", "OAuth2"],
     metrics: [
-      { label: "Volume Increase", value: "15%", icon: <TrendingUp className="w-4 h-4" />, color: "text-green-600" },
-      { label: "Conversion Boost", value: "7%", icon: <Target className="w-4 h-4" />, color: "text-blue-600" },
-      { label: "Cost Reduction", value: "15%", icon: <Zap className="w-4 h-4" />, color: "text-purple-600" },
+      { label: "VOLUME", value: "+15%" },
+      { label: "CONV", value: "+7%" },
+      { label: "AWS", value: "-15%" },
     ],
-    category: "Infrastructure + AI",
-    status: "Production",
-    gradient: "from-blue-500 to-indigo-600",
-    featured: true,
+    category: "INFRA + AI",
+    status: "PROD",
+    variant: "green",
+    filename: "core-infra.proj",
   },
   {
     title: "High-Performance Warehouse Gateway",
     company: "Zalando",
     period: "2021-2022",
     description:
-      "Enterprise-grade gateway system connecting warehouse operations with Zalando's infrastructure, featuring React dashboards and optimized Java APIs.",
-    impact: "1000+ RPS, 15% latency reduction, 25% inventory optimization",
+      "Enterprise gateway connecting warehouse operations with Zalando's infrastructure — React dashboards + optimized Java APIs.",
     details: [
-      "Designed high-performance Java APIs handling 1000+ requests per second",
-      "Built responsive React interfaces for warehouse management teams",
-      "Implemented AI-powered demand forecasting improving inventory by 25%",
-      "Set up comprehensive monitoring with Grafana and Prometheus",
-      "Led technical workshops for integration teams across the organization",
+      "High-performance Java APIs handling 1000+ requests per second",
+      "Responsive React interfaces for warehouse management teams",
+      "AI-powered demand forecasting improving inventory by 25%",
+      "Comprehensive monitoring with Grafana and Prometheus",
+      "Technical workshops for integration teams",
     ],
-    technologies: ["Java", "React", "TypeScript", "PostgreSQL", "Docker", "Kubernetes", "Grafana", "Prometheus"],
+    technologies: ["Java", "React", "TypeScript", "PostgreSQL", "Docker", "K8s", "Grafana", "Prometheus"],
     metrics: [
-      { label: "RPS Handled", value: "1000+", icon: <Target className="w-4 h-4" />, color: "text-orange-600" },
-      { label: "Latency", value: "-15%", icon: <Zap className="w-4 h-4" />, color: "text-red-600" },
-      { label: "Optimization", value: "+25%", icon: <TrendingUp className="w-4 h-4" />, color: "text-green-600" },
+      { label: "RPS", value: "1K+" },
+      { label: "LATENCY", value: "-15%" },
+      { label: "INVENTORY", value: "+25%" },
     ],
-    category: "Backend + Frontend",
-    status: "Production",
-    gradient: "from-orange-500 to-red-600",
-    featured: false,
+    category: "BACKEND + UI",
+    status: "PROD",
+    variant: "amber",
+    filename: "warehouse.proj",
   },
   {
     title: "Multi-Cloud Migration Platform",
-    company: "Nordcloud - IBM",
+    company: "Nordcloud (IBM)",
     period: "2020-2021",
     description:
-      "Enterprise cloud migration platform transforming monolithic applications into modern microservices across AWS, Azure, and GCP.",
-    impact: "£5M savings, 30+ migrations, 40% efficiency improvement",
+      "Cloud migration platform transforming monolithic applications into microservices across AWS, Azure, GCP.",
     details: [
-      "Led architectural design for cross-cloud compatibility and migration patterns",
-      "Built data transformation pipelines ensuring zero data loss during migrations",
-      "Implemented CI/CD workflows accelerating deployments by 40%",
-      "Created migration assessment tools providing accurate timelines and costs",
-      "Managed client stakeholders throughout complex migration projects",
+      "Architectural design for cross-cloud compatibility and migration patterns",
+      "Data transformation pipelines ensuring zero data loss during migrations",
+      "CI/CD workflows accelerating deployments by 40%",
+      "Migration assessment tools providing accurate timelines and costs",
+      "Client stakeholder management throughout complex projects",
     ],
-    technologies: ["AWS", "Azure", "GCP", "Terraform", "Docker", "Kubernetes", "Python", "Go"],
+    technologies: ["AWS", "Azure", "GCP", "Terraform", "Docker", "K8s", "Python", "Go"],
     metrics: [
-      { label: "Migrations", value: "30+", icon: <Target className="w-4 h-4" />, color: "text-blue-600" },
-      { label: "Efficiency", value: "+40%", icon: <TrendingUp className="w-4 h-4" />, color: "text-green-600" },
-      { label: "Cost Savings", value: "£5M", icon: <Zap className="w-4 h-4" />, color: "text-purple-600" },
+      { label: "MIGRATIONS", value: "30+" },
+      { label: "EFFICIENCY", value: "+40%" },
+      { label: "SAVED", value: "£5M" },
     ],
-    category: "Cloud Infrastructure",
-    status: "Production",
-    gradient: "from-blue-500 to-cyan-600",
-    featured: false,
+    category: "CLOUD INFRA",
+    status: "PROD",
+    variant: "cyan",
+    filename: "multi-cloud.proj",
   },
   {
     title: "Event-Driven E-Commerce Platform",
@@ -128,183 +128,148 @@ const projects = [
     period: "2019-2020",
     description:
       "Scalable e-commerce system handling high-volume transactions with real-time inventory management and personalized recommendations.",
-    impact: "99.9% uptime, 3x conversion rate, 25,000+ daily orders",
     details: [
-      "Architected event-driven system with message queues for reliability",
-      "Built personalized recommendation engine using collaborative filtering",
-      "Implemented real-time inventory synchronization across multiple channels",
-      "Created responsive React/Next.js frontend with optimized mobile UX",
-      "Integrated payment gateways with robust error handling and reconciliation",
+      "Event-driven architecture with message queues for reliability",
+      "Personalized recommendation engine using collaborative filtering",
+      "Real-time inventory synchronization across multiple channels",
+      "Responsive React/Next.js frontend with optimized mobile UX",
+      "Payment gateway integration with robust error handling",
     ],
     technologies: ["Node.js", "React", "Next.js", "Redis", "PostgreSQL", "Kafka", "AWS", "ElasticSearch"],
     metrics: [
-      { label: "Uptime", value: "99.9%", icon: <Target className="w-4 h-4" />, color: "text-green-600" },
-      { label: "Conversions", value: "3x", icon: <TrendingUp className="w-4 h-4" />, color: "text-blue-600" },
-      { label: "Daily Orders", value: "25k+", icon: <Zap className="w-4 h-4" />, color: "text-purple-600" },
+      { label: "UPTIME", value: "99.9%" },
+      { label: "CONVERSIONS", value: "3x" },
+      { label: "ORDERS/D", value: "25K" },
     ],
-    category: "Full-Stack",
-    status: "Production",
-    gradient: "from-green-500 to-emerald-600",
-    featured: false,
+    category: "FULL_STACK",
+    status: "PROD",
+    variant: "green",
+    filename: "ecom-events.proj",
   },
 ]
 
-// ProjectsContent component with the actual content
 function ProjectsContent() {
-  const isMobile = useIsMobile()
-  
   return (
-    <div className="min-h-screen bg-background">
-      <FloatingTags />
+    <div className="min-h-screen">
       <TopNavigation activeSection="projects" />
 
-      {/* Hero Header */}
-      <section className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 border-b">
-        <div className="max-w-7xl mx-auto">
-          <FadeIn delay={0.1} direction="up">
-            <div className="text-center max-w-3xl mx-auto">
-              <h1 className={`${isMobile ? 'text-4xl' : 'text-5xl'} font-bold mb-4`}>
-                <span className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                  Featured Projects
-                </span>
-              </h1>
-              <p className={`${isMobile ? 'text-lg' : 'text-xl'} text-muted-foreground leading-relaxed`}>
-                A collection of projects demonstrating my expertise in AI, full-stack development, and cloud infrastructure.
-              </p>
-            </div>
-          </FadeIn>
+      <section className="pt-24 pb-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="font-mono text-xs uppercase text-muted-foreground mb-2">
+            <span className="text-primary">$&gt;</span> ls -la /projects
+          </div>
+          <h1 className="font-pixel text-3xl sm:text-5xl phosphor-glow mb-3">
+            <GlitchText text="PROJECTS.dir" />
+          </h1>
+          <p className="font-mono text-sm sm:text-base text-card-foreground max-w-2xl">
+            <span className="text-primary">// </span>
+            Selected production systems — AI agents, infrastructure platforms, and high-performance backends.
+          </p>
         </div>
       </section>
 
-      {/* Projects Grid */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <StaggerContainer className="grid md:grid-cols-2 gap-8" staggerDelay={0.1}>
-            {projects.map((project, index) => (
-              <StaggerItem key={index}>
-                <CardHover>
-                  <Card className="overflow-hidden border-2 hover:shadow-xl transition-all duration-300">
-                    <div className={`h-1.5 bg-gradient-to-r ${project.gradient}`} />
-                    <CardHeader className="pb-4">
-                      <div className="flex flex-wrap items-center gap-2 mb-3">
-                        <Badge 
-                          className={`bg-gradient-to-r ${project.gradient} text-white border-0 hover:opacity-90`}
-                        >
-                          {project.category}
-                        </Badge>
-                        <Badge variant="secondary" className="font-medium">
-                          {project.status}
-                        </Badge>
-                        <div className="ml-auto flex items-center gap-1.5 text-sm text-muted-foreground">
-                          <Calendar className="w-3.5 h-3.5" />
-                          <span>{project.period}</span>
-                        </div>
+      <section className="px-4 sm:px-6 lg:px-8 pb-12">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-6">
+          {projects.map((p, i) => (
+            <TerminalWindow
+              key={i}
+              title={p.filename}
+              variant={p.variant}
+              prompt={p.period}
+            >
+              <div className="space-y-4 font-mono text-sm">
+                <div className="flex flex-wrap gap-2 items-center">
+                  <RetroTag variant={p.variant}>{p.category}</RetroTag>
+                  <RetroTag variant="amber">{p.status}</RetroTag>
+                  <span className="text-muted-foreground text-xs ml-auto">{p.company}</span>
+                </div>
+
+                <h2 className="font-pixel text-base sm:text-lg phosphor-glow leading-snug">
+                  {p.title}
+                </h2>
+
+                <p className="text-card-foreground leading-relaxed">{p.description}</p>
+
+                <div className="grid grid-cols-3 gap-2">
+                  {p.metrics.map((m, j) => (
+                    <div
+                      key={j}
+                      className="pixel-border-thin p-2 text-center"
+                    >
+                      <div className="font-pixel text-sm phosphor-glow">{m.value}</div>
+                      <div className="text-[9px] uppercase text-muted-foreground tracking-wider mt-1">
+                        {m.label}
                       </div>
-                      <CardTitle className={`${isMobile ? 'text-xl' : 'text-2xl'} mb-2`}>
-                        {project.title}
-                      </CardTitle>
-                      <CardDescription className="text-base leading-relaxed">
-                        {project.description}
-                      </CardDescription>
-                    </CardHeader>
+                    </div>
+                  ))}
+                </div>
 
-                    {project.metrics && (
-                      <CardContent className="pb-4">
-                        <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-3'} gap-4`}>
-                          {project.metrics.map((metric, i) => (
-                            <Card key={i} className="border bg-muted/50">
-                              <CardContent className="p-4">
-                                <div className="flex items-center gap-3">
-                                  <div className={`p-2 rounded-lg bg-background ${metric.color} bg-opacity-10`}>
-                                    <div className={metric.color}>
-                                      {metric.icon}
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs text-muted-foreground font-medium">{metric.label}</p>
-                                    <p className="text-lg font-bold">{metric.value}</p>
-                                  </div>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          ))}
-                        </div>
-                      </CardContent>
-                    )}
+                <div>
+                  <div className="text-xs uppercase text-primary mb-2 tracking-wider">
+                    &gt; KEY_OUTPUTS
+                  </div>
+                  <ul className="space-y-1.5">
+                    {p.details.map((d, j) => (
+                      <li key={j} className="flex gap-2 text-card-foreground text-xs sm:text-sm">
+                        <span className="text-primary shrink-0">▸</span>
+                        <span>{d}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
-                    <CardContent className="space-y-4">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-yellow-500" />
-                        <h4 className="text-sm font-semibold">Key Contributions</h4>
-                      </div>
-                      <Separator />
-                      <ul className="space-y-2.5">
-                        {project.details.map((detail, i) => (
-                          <li key={i} className="flex items-start gap-2.5 text-sm text-muted-foreground">
-                            <div className="w-1.5 h-1.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mt-2 flex-shrink-0" />
-                            <span>{detail}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-
-                    <CardFooter className="flex-col items-start gap-3 pt-4">
-                      <div className="w-full">
-                        <h4 className="text-sm font-semibold mb-3">Technologies</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {project.technologies.map((tech, i) => (
-                            <Badge 
-                              key={i} 
-                              variant="outline" 
-                              className="font-normal"
-                            >
-                              {tech}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    </CardFooter>
-                  </Card>
-                </CardHover>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-12 px-4 sm:px-6 lg:px-8 border-t">
-        <div className="max-w-7xl mx-auto">
-          <FadeIn delay={0.3} direction="up">
-            <div className={`${isMobile ? 'flex flex-col space-y-4' : 'flex items-center justify-between'} text-sm text-muted-foreground`}>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span>Last updated: June 27, 2025</span>
+                <div>
+                  <div className="text-xs uppercase text-primary mb-2 tracking-wider">&gt; STACK</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {p.technologies.map((t, j) => (
+                      <RetroTag key={j} variant={p.variant}>
+                        {t}
+                      </RetroTag>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <ScaleOnHover>
-                <Button variant="ghost" size="sm" asChild>
-                  <Link href="https://github.com/aashirjaved" target="_blank">
-                    <Github className="w-4 h-4 mr-2" />
-                    View Source
-                  </Link>
-                </Button>
-              </ScaleOnHover>
-            </div>
-          </FadeIn>
+            </TerminalWindow>
+          ))}
         </div>
-      </footer>
+      </section>
+
+      <section className="px-4 sm:px-6 lg:px-8 pb-12">
+        <div className="max-w-4xl mx-auto">
+          <TerminalWindow title="cta.sh" variant="green">
+            <div className="text-center space-y-4">
+              <div className="font-pixel text-base sm:text-xl phosphor-glow">WANT_DEEPER_DIVE?</div>
+              <p className="font-mono text-sm text-card-foreground">
+                <span className="text-primary">// </span>
+                Each system has stories. Open a channel and ask.
+              </p>
+              <div className="flex justify-center gap-3 flex-wrap">
+                <Link href="/contact">
+                  <RetroButton variant="green">CONTACT_ME</RetroButton>
+                </Link>
+                <Link href="/experience">
+                  <RetroButton variant="amber">VIEW_TIMELINE</RetroButton>
+                </Link>
+              </div>
+            </div>
+          </TerminalWindow>
+        </div>
+      </section>
+
+      <RetroFooter />
     </div>
   )
 }
 
-// Main component wrapped with Suspense
 export default function Projects() {
   return (
-    <Suspense fallback={
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-        <p className="text-slate-600">Loading...</p>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen bg-background font-mono text-primary phosphor-glow">
+          LOADING...
+        </div>
+      }
+    >
       <ProjectsContent />
     </Suspense>
   )

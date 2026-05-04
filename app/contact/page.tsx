@@ -1,305 +1,244 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Github, Linkedin, Mail, MapPin, ExternalLink, Clock, Sparkles } from "lucide-react"
 import Link from "next/link"
+import { Suspense, useState } from "react"
+import { Github, Linkedin, Mail, MapPin, ExternalLink } from "lucide-react"
 import { TopNavigation } from "@/components/top-navigation"
-import { FloatingTags } from "@/components/floating-tags"
-import { useIsMobile } from "@/hooks/use-mobile"
-import Newsletter from "@/components/newsletter"
-import { Suspense } from "react"
-import { FadeIn, CardHover, StaggerContainer, StaggerItem, ScaleOnHover } from "@/components/animations"
+import { RetroFooter } from "@/components/retro-footer"
+import { TerminalWindow } from "@/components/crt/terminal-window"
+import { GlitchText } from "@/components/crt/glitch-text"
+import { RetroTag } from "@/components/crt/retro-tag"
+import { RetroButton } from "@/components/crt/retro-button"
+import { BlinkingCursor } from "@/components/crt/blinking-cursor"
 
-const contactMethods = [
+const channels = [
   {
-    title: "Email",
-    description: "Best way to reach me for professional inquiries and collaborations",
+    title: "EMAIL",
+    desc: "Best channel for professional inquiries and collaborations",
     value: "me@aashir.net",
     href: "mailto:me@aashir.net",
     icon: <Mail className="w-5 h-5" />,
-    gradient: "from-blue-500 to-cyan-600",
+    variant: "green" as const,
   },
   {
-    title: "LinkedIn",
-    description: "Connect with me professionally and see my latest updates",
-    value: "linkedin.com/in/aashirjaved",
+    title: "LINKEDIN",
+    desc: "Professional network — endorsements, updates, news",
+    value: "/in/aashirjaved",
     href: "https://www.linkedin.com/in/aashirjaved/",
     icon: <Linkedin className="w-5 h-5" />,
-    gradient: "from-blue-600 to-indigo-700",
+    variant: "cyan" as const,
   },
   {
-    title: "GitHub",
-    description: "Explore my code, contributions, and open-source projects",
-    value: "github.com/aashirjaved",
+    title: "GITHUB",
+    desc: "Code, contributions, open-source projects",
+    value: "@aashirjaved",
     href: "https://github.com/aashirjaved",
     icon: <Github className="w-5 h-5" />,
-    gradient: "from-slate-600 to-slate-800",
+    variant: "magenta" as const,
   },
 ]
 
 const availability = [
   {
-    type: "Full-time Opportunities",
-    status: "Open to discussions",
-    statusColor: "bg-blue-100 text-blue-700",
-    description:
-      "Interested in senior engineering roles, technical leadership positions, and AI/ML focused opportunities at innovative companies",
-    gradient: "from-blue-500 to-indigo-600",
+    type: "FULL_TIME",
+    status: "OPEN",
+    desc: "Senior engineering, technical leadership, AI/ML focused roles at innovative companies",
+    variant: "green" as const,
   },
   {
-    type: "Consulting & Advisory",
-    status: "Limited availability",
-    statusColor: "bg-yellow-100 text-yellow-700",
-    description:
-      "Available for strategic technical consulting, AI integration projects, and infrastructure optimization initiatives",
-    gradient: "from-purple-500 to-pink-600",
+    type: "CONSULTING",
+    status: "LIMITED",
+    desc: "Strategic technical consulting, AI integration, infrastructure optimization",
+    variant: "amber" as const,
   },
   {
-    type: "Speaking & Mentoring",
-    status: "Always available",
-    statusColor: "bg-green-100 text-green-700",
-    description: "Happy to speak at conferences, mentor engineers, or provide technical guidance to growing teams",
-    gradient: "from-emerald-500 to-teal-600",
+    type: "SPEAKING / MENTOR",
+    status: "ALWAYS",
+    desc: "Conferences, mentoring, technical guidance for growing teams",
+    variant: "magenta" as const,
   },
 ]
 
-// ContactContent component with the actual content
-function ContactContent() {
-  const isMobile = useIsMobile()
-  
+function ContactForm() {
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [subject, setSubject] = useState("")
+  const [message, setMessage] = useState("")
+
+  const inputClass =
+    "w-full bg-background border-2 border-primary/40 px-3 py-2 font-mono text-sm text-foreground focus:border-primary focus:outline-none focus:ring-0 placeholder:text-muted-foreground/60"
+
   return (
-    <div className="min-h-screen bg-background">
-      <FloatingTags />
+    <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+      <div className="grid sm:grid-cols-2 gap-4">
+        <label className="block">
+          <span className="font-mono text-xs uppercase text-primary phosphor-glow">&gt; NAME</span>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="your_handle"
+            className={inputClass}
+          />
+        </label>
+        <label className="block">
+          <span className="font-mono text-xs uppercase text-primary phosphor-glow">&gt; EMAIL</span>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="your@email.address"
+            className={inputClass}
+          />
+        </label>
+      </div>
+      <label className="block">
+        <span className="font-mono text-xs uppercase text-primary phosphor-glow">&gt; SUBJECT</span>
+        <input
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+          placeholder="re: opportunity"
+          className={inputClass}
+        />
+      </label>
+      <label className="block">
+        <span className="font-mono text-xs uppercase text-primary phosphor-glow">&gt; MESSAGE</span>
+        <textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          rows={6}
+          placeholder="type message here..."
+          className={inputClass}
+        />
+      </label>
+      <RetroButton type="submit" variant="green">
+        TRANSMIT_MESSAGE
+      </RetroButton>
+    </form>
+  )
+}
+
+function ContactContent() {
+  return (
+    <div className="min-h-screen">
       <TopNavigation activeSection="contact" />
 
-      {/* Hero Header */}
-      <section className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 border-b">
-        <div className="max-w-7xl mx-auto">
-          <FadeIn delay={0.1} direction="up">
-            <div className="text-center max-w-3xl mx-auto">
-              <h1 className={`${isMobile ? 'text-4xl' : 'text-5xl'} font-bold mb-4`}>
-                <span className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                  Get In Touch
-                </span>
-              </h1>
-              <p className={`${isMobile ? 'text-lg' : 'text-xl'} text-muted-foreground leading-relaxed`}>
-                Let's discuss opportunities, collaborations, or just have a conversation about technology and engineering
-                innovation.
-              </p>
-            </div>
-          </FadeIn>
+      <section className="pt-24 pb-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="font-mono text-xs uppercase text-muted-foreground mb-2">
+            <span className="text-primary">$&gt;</span> connect --target=aashir
+          </div>
+          <h1 className="font-pixel text-3xl sm:text-5xl phosphor-glow mb-3">
+            <GlitchText text="CONTACT.SYS" />
+          </h1>
+          <p className="font-mono text-sm sm:text-base text-card-foreground max-w-2xl">
+            <span className="text-primary">// </span>
+            Open a channel<BlinkingCursor /> Multiple frequencies available.
+          </p>
         </div>
       </section>
 
-      {/* Contact Methods */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <FadeIn delay={0.2} direction="up">
-            <div className="flex items-center gap-3 mb-8 justify-center">
-              <Sparkles className="w-5 h-5 text-yellow-500" />
-              <h2 className="text-sm font-bold text-primary uppercase tracking-wider">Contact Methods</h2>
-            </div>
-          </FadeIn>
-
-          <StaggerContainer className="grid md:grid-cols-3 gap-6" staggerDelay={0.1}>
-            {contactMethods.map((method, index) => (
-              <StaggerItem key={index}>
-                <CardHover>
-                  <Card className="border-2 h-full hover:shadow-xl transition-all">
-                    <CardHeader>
-                      <div className={`w-12 h-12 bg-gradient-to-br ${method.gradient} rounded-xl flex items-center justify-center text-white shadow-lg mb-4`}>
-                        {method.icon}
-                      </div>
-                      <CardTitle>{method.title}</CardTitle>
-                      <CardDescription>{method.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <Link
-                        href={method.href}
-                        target={method.href.startsWith("http") ? "_blank" : undefined}
-                        className="flex items-center gap-2 text-primary hover:underline"
-                      >
-                        <span className="font-medium">{method.value}</span>
-                        {method.href.startsWith("http") && (
-                          <ExternalLink className="w-4 h-4" />
-                        )}
-                      </Link>
-                    </CardContent>
-                  </Card>
-                </CardHover>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-      </section>
-
-          {/* Current Availability */}
-          <section className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/30">
-            <div className="max-w-7xl mx-auto">
-              <FadeIn delay={0.3} direction="up">
-                <div className="flex items-center gap-3 mb-8 justify-center">
-                  <Clock className="w-5 h-5 text-primary" />
-                  <h2 className="text-sm font-bold text-primary uppercase tracking-wider">Current Availability</h2>
-                </div>
-              </FadeIn>
-
-              <StaggerContainer className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-3'} gap-6`} staggerDelay={0.1}>
-                {availability.map((item, index) => (
-                  <StaggerItem key={index}>
-                    <CardHover>
-                      <Card className="border-2 overflow-hidden hover:shadow-xl transition-all h-full">
-                        <div className={`h-1.5 bg-gradient-to-r ${item.gradient}`} />
-                        <CardHeader>
-                          <CardTitle className="text-lg">{item.type}</CardTitle>
-                          <Badge variant="secondary" className="w-fit">
-                            {item.status}
-                          </Badge>
-                        </CardHeader>
-                        <CardContent>
-                          <CardDescription>{item.description}</CardDescription>
-                        </CardContent>
-                      </Card>
-                    </CardHover>
-                  </StaggerItem>
-                ))}
-              </StaggerContainer>
-            </div>
-          </section>
-
-          {/* Contact Form */}
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto">
-              <FadeIn delay={0.4} direction="up">
-                <Card className="border-2">
-                  <CardHeader>
-                    <div className="flex items-center gap-3">
-                      <Mail className="w-5 h-5 text-primary" />
-                      <CardTitle>Send a Message</CardTitle>
-                    </div>
-                    <Separator />
-                  </CardHeader>
-                  <CardContent>
-                    <form className="space-y-6">
-                      <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'} gap-6`}>
-                        <div className="space-y-2">
-                          <label htmlFor="name" className="text-sm font-medium">
-                            Name
-                          </label>
-                          <Input id="name" placeholder="Your name" />
-                        </div>
-                        <div className="space-y-2">
-                          <label htmlFor="email" className="text-sm font-medium">
-                            Email
-                          </label>
-                          <Input type="email" id="email" placeholder="Your email" />
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="subject" className="text-sm font-medium">
-                          Subject
-                        </label>
-                        <Input id="subject" placeholder="Subject of your message" />
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="message" className="text-sm font-medium">
-                          Message
-                        </label>
-                        <Textarea id="message" rows={5} placeholder="Your message" />
-                      </div>
-                      <ScaleOnHover>
-                        <Button size="lg" type="submit" className="w-full sm:w-auto">
-                          Send Message
-                        </Button>
-                      </ScaleOnHover>
-                    </form>
-                  </CardContent>
-                </Card>
-              </FadeIn>
-            </div>
-          </section>
-
-          {/* Newsletter */}
-          <section className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/30">
-            <div className="max-w-4xl mx-auto">
-              <Newsletter />
-            </div>
-          </section>
-
-          {/* Location */}
-          <section className="py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto">
-              <FadeIn delay={0.5} direction="up">
-                <Card className="border-2">
-                  <CardHeader>
-                    <div className="flex items-center gap-3">
-                      <MapPin className="w-5 h-5 text-primary" />
-                      <CardTitle>Location</CardTitle>
-                    </div>
-                    <Separator />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="mb-6">
-                      <h3 className="text-xl font-bold mb-2">London, United Kingdom</h3>
-                      <CardDescription>
-                        Based in London but working with clients and companies worldwide. Open to remote opportunities and
-                        occasional travel.
-                      </CardDescription>
-                    </div>
-                    <div className="aspect-video w-full rounded-xl overflow-hidden border">
-                      <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d317718.69319292053!2d-0.3817765404429606!3d51.528735174646494!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a00baf21de75%3A0x52963a5addd52a99!2sLondon%2C%20UK!5e0!3m2!1sen!2suk!4v1704289020035!5m2!1sen!2suk"
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
-                        allowFullScreen
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                      ></iframe>
-                    </div>
-                  </CardContent>
-                </Card>
-              </FadeIn>
-            </div>
-          </section>
-
-      {/* Footer */}
-      <footer className="py-12 px-4 sm:px-6 lg:px-8 border-t">
-        <div className="max-w-7xl mx-auto">
-          <FadeIn delay={0.6} direction="up">
-            <div className={`${isMobile ? 'flex flex-col space-y-4' : 'flex items-center justify-between'} text-sm text-muted-foreground`}>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span>Last updated: June 27, 2025</span>
-              </div>
-              <ScaleOnHover>
-                <Button variant="ghost" size="sm" asChild>
-                  <Link href="https://github.com/aashirjaved" target="_blank">
-                    <Github className="w-4 h-4 mr-2" />
-                    View Source
+      {/* Channels */}
+      <section className="px-4 sm:px-6 lg:px-8 pb-12">
+        <div className="max-w-6xl mx-auto">
+          <div className="font-pixel text-xs sm:text-sm uppercase tracking-widest mb-4 phosphor-glow">
+            <span className="text-primary">[</span> CHANNELS <span className="text-primary">]</span>
+          </div>
+          <div className="grid md:grid-cols-3 gap-4">
+            {channels.map((c, i) => (
+              <TerminalWindow key={i} title={`${c.title.toLowerCase()}.sock`} variant={c.variant}>
+                <div className="space-y-3">
+                  <div className="text-primary">{c.icon}</div>
+                  <div className="font-pixel text-sm phosphor-glow">{c.title}</div>
+                  <p className="font-mono text-xs text-card-foreground leading-relaxed">{c.desc}</p>
+                  <Link
+                    href={c.href}
+                    target={c.href.startsWith("http") ? "_blank" : undefined}
+                    className="inline-flex items-center gap-2 font-mono text-sm text-primary hover:underline"
+                  >
+                    <span>{c.value}</span>
+                    {c.href.startsWith("http") && <ExternalLink className="w-3 h-3" />}
                   </Link>
-                </Button>
-              </ScaleOnHover>
-            </div>
-          </FadeIn>
+                </div>
+              </TerminalWindow>
+            ))}
+          </div>
         </div>
-      </footer>
+      </section>
+
+      {/* Availability */}
+      <section className="px-4 sm:px-6 lg:px-8 pb-12">
+        <div className="max-w-6xl mx-auto">
+          <div className="font-pixel text-xs sm:text-sm uppercase tracking-widest mb-4 phosphor-glow">
+            <span className="text-primary">[</span> AVAILABILITY <span className="text-primary">]</span>
+          </div>
+          <div className="grid md:grid-cols-3 gap-4">
+            {availability.map((a, i) => (
+              <TerminalWindow key={i} title={a.type} variant={a.variant} controls={false}>
+                <div className="space-y-2">
+                  <RetroTag variant={a.variant}>{a.status}</RetroTag>
+                  <p className="font-mono text-xs text-card-foreground leading-relaxed">{a.desc}</p>
+                </div>
+              </TerminalWindow>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Form */}
+      <section className="px-4 sm:px-6 lg:px-8 pb-12">
+        <div className="max-w-4xl mx-auto">
+          <TerminalWindow title="compose_message.sh" variant="green" prompt="awaiting input">
+            <ContactForm />
+          </TerminalWindow>
+        </div>
+      </section>
+
+      {/* Location */}
+      <section className="px-4 sm:px-6 lg:px-8 pb-12">
+        <div className="max-w-4xl mx-auto">
+          <TerminalWindow title="locate.sh" variant="cyan">
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-crt-cyan" />
+                <span className="font-pixel text-sm phosphor-glow-cyan">LONDON, UNITED KINGDOM</span>
+              </div>
+              <p className="font-mono text-sm text-card-foreground">
+                <span className="phosphor-glow-cyan">// </span>
+                Based in London. Working with clients globally. Open to remote, occasional travel.
+              </p>
+              <div className="font-mono text-xs text-muted-foreground grid grid-cols-2 gap-x-4 gap-y-1 pt-2 border-t border-primary/30">
+                <span>
+                  <span className="text-primary">LAT:</span> 51.5074°N
+                </span>
+                <span>
+                  <span className="text-primary">LON:</span> 0.1278°W
+                </span>
+                <span>
+                  <span className="text-primary">TZ:</span> GMT/BST
+                </span>
+                <span>
+                  <span className="text-primary">PING:</span> ~LOW
+                </span>
+              </div>
+            </div>
+          </TerminalWindow>
+        </div>
+      </section>
+
+      <RetroFooter />
     </div>
   )
 }
 
-// Main component wrapped with Suspense
 export default function Contact() {
   return (
-    <Suspense fallback={
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <p className="text-muted-foreground">Loading...</p>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen bg-background font-mono text-primary phosphor-glow">
+          LOADING...
+        </div>
+      }
+    >
       <ContactContent />
     </Suspense>
   )

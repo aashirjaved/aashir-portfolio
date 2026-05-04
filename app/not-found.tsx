@@ -1,60 +1,44 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Suspense } from "react"
-
-// Simple component that doesn't use any hooks requiring Suspense
-function NotFoundFallback() {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-6 text-center">
-      <div className="max-w-md">
-        <h1 className="text-9xl font-bold text-slate-300 mb-4">404</h1>
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-900 via-blue-800 to-purple-800 bg-clip-text text-transparent mb-6">
-          Page Not Found
-        </h2>
-        <p className="text-lg text-slate-600 mb-8">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700" asChild>
-            <Link href="/">Go Home</Link>
-          </Button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// Content component with hooks that need Suspense
-function NotFoundContent() {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-6 text-center">
-      <div className="max-w-md">
-        <h1 className="text-9xl font-bold text-slate-300 mb-4">404</h1>
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-900 via-blue-800 to-purple-800 bg-clip-text text-transparent mb-6">
-          Page Not Found
-        </h2>
-        <p className="text-lg text-slate-600 mb-8">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700" asChild>
-            <Link href="/">Go Home</Link>
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href="/">Go Back</Link>
-          </Button>
-        </div>
-      </div>
-    </div>
-  )
-}
+import { TerminalWindow } from "@/components/crt/terminal-window"
+import { GlitchText } from "@/components/crt/glitch-text"
+import { RetroButton } from "@/components/crt/retro-button"
+import { BlinkingCursor } from "@/components/crt/blinking-cursor"
 
 export default function NotFound() {
   return (
-    <Suspense fallback={<NotFoundFallback />}>
-      <NotFoundContent />
-    </Suspense>
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="w-full max-w-2xl">
+        <TerminalWindow title="ERROR_404.sys" variant="magenta" prompt="SEGFAULT">
+          <div className="text-center space-y-6 py-4">
+            <div className="font-pixel text-5xl sm:text-7xl phosphor-glow-magenta">
+              <GlitchText text="404" />
+            </div>
+            <div className="font-pixel text-base sm:text-xl phosphor-glow">FILE_NOT_FOUND</div>
+            <div className="font-mono text-sm text-card-foreground space-y-1">
+              <div>
+                <span className="text-accent">$&gt;</span> The requested resource does not exist.
+              </div>
+              <div>
+                <span className="text-accent">$&gt;</span> Possible causes: moved, deleted, or never existed.
+              </div>
+              <div>
+                <span className="text-accent">$&gt;</span> Returning to base
+                <BlinkingCursor />
+              </div>
+            </div>
+            <div className="flex justify-center gap-3 flex-wrap pt-2">
+              <Link href="/">
+                <RetroButton variant="green">RETURN_HOME</RetroButton>
+              </Link>
+              <Link href="/contact">
+                <RetroButton variant="magenta">REPORT_BUG</RetroButton>
+              </Link>
+            </div>
+          </div>
+        </TerminalWindow>
+      </div>
+    </div>
   )
 }

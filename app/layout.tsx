@@ -2,13 +2,13 @@ import type { Metadata, Viewport } from 'next'
 import Analytics from '@/components/analytics'
 import { generateMetadata as getMetadata } from './layout-metadata'
 import { display, body, mono } from './fonts'
-import { ScrollProgress } from '@/components/crt'
 import './globals.css'
 import { Suspense } from 'react'
+import { Nav } from '@/components/editorial/nav'
 
 export const viewport: Viewport = {
-  themeColor: '#1a0e00',
-  colorScheme: 'dark',
+  themeColor: '#faf8f4',
+  colorScheme: 'light',
 };
 
 export const generateMetadata = (): Metadata => {
@@ -21,28 +21,26 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable} dark`}>
+    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="theme-color" content="#1a0e00" />
+        <meta name="theme-color" content="#faf8f4" />
         <link rel="icon" href="/me.png" />
         <link rel="apple-touch-icon" href="/me.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
-      <body className="font-body bg-bg text-fg antialiased">
+      <body className="font-body bg-paper text-ink antialiased">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:px-3 focus:py-1 focus:bg-bg focus:border focus:border-accent focus:text-bright focus:font-mono focus:text-xs focus:uppercase focus:tracking-widest"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[200] focus:px-3 focus:py-2 focus:bg-ink focus:text-paper focus:text-sm focus:rounded-full"
         >
-          skip to content
+          Skip to content
         </a>
-        <div className="crt-noise" aria-hidden />
-        <div className="crt-overlay" aria-hidden />
-        <ScrollProgress />
+        <Nav />
         <Suspense fallback={null}>
           <Analytics />
         </Suspense>
-        <div className="crt-flicker">{children}</div>
+        {children}
       </body>
     </html>
   )

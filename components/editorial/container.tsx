@@ -1,21 +1,26 @@
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
-export function CRTScreen({
+export function Container({
   children,
   className,
-  width = "narrow",
+  size = "default",
 }: {
   children: ReactNode;
   className?: string;
-  width?: "narrow" | "wide";
+  size?: "narrow" | "default" | "wide";
 }) {
+  const widths = {
+    narrow: "max-w-[640px]",
+    default: "max-w-[860px]",
+    wide: "max-w-[1180px]",
+  };
   return (
     <main
       id="main"
       className={cn(
-        "mx-auto px-5 sm:px-8 pt-20 pb-24",
-        width === "narrow" ? "max-w-[760px]" : "max-w-[920px]",
+        "mx-auto px-5 sm:px-8 pt-28 sm:pt-32 pb-32",
+        widths[size],
         className,
       )}
     >

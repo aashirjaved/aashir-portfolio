@@ -397,6 +397,90 @@
     100% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
   }
 
+  /* ============ Kaiju briefing overlay (per-level intro) ============ */
+  #kaiju-briefing {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(20,4,20,0.85) 0%, rgba(0,0,0,0.92) 70%);
+    z-index: 45;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    padding: 20px;
+  }
+  #kaiju-briefing.show {
+    opacity: 1;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+  #kaiju-briefing .brief-inner {
+    text-align: center;
+    transform: scale(0.7) translateY(20px);
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+    color: inherit;
+    max-width: 720px;
+    width: 100%;
+  }
+  #kaiju-briefing.show .brief-inner {
+    transform: scale(1) translateY(0);
+  }
+  .brief-level {
+    font-size: clamp(14px, 2.4vw, 22px);
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-shadow: 2px 2px 0 #000, 0 0 12px var(--glow);
+    opacity: 0.85;
+    margin-bottom: 18px;
+  }
+  .brief-name {
+    font-size: clamp(48px, 11vw, 130px);
+    letter-spacing: 6px;
+    color: currentColor;
+    text-shadow:
+      0 0 24px currentColor,
+      0 0 48px currentColor,
+      4px 4px 0 #000,
+      8px 8px 0 rgba(0,0,0,0.5);
+    line-height: 1;
+    animation: brief-name-pulse 1.4s ease-in-out infinite alternate;
+  }
+  @keyframes brief-name-pulse {
+    from { transform: scale(1) rotate(-0.5deg); }
+    to   { transform: scale(1.04) rotate(0.5deg); }
+  }
+  .brief-sub {
+    font-size: clamp(16px, 2.8vw, 26px);
+    letter-spacing: 3px;
+    color: #fff;
+    text-shadow: 0 0 10px currentColor, 2px 2px 0 #000;
+    margin: 14px 0 24px;
+    opacity: 0.9;
+  }
+  .brief-lore {
+    font-size: clamp(18px, 3vw, 28px);
+    color: #fff;
+    text-shadow: 2px 2px 0 #000;
+    letter-spacing: 1.5px;
+    line-height: 1.4;
+    margin-bottom: 24px;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .brief-skip {
+    font-size: clamp(11px, 1.8vw, 14px);
+    letter-spacing: 3px;
+    color: #888;
+    text-shadow: 1px 1px 0 #000;
+    opacity: 0.6;
+    animation: brief-skip-blink 1.2s ease-in-out infinite;
+  }
+  @keyframes brief-skip-blink {
+    0%, 100% { opacity: 0.4; }
+    50%      { opacity: 0.9; }
+  }
+
   /* HUD */
   #hud {
     position: absolute;
@@ -825,6 +909,17 @@
   <div id="defeat-vignette"></div>
   <div id="biome-name"></div>
 
+  <!-- Kaiju briefing overlay: shown at the start of every level -->
+  <div id="kaiju-briefing">
+    <div class="brief-inner">
+      <div class="brief-level">LEVEL 1 / 20</div>
+      <div class="brief-name">GOJIRA</div>
+      <div class="brief-sub">The Original King</div>
+      <div class="brief-lore">The original king of all monsters!</div>
+      <div class="brief-skip">Tap to skip</div>
+    </div>
+  </div>
+
   <div id="playfield">
     <div id="skyline"></div>
     <div id="ground"></div>
@@ -1247,7 +1342,7 @@ const Voice = (() => {
 })();
 
 // ---------- Version ----------
-const GAME_VERSION = "v2.0 · KAIJU ROSTER";
+const GAME_VERSION = "v2.1 · KAIJU BRIEFING";
 const GAME_BUILD_DATE = "2026-05-16";
 
 // ---------- Characters ----------
@@ -1554,11 +1649,61 @@ const GHIDORAH_SVG = `
 `;
 
 const CHARACTERS = {
-  gojira:   { name: "GOJIRA",         subtitle: "The Original King",     svg: GOJIRA_SVG,   color: "#5fffaa", mouthX: 175 },
-  space:    { name: "SPACE GODZILLA", subtitle: "Crystal Kaiju from Stars", svg: SPACE_SVG, color: "#aa88ff", mouthX: 175 },
-  fire:     { name: "FIRE GODZILLA",  subtitle: "Burning Heart, Hotter Rage", svg: FIRE_SVG, color: "#ff8800", mouthX: 175 },
-  cyber:    { name: "CYBER GODZILLA", subtitle: "Machine of Pure Power", svg: CYBER_SVG,  color: "#ff4040", mouthX: 175 },
-  ghidorah: { name: "KING GHIDORAH",  subtitle: "Three-Headed Final Boss", svg: GHIDORAH_SVG, color: "#ffeb6a", mouthX: 165 },
+  gojira: {
+    name: "GOJIRA",
+    subtitle: "The Original King",
+    svg: GOJIRA_SVG, color: "#5fffaa", mouthX: 175,
+    lore: [
+      "The original king of all monsters!",
+      "He came from the deep sea to smash Tokyo!",
+      "His green spikes flash with atomic power!",
+      "Nothing can stop the king of kaiju!"
+    ]
+  },
+  space: {
+    name: "SPACE GODZILLA",
+    subtitle: "Crystal Kaiju from Stars",
+    svg: SPACE_SVG, color: "#aa88ff", mouthX: 175,
+    lore: [
+      "He fell from the stars with shining crystals!",
+      "His crystals can fire lasers across the city!",
+      "He is from outer space and very, very strong!",
+      "Watch out for the cosmic crystal smash!"
+    ]
+  },
+  fire: {
+    name: "FIRE GODZILLA",
+    subtitle: "Burning Heart, Hotter Rage",
+    svg: FIRE_SVG, color: "#ff8800", mouthX: 175,
+    lore: [
+      "His heart is burning. His breath is fire!",
+      "Lava runs through his body like rivers!",
+      "Every step he takes melts the ground!",
+      "He is the hottest kaiju ever seen!"
+    ]
+  },
+  cyber: {
+    name: "CYBER GODZILLA",
+    subtitle: "Machine of Pure Power",
+    svg: CYBER_SVG, color: "#ff4040", mouthX: 175,
+    lore: [
+      "Half metal, half monster, all power!",
+      "His red eye sees through everything!",
+      "His mechanical claws crush buildings flat!",
+      "Built to defeat all the other kaiju!"
+    ]
+  },
+  ghidorah: {
+    name: "KING GHIDORAH",
+    subtitle: "Three-Headed Final Boss",
+    svg: GHIDORAH_SVG, color: "#ffeb6a", mouthX: 165,
+    lore: [
+      "Three golden dragon heads! Two huge wings!",
+      "He is the FINAL BOSS. Only the best can beat him!",
+      "Each head can blast yellow lightning!",
+      "The most dangerous kaiju in the universe!"
+    ]
+  },
 };
 const CHARACTER_ORDER = ["gojira","space","fire","cyber","ghidorah"];
 
@@ -1927,7 +2072,7 @@ function switchToBiome(index) {
     Audio.startMusic(biome.key);
   }
   Audio.roar(true);
-  Voice.speak(characterChanged ? ch.name : biome.label, { priority: true });
+  // (Kaiju name + lore is spoken by briefKaiju() now — don't double-announce here)
 }
 
 // ---------- HUD ----------
@@ -2370,6 +2515,48 @@ function saveProgress() {
   } catch (e) {}
 }
 
+// ---------- Per-level kaiju briefing ----------
+let briefingTimer = null;
+function briefKaiju(onDone) {
+  const charKey = characterForLevel(State.level);
+  const ch = CHARACTERS[charKey];
+  const biome = BIOMES[LEVELS[State.level].biome];
+  const lore = ch.lore[Math.floor(Math.random() * ch.lore.length)];
+
+  const $brief = document.getElementById("kaiju-briefing");
+  $brief.querySelector(".brief-level").textContent =
+    "LEVEL " + (State.level + 1) + " / " + LEVELS.length + "  ·  " + biome.label;
+  $brief.querySelector(".brief-name").textContent = ch.name;
+  $brief.querySelector(".brief-sub").textContent = ch.subtitle;
+  $brief.querySelector(".brief-lore").textContent = lore;
+  $brief.style.color = ch.color;
+
+  $brief.classList.remove("show");
+  void $brief.offsetWidth;
+  $brief.classList.add("show");
+
+  // Announce kaiju name, then read the lore
+  // (switchToBiome already roars, so we don't roar again here.)
+  setTimeout(() => Voice.speak(ch.name, { rate: 0.85, pitch: 0.95, priority: true }), 220);
+  setTimeout(() => Voice.speak(lore, { rate: 1.0, priority: true }), 1500);
+
+  if (briefingTimer) { clearTimeout(briefingTimer); briefingTimer = null; }
+
+  let finished = false;
+  function finish() {
+    if (finished) return;
+    finished = true;
+    if (briefingTimer) { clearTimeout(briefingTimer); briefingTimer = null; }
+    $brief.classList.remove("show");
+    $brief.onclick = null;
+    if (onDone) onDone();
+  }
+
+  // Tap to skip
+  $brief.onclick = finish;
+  briefingTimer = setTimeout(finish, 4500);
+}
+
 function startGame(startLevel) {
   $start.classList.add("hidden");
   $gameover.classList.add("hidden");
@@ -2387,26 +2574,32 @@ function startGame(startLevel) {
   State.currentTarget = null;
 
   Audio.ensure();
-  Voice.speak(State.level > 0 ? "level " + (State.level + 1) : "godzilla rampage");
   updateHUD();
   switchToBiome(LEVELS[State.level].biome);
-  scheduleSpawns();
-  loop();
   maybeLightning();
-  showHint(State.level > 0
-    ? "LEVEL " + (State.level + 1) + " — " + LEVELS[State.level].title + "!"
-    : "PRESS THE YELLOW LETTER!", 4000);
-  focusInput();
+  // Brief the kaiju, THEN start spawning
+  briefKaiju(() => {
+    if (!State.running) return;
+    scheduleSpawns();
+    loop();
+    showHint(State.level > 0
+      ? "LEVEL " + (State.level + 1) + " — " + LEVELS[State.level].title + "!"
+      : "PRESS THE YELLOW LETTER!", 4000);
+    focusInput();
+  });
 }
 
 function continueLevel() {
   $levelup.classList.add("hidden");
   State.paused = false;
   switchToBiome(LEVELS[State.level].biome);
-  scheduleSpawns();
-  loop();
-  showHint(LEVELS[State.level].title + "!", 2500);
-  focusInput();
+  briefKaiju(() => {
+    if (!State.running || State.paused) return;
+    scheduleSpawns();
+    loop();
+    showHint(LEVELS[State.level].title + "!", 2500);
+    focusInput();
+  });
 }
 
 function pauseGame() {

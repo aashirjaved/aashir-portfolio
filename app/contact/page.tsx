@@ -2,88 +2,66 @@
 
 import { useState } from "react";
 import {
-  CRTScreen,
-  NavBar,
-  Terminal,
-  SectionHeader,
-  AsciiDivider,
-  PageFooter,
-  PixelButton,
-  CRTLink,
-  Cursor,
-  Tag,
-} from "@/components/crt";
+  Container,
+  Footer,
+  PageHero,
+  SectionLabel,
+  Reveal,
+  Pill,
+  EditorialLink,
+} from "@/components/editorial";
 import Newsletter from "@/components/newsletter";
 
 const channels = [
   {
-    cmd: "$ mail aashir",
-    label: "EMAIL",
+    label: "Email",
     value: "me@aashir.net",
     href: "mailto:me@aashir.net",
-    note: "Best route. Reply in 1–2 days.",
+    note: "Best route. Reply in 24 — 48h.",
   },
   {
-    cmd: "$ open linkedin",
-    label: "LINKEDIN",
-    value: "linkedin.com/in/aashirjaved",
+    label: "LinkedIn",
+    value: "/in/aashirjaved",
     href: "https://www.linkedin.com/in/aashirjaved/",
     external: true,
     note: "Professional updates and DMs.",
   },
   {
-    cmd: "$ ssh github",
-    label: "GITHUB",
-    value: "github.com/aashirjaved",
+    label: "GitHub",
+    value: "@aashirjaved",
     href: "https://github.com/aashirjaved",
     external: true,
     note: "Code, contributions, occasional rants.",
+  },
+  {
+    label: "X",
+    value: "@aasjav",
+    href: "https://x.com/aasjav",
+    external: true,
+    note: "Half-formed thoughts in real time.",
   },
 ];
 
 const availability = [
   {
-    type: "FULL-TIME",
-    status: "OPEN" as const,
-    body: "Senior eng / tech leadership / AI-ML focused at companies that ship.",
+    type: "Full-time roles",
+    status: "Open",
+    body: "Staff / senior / founding engineer at companies that ship.",
+    tone: "ok" as const,
   },
   {
-    type: "CONSULTING",
-    status: "LIMITED" as const,
+    type: "Consulting",
+    status: "Limited",
     body: "Strategic technical consulting, AI integration, infra optimisation.",
+    tone: "accent" as const,
   },
   {
-    type: "SPEAKING / MENTOR",
-    status: "OPEN" as const,
+    type: "Speaking & mentoring",
+    status: "Open",
     body: "Conferences, mentoring, technical guidance to growing teams.",
+    tone: "ok" as const,
   },
 ];
-
-function StatusGlyph({ s }: { s: "OPEN" | "LIMITED" | "CLOSED" }) {
-  const map = {
-    OPEN: { glyph: "●", tone: "ok" as const },
-    LIMITED: { glyph: "◐", tone: "accent" as const },
-    CLOSED: { glyph: "○", tone: "danger" as const },
-  };
-  const { glyph, tone } = map[s];
-  return (
-    <span className="inline-flex items-center gap-2">
-      <span
-        className={
-          tone === "ok"
-            ? "text-ok"
-            : tone === "accent"
-              ? "text-accent"
-              : "text-danger"
-        }
-        aria-hidden
-      >
-        {glyph}
-      </span>
-      <Tag tone={tone}>{s}</Tag>
-    </span>
-  );
-}
 
 export default function Contact() {
   const [name, setName] = useState("");
@@ -97,159 +75,214 @@ export default function Contact() {
     const body = encodeURIComponent(
       `From: ${name} <${email}>\n\n${message}\n\n— sent via aashir.net`,
     );
-    const subj = encodeURIComponent(subject || "hello from aashir.net");
+    const subj = encodeURIComponent(subject || "Hello from aashir.net");
     window.location.href = `mailto:me@aashir.net?subject=${subj}&body=${body}`;
     setSent(true);
   };
 
   return (
-    <>
-      <NavBar />
-      <CRTScreen>
-        <div className="font-mono text-sm text-dim uppercase tracking-widest mb-2">
-          {"> establishing connection..."}
-        </div>
-        <h1 className="font-display text-[clamp(1.4rem,4vw,2.2rem)] uppercase glow-strong leading-tight">
-          CONTACT.DAT
-        </h1>
-        <p className="mt-3 text-fg/90 font-mono">
-          Three reliable channels and a form. Pick whichever feels right — they all reach me.
-        </p>
+    <Container>
+      <PageHero
+        eyebrow="Contact"
+        number="C"
+        title="Let's"
+        italic="talk."
+        lede="Four reliable channels and a form. Pick whichever feels right — they all reach me."
+      />
 
-        <SectionHeader index={1} title="CHANNELS" />
-        <div className="space-y-3">
-          {channels.map((c) => (
-            <Terminal key={c.label} command={c.cmd}>
-              <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2">
-                <div className="font-mono">
-                  <span className="text-bright uppercase tracking-wider mr-3">{c.label}</span>
-                  <CRTLink href={c.href} external={c.external}>
+      <section className="pt-8">
+        <Reveal>
+          <SectionLabel
+            number="01"
+            title="Where to find"
+            italic="me"
+          />
+        </Reveal>
+        <Reveal>
+          <div>
+            {channels.map((c) => (
+              <a
+                key={c.label}
+                href={c.href}
+                target={c.external ? "_blank" : undefined}
+                rel={c.external ? "noreferrer" : undefined}
+                className="group grid grid-cols-1 sm:grid-cols-[8rem_1fr_auto] gap-y-2 sm:gap-x-8 py-6 border-b border-rule-soft hover:border-ink transition-colors"
+              >
+                <div className="mono text-xs uppercase tracking-wider text-ink-mute pt-1">
+                  {c.label}
+                </div>
+                <div>
+                  <div className="display text-[clamp(1.25rem,2.4vw,1.75rem)] leading-tight text-ink group-hover:text-accent transition-colors">
                     {c.value}
-                  </CRTLink>
+                    {c.external && (
+                      <span aria-hidden className="ml-2 text-ink-faint group-hover:text-accent transition-colors">
+                        ↗
+                      </span>
+                    )}
+                  </div>
+                  <div className="mt-1 text-sm text-ink-mute">{c.note}</div>
                 </div>
-                <span className="text-dim font-mono text-sm">{c.note}</span>
-              </div>
-            </Terminal>
-          ))}
-        </div>
+              </a>
+            ))}
+          </div>
+        </Reveal>
+      </section>
 
-        <SectionHeader index={2} title="AVAILABILITY" />
-        <Terminal command="cat status.now">
-          <div className="space-y-3">
+      <section className="pt-24">
+        <Reveal>
+          <SectionLabel
+            number="02"
+            title="What I'm open"
+            italic="to"
+          />
+        </Reveal>
+        <Reveal>
+          <div className="space-y-0">
             {availability.map((a) => (
-              <div key={a.type} className="flex flex-col sm:flex-row sm:items-start sm:gap-4">
-                <div className="w-full sm:w-44 flex items-center gap-2">
-                  <StatusGlyph s={a.status} />
-                </div>
-                <div className="flex-1">
-                  <div className="font-mono text-bright text-sm uppercase tracking-wider">
+              <div
+                key={a.type}
+                className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-y-3 sm:gap-x-8 py-6 border-b border-rule-soft last:border-0"
+              >
+                <div>
+                  <div className="display text-[clamp(1.25rem,2.4vw,1.75rem)] leading-tight text-ink">
                     {a.type}
                   </div>
-                  <p className="font-mono text-sm text-fg/90">{a.body}</p>
+                  <p className="mt-2 text-ink-2">{a.body}</p>
+                </div>
+                <div className="self-start sm:self-center">
+                  <Pill tone={a.tone}>
+                    <span
+                      className="mr-2 inline-block w-1.5 h-1.5 rounded-full"
+                      aria-hidden
+                      style={{
+                        background: a.tone === "ok" ? "rgb(var(--ok))" : "rgb(var(--accent))",
+                      }}
+                    />
+                    {a.status}
+                  </Pill>
                 </div>
               </div>
             ))}
           </div>
-        </Terminal>
+        </Reveal>
+      </section>
 
-        <SectionHeader index={3} title="MESSAGE" />
-        <form onSubmit={onSubmit} className="frame frame-amber p-4 sm:p-5 bg-screen/40">
-          <div className="font-mono text-xs uppercase tracking-widest text-dim mb-3">
-            $ compose --to=aashir
-          </div>
-
-          <div className="grid sm:grid-cols-2 gap-3 mb-3">
-            <label className="block">
-              <span className="font-mono text-xs text-dim uppercase tracking-widest">
-                {"> name"}
-              </span>
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="mt-1 w-full bg-bg border border-rule px-2 py-2 font-mono text-fg outline-none focus:border-accent"
-              />
-            </label>
-            <label className="block">
-              <span className="font-mono text-xs text-dim uppercase tracking-widest">
-                {"> email"}
-              </span>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="mt-1 w-full bg-bg border border-rule px-2 py-2 font-mono text-fg outline-none focus:border-accent"
-              />
-            </label>
-          </div>
-
-          <label className="block mb-3">
-            <span className="font-mono text-xs text-dim uppercase tracking-widest">
-              {"> subject"}
-            </span>
-            <input
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              className="mt-1 w-full bg-bg border border-rule px-2 py-2 font-mono text-fg outline-none focus:border-accent"
+      <section className="pt-24">
+        <Reveal>
+          <SectionLabel
+            number="03"
+            title="Or send a"
+            italic="message"
+            description="Opens your mail client with a fully composed draft — no third-party in the middle."
+          />
+        </Reveal>
+        <Reveal>
+          <form onSubmit={onSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+            <Field
+              label="Name"
+              value={name}
+              onChange={setName}
+              required
             />
-          </label>
-
-          <label className="block mb-4">
-            <span className="font-mono text-xs text-dim uppercase tracking-widest">
-              {"> message"}
-            </span>
-            <div className="mt-1 relative">
-              <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                rows={6}
-                required
-                className="w-full bg-bg border border-rule px-2 py-2 font-mono text-fg outline-none focus:border-accent resize-y"
+            <Field
+              label="Email"
+              type="email"
+              value={email}
+              onChange={setEmail}
+              required
+            />
+            <div className="sm:col-span-2">
+              <Field
+                label="Subject"
+                value={subject}
+                onChange={setSubject}
               />
-              {!message && (
-                <div className="absolute top-2 left-2 font-mono text-dim pointer-events-none">
-                  type message <Cursor />
-                </div>
+            </div>
+            <div className="sm:col-span-2">
+              <label className="block">
+                <span className="mono text-xs uppercase tracking-wider text-ink-mute mb-2 block">
+                  Message
+                </span>
+                <textarea
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  rows={6}
+                  required
+                  className="w-full bg-transparent border-b border-ink focus:border-accent transition-colors py-3 outline-none resize-y text-ink placeholder:text-ink-faint"
+                  placeholder="What's on your mind?"
+                />
+              </label>
+            </div>
+            <div className="sm:col-span-2 flex items-center gap-4 flex-wrap pt-2">
+              <button type="submit" className="btn">
+                Send message →
+              </button>
+              {sent && (
+                <span className="text-sm text-ink-mute">
+                  Mail client launched. Fall back to{" "}
+                  <EditorialLink href="mailto:me@aashir.net">
+                    me@aashir.net
+                  </EditorialLink>
+                  .
+                </span>
               )}
             </div>
-          </label>
+          </form>
+        </Reveal>
+      </section>
 
-          <div className="flex items-center gap-3">
-            <PixelButton type="submit">$ send</PixelButton>
-            {sent && (
-              <span className="font-mono text-sm text-ok">
-                [OK] mail client launched. fall back to <CRTLink href="mailto:me@aashir.net">me@aashir.net</CRTLink>.
-              </span>
-            )}
-          </div>
-        </form>
+      <Reveal>
+        <section className="pt-24">
+          <Newsletter />
+        </section>
+      </Reveal>
 
-        <SectionHeader index={4} title="SUBSCRIBE" />
-        <Newsletter />
-
-        <SectionHeader index={5} title="LOCATION" />
-        <Terminal command="whereis aashir">
-          <pre className="font-mono text-xs sm:text-sm leading-tight text-fg whitespace-pre overflow-x-auto m-0">
-{`  ┌─────────────────────────────┐
-  │  ░░░░░░░░░░░░░░░░░░░░░░░░░  │
-  │  ░░░░██░░░░░░░░░░░░░░░░░░░  │
-  │  ░░░████░░░░░░░░░░░░░░░░░░  │
-  │  ░░░░██░░░██░░░░░░░░░░░░░░  │
-  │  ░░░░░░░░████░░░░░░░░░░░░░  │
-  │  ░░░░░░░░░██░░░░░░ ◉ ░░░░░  │   ◉  LONDON
-  │  ░░░░░░░░░░░░░░░░░░░░░░░░░  │      51.5074°N 0.1278°W
-  │  ░░░░░░░░░░░░░░░░░░░░░░░░░  │      GMT/BST
-  └─────────────────────────────┘`}
-          </pre>
-          <p className="mt-3 font-mono text-sm text-fg/90">
-            Based in London. Open to remote and occasional travel.
+      <Reveal>
+        <section className="pt-24">
+          <p className="eyebrow mb-4">Based in</p>
+          <p className="display text-[clamp(2.5rem,7vw,5rem)] leading-[0.95] text-ink">
+            London,{" "}
+            <span className="display-italic text-ink-mute">UK.</span>
           </p>
-        </Terminal>
+          <p className="mt-4 text-ink-2 mono text-sm">
+            51.5074° N · 0.1278° W · GMT/BST
+          </p>
+          <p className="mt-2 text-ink-2">
+            Open to remote and occasional travel.
+          </p>
+        </section>
+      </Reveal>
 
-        <AsciiDivider variant="block" className="mt-16" />
-        <PageFooter />
-      </CRTScreen>
-    </>
+      <Footer />
+    </Container>
+  );
+}
+
+function Field({
+  label,
+  value,
+  onChange,
+  type = "text",
+  required,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  type?: string;
+  required?: boolean;
+}) {
+  return (
+    <label className="block">
+      <span className="mono text-xs uppercase tracking-wider text-ink-mute mb-2 block">
+        {label}
+      </span>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        required={required}
+        className="w-full bg-transparent border-b border-ink focus:border-accent transition-colors py-3 outline-none text-ink"
+      />
+    </label>
   );
 }

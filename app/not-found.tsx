@@ -1,38 +1,30 @@
-import { CRTScreen, NavBar, Terminal, PixelButton, AsciiDivider, PageFooter } from "@/components/crt";
+import { Container, Footer, LinkButton } from "@/components/editorial";
 
 export default function NotFound() {
   return (
-    <>
-      <NavBar />
-      <CRTScreen>
-        <div className="font-mono text-sm text-dim uppercase tracking-widest mb-2">
-          {"> kernel panic"}
-        </div>
-        <h1 className="font-display text-[clamp(2rem,8vw,4.5rem)] uppercase glow-strong leading-none text-accent">
-          404
+    <Container>
+      <section className="pt-12 pb-32">
+        <div className="eyebrow mb-8">Error · 404</div>
+        <h1 className="display text-[clamp(5rem,18vw,14rem)] leading-[0.85] text-ink">
+          Lost.
+          <br />
+          <span className="display-italic text-ink-mute">Not found.</span>
         </h1>
-        <h2 className="font-display text-[clamp(0.9rem,2.4vw,1.4rem)] uppercase mt-3 text-bright glow">
-          SEGMENTATION FAULT
-        </h2>
-
-        <Terminal command="dmesg | tail -n 4" className="mt-8">
-          <pre className="font-mono text-sm whitespace-pre-wrap m-0">
-{`[  0.000001] mounting /aashir... ok
-[  0.000010] resolving requested page... fail
-[  0.000017] reason: page not located in memory
-[  0.000023] suggestion: try a known route below`}
-          </pre>
-        </Terminal>
-
-        <div className="flex flex-wrap gap-3 mt-8">
-          <PixelButton href="/">$ cd /home</PixelButton>
-          <PixelButton href="/projects" variant="ghost">$ ls projects</PixelButton>
-          <PixelButton href="/contact" variant="ghost">$ mail aashir</PixelButton>
+        <p className="lede mt-10 max-w-[36ch] text-ink-2 font-light">
+          The page you&rsquo;re looking for doesn&rsquo;t exist — or has been
+          renamed since you last visited.
+        </p>
+        <div className="mt-12 flex flex-wrap gap-3">
+          <LinkButton href="/">Back home →</LinkButton>
+          <LinkButton href="/projects" variant="ghost">
+            See selected work
+          </LinkButton>
+          <LinkButton href="/contact" variant="ghost">
+            Get in touch
+          </LinkButton>
         </div>
-
-        <AsciiDivider variant="block" className="mt-16" />
-        <PageFooter />
-      </CRTScreen>
-    </>
+      </section>
+      <Footer />
+    </Container>
   );
 }

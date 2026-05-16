@@ -1,23 +1,21 @@
 import {
-  CRTScreen,
-  NavBar,
-  Terminal,
-  SectionHeader,
-  AsciiDivider,
-  PageFooter,
-  PixelButton,
-  Tag,
-  CRTLink,
-  DataRow,
-} from "@/components/crt";
+  Container,
+  Footer,
+  PageHero,
+  SectionLabel,
+  Reveal,
+  Pill,
+  LinkButton,
+  EditorialLink,
+} from "@/components/editorial";
 
 const positions = [
   {
     co: "MoonPay",
     role: "Senior Software Engineer · Consumer Product",
-    when: "Present · London, UK",
+    when: "Present · London",
     pts: [
-      "Shipping consumer crypto products at scale across iOS, Android, web.",
+      "Shipping consumer crypto products at scale across iOS, Android and web.",
       "Polygon transaction path → 8.5× faster after rebuild.",
       "Balance experience rebuilt with ACH / SEPA / Faster Payments rails.",
       "Buy/Sell screens redesigned · Liquid Glass UI refresh · onboarding rework.",
@@ -26,9 +24,9 @@ const positions = [
   {
     co: "Motorway",
     role: "Senior Backend Engineer · Core Engineering Lead",
-    when: "Jun 2024 – 2026 · London, UK",
+    when: "Jun 2024 — 2026 · London",
     pts: [
-      "Led Core Engineering: foundational services + platform primitives.",
+      "Led Core Engineering: foundational services and platform primitives.",
       "Decoupled AuthN/AuthZ migration → +7% conversion.",
       "Operational excellence working group → −15% AWS spend.",
       "AI incident management with LLM categorisation → −40% MTTR.",
@@ -37,19 +35,19 @@ const positions = [
   {
     co: "Deliveroo",
     role: "Software Engineer II · Platform / Customer Care",
-    when: "May 2022 – Jun 2024 · London, UK",
+    when: "May 2022 — Jun 2024 · London",
     pts: [
       "AI agents shipping 10,000+ daily cases at 95% accuracy.",
-      "2× CSAT, 50% reduction in handling time, £2M annual savings.",
-      "Multi-region k8s + Terraform; engineering gamedays for 100+.",
+      "2× CSAT · 50% reduction in handling time · £2M annual savings.",
+      "Multi-region k8s + Terraform; engineering gamedays for 100+ engineers.",
     ],
   },
   {
     co: "Zalando",
     role: "Software Engineer · Customer Fulfillment",
-    when: "Jan 2021 – May 2022 · Helsinki, FI",
+    when: "Jan 2021 — May 2022 · Helsinki",
     pts: [
-      "Warehouse integration gateway: 1000+ RPS, −15% latency.",
+      "Warehouse integration gateway · 1000+ RPS · −15% latency.",
       "AI demand forecasting → +25% inventory optimisation.",
       "Grafana + Prometheus monitoring with custom alerting.",
     ],
@@ -57,135 +55,157 @@ const positions = [
   {
     co: "Nordcloud (IBM)",
     role: "Lead Cloud Engineer · Cloud Transformation",
-    when: "Aug 2019 – Jan 2021 · Helsinki, FI",
+    when: "Aug 2019 — Jan 2021 · Helsinki",
     pts: [
       "Multi-cloud migration platform across AWS / Azure / GCP.",
-      "30+ enterprise migrations; £5M+ operational savings.",
-      "Zero-data-loss pipelines; +40% deployment velocity.",
+      "30+ enterprise migrations · £5M+ operational savings.",
+      "Zero-data-loss pipelines · +40% deployment velocity.",
     ],
   },
 ];
 
+const stack = [
+  ["Languages", "go · python · typescript · javascript · java"],
+  ["Frontend", "react · next.js · tailwind · radix"],
+  ["Backend", "go · python · node · graphql · grpc"],
+  ["Cloud", "aws · gcp · azure"],
+  ["Infra", "terraform · kubernetes · docker · ci/cd"],
+  ["Data", "postgres · redis · dynamodb · mongo · kafka"],
+  ["AI / ML", "llms · agents · rag · fine-tune · vector dbs · mlops"],
+  ["Monitoring", "grafana · prometheus · datadog · sentry"],
+];
+
 export default function Resume() {
   return (
-    <>
-      <NavBar />
-      <CRTScreen width="wide">
-        <div className="font-mono text-sm text-dim uppercase tracking-widest mb-2">
-          {"> man aashir"}
-        </div>
-        <h1 className="font-display text-[clamp(1.4rem,4vw,2.2rem)] uppercase glow-strong leading-tight">
-          AASHIR(1)
-        </h1>
-        <p className="mt-3 text-fg/90 font-mono">
-          Plain-text resume. The printable version. Source of truth: this page.
-        </p>
+    <Container size="wide">
+      <PageHero
+        eyebrow="Résumé"
+        number="R"
+        title="Aashir"
+        italic="Javed."
+        lede="Senior software engineer · eight years · full-stack, cloud, AI/ML. London."
+        meta={
+          <div className="flex gap-3 flex-wrap no-print">
+            <LinkButton href="/Aashir-Javed-Resume.pdf" external>
+              Download PDF →
+            </LinkButton>
+            <LinkButton href="https://github.com/aashirjaved" variant="ghost" external>
+              GitHub
+            </LinkButton>
+          </div>
+        }
+      />
 
-        <div className="flex flex-wrap gap-3 mt-5">
-          <PixelButton href="/Aashir-Javed-Resume.pdf" external>
-            $ download.pdf
-          </PixelButton>
-          <PixelButton href="https://github.com/aashirjaved" variant="ghost" external>
-            $ ssh github
-          </PixelButton>
-        </div>
-
-        <SectionHeader index={1} title="NAME" />
-        <Terminal command="head -n1 aashir.1">
-          <p>aashir — versatile engineer; 8+ years; full-stack, cloud, AI/ML.</p>
-        </Terminal>
-
-        <SectionHeader index={2} title="SYNOPSIS" />
-        <Terminal command="cat synopsis">
-          <p>
-            $ aashir [--lead] [--build] [--ship] [--mentor]{"\n"}
-            $ aashir --area={"{full-stack | cloud | ai-ml}"} --location=london{"\n"}
-            $ aashir --currently=moonpay --status=active
-          </p>
-        </Terminal>
-
-        <SectionHeader index={3} title="EXPERIENCE" />
-        <Terminal command="cat experience">
-          <div className="space-y-6">
+      <section className="pt-8">
+        <Reveal>
+          <SectionLabel
+            number="01"
+            title="Experience"
+            italic=""
+          />
+        </Reveal>
+        <Reveal>
+          <div>
             {positions.map((p) => (
-              <article key={p.co}>
-                <div className="flex flex-wrap items-baseline gap-2 mb-1">
-                  <span className="font-mono text-bright text-sm sm:text-base uppercase tracking-wider">
-                    {p.co}
-                  </span>
-                  <span aria-hidden className="text-rule">·</span>
-                  <span className="font-mono text-fg text-sm">{p.role}</span>
+              <article
+                key={p.co}
+                className="grid grid-cols-1 sm:grid-cols-[10rem_1fr] gap-y-3 sm:gap-x-10 py-8 border-b border-rule-soft last:border-0"
+              >
+                <div className="mono text-xs uppercase tracking-wider text-ink-mute pt-1">
+                  {p.when}
                 </div>
-                <div className="font-mono text-xs text-dim mb-2">{p.when}</div>
-                <ul className="space-y-1">
-                  {p.pts.map((pt) => (
-                    <li key={pt} className="font-mono text-sm text-fg/90 leading-relaxed">
-                      <span className="text-accent select-none mr-2">▸</span>
-                      {pt}
-                    </li>
-                  ))}
-                </ul>
+                <div>
+                  <h3 className="display text-[clamp(1.4rem,2.8vw,2rem)] leading-tight text-ink">
+                    {p.co}{" "}
+                    <span className="display-italic text-ink-mute">
+                      — {p.role}
+                    </span>
+                  </h3>
+                  <ul className="mt-4 space-y-2 max-w-[62ch]">
+                    {p.pts.map((pt) => (
+                      <li key={pt} className="text-ink-2 text-[0.95rem] leading-relaxed pl-5 relative">
+                        <span aria-hidden className="absolute left-0 top-[0.6em] w-2.5 h-px bg-ink-faint" />
+                        {pt}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </article>
             ))}
           </div>
-        </Terminal>
+        </Reveal>
+      </section>
 
-        <SectionHeader index={4} title="STACK" />
-        <Terminal command="cat stack">
-          <div className="space-y-1">
-            <DataRow label="Languages" value="go · python · typescript · javascript · java" />
-            <DataRow label="Frontend" value="react · next.js · tailwind · radix" />
-            <DataRow label="Backend" value="go · python · node · graphql · grpc" />
-            <DataRow label="Cloud" value="aws · gcp · azure" />
-            <DataRow label="Infra" value="terraform · kubernetes · docker · ci/cd" />
-            <DataRow label="Data" value="postgres · redis · dynamodb · mongo · kafka" />
-            <DataRow label="AI/ML" value="llms · agents · rag · fine-tune · vector dbs · mlops" />
-            <DataRow label="Monitoring" value="grafana · prometheus · datadog · sentry" />
+      <section className="pt-24">
+        <Reveal>
+          <SectionLabel number="02" title="Stack" italic="" />
+        </Reveal>
+        <Reveal>
+          <div>
+            {stack.map(([label, value]) => (
+              <div
+                key={label}
+                className="grid grid-cols-1 sm:grid-cols-[10rem_1fr] gap-y-2 sm:gap-x-10 py-5 border-b border-rule-soft last:border-0"
+              >
+                <div className="mono text-xs uppercase tracking-wider text-ink-mute pt-1">
+                  {label}
+                </div>
+                <div className="text-ink-2">{value}</div>
+              </div>
+            ))}
           </div>
-        </Terminal>
+        </Reveal>
+      </section>
 
-        <SectionHeader index={5} title="OPEN SOURCE" />
-        <Terminal command="ls -la github.com/aashirjaved">
-          <div className="flex flex-wrap gap-2 mb-3">
-            <Tag>open source</Tag>
-            <Tag>tooling</Tag>
-            <Tag>llm experiments</Tag>
+      <section className="pt-24">
+        <Reveal>
+          <SectionLabel
+            number="03"
+            title="Open"
+            italic="source"
+            description="Tools, side experiments, and contributions to libraries I rely on."
+          />
+        </Reveal>
+        <Reveal>
+          <div className="flex flex-wrap gap-2 mb-6">
+            <Pill>open source</Pill>
+            <Pill>tooling</Pill>
+            <Pill>llm experiments</Pill>
           </div>
-          <p>
-            Various tools, side experiments, and the occasional contribution to libraries I rely on.
-            Full listing at <CRTLink href="https://github.com/aashirjaved" external>github.com/aashirjaved</CRTLink>.
+          <p className="prose-editorial">
+            Full listing at{" "}
+            <EditorialLink href="https://github.com/aashirjaved" external>
+              github.com/aashirjaved
+            </EditorialLink>
+            .
           </p>
-        </Terminal>
+        </Reveal>
+      </section>
 
-        <SectionHeader index={6} title="SEE ALSO" />
-        <Terminal command="man -k aashir">
-          <ul className="space-y-1 font-mono text-sm">
-            <li>
-              <span className="text-dim">about(1)</span> — <CRTLink href="/about">/about</CRTLink>{" "}
-              the longer story
-            </li>
-            <li>
-              <span className="text-dim">projects(1)</span>{" "}
-              — <CRTLink href="/projects">/projects</CRTLink> case files
-            </li>
-            <li>
-              <span className="text-dim">experience(1)</span>{" "}
-              — <CRTLink href="/experience">/experience</CRTLink> career timeline
-            </li>
-            <li>
-              <span className="text-dim">writing(1)</span>{" "}
-              — <CRTLink href="/writing">/writing</CRTLink> notes from production
-            </li>
-            <li>
-              <span className="text-dim">contact(1)</span>{" "}
-              — <CRTLink href="/contact">/contact</CRTLink> get in touch
-            </li>
+      <section className="pt-24">
+        <Reveal>
+          <SectionLabel number="04" title="See" italic="also" />
+        </Reveal>
+        <Reveal>
+          <ul className="space-y-3">
+            {[
+              { href: "/about", label: "About — the longer story" },
+              { href: "/projects", label: "Selected work" },
+              { href: "/experience", label: "Career timeline" },
+              { href: "/writing", label: "Writing — notes from production" },
+              { href: "/contact", label: "Contact — get in touch" },
+            ].map((l) => (
+              <li key={l.href}>
+                <EditorialLink href={l.href} variant="grow">
+                  {l.label}
+                </EditorialLink>
+              </li>
+            ))}
           </ul>
-        </Terminal>
+        </Reveal>
+      </section>
 
-        <AsciiDivider variant="block" className="mt-16" />
-        <PageFooter />
-      </CRTScreen>
-    </>
+      <Footer />
+    </Container>
   );
 }

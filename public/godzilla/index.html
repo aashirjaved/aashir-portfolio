@@ -974,33 +974,60 @@
     max-width: min(720px, 96vw);
   }
   .kaiju-card {
-    width: clamp(86px, 16vw, 130px);
+    width: clamp(96px, 17vw, 140px);
     background: rgba(255, 235, 106, 0.06);
-    border: 2px solid var(--accent);
-    border-radius: 10px;
-    padding: 6px 4px 8px;
+    border: 3px solid var(--accent);
+    border-radius: 12px;
+    padding: 8px 4px 10px;
     text-align: center;
     box-shadow: 0 0 14px rgba(255, 80, 80, 0.25);
+    cursor: pointer;
+    font-family: inherit;
+    color: inherit;
+    transition: transform 0.12s ease, box-shadow 0.15s ease, background 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+  }
+  .kaiju-card:hover,
+  .kaiju-card:focus-visible {
+    transform: translateY(-4px) scale(1.04);
+    background: rgba(255, 235, 106, 0.16);
+    box-shadow: 0 0 30px currentColor, 0 0 60px rgba(255, 80, 80, 0.4);
+    outline: none;
+  }
+  .kaiju-card:active {
+    transform: translateY(2px) scale(0.97);
   }
   .kaiju-card svg {
     width: 100%;
-    height: clamp(80px, 14vw, 110px);
+    height: clamp(86px, 15vw, 116px);
     display: block;
     filter: drop-shadow(0 0 10px currentColor);
   }
   .kaiju-card .nm {
     margin-top: 4px;
-    font-size: clamp(10px, 1.8vw, 13px);
+    font-size: clamp(11px, 1.9vw, 14px);
     letter-spacing: 1.5px;
     color: var(--accent);
     text-shadow: 1px 1px 0 #000;
     line-height: 1.1;
+    font-weight: 900;
   }
   .kaiju-card .sub {
     font-size: 9px;
     color: #aaa;
     margin-top: 2px;
     letter-spacing: 1px;
+  }
+  .kaiju-card .play {
+    margin-top: 6px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: currentColor;
+    background: rgba(0,0,0,0.5);
+    border-radius: 4px;
+    padding: 3px 0;
+    text-shadow: 1px 1px 0 #000;
   }
   @keyframes roster-glow {
     0%, 100% { box-shadow: 0 0 14px rgba(255, 80, 80, 0.25); }
@@ -1307,14 +1334,14 @@
 
   <div id="start" class="screen">
     <h1>GODZILLA<br/>TYPING<br/>RAMPAGE</h1>
-    <p style="color:var(--accent); font-size: clamp(16px, 2.6vw, 22px); margin-bottom: 6px;">Type the words. SMASH the city with ATOMIC BREATH!</p>
-    <p style="font-size:13px; color:#888; margin-bottom: 4px;">Yellow letter = press this next!</p>
+    <p style="color:var(--accent); font-size: clamp(16px, 2.6vw, 22px); margin-bottom: 4px;">Type the words. SMASH the city with ATOMIC BREATH!</p>
+    <p id="pickPrompt" style="color:var(--accent); font-size: clamp(18px, 3vw, 26px); margin: 8px 0 2px; letter-spacing: 3px;">▼ TAP YOUR KAIJU TO START ▼</p>
+    <p style="font-size:12px; color:#888; margin-bottom: 4px;">Every level brings a different kaiju!</p>
     <div id="kaiju-roster"></div>
-    <button class="btn" id="startBtn">🦖 START FROM LEVEL 1</button>
     <button class="btn green hidden" id="continueRunBtn" style="margin-top:14px;">▶ CONTINUE</button>
-    <p id="progressNote" style="margin-top:14px; font-size:14px; color:var(--accent); opacity:0.8;"></p>
-    <p style="margin-top:14px; font-size:12px; color:#666;">iPad? On-screen keyboard pops up automatically.</p>
-    <p id="versionLine" style="margin-top:10px; font-size:11px; color:#5a5a5a; letter-spacing: 2px;"></p>
+    <p id="progressNote" style="margin-top:10px; font-size:14px; color:var(--accent); opacity:0.8;"></p>
+    <p style="margin-top:10px; font-size:12px; color:#666;">iPad? On-screen keyboard pops up automatically.</p>
+    <p id="versionLine" style="margin-top:8px; font-size:11px; color:#5a5a5a; letter-spacing: 2px;"></p>
   </div>
 
   <div id="gameover" class="screen hidden">
@@ -1695,7 +1722,7 @@ const Voice = (() => {
 })();
 
 // ---------- Version ----------
-const GAME_VERSION = "v2.4 · ENGAGEMENT BOOST";
+const GAME_VERSION = "v2.5 · PICK + CYBER REBUILD";
 const GAME_BUILD_DATE = "2026-05-16";
 
 // ---------- Characters ----------
@@ -1862,72 +1889,130 @@ const FIRE_SVG = `
 const CYBER_SVG = `
 <defs>
   <linearGradient id="g-cyber-body" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0%" stop-color="#d8dde8"/>
-    <stop offset="50%" stop-color="#9099aa"/>
-    <stop offset="100%" stop-color="#4a5060"/>
+    <stop offset="0%" stop-color="#ffffff"/>
+    <stop offset="40%" stop-color="#e8ecf0"/>
+    <stop offset="100%" stop-color="#a8b0bc"/>
   </linearGradient>
   <linearGradient id="g-cyber-panel" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0%" stop-color="#aab0c0"/>
-    <stop offset="100%" stop-color="#606878"/>
+    <stop offset="0%" stop-color="#f2f4f8"/>
+    <stop offset="100%" stop-color="#b8c0cc"/>
   </linearGradient>
+  <linearGradient id="g-cyber-joint" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#7a8090"/>
+    <stop offset="100%" stop-color="#3a4050"/>
+  </linearGradient>
+  <radialGradient id="g-cyber-eye" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#ffffff"/>
+    <stop offset="30%" stop-color="#ffeb6a"/>
+    <stop offset="70%" stop-color="#ff3030"/>
+    <stop offset="100%" stop-color="#7a0000"/>
+  </radialGradient>
 </defs>
 <g>
-  <!-- mechanical tail (segmented) -->
-  <rect x="10" y="190" width="20" height="20" rx="3" fill="url(#g-cyber-panel)" stroke="#000" stroke-width="2"/>
-  <rect x="30" y="200" width="20" height="20" rx="3" fill="url(#g-cyber-panel)" stroke="#000" stroke-width="2"/>
-  <rect x="50" y="220" width="22" height="22" rx="3" fill="url(#g-cyber-panel)" stroke="#000" stroke-width="2"/>
-  <!-- legs (boxy) -->
-  <rect x="65" y="245" width="28" height="50" rx="4" fill="url(#g-cyber-body)" stroke="#000" stroke-width="2"/>
-  <rect x="105" y="245" width="28" height="50" rx="4" fill="url(#g-cyber-body)" stroke="#000" stroke-width="2"/>
-  <rect x="68" y="288" width="22" height="8" fill="#3a3a4a" stroke="#000" stroke-width="1"/>
-  <rect x="108" y="288" width="22" height="8" fill="#3a3a4a" stroke="#000" stroke-width="1"/>
-  <!-- body (rectangular with panels) -->
-  <rect x="55" y="145" width="90" height="105" rx="8" fill="url(#g-cyber-body)" stroke="#000" stroke-width="2"/>
-  <rect x="70" y="170" width="60" height="55" rx="4" fill="url(#g-cyber-panel)" stroke="#000" stroke-width="1.5"/>
-  <line x1="100" y1="170" x2="100" y2="225" stroke="#000" stroke-width="1"/>
-  <line x1="70" y1="197" x2="130" y2="197" stroke="#000" stroke-width="1"/>
-  <!-- chest light -->
-  <circle cx="100" cy="160" r="6" fill="#ff3030" stroke="#000" stroke-width="1"/>
-  <circle cx="100" cy="160" r="3" fill="#ffeb6a"/>
-  <!-- rivets -->
-  <circle cx="62" cy="152" r="2" fill="#333"/>
-  <circle cx="138" cy="152" r="2" fill="#333"/>
-  <circle cx="62" cy="242" r="2" fill="#333"/>
-  <circle cx="138" cy="242" r="2" fill="#333"/>
-  <!-- mechanical arms -->
-  <rect x="40" y="160" width="22" height="55" rx="3" fill="url(#g-cyber-body)" stroke="#000" stroke-width="2"/>
-  <rect x="138" y="160" width="22" height="55" rx="3" fill="url(#g-cyber-body)" stroke="#000" stroke-width="2"/>
-  <!-- claws (metallic) -->
-  <polygon points="40,215 35,228 48,222" fill="#888" stroke="#000" stroke-width="1"/>
-  <polygon points="48,222 50,235 55,222" fill="#888" stroke="#000" stroke-width="1"/>
-  <polygon points="160,215 165,228 152,222" fill="#888" stroke="#000" stroke-width="1"/>
-  <polygon points="152,222 150,235 145,222" fill="#888" stroke="#000" stroke-width="1"/>
-  <!-- neck -->
-  <rect x="88" y="120" width="24" height="28" fill="url(#g-cyber-panel)" stroke="#000" stroke-width="2"/>
-  <!-- head (boxy) -->
-  <path d="M 70 85 L 70 125 L 165 125 L 165 95 Q 165 80 150 80 L 80 78 Q 70 78 70 85 Z" fill="url(#g-cyber-body)" stroke="#000" stroke-width="2"/>
-  <!-- visor/eye band -->
-  <rect x="80" y="90" width="80" height="15" fill="#1a0a0a" stroke="#000" stroke-width="1.5"/>
-  <!-- glowing red eye sensor -->
-  <circle cx="135" cy="97" r="6" fill="#ff0000"/>
-  <circle cx="135" cy="97" r="11" fill="#ff0000" opacity="0.4"/>
-  <circle cx="136" cy="98" r="2" fill="#fff"/>
-  <!-- jaw with teeth -->
-  <rect x="85" y="108" width="70" height="14" fill="#3a4050" stroke="#000" stroke-width="2"/>
-  <polygon points="92,114 95,121 98,114" fill="#fff"/>
-  <polygon points="105,114 108,121 111,114" fill="#fff"/>
-  <polygon points="120,114 123,121 126,114" fill="#fff"/>
-  <polygon points="135,114 138,121 141,114" fill="#fff"/>
-  <polygon points="148,114 150,121 152,114" fill="#fff"/>
-  <!-- antenna -->
-  <line x1="110" y1="78" x2="110" y2="50" stroke="#000" stroke-width="2"/>
-  <circle cx="110" cy="48" r="4" fill="#ff3030"/>
-  <line x1="130" y1="78" x2="130" y2="55" stroke="#000" stroke-width="2"/>
-  <circle cx="130" cy="53" r="3" fill="#ffeb6a"/>
-  <!-- mechanical back fins -->
-  <polygon points="80,165 75,135 92,155" fill="url(#g-cyber-panel)" stroke="#000" stroke-width="1.5"/>
-  <polygon points="100,185 90,155 110,175" fill="url(#g-cyber-panel)" stroke="#000" stroke-width="1.5"/>
-  <polygon points="115,210 105,180 125,200" fill="url(#g-cyber-panel)" stroke="#000" stroke-width="1.5"/>
+  <!-- mechanical segmented tail -->
+  <rect x="8"  y="190" width="22" height="22" rx="4" fill="url(#g-cyber-panel)" stroke="#1a1f2a" stroke-width="2"/>
+  <circle cx="30" cy="201" r="3" fill="url(#g-cyber-joint)" stroke="#000" stroke-width="1"/>
+  <rect x="28" y="205" width="22" height="22" rx="4" fill="url(#g-cyber-panel)" stroke="#1a1f2a" stroke-width="2"/>
+  <circle cx="50" cy="216" r="3" fill="url(#g-cyber-joint)" stroke="#000" stroke-width="1"/>
+  <rect x="48" y="222" width="24" height="22" rx="4" fill="url(#g-cyber-panel)" stroke="#1a1f2a" stroke-width="2"/>
+  <!-- HIP joints (exposed) -->
+  <circle cx="78"  cy="244" r="9" fill="url(#g-cyber-joint)" stroke="#000" stroke-width="1.5"/>
+  <circle cx="122" cy="244" r="9" fill="url(#g-cyber-joint)" stroke="#000" stroke-width="1.5"/>
+  <circle cx="78"  cy="244" r="3.5" fill="#1a1f2a"/>
+  <circle cx="122" cy="244" r="3.5" fill="#1a1f2a"/>
+  <!-- legs -->
+  <rect x="68"  y="250" width="22" height="42" rx="3" fill="url(#g-cyber-body)" stroke="#1a1f2a" stroke-width="2"/>
+  <rect x="110" y="250" width="22" height="42" rx="3" fill="url(#g-cyber-body)" stroke="#1a1f2a" stroke-width="2"/>
+  <!-- knee joints -->
+  <circle cx="79"  cy="270" r="4" fill="url(#g-cyber-joint)" stroke="#000" stroke-width="1"/>
+  <circle cx="121" cy="270" r="4" fill="url(#g-cyber-joint)" stroke="#000" stroke-width="1"/>
+  <!-- feet plates -->
+  <rect x="64" y="288" width="30" height="9" rx="2" fill="url(#g-cyber-joint)" stroke="#000" stroke-width="1"/>
+  <rect x="106" y="288" width="30" height="9" rx="2" fill="url(#g-cyber-joint)" stroke="#000" stroke-width="1"/>
+  <!-- TORSO with hex panels -->
+  <rect x="55" y="145" width="90" height="100" rx="10" fill="url(#g-cyber-body)" stroke="#1a1f2a" stroke-width="2"/>
+  <!-- hexagonal chest plate -->
+  <polygon points="100,150 138,170 138,210 100,230 62,210 62,170"
+           fill="url(#g-cyber-panel)" stroke="#1a1f2a" stroke-width="1.5"/>
+  <line x1="100" y1="150" x2="100" y2="230" stroke="#7a8090" stroke-width="1"/>
+  <line x1="62" y1="190" x2="138" y2="190" stroke="#7a8090" stroke-width="1"/>
+  <!-- chest reactor (glowing) -->
+  <circle cx="100" cy="190" r="13" fill="#1a1f2a" stroke="#000" stroke-width="1.5"/>
+  <circle cx="100" cy="190" r="10" fill="#7fdfff"/>
+  <circle cx="100" cy="190" r="6"  fill="#ffffff"/>
+  <circle cx="100" cy="190" r="3"  fill="#ff3030"/>
+  <!-- rivets / bolts on torso corners -->
+  <circle cx="62"  cy="152" r="2.5" fill="#1a1f2a"/>
+  <circle cx="138" cy="152" r="2.5" fill="#1a1f2a"/>
+  <circle cx="62"  cy="240" r="2.5" fill="#1a1f2a"/>
+  <circle cx="138" cy="240" r="2.5" fill="#1a1f2a"/>
+  <!-- vent slats on shoulders -->
+  <rect x="58" y="158" width="14" height="2" fill="#7a8090"/>
+  <rect x="58" y="162" width="14" height="2" fill="#7a8090"/>
+  <rect x="58" y="166" width="14" height="2" fill="#7a8090"/>
+  <rect x="128" y="158" width="14" height="2" fill="#7a8090"/>
+  <rect x="128" y="162" width="14" height="2" fill="#7a8090"/>
+  <rect x="128" y="166" width="14" height="2" fill="#7a8090"/>
+  <!-- SHOULDER joints -->
+  <circle cx="50" cy="158" r="10" fill="url(#g-cyber-joint)" stroke="#000" stroke-width="1.5"/>
+  <circle cx="150" cy="158" r="10" fill="url(#g-cyber-joint)" stroke="#000" stroke-width="1.5"/>
+  <circle cx="50" cy="158" r="4" fill="#1a1f2a"/>
+  <circle cx="150" cy="158" r="4" fill="#1a1f2a"/>
+  <!-- arms -->
+  <rect x="38" y="162" width="22" height="55" rx="4" fill="url(#g-cyber-body)" stroke="#1a1f2a" stroke-width="2"/>
+  <rect x="140" y="162" width="22" height="55" rx="4" fill="url(#g-cyber-body)" stroke="#1a1f2a" stroke-width="2"/>
+  <!-- elbow joints -->
+  <circle cx="49" cy="190" r="4" fill="url(#g-cyber-joint)" stroke="#000" stroke-width="1"/>
+  <circle cx="151" cy="190" r="4" fill="url(#g-cyber-joint)" stroke="#000" stroke-width="1"/>
+  <!-- mechanical hands (claws) -->
+  <polygon points="38,217 32,232 50,224" fill="#aab0c0" stroke="#1a1f2a" stroke-width="1"/>
+  <polygon points="50,224 48,238 58,225" fill="#aab0c0" stroke="#1a1f2a" stroke-width="1"/>
+  <polygon points="162,217 168,232 150,224" fill="#aab0c0" stroke="#1a1f2a" stroke-width="1"/>
+  <polygon points="150,224 152,238 142,225" fill="#aab0c0" stroke="#1a1f2a" stroke-width="1"/>
+  <!-- NECK with cable hose detail -->
+  <rect x="86" y="122" width="28" height="26" rx="3" fill="url(#g-cyber-joint)" stroke="#1a1f2a" stroke-width="2"/>
+  <line x1="92" y1="125" x2="92" y2="146" stroke="#1a1f2a" stroke-width="1"/>
+  <line x1="100" y1="125" x2="100" y2="146" stroke="#1a1f2a" stroke-width="1"/>
+  <line x1="108" y1="125" x2="108" y2="146" stroke="#1a1f2a" stroke-width="1"/>
+  <!-- HEAD: angular, robotic, white -->
+  <path d="M 66 82 L 70 130 L 168 130 L 170 100 Q 170 76 152 75 L 80 73 Q 66 73 66 82 Z"
+        fill="url(#g-cyber-body)" stroke="#1a1f2a" stroke-width="2"/>
+  <!-- side cheek plates -->
+  <polygon points="66,90 75,95 75,118 66,123" fill="url(#g-cyber-panel)" stroke="#1a1f2a" stroke-width="1"/>
+  <polygon points="170,90 162,95 162,118 170,123" fill="url(#g-cyber-panel)" stroke="#1a1f2a" stroke-width="1"/>
+  <!-- visor band -->
+  <rect x="74" y="86" width="92" height="20" rx="3" fill="#0a0f18" stroke="#1a1f2a" stroke-width="1.5"/>
+  <!-- horizontal HUD lines inside visor -->
+  <line x1="80" y1="92" x2="160" y2="92" stroke="#7fdfff" stroke-width="0.5" opacity="0.6"/>
+  <line x1="80" y1="100" x2="160" y2="100" stroke="#7fdfff" stroke-width="0.5" opacity="0.6"/>
+  <!-- GLOWING SENSOR EYE -->
+  <circle cx="130" cy="96" r="9" fill="url(#g-cyber-eye)"/>
+  <circle cx="130" cy="96" r="16" fill="#ff3030" opacity="0.25"/>
+  <circle cx="130" cy="96" r="4" fill="#fff"/>
+  <!-- secondary tracker eye (smaller) -->
+  <circle cx="90" cy="96" r="3" fill="#7fdfff"/>
+  <circle cx="90" cy="96" r="6" fill="#7fdfff" opacity="0.35"/>
+  <!-- vent grill below visor (mouth) -->
+  <rect x="82" y="112" width="76" height="16" rx="2" fill="#1a1f2a" stroke="#000" stroke-width="1.5"/>
+  <rect x="86" y="116" width="68" height="2" fill="#7a8090"/>
+  <rect x="86" y="120" width="68" height="2" fill="#7a8090"/>
+  <rect x="86" y="124" width="68" height="2" fill="#7a8090"/>
+  <!-- ANTENNA ARRAY on head -->
+  <line x1="100" y1="73" x2="100" y2="40" stroke="#1a1f2a" stroke-width="2.5"/>
+  <circle cx="100" cy="38" r="5" fill="#ff3030"/>
+  <circle cx="100" cy="38" r="8" fill="#ff3030" opacity="0.5"/>
+  <line x1="118" y1="73" x2="124" y2="45" stroke="#1a1f2a" stroke-width="2"/>
+  <circle cx="124" cy="43" r="3.5" fill="#ffeb6a"/>
+  <line x1="82" y1="73" x2="76" y2="45" stroke="#1a1f2a" stroke-width="2"/>
+  <circle cx="76" cy="43" r="3.5" fill="#7fdfff"/>
+  <!-- satellite dish on right side of head -->
+  <ellipse cx="160" cy="80" rx="6" ry="3" fill="url(#g-cyber-panel)" stroke="#1a1f2a" stroke-width="1"/>
+  <line x1="160" y1="83" x2="160" y2="92" stroke="#1a1f2a" stroke-width="1.5"/>
+  <!-- BACK fins: angular tech plates -->
+  <polygon points="80,170 73,138 95,158" fill="url(#g-cyber-panel)" stroke="#1a1f2a" stroke-width="1.5"/>
+  <polygon points="98,188 86,150 114,178" fill="url(#g-cyber-panel)" stroke="#1a1f2a" stroke-width="1.5"/>
+  <polygon points="115,210 102,172 128,200" fill="url(#g-cyber-panel)" stroke="#1a1f2a" stroke-width="1.5"/>
+  <polygon points="100,232 92,200 115,224" fill="url(#g-cyber-panel)" stroke="#1a1f2a" stroke-width="1.5"/>
 </g>
 `;
 
@@ -2006,6 +2091,7 @@ const CHARACTERS = {
     name: "GOJIRA",
     subtitle: "The Original King",
     svg: GOJIRA_SVG, color: "#5fffaa", mouthX: 175,
+    biome: 0, // TOKYO NIGHT
     lore: [
       "The original king of all monsters!",
       "He came from the deep sea to smash Tokyo!",
@@ -2017,6 +2103,7 @@ const CHARACTERS = {
     name: "SPACE GODZILLA",
     subtitle: "Crystal Kaiju from Stars",
     svg: SPACE_SVG, color: "#aa88ff", mouthX: 175,
+    biome: 4, // OCEAN (deep cosmic blue)
     lore: [
       "He fell from the stars with shining crystals!",
       "His crystals can fire lasers across the city!",
@@ -2028,6 +2115,7 @@ const CHARACTERS = {
     name: "FIRE GODZILLA",
     subtitle: "Burning Heart, Hotter Rage",
     svg: FIRE_SVG, color: "#ff8800", mouthX: 175,
+    biome: 3, // LAVA volcano
     lore: [
       "His heart is burning. His breath is fire!",
       "Lava runs through his body like rivers!",
@@ -2037,19 +2125,22 @@ const CHARACTERS = {
   },
   cyber: {
     name: "CYBER GODZILLA",
-    subtitle: "Machine of Pure Power",
-    svg: CYBER_SVG, color: "#ff4040", mouthX: 175,
+    subtitle: "Robot Kaiju from the Future",
+    svg: CYBER_SVG, color: "#ffffff", mouthX: 175,
+    biome: 5, // NEON downtown / cyberpunk
     lore: [
-      "Half metal, half monster, all power!",
-      "His red eye sees through everything!",
-      "His mechanical claws crush buildings flat!",
-      "Built to defeat all the other kaiju!"
+      "A shining white robot built to crush all kaiju!",
+      "His scanner eye finds buildings in one second!",
+      "His glowing reactor powers a giant atomic blast!",
+      "Antenna up! Sensors locked! Targets ACQUIRED!",
+      "Beep boop ROAR! Cyber Godzilla is ONLINE!"
     ]
   },
   ghidorah: {
     name: "KING GHIDORAH",
     subtitle: "Three-Headed Final Boss",
     svg: GHIDORAH_SVG, color: "#ffeb6a", mouthX: 165,
+    biome: 2, // FOREST (golden over deep green)
     lore: [
       "Three golden dragon heads! Two huge wings!",
       "He is the FINAL BOSS. Only the best can beat him!",
@@ -2244,6 +2335,7 @@ const State = {
   levelStats: { destroyed: 0, missed: 0, maxCombo: 1 },
   powerUps: { slomo: 0, doubleScore: 0 }, // ms remaining
   bossSpawnedThisLevel: false,
+  startingCharacter: null, // set from start-screen kaiju pick
 };
 
 // ---------- DOM ----------
@@ -2256,7 +2348,7 @@ const $level = document.getElementById("level");
 const $combo = document.getElementById("combo");
 const $healthBar = document.getElementById("health-bar");
 const $start = document.getElementById("start");
-const $startBtn = document.getElementById("startBtn");
+// (startBtn removed — see kaiju roster cards which act as start CTAs)
 const $gameover = document.getElementById("gameover");
 const $restartBtn = document.getElementById("restartBtn");
 const $levelup = document.getElementById("levelup");
@@ -2368,11 +2460,20 @@ function maybeLightning() {
 
 // ---------- Biome switch ----------
 function characterForLevel(idx) {
-  if (idx < 4)  return "gojira";
-  if (idx < 8)  return "space";
-  if (idx < 13) return "fire";
-  if (idx < 17) return "cyber";
-  return "ghidorah";
+  // Every level switches to a NEW kaiju. The order starts at whichever
+  // kaiju the player picked on the start screen and cycles through the
+  // roster.
+  const startKey = State.startingCharacter || "gojira";
+  const startIdx = Math.max(0, CHARACTER_ORDER.indexOf(startKey));
+  return CHARACTER_ORDER[(startIdx + idx) % CHARACTER_ORDER.length];
+}
+
+function biomeForLevel(idx) {
+  // The biome follows the kaiju — Cyber → neon cyberpunk, Fire → lava, etc.
+  // Falls back to the level's declared biome if the kaiju doesn't pin one.
+  const ch = CHARACTERS[characterForLevel(idx)];
+  if (ch && typeof ch.biome === "number") return ch.biome;
+  return LEVELS[idx].biome;
 }
 
 let currentCharacterKey = null;
@@ -2456,7 +2557,7 @@ function spawnBuilding() {
   const word = pickWord(State.level);
   const playW = $playfield.clientWidth;
   const playH = $playfield.clientHeight;
-  const biome = BIOMES[lv.biome];
+  const biome = BIOMES[biomeForLevel(State.level)];
   const portrait = document.body.classList.contains("layout-portrait");
 
   // Per-biome size variation
@@ -3153,7 +3254,7 @@ function spawnBoss() {
   }
 
   const el = document.createElement("div");
-  el.className = "building building--" + BIOMES[lv.biome].buildingStyle + " building-boss";
+  el.className = "building building--" + BIOMES[biomeForLevel(State.level)].buildingStyle + " building-boss";
   el.style.width = bWidth + "px";
   el.style.height = bHeight + "px";
 
@@ -3210,7 +3311,7 @@ function checkLevelProgress() {
       State.level++;
       State.destroyed = 0;
       const nlv = LEVELS[State.level];
-      const nb = BIOMES[nlv.biome];
+      const nb = BIOMES[biomeForLevel(State.level)];
       const ncKey = characterForLevel(State.level);
       const nc = CHARACTERS[ncKey];
       const charChanged = ncKey !== currentCharacterKey;
@@ -3268,7 +3369,7 @@ let briefingTimer = null;
 function briefKaiju(onDone) {
   const charKey = characterForLevel(State.level);
   const ch = CHARACTERS[charKey];
-  const biome = BIOMES[LEVELS[State.level].biome];
+  const biome = BIOMES[biomeForLevel(State.level)];
   const lore = ch.lore[Math.floor(Math.random() * ch.lore.length)];
 
   const $brief = document.getElementById("kaiju-briefing");
@@ -3325,7 +3426,7 @@ function startGame(startLevel) {
   resetLevelStats();
   applyComboTier();
   updateHUD();
-  switchToBiome(LEVELS[State.level].biome);
+  switchToBiome(biomeForLevel(State.level));
   maybeLightning();
   // Brief the kaiju, THEN start spawning
   briefKaiju(() => {
@@ -3347,7 +3448,7 @@ function continueLevel() {
   State.paused = false;
   resetLevelStats();
   applyComboTier();
-  switchToBiome(LEVELS[State.level].biome);
+  switchToBiome(biomeForLevel(State.level));
   briefKaiju(() => {
     if (!State.running || State.paused) return;
     scheduleSpawns();
@@ -3571,7 +3672,8 @@ function attachStartHandler(btn, level) {
   btn.addEventListener("click", trigger);
   btn.addEventListener("touchend", trigger, { passive: false });
 }
-attachStartHandler($startBtn, 0);
+// $startBtn was retired — kaiju cards on the start screen are the new start CTA.
+// Wire restartBtn to retry with whatever kaiju the player picked (or gojira).
 attachStartHandler($restartBtn, 0);
 
 const $continueRunBtn = document.getElementById("continueRunBtn");
@@ -3596,14 +3698,32 @@ refreshStartScreenProgress();
   const $roster = document.getElementById("kaiju-roster");
   CHARACTER_ORDER.forEach(key => {
     const c = CHARACTERS[key];
-    const card = document.createElement("div");
+    const card = document.createElement("button");
+    card.type = "button";
     card.className = "kaiju-card";
     card.style.color = c.color;
+    card.dataset.kaiju = key;
+    card.setAttribute("aria-label", "Start as " + c.name);
     card.innerHTML =
       '<svg viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">' +
       c.svg + '</svg>' +
       '<div class="nm">' + c.name + '</div>' +
-      '<div class="sub">' + c.subtitle + '</div>';
+      '<div class="sub">' + c.subtitle + '</div>' +
+      '<div class="play">▶ PLAY</div>';
+
+    function pick(e) {
+      e.preventDefault();
+      // Focus iPad keyboard if hidden, then start with this kaiju
+      if (isTouchDevice() && !document.body.classList.contains("kb-visible")) {
+        try { $ipadInput.focus(); } catch (er) {}
+      }
+      State.startingCharacter = key;
+      Voice.speak("Starting with " + c.name, { priority: true });
+      startGame(0);
+    }
+    card.addEventListener("click", pick);
+    card.addEventListener("touchend", pick, { passive: false });
+
     $roster.appendChild(card);
   });
   const $ver = document.getElementById("versionLine");

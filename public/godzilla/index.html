@@ -8,6 +8,11 @@
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="theme-color" content="#0a0a14" />
 <title>GODZILLA TYPING RAMPAGE</title>
+<!-- CDN animation + gaming libs (defer so they don't block first paint;
+     code below uses graceful fallbacks if any fail to load) -->
+<script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"/>
 <style>
   /* =========================================================
      BIOME THEME VARIABLES (defaults: Tokyo Night)
@@ -250,6 +255,49 @@
   @keyframes gz-arrive {
     0% { transform: translate(-60vw, 0) scale(0.7); opacity: 0; }
     100% { transform: translate(0,0) scale(1); opacity: 1; }
+  }
+  /* Idle / ambient action animations — Godzilla doesn't stay static */
+  #godzilla.jump  { animation: gz-jump  0.9s ease-out; }
+  #godzilla.stomp { animation: gz-stomp 0.7s ease-out; }
+  #godzilla.roar  { animation: gz-roar  1.0s ease-out; }
+  #godzilla.flex  { animation: gz-flex  1.1s ease-in-out; }
+  #godzilla.duck  { animation: gz-duck  0.8s ease-out; }
+  #godzilla.run   { animation: gz-run   0.5s ease-in-out 3; }
+  #godzilla.fly   { animation: gz-fly   1.2s ease-in-out; }
+  @keyframes gz-jump {
+    0%, 100% { transform: translateY(0) scale(1); }
+    45%      { transform: translateY(-44px) scale(1.05, 0.95); }
+    70%      { transform: translateY(0) scale(1.08, 0.85); }
+  }
+  @keyframes gz-stomp {
+    0%   { transform: translateY(0) scaleY(1); }
+    30%  { transform: translateY(-18px) scaleY(1.05); }
+    55%  { transform: translateY(10px) scaleY(0.78); }
+    100% { transform: translateY(0) scaleY(1); }
+  }
+  @keyframes gz-roar {
+    0%, 100% { transform: scale(1) rotate(0); }
+    25%      { transform: scale(1.1, 0.95) rotate(-4deg) translateY(-6px); }
+    55%      { transform: scale(1.14, 1.04) rotate(0deg) translateY(-12px); }
+  }
+  @keyframes gz-flex {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.16, 1.10) translateY(-4px); }
+  }
+  @keyframes gz-duck {
+    0%, 100% { transform: translateY(0) scaleY(1); }
+    50%      { transform: translateY(22px) scaleY(0.7); }
+  }
+  @keyframes gz-run {
+    0%, 100% { transform: translateX(0) translateY(0) skewX(0); }
+    25%      { transform: translateX(8px) translateY(-4px) skewX(-3deg); }
+    75%      { transform: translateX(-8px) translateY(-4px) skewX(3deg); }
+  }
+  @keyframes gz-fly {
+    0%   { transform: translateY(0) rotate(0); }
+    40%  { transform: translateY(-50px) rotate(-6deg); }
+    70%  { transform: translateY(-65px) rotate(2deg); }
+    100% { transform: translateY(0) rotate(0); }
   }
 
   .beam {
@@ -655,6 +703,98 @@
     50%      { opacity: 0.9; }
   }
 
+  /* ============ DRAMATIC BLAST FX ============ */
+  /* Expanding shockwave ring on each smash */
+  .shockwave {
+    position: absolute;
+    z-index: 22;
+    border-radius: 50%;
+    pointer-events: none;
+    border: 4px solid #ffffff;
+    box-shadow:
+      0 0 30px #ffeb6a,
+      inset 0 0 20px #ff8800;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.9;
+    animation: shockwave 0.7s ease-out forwards;
+  }
+  @keyframes shockwave {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 1; border-width: 6px; }
+    60%  { opacity: 0.7; }
+    100% { transform: translate(-50%, -50%) scale(7); opacity: 0; border-width: 1px; }
+  }
+  /* Big mushroom-fireball at the impact */
+  .fireball {
+    position: absolute;
+    z-index: 23;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffffff 0%, #ffeb6a 30%, #ff5a00 70%, transparent 100%);
+    box-shadow: 0 0 40px #ff5a00, 0 0 80px #ffaa00;
+    transform: translate(-50%, -50%) scale(0.4);
+    pointer-events: none;
+    animation: fireball 0.7s ease-out forwards;
+  }
+  @keyframes fireball {
+    0%   { transform: translate(-50%, -50%) scale(0.3); opacity: 1; }
+    30%  { transform: translate(-50%, -50%) scale(1.6); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(2.6); opacity: 0; }
+  }
+  /* Debris chunks flung outward + gravity */
+  .debris {
+    position: absolute;
+    z-index: 14;
+    width: 16px; height: 16px;
+    background: linear-gradient(180deg, #4a3a2a 0%, #1a0a0a 100%);
+    border: 1px solid #000;
+    box-shadow: inset 0 0 4px rgba(0,0,0,0.6);
+    pointer-events: none;
+    border-radius: 2px;
+  }
+  /* Rising smoke puff after destruction */
+  .smoke {
+    position: absolute;
+    z-index: 11;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(100,100,100,0.6) 0%, rgba(40,40,40,0.4) 60%, transparent 100%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+  /* Multi-layered atomic beam: hot white core + colored aura + flame trail */
+  .beam-core {
+    position: absolute;
+    height: 8px;
+    background: linear-gradient(90deg, transparent 0%, #ffffff 30%, #ffffff 100%);
+    box-shadow: 0 0 14px #ffffff, 0 0 28px #ffffff;
+    z-index: 16;
+    transform-origin: left center;
+    pointer-events: none;
+    border-radius: 4px;
+  }
+  /* Cracks that appear on the building right before destruction */
+  .building-cracking {
+    animation: cracking 0.18s ease-in-out 2;
+  }
+  @keyframes cracking {
+    0%, 100% { transform: translate(0); }
+    25% { transform: translate(-3px, 1px); }
+    75% { transform: translate(3px, -1px); }
+  }
+  .building.cracked::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(45deg, transparent 48%, rgba(255,255,255,0.7) 49%, rgba(255,255,255,0.7) 51%, transparent 52%),
+      linear-gradient(135deg, transparent 48%, rgba(255,255,255,0.5) 49%, rgba(255,255,255,0.5) 51%, transparent 52%);
+    background-size: 60% 60%, 60% 60%;
+    background-repeat: no-repeat;
+    background-position: center, center;
+    pointer-events: none;
+    z-index: 3;
+  }
+
   /* ============ ENGAGEMENT FX ============ */
   /* Floating +SCORE that flies from smash to HUD */
   .score-pop {
@@ -935,6 +1075,70 @@
     animation: combo20-rainbow 3s linear infinite;
   }
   @keyframes combo20-rainbow { from {filter:hue-rotate(0deg);} to {filter:hue-rotate(360deg);} }
+
+  /* Low-health red vignette PULSE (when city health < 30%) */
+  body.low-health #game::before {
+    content: "";
+    position: absolute; inset: 0;
+    pointer-events: none;
+    z-index: 33;
+    background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(255,0,0,0.55) 100%);
+    animation: low-pulse 0.9s ease-in-out infinite;
+  }
+  @keyframes low-pulse {
+    0%, 100% { opacity: 0.55; }
+    50%      { opacity: 0.85; }
+  }
+
+  /* Rain scene overlay — for stormy levels */
+  body.scene-storm #playfield::after {
+    content: "";
+    position: absolute; inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(transparent 0%, rgba(170,200,255,0.6) 50%, transparent 100%);
+    background-size: 2px 14px;
+    background-repeat: repeat;
+    opacity: 0.35;
+    animation: rain-fall 0.45s linear infinite;
+  }
+  @keyframes rain-fall {
+    from { background-position-y: 0; }
+    to   { background-position-y: 14px; }
+  }
+  body.scene-storm #lightning {
+    animation: storm-lightning 6s linear infinite;
+    background: linear-gradient(180deg, #cccfff 0%, transparent 100%);
+  }
+  @keyframes storm-lightning {
+    0%, 92%, 100% { opacity: 0; }
+    93%, 95%, 97% { opacity: 0.8; }
+    94%, 96%      { opacity: 0; }
+  }
+
+  /* Frenzy wave indicator */
+  #frenzy-banner {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: clamp(40px, 8vw, 90px);
+    color: #ffeb6a;
+    text-shadow: 0 0 20px #ff5500, 0 0 40px #ff0000, 4px 4px 0 #000;
+    letter-spacing: 6px;
+    z-index: 32;
+    pointer-events: none;
+    opacity: 0;
+    text-align: center;
+    font-weight: 900;
+  }
+  #frenzy-banner.show { animation: frenzy-pop 1.6s ease-out forwards; }
+  @keyframes frenzy-pop {
+    0%   { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    20%  { transform: translate(-50%, -50%) scale(1.4) rotate(-3deg); opacity: 1; }
+    50%  { transform: translate(-50%, -50%) scale(1.1) rotate(2deg); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(2) rotate(0); opacity: 0; }
+  }
 
   /* HUD */
   #hud {
@@ -1483,6 +1687,7 @@
 
     <div id="next-key-prompt"><span class="hint">PRESS</span><span id="next-key-letter">A</span></div>
     <div id="combo-banner"></div>
+    <div id="frenzy-banner">FRENZY!!</div>
     <div id="hint"></div>
   </div>
 
@@ -1862,7 +2067,140 @@ const Audio = (() => {
     if (!on) stopMusic();
   }
 
-  return { ensure, roar, atomicBreath, explosion, correctChime, wrongBuzz, levelUpFanfare, defeatSting, startMusic, stopMusic, setEnabled, isEnabled: () => soundEnabled };
+  // ============ DRAMATIC ONE-SHOTS ============
+  // Short percussive thump for every smash — gives weight.
+  function kickDrum(strength = 1) {
+    if (!soundEnabled) return;
+    ensure();
+    const t = ctx.currentTime;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = "sine";
+    o.frequency.setValueAtTime(140 * strength, t);
+    o.frequency.exponentialRampToValueAtTime(45, t + 0.18);
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.55 * strength, t + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t); o.stop(t + 0.25);
+  }
+  // Bright crash for combo milestones / level milestones.
+  function cymbalCrash(intensity = 1) {
+    if (!soundEnabled) return;
+    ensure();
+    const dur = 0.7 + 0.4 * intensity;
+    const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) {
+      const decay = 1 - (i / data.length);
+      data[i] = (Math.random() * 2 - 1) * decay;
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const filt = ctx.createBiquadFilter();
+    filt.type = "highpass";
+    filt.frequency.value = 4000;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.45 * intensity, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    src.connect(filt); filt.connect(g); g.connect(ctx.destination);
+    src.start();
+  }
+  // Sub-bass swell + drop. Use on combo escalation / boss arrival.
+  function bassDrop() {
+    if (!soundEnabled) return;
+    ensure();
+    const t = ctx.currentTime;
+    // Riser
+    const r = ctx.createOscillator();
+    const rg = ctx.createGain();
+    r.type = "sawtooth";
+    r.frequency.setValueAtTime(70, t);
+    r.frequency.exponentialRampToValueAtTime(380, t + 0.4);
+    rg.gain.setValueAtTime(0, t);
+    rg.gain.linearRampToValueAtTime(0.18, t + 0.05);
+    rg.gain.linearRampToValueAtTime(0, t + 0.42);
+    r.connect(rg); rg.connect(ctx.destination);
+    r.start(t); r.stop(t + 0.45);
+    // Drop
+    const d = ctx.createOscillator();
+    const dg = ctx.createGain();
+    d.type = "sine";
+    d.frequency.setValueAtTime(60, t + 0.42);
+    d.frequency.exponentialRampToValueAtTime(25, t + 1.0);
+    dg.gain.setValueAtTime(0, t + 0.42);
+    dg.gain.linearRampToValueAtTime(0.7, t + 0.45);
+    dg.gain.exponentialRampToValueAtTime(0.001, t + 1.0);
+    d.connect(dg); dg.connect(ctx.destination);
+    d.start(t + 0.42); d.stop(t + 1.05);
+  }
+  // Short brass-like stinger.
+  function orchestralStinger() {
+    if (!soundEnabled) return;
+    ensure();
+    const t = ctx.currentTime;
+    [330, 415, 494].forEach((f, i) => {
+      const o = ctx.createOscillator();
+      const fl = ctx.createBiquadFilter();
+      const g = ctx.createGain();
+      o.type = "sawtooth";
+      o.frequency.value = f;
+      fl.type = "lowpass"; fl.frequency.value = 900; fl.Q.value = 4;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.25, t + 0.02);
+      g.gain.linearRampToValueAtTime(0.15, t + 0.25);
+      g.gain.linearRampToValueAtTime(0, t + 0.65);
+      o.connect(fl); fl.connect(g); g.connect(ctx.destination);
+      o.start(t); o.stop(t + 0.7);
+    });
+  }
+  // Tense rumble for low-HP / boss-incoming
+  function tensionPulse() {
+    if (!soundEnabled) return;
+    ensure();
+    const t = ctx.currentTime;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = "sine";
+    o.frequency.setValueAtTime(40, t);
+    o.frequency.linearRampToValueAtTime(55, t + 1.2);
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.3, t + 0.3);
+    g.gain.linearRampToValueAtTime(0, t + 1.3);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t); o.stop(t + 1.35);
+  }
+
+  // Combo-tier intensity layer on top of the running music
+  let intensityLayer = null;
+  function setMusicIntensity(tier) {
+    if (!soundEnabled) return;
+    if (!musicOn) return;
+    if (intensityLayer) {
+      try { intensityLayer.osc.stop(); } catch (e) {}
+      try { intensityLayer.gain.disconnect(); } catch (e) {}
+      intensityLayer = null;
+    }
+    if (tier <= 0) return;
+    // Add a brassy fifth on top of the bass for tier 1+, double on tier 2
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = "sawtooth";
+    o.frequency.value = tier >= 3 ? 220 : tier >= 2 ? 175 : 147;
+    g.gain.value = 0;
+    g.gain.linearRampToValueAtTime(0.06 * tier, ctx.currentTime + 0.4);
+    o.connect(g); g.connect(musicGain || ctx.destination);
+    o.start();
+    intensityLayer = { osc: o, gain: g };
+  }
+
+  return {
+    ensure, roar, atomicBreath, explosion, correctChime, wrongBuzz,
+    levelUpFanfare, defeatSting, startMusic, stopMusic,
+    setEnabled, isEnabled: () => soundEnabled,
+    kickDrum, cymbalCrash, bassDrop, orchestralStinger, tensionPulse,
+    setMusicIntensity,
+  };
 })();
 
 // ---------- Voice ----------
@@ -1902,7 +2240,7 @@ const Voice = (() => {
 })();
 
 // ---------- Version ----------
-const GAME_VERSION = "v2.7 · LEARNING + KONG";
+const GAME_VERSION = "v2.9 · DRAMA + CDN POLISH";
 const GAME_BUILD_DATE = "2026-05-16";
 
 // ---------- Characters ----------
@@ -3056,6 +3394,13 @@ function updateHUD() {
   $healthBar.style.width = State.health + "%";
 }
 function bumpCombo() {
+  if (window.gsap) {
+    gsap.killTweensOf($combo);
+    gsap.fromTo($combo,
+      { scale: 1 },
+      { scale: 1.55, duration: 0.12, ease: "back.out(3)", yoyo: true, repeat: 1 });
+    return;
+  }
   $combo.classList.remove("big");
   void $combo.offsetWidth;
   $combo.classList.add("big");
@@ -3615,6 +3960,7 @@ function shootBeam(b) {
   const len = Math.sqrt(dx*dx + dy*dy);
   const angle = Math.atan2(dy, dx) * 180 / Math.PI;
 
+  // OUTER aura beam (colored, glowy)
   const beam = document.createElement("div");
   beam.className = "beam";
   beam.style.left = startX + "px";
@@ -3622,20 +3968,37 @@ function shootBeam(b) {
   beam.style.width = "0px";
   beam.style.transform = `rotate(${angle}deg)`;
   $game.appendChild(beam);
+  // HOT-WHITE inner core (sits on top of the outer beam)
+  const core = document.createElement("div");
+  core.className = "beam-core";
+  core.style.left = startX + "px";
+  core.style.top = (startY + 7) + "px";
+  core.style.width = "0px";
+  core.style.transform = `rotate(${angle}deg)`;
+  $game.appendChild(core);
   requestAnimationFrame(() => {
     beam.style.transition = "width 0.08s linear, opacity 0.25s linear 0.08s";
     beam.style.width = len + "px";
     beam.style.opacity = "1";
-    setTimeout(() => { beam.style.opacity = "0"; }, 120);
-    setTimeout(() => beam.remove(), 400);
+    core.style.transition = "width 0.06s linear, opacity 0.18s linear 0.06s";
+    core.style.width = len + "px";
+    core.style.opacity = "1";
+    setTimeout(() => { beam.style.opacity = "0"; core.style.opacity = "0"; }, 120);
+    setTimeout(() => { beam.remove(); core.remove(); }, 400);
   });
 }
 
 function destroyBuilding(b) {
   b.dead = true;
   shootBeam(b);
+  // DRAMATIC layered destruction
   Audio.explosion();
+  Audio.kickDrum(1.0);
+  spawnShockwave(b.el, Math.min(4, State.combo / 2));
+  spawnFireball(b.el);
   spawnParticles(b.el);
+  spawnDebris(b.el);
+  spawnSmoke(b.el);
   spawnConfetti(b.el);
   b.el.classList.add("destroyed");
   setTimeout(() => b.el.remove(), 900);
@@ -3676,18 +4039,23 @@ function destroyBuilding(b) {
   if (State.combo >= 4 && State.combo % 4 === 0) {
     showBanner(["MEGA SMASH!","RAMPAGE!","DEVASTATING!","ROOOAAR!!","CITY CRUSHER!","UNSTOPPABLE!"][Math.floor(Math.random()*6)]);
     Audio.roar(false);
+    Audio.cymbalCrash(1.4);
     Voice.speak("rampage");
     $game.classList.remove("big-shake");
     void $game.offsetWidth;
     $game.classList.add("big-shake");
     State.health = Math.min(100, State.health + 8);
-    $godzilla.classList.remove("cheer");
-    void $godzilla.offsetWidth;
-    $godzilla.classList.add("cheer");
+    // Combo milestones trigger varied hero animations
+    const milestoneAction = ["roar","jump","flex","stomp"][Math.floor(Math.random()*4)];
+    doGodzillaAction(milestoneAction);
   } else {
     $game.classList.remove("shake");
     void $game.offsetWidth;
     $game.classList.add("shake");
+    // 12% chance to play a small flair animation on any successful smash
+    if (Math.random() < 0.12) {
+      doGodzillaAction(["stomp","flex","duck"][Math.floor(Math.random()*3)]);
+    }
   }
 
   if (State.currentTarget === b) State.currentTarget = null;
@@ -3699,21 +4067,109 @@ function destroyBuilding(b) {
 function damageCity(b) {
   b.el.classList.add("destroyed");
   setTimeout(() => b.el.remove(), 900);
+  const prevHealth = State.health;
   State.health = Math.max(0, State.health - 15);
   State.combo = 1;
   applyComboTier();
   trackMiss();
   Audio.wrongBuzz();
+  // Drum-thud on impact
+  Audio.kickDrum(0.7);
   $godzilla.classList.remove("hurt");
   void $godzilla.offsetWidth;
   $godzilla.classList.add("hurt");
   $game.classList.remove("shake");
   void $game.offsetWidth;
   $game.classList.add("shake");
+  // Tension pulse when health crosses below 30%
+  if (prevHealth > 30 && State.health <= 30) {
+    Audio.tensionPulse();
+    document.body.classList.add("low-health");
+  }
   if (State.currentTarget === b) State.currentTarget = null;
   pickTarget();
   updateHUD();
   if (State.health <= 0) gameOver(false);
+}
+
+// ============================================================
+// DRAMATIC DESTRUCTION FX
+// ============================================================
+function spawnShockwave(el, intensity) {
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top + rect.height/2;
+  const w = document.createElement("div");
+  w.className = "shockwave";
+  w.style.left = cx + "px";
+  w.style.top = cy + "px";
+  const size = 40 + (intensity || 1) * 18;
+  w.style.width = size + "px";
+  w.style.height = size + "px";
+  $game.appendChild(w);
+  setTimeout(() => w.remove(), 750);
+}
+function spawnFireball(el) {
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top + rect.height/2;
+  const f = document.createElement("div");
+  f.className = "fireball";
+  f.style.left = cx + "px";
+  f.style.top = cy + "px";
+  $game.appendChild(f);
+  setTimeout(() => f.remove(), 750);
+}
+function spawnDebris(el) {
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top + rect.height/2;
+  for (let i = 0; i < 14; i++) {
+    const d = document.createElement("div");
+    d.className = "debris";
+    d.style.left = cx + "px";
+    d.style.top = cy + "px";
+    $game.appendChild(d);
+    const angle = (Math.PI * 2 * i / 14) + Math.random() * 0.5 - 0.25;
+    const speed = 200 + Math.random() * 280;
+    const dx = Math.cos(angle) * speed;
+    const dy = Math.sin(angle) * speed - 200;
+    const rot = (Math.random() - 0.5) * 1080;
+    const start = performance.now();
+    function step(now) {
+      const t = (now - start) / 1100;
+      if (t >= 1) { d.remove(); return; }
+      d.style.transform = `translate(${dx*t}px, ${dy*t + 1100*t*t}px) rotate(${rot*t}deg)`;
+      d.style.opacity = (1 - t).toFixed(2);
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+}
+function spawnSmoke(el) {
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top + rect.height/2;
+  for (let i = 0; i < 5; i++) {
+    const s = document.createElement("div");
+    s.className = "smoke";
+    s.style.left = cx + "px";
+    s.style.top = cy + "px";
+    $game.appendChild(s);
+    const dx = (Math.random() - 0.5) * 80;
+    const dy = -60 - Math.random() * 120;
+    const scale = 1 + Math.random() * 1.5;
+    const dur = 1500 + Math.random() * 800;
+    const start = performance.now();
+    function step(now) {
+      const t = (now - start) / dur;
+      if (t >= 1) { s.remove(); return; }
+      s.style.transform = `translate(${-50 + dx*t}%, ${-50 + dy*t/4}%) scale(${1 + scale*t})`;
+      s.style.opacity = (0.7 * (1 - t)).toFixed(2);
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
 }
 
 function spawnParticles(el) {
@@ -3751,6 +4207,37 @@ function spawnConfetti(el) {
   const cx = rect.left + rect.width/2;
   const cy = rect.top;
   const colors = ["#ffeb6a","#5fffaa","#ff8800","#ff5050","#ffffff","#88ccff","#ff44dd","#aaffff"];
+  // Prefer canvas-confetti from CDN (huge visual upgrade)
+  if (window.confetti) {
+    const ox = cx / window.innerWidth;
+    const oy = cy / window.innerHeight;
+    window.confetti({
+      particleCount: 90,
+      angle: 90,
+      spread: 90,
+      startVelocity: 55,
+      gravity: 1.1,
+      ticks: 240,
+      decay: 0.92,
+      colors,
+      origin: { x: ox, y: oy },
+      scalar: 1.2,
+      shapes: ["square","circle","star"]
+    });
+    // Side bursts for extra drama on combo
+    if (State.combo >= 5) {
+      setTimeout(() => window.confetti({
+        particleCount: 40, angle: 60, spread: 55, startVelocity: 60,
+        origin: { x: 0, y: 0.7 }, colors
+      }), 90);
+      setTimeout(() => window.confetti({
+        particleCount: 40, angle: 120, spread: 55, startVelocity: 60,
+        origin: { x: 1, y: 0.7 }, colors
+      }), 90);
+    }
+    return;
+  }
+  // Fallback DOM-based confetti
   for (let i = 0; i < 28; i++) {
     const c = document.createElement("div");
     c.className = "confetti";
@@ -3787,6 +4274,15 @@ function spawnPraise(text, anchor, big) {
 
 function showBanner(text) {
   $banner.textContent = text;
+  if (window.gsap) {
+    gsap.killTweensOf($banner);
+    gsap.set($banner, { scale: 0, opacity: 0, rotate: -6 });
+    gsap.timeline()
+      .to($banner, { scale: 1.3, opacity: 1, rotate: 0, duration: 0.22, ease: "back.out(2.6)" })
+      .to($banner, { scale: 1, duration: 0.18, ease: "power1.out" })
+      .to($banner, { scale: 1.6, opacity: 0, duration: 0.6, ease: "power2.in", delay: 0.6 });
+    return;
+  }
   $banner.classList.remove("show");
   void $banner.offsetWidth;
   $banner.classList.add("show");
@@ -3816,6 +4312,18 @@ function spawnScorePop(srcEl, amount) {
   $game.appendChild(pop);
   const dx = (target.left + target.width / 2) - startX;
   const dy = (target.top  + target.height / 2) - startY;
+  // Prefer GSAP for snappier feel (overshoot pop → arc to HUD)
+  if (window.gsap) {
+    gsap.fromTo(pop,
+      { scale: 0.2, opacity: 0 },
+      { scale: 1.25, opacity: 1, duration: 0.16, ease: "back.out(2.4)" });
+    gsap.to(pop, {
+      x: dx, y: dy, scale: 0.35, opacity: 0,
+      duration: 0.7, delay: 0.16, ease: "power2.in",
+      onComplete: () => pop.remove()
+    });
+    return;
+  }
   requestAnimationFrame(() => {
     pop.style.transition = "transform 0.7s cubic-bezier(0.5, 0.05, 0.6, 1), opacity 0.7s ease-out";
     pop.style.transform = "translate(" + dx + "px," + dy + "px) scale(0.35)";
@@ -3834,12 +4342,107 @@ function flashScreen(color) {
 }
 
 // Combo tier class on body so CSS can react (red glow, rainbow at high tiers)
+let lastComboTier = 0;
 function applyComboTier() {
   document.body.classList.remove("combo-3","combo-5","combo-10","combo-20");
-  if (State.combo >= 20) document.body.classList.add("combo-20");
-  else if (State.combo >= 10) document.body.classList.add("combo-10");
-  else if (State.combo >= 5)  document.body.classList.add("combo-5");
-  else if (State.combo >= 3)  document.body.classList.add("combo-3");
+  let tier = 0;
+  if (State.combo >= 20)      { document.body.classList.add("combo-20"); tier = 4; }
+  else if (State.combo >= 10) { document.body.classList.add("combo-10"); tier = 3; }
+  else if (State.combo >= 5)  { document.body.classList.add("combo-5");  tier = 2; }
+  else if (State.combo >= 3)  { document.body.classList.add("combo-3");  tier = 1; }
+  // Music intensity escalates with combo, with audible "drop" + cymbal
+  // every time we step UP a tier.
+  if (tier !== lastComboTier) {
+    if (tier > lastComboTier && tier >= 2) {
+      Audio.bassDrop();
+      Audio.cymbalCrash(Math.min(2, tier - 1));
+      if (tier >= 3) Audio.orchestralStinger();
+    }
+    Audio.setMusicIntensity(tier);
+    lastComboTier = tier;
+  }
+}
+
+// ============================================================
+// IDLE ANIMATIONS: Godzilla doesn't stay static.
+// Periodically picks jump / stomp / roar / flex / duck / run.
+// ============================================================
+const GZ_ACTIONS = ["jump","stomp","roar","flex","duck","run","fly","jump","stomp"];
+let idleActionTimer = null;
+function doGodzillaAction(action) {
+  // Don't override critical state animations (hurt/cheer/attacking)
+  if ($godzilla.classList.contains("hurt")) return;
+  $godzilla.classList.remove("jump","stomp","roar","flex","duck","run","fly","cheer","attacking");
+  void $godzilla.offsetWidth;
+  $godzilla.classList.add(action);
+  if (action === "stomp") Audio.kickDrum(0.8);
+  if (action === "roar")  Audio.roar(false);
+  setTimeout(() => $godzilla.classList.remove(action), 1300);
+}
+function scheduleIdleAction() {
+  if (idleActionTimer) clearTimeout(idleActionTimer);
+  if (!State.running) return;
+  const wait = 5500 + Math.random() * 6500;
+  idleActionTimer = setTimeout(() => {
+    if (State.running && !State.paused && !State.currentOpponent) {
+      const a = GZ_ACTIONS[Math.floor(Math.random() * GZ_ACTIONS.length)];
+      doGodzillaAction(a);
+    }
+    scheduleIdleAction();
+  }, wait);
+}
+function stopIdleActions() {
+  if (idleActionTimer) { clearTimeout(idleActionTimer); idleActionTimer = null; }
+}
+
+// ============================================================
+// FRENZY WAVE — burst of 3-4 buildings dropped in rapid succession
+// Triggers occasionally mid-level to break monotony.
+// ============================================================
+let frenzyTimer = null;
+function triggerFrenzy() {
+  if (!State.running || State.paused || State.currentOpponent) return;
+  const fb = document.getElementById("frenzy-banner");
+  if (fb) {
+    fb.classList.remove("show");
+    void fb.offsetWidth;
+    fb.classList.add("show");
+  }
+  Audio.bassDrop();
+  Audio.orchestralStinger();
+  Voice.speak("Frenzy!", { priority: true });
+  doGodzillaAction("roar");
+  const count = 3 + Math.floor(Math.random() * 2); // 3-4 buildings
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      if (State.running && !State.paused && !State.currentOpponent) spawnBuilding();
+    }, i * 380);
+  }
+}
+function scheduleFrenzy() {
+  if (frenzyTimer) clearTimeout(frenzyTimer);
+  if (!State.running) return;
+  const wait = 22000 + Math.random() * 18000;
+  frenzyTimer = setTimeout(() => {
+    if (State.running && State.level >= 2) triggerFrenzy();
+    scheduleFrenzy();
+  }, wait);
+}
+function stopFrenzy() {
+  if (frenzyTimer) { clearTimeout(frenzyTimer); frenzyTimer = null; }
+}
+
+// ============================================================
+// SCENE EFFECT: storm overlay applied to ~1/3 of levels for variety.
+// ============================================================
+function applySceneEffect() {
+  document.body.classList.remove("scene-storm");
+  // Higher chance on biomes that already feel atmospheric (tokyo / neon)
+  const biome = BIOMES[biomeForLevel(State.level)];
+  const chance = biome && ["tokyo","neon","ocean"].includes(biome.key) ? 0.55 : 0.20;
+  if (Math.random() < chance) {
+    document.body.classList.add("scene-storm");
+  }
 }
 
 // ---------- Power-up crystals ----------
@@ -4418,17 +5021,22 @@ function startGame(startLevel) {
     State.currentOpponent = null;
   }
   document.querySelectorAll(".opp-fireball, .opponent, .opp-hp, .opp-word").forEach(n => n.remove());
+  document.body.classList.remove("low-health", "combo-3", "combo-5", "combo-10", "combo-20");
+  lastComboTier = 0;
 
   Audio.ensure();
   resetLevelStats();
   applyComboTier();
   updateHUD();
   switchToBiome(biomeForLevel(State.level));
+  applySceneEffect();
   maybeLightning();
   // Brief the kaiju, THEN start spawning
   briefKaiju(() => {
     if (!State.running) return;
     scheduleSpawns();
+    scheduleIdleAction();
+    scheduleFrenzy();
     loop();
     const isBossLevel = ((State.level + 1) % 5 === 0);
     showHint(isBossLevel
@@ -4446,9 +5054,12 @@ function continueLevel() {
   resetLevelStats();
   applyComboTier();
   switchToBiome(biomeForLevel(State.level));
+  applySceneEffect();
   briefKaiju(() => {
     if (!State.running || State.paused) return;
     scheduleSpawns();
+    scheduleIdleAction();
+    scheduleFrenzy();
     loop();
     const isBossLevel = ((State.level + 1) % 5 === 0);
     showHint(isBossLevel ? "⚠ BOSS LEVEL! ⚠" : LEVELS[State.level].title + "!", 2500);
@@ -4460,6 +5071,8 @@ function pauseGame() {
   State.paused = true;
   if (State.spawnTimer) { clearTimeout(State.spawnTimer); State.spawnTimer = null; }
   if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+  stopIdleActions();
+  stopFrenzy();
   if (State.currentOpponent && State.currentOpponent.attackTimer) {
     clearTimeout(State.currentOpponent.attackTimer);
     State.currentOpponent.attackTimer = null;

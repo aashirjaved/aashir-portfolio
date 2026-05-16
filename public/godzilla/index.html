@@ -804,8 +804,10 @@
   <div id="start" class="screen">
     <h1>GODZILLA<br/>TYPING<br/>RAMPAGE</h1>
     <p style="color:var(--accent); font-size: clamp(18px, 3vw, 24px); margin-bottom: 8px;">Type the words on the buildings.<br/>Godzilla SMASHES them with his ATOMIC BREATH!</p>
-    <p style="font-size:14px; color:#888;">Yellow letter = press this next!<br/>6 worlds: Tokyo · Snow · Forest · Lava · Ocean · Neon</p>
-    <button class="btn" id="startBtn">🦖 ROAR!! START</button>
+    <p style="font-size:14px; color:#888;">Yellow letter = press this next!<br/>20 levels · 6 worlds · slow and steady</p>
+    <button class="btn" id="startBtn">🦖 START FROM LEVEL 1</button>
+    <button class="btn green hidden" id="continueRunBtn" style="margin-top:14px;">▶ CONTINUE</button>
+    <p id="progressNote" style="margin-top:14px; font-size:14px; color:var(--accent); opacity:0.8;"></p>
     <p style="margin-top:14px; font-size:14px; color:#888;">iPad? The on-screen keyboard pops up automatically.</p>
   </div>
 
@@ -1133,52 +1135,159 @@ const BIOMES = [
 ];
 
 // ---------- Levels ----------
+// 20 levels — slow, steady ramp. One new concept per level.
+// Biome cycles every level for constant scene change.
 const LEVELS = [
+  // --- Tier 1: home row index fingers, then expand outward (lvl 1-7) ---
   {
-    title: "BABY KAIJU",
-    desc: "Type one letter at a time. Watch the YELLOW letter!",
-    pool: ["a","s","d","f","j","k","l","g","h"],
-    spawnEvery: 2800, fallSpeed: 22, target: 8,
-    biome: 0, // tokyo
+    title: "FIRST TOUCH",
+    desc: "Just F and J — your index fingers. Watch the YELLOW letter!",
+    pool: ["f","j"],
+    spawnEvery: 3400, fallSpeed: 26, target: 5,
+    biome: 0,
   },
   {
-    title: "YOUNG GODZILLA",
-    desc: "All letters of the alphabet!",
+    title: "FOUR FINGERS",
+    desc: "F  J  D  K — point fingers + middle fingers.",
+    pool: ["f","j","d","k"],
+    spawnEvery: 3200, fallSpeed: 25, target: 6,
+    biome: 1,
+  },
+  {
+    title: "SIX HOME KEYS",
+    desc: "Add S and L (your ring fingers).",
+    pool: ["s","l","f","j","d","k"],
+    spawnEvery: 3100, fallSpeed: 24, target: 6,
+    biome: 2,
+  },
+  {
+    title: "FULL HOME ROW",
+    desc: "All of A  S  D  F  J  K  L. Pinky time!",
+    pool: ["a","s","d","f","j","k","l"],
+    spawnEvery: 3000, fallSpeed: 24, target: 7,
+    biome: 3,
+  },
+  {
+    title: "ADD G AND H",
+    desc: "G and H — index fingers reach in.",
+    pool: ["a","s","d","f","g","h","j","k","l"],
+    spawnEvery: 2900, fallSpeed: 23, target: 8,
+    biome: 4,
+  },
+  {
+    title: "HOME ROW WORDS",
+    desc: "Tiny words from home row keys.",
+    pool: ["dad","sad","fad","lad","gas","has","ash","add"],
+    spawnEvery: 3100, fallSpeed: 23, target: 8,
+    biome: 5,
+  },
+  {
+    title: "LONGER HOME WORDS",
+    desc: "Bigger home-row words. Same fingers!",
+    pool: ["dash","sash","hash","flag","gala","half","glad","lass","jagged"],
+    spawnEvery: 3000, fallSpeed: 22, target: 9,
+    biome: 0,
+  },
+
+  // --- Tier 2: top row (lvl 8-13) ---
+  {
+    title: "TOP VOWELS",
+    desc: "New keys: E and I — your middle fingers reach up.",
+    pool: ["e","i","a","s","d","f","j","k","l"],
+    spawnEvery: 2900, fallSpeed: 22, target: 9,
+    biome: 1,
+  },
+  {
+    title: "MIX HOME + EI",
+    desc: "Easy words with E and I.",
+    pool: ["he","she","is","if","aid","said","like","life","kid","lid"],
+    spawnEvery: 2900, fallSpeed: 22, target: 10,
+    biome: 2,
+  },
+  {
+    title: "ADD R AND U",
+    desc: "Index fingers reach top: R and U.",
+    pool: ["r","u","e","i","a","s","d","f","j","k","l"],
+    spawnEvery: 2800, fallSpeed: 22, target: 10,
+    biome: 3,
+  },
+  {
+    title: "REAL WORDS",
+    desc: "Words mixing home + top row.",
+    pool: ["fire","ride","side","hide","fade","rude","fuel","ruler","jurassic","dare"],
+    spawnEvery: 2900, fallSpeed: 21, target: 11,
+    biome: 4,
+  },
+  {
+    title: "T AND Y",
+    desc: "Two more top-row keys.",
+    pool: ["t","y","r","u","e","i","a","s","d","f","j","k","l"],
+    spawnEvery: 2700, fallSpeed: 21, target: 11,
+    biome: 5,
+  },
+  {
+    title: "FULL TOP ROW",
+    desc: "Q  W  O  P join in. All top-row keys now!",
+    pool: ["q","w","o","p","t","y","r","u","e","i","a","s","d","f","j","k","l"],
+    spawnEvery: 2700, fallSpeed: 21, target: 12,
+    biome: 0,
+  },
+
+  // --- Tier 3: bottom row + 3-letter words (lvl 14-18) ---
+  {
+    title: "ADD B AND N",
+    desc: "Index fingers go down: B and N.",
+    pool: ["b","n","q","w","o","p","t","y","r","u","e","i","a","s","d","f","j","k","l"],
+    spawnEvery: 2700, fallSpeed: 20, target: 12,
+    biome: 1,
+  },
+  {
+    title: "M  V  C",
+    desc: "Bottom row middle keys.",
+    pool: ["m","v","c","b","n","a","s","d","f","j","k","l","e","i","r","u","t","y"],
+    spawnEvery: 2600, fallSpeed: 20, target: 13,
+    biome: 2,
+  },
+  {
+    title: "ALL 26 LETTERS",
+    desc: "Add X and Z — full alphabet unlocked!",
     pool: "abcdefghijklmnopqrstuvwxyz".split(""),
-    spawnEvery: 2400, fallSpeed: 20, target: 10,
-    biome: 1, // snow
+    spawnEvery: 2500, fallSpeed: 20, target: 13,
+    biome: 3,
   },
   {
-    title: "GODZILLA AWAKENS",
-    desc: "Real words! SMASH the buildings!",
-    pool: ["cat","dog","run","sun","fun","big","top","mom","dad","hit","map","fox","bug","red","pop","bat","jam"],
-    spawnEvery: 2800, fallSpeed: 20, target: 10,
-    biome: 2, // forest
+    title: "SMALL WORDS",
+    desc: "Three-letter monster snacks.",
+    pool: ["cat","dog","fox","bat","bug","big","pop","run","sun","fun","top","mom","dad","hit","map","red","jam","cow","pig"],
+    spawnEvery: 2700, fallSpeed: 20, target: 13,
+    biome: 4,
   },
   {
-    title: "ATOMIC BREATH",
-    desc: "Bigger words! Bigger ROAR!",
-    pool: ["fire","roar","lava","jump","kick","fast","bomb","loud","fish","bird","tree","king","wind","wave","cool"],
-    spawnEvery: 2800, fallSpeed: 19, target: 12,
-    biome: 3, // lava
+    title: "FOUR LETTERS",
+    desc: "Bigger words = bigger ROAR!",
+    pool: ["fire","roar","lava","jump","kick","fast","bomb","loud","fish","bird","tree","king","wind","wave","cool","city","laser","park"],
+    spawnEvery: 2700, fallSpeed: 19, target: 14,
+    biome: 5,
   },
+
+  // --- Tier 4: big words + sentences (lvl 19-20) ---
   {
-    title: "KAIJU CARNAGE",
-    desc: "Big monster words!",
-    pool: ["smash","crash","stomp","tokyo","kaiju","laser","power","giant","scary","brave","strong","attack","danger","monster","destroy","rampage"],
-    spawnEvery: 3000, fallSpeed: 20, target: 12,
-    biome: 4, // ocean
+    title: "KAIJU WORDS",
+    desc: "Monster-sized words!",
+    pool: ["smash","crash","stomp","tokyo","kaiju","power","giant","scary","brave","strong","attack","danger","monster","destroy","rampage","breath"],
+    spawnEvery: 2900, fallSpeed: 19, target: 14,
+    biome: 0,
   },
   {
     title: "KING OF MONSTERS",
-    desc: "Sentences! Use the SPACE BAR!",
+    desc: "Short sentences. Use the SPACE BAR!",
     pool: [
       "godzilla wins","smash the city","kaiju attack","atomic breath",
       "save tokyo","monster king","i can type","you are fast",
-      "roar loud now","fire and smoke"
+      "roar loud now","fire and smoke","i am godzilla"
     ],
-    spawnEvery: 5000, fallSpeed: 24, target: 6,
-    biome: 5, // neon
+    spawnEvery: 5000, fallSpeed: 24, target: 8,
+    biome: 1,
   }
 ];
 
@@ -1358,7 +1467,7 @@ function switchToBiome(index) {
 // ---------- HUD ----------
 function updateHUD() {
   $score.textContent = State.score;
-  $level.textContent = State.level + 1;
+  $level.textContent = (State.level + 1) + "/" + LEVELS.length;
   $combo.textContent = "x" + State.combo;
   $healthBar.style.width = State.health + "%";
 }
@@ -1717,13 +1826,14 @@ function showHint(text, ms = 3000) {
 function checkLevelProgress() {
   const lv = LEVELS[State.level];
   if (State.destroyed >= lv.target) {
+    saveProgress();
     if (State.level + 1 < LEVELS.length) {
       pauseGame();
       State.level++;
       State.destroyed = 0;
       const nlv = LEVELS[State.level];
       const nb = BIOMES[nlv.biome];
-      $levelTitle.textContent = nlv.title;
+      $levelTitle.textContent = "LEVEL " + (State.level + 1) + " / " + LEVELS.length + " — " + nlv.title;
       $levelDesc.textContent = nlv.desc;
       $biomeAnnounce.textContent = "Next world: " + nb.label + " — " + nb.gz;
       Audio.levelUpFanfare();
@@ -1735,13 +1845,36 @@ function checkLevelProgress() {
   }
 }
 
-function startGame() {
+// ---------- Persistence ----------
+const SAVE_KEY = "godzilla.progress.v1";
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return { highestLevel: 0, highScore: 0 };
+    const p = JSON.parse(raw);
+    return {
+      highestLevel: Math.max(0, Math.min(LEVELS.length - 1, p.highestLevel || 0)),
+      highScore: p.highScore || 0,
+    };
+  } catch (e) { return { highestLevel: 0, highScore: 0 }; }
+}
+function saveProgress() {
+  try {
+    const cur = loadProgress();
+    localStorage.setItem(SAVE_KEY, JSON.stringify({
+      highestLevel: Math.max(cur.highestLevel, State.level),
+      highScore: Math.max(cur.highScore, State.score),
+    }));
+  } catch (e) {}
+}
+
+function startGame(startLevel) {
   $start.classList.add("hidden");
   $gameover.classList.add("hidden");
   $levelup.classList.add("hidden");
   State.running = true;
   State.paused = false;
-  State.level = 0;
+  State.level = Math.max(0, Math.min(LEVELS.length - 1, startLevel || 0));
   State.score = 0;
   State.combo = 1;
   State.bestCombo = 1;
@@ -1752,13 +1885,15 @@ function startGame() {
   State.currentTarget = null;
 
   Audio.ensure();
-  Voice.speak("godzilla rampage");
+  Voice.speak(State.level > 0 ? "level " + (State.level + 1) : "godzilla rampage");
   updateHUD();
-  switchToBiome(LEVELS[0].biome);
+  switchToBiome(LEVELS[State.level].biome);
   scheduleSpawns();
   loop();
   maybeLightning();
-  showHint("PRESS THE YELLOW LETTER!", 4000);
+  showHint(State.level > 0
+    ? "LEVEL " + (State.level + 1) + " — " + LEVELS[State.level].title + "!"
+    : "PRESS THE YELLOW LETTER!", 4000);
   focusInput();
 }
 
@@ -1789,12 +1924,13 @@ function gameOver(victory) {
   State.running = false;
   pauseGame();
   Audio.stopMusic();
+  saveProgress();
   $finalScore.textContent = State.score;
   $finalCombo.textContent = "x" + State.bestCombo;
   $finalSmashed.textContent = State.destroyed + " on level " + (State.level + 1);
   if (victory) {
     $endTitle.textContent = "KING OF MONSTERS!";
-    $endSubtitle.textContent = "Godzilla conquered every world!";
+    $endSubtitle.textContent = "Godzilla conquered all " + LEVELS.length + " levels!";
     Audio.levelUpFanfare();
     Voice.speak("you are the king of monsters!");
     setTimeout(() => Audio.roar(true), 600);
@@ -1802,6 +1938,7 @@ function gameOver(victory) {
     $endTitle.textContent = "GODZILLA TIRED";
     $endSubtitle.textContent = "Take a breath... and rampage again!";
   }
+  refreshStartScreenProgress();
   $gameover.classList.remove("hidden");
 }
 
@@ -1931,20 +2068,36 @@ $voiceToggle.addEventListener("click", () => {
   if (on) Voice.speak("voice on");
 });
 
-function attachStartHandler(btn) {
+function attachStartHandler(btn, level) {
   function trigger(e) {
     e.preventDefault();
-    // Only summon native iPad keyboard when the on-screen keyboard is HIDDEN
     if (isTouchDevice() && !document.body.classList.contains("kb-visible")) {
       try { $ipadInput.focus(); } catch (er) {}
     }
-    startGame();
+    startGame(typeof level === "function" ? level() : level || 0);
   }
   btn.addEventListener("click", trigger);
   btn.addEventListener("touchend", trigger, { passive: false });
 }
-attachStartHandler($startBtn);
-attachStartHandler($restartBtn);
+attachStartHandler($startBtn, 0);
+attachStartHandler($restartBtn, 0);
+
+const $continueRunBtn = document.getElementById("continueRunBtn");
+const $progressNote = document.getElementById("progressNote");
+attachStartHandler($continueRunBtn, () => loadProgress().highestLevel);
+
+function refreshStartScreenProgress() {
+  const p = loadProgress();
+  if (p.highestLevel > 0) {
+    $continueRunBtn.classList.remove("hidden");
+    $continueRunBtn.textContent = "▶ CONTINUE FROM LEVEL " + (p.highestLevel + 1);
+    $progressNote.textContent = "Best so far: Level " + (p.highestLevel + 1) + " · High score " + p.highScore;
+  } else {
+    $continueRunBtn.classList.add("hidden");
+    $progressNote.textContent = "";
+  }
+}
+refreshStartScreenProgress();
 
 function attachContinueHandler(btn) {
   function trigger(e) {

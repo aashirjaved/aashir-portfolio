@@ -957,12 +957,12 @@
      top down, beam shoots upward. */
   body.layout-portrait #godzilla {
     left: 50%;
-    width: 50vw;
+    width: 62vw;
     height: auto;
-    margin-left: -25vw;
+    margin-left: -31vw;
     bottom: 2%;
-    max-height: 38vh;
-    max-width: 25vh; /* preserve aspect ratio at very tall viewports */
+    max-height: 42vh;
+    max-width: 28vh; /* preserve aspect ratio at very tall viewports */
   }
   body.layout-portrait .building {
     bottom: auto; /* falling buildings use top instead */
@@ -1000,8 +1000,11 @@
   body.layout-portrait #skyline { height: 35%; }
   /* When the on-screen keyboard occupies the bottom, also pull Godzilla up */
   body.layout-portrait.kb-visible #godzilla {
-    bottom: calc(38vh + 4px);
-    max-height: 28vh;
+    bottom: calc(38vh + 8px);
+    max-height: 32vh;
+    max-width: 22vh;
+    width: 55vw;
+    margin-left: -27.5vw;
   }
 
   /* On-screen virtual keyboard — BIG, kid-friendly */
@@ -1089,6 +1092,21 @@
     bottom: calc(38vh + 10px);
   }
   #kb-toggle.active { background: var(--accent); color: #2a0000; }
+  /* Portrait: stack toggles in the top-right corner so they don't compete
+     with Godzilla / playfield for vertical space */
+  body.layout-portrait #kb-toggle,
+  body.layout-portrait #sound-toggle,
+  body.layout-portrait #voice-toggle {
+    bottom: auto;
+    right: 6px;
+    padding: 5px 8px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    border-width: 1px;
+  }
+  body.layout-portrait #voice-toggle { top: 92px; }
+  body.layout-portrait #sound-toggle { top: 128px; }
+  body.layout-portrait #kb-toggle    { top: 164px; }
 
   #hint {
     position: absolute;
@@ -2368,9 +2386,13 @@ function spawnBuilding() {
     vertical: portrait,
   };
   if (portrait) {
-    // Buildings DROP from above, land just above Godzilla's head
+    // Buildings DROP from above, land just above Godzilla's head.
+    // Use Godzilla's actual rendered top as the landing line.
     const startY = -bHeight - 20;
-    const endY = playH * 0.55 - bHeight;
+    const gzRect = $godzilla.getBoundingClientRect();
+    const playRect = $playfield.getBoundingClientRect();
+    const headLineWithinPlayfield = Math.max(80, gzRect.top - playRect.top - 20);
+    const endY = headLineWithinPlayfield - bHeight;
     const xCol = 6 + Math.random() * (playW - bWidth - 12);
     el.style.left = xCol + "px";
     el.style.top = startY + "px";

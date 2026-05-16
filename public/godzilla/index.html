@@ -720,6 +720,108 @@
     text-shadow: 0 0 8px #ff44dd, 0 0 18px #ff44dd !important;
   }
 
+  /* ============ OPPONENT BOSS FIGHTS ============ */
+  .opponent {
+    position: absolute;
+    z-index: 13;
+    width: clamp(180px, 32vw, 280px);
+    height: auto;
+    pointer-events: none;
+    filter: drop-shadow(0 0 30px currentColor);
+    animation: opp-arrive 0.9s ease-out, opp-bob 2.4s ease-in-out 0.9s infinite;
+  }
+  .opponent svg { width: 100%; height: auto; display: block; }
+  @keyframes opp-arrive {
+    0%   { transform: translateY(-60vh) rotate(8deg) scale(0.6); opacity: 0; }
+    70%  { transform: translateY(20px) rotate(-3deg) scale(1.05); opacity: 1; }
+    100% { transform: translateY(0) rotate(0) scale(1); opacity: 1; }
+  }
+  @keyframes opp-bob {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-12px); }
+  }
+  .opponent.attacking { animation: opp-attack 0.5s ease-out; }
+  @keyframes opp-attack {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    30%      { transform: translate(-18px, 4px) scale(1.05); }
+    60%      { transform: translate(8px, -4px) scale(1.08); }
+  }
+  .opponent.defeated {
+    animation: opp-defeated 1.4s ease-in forwards;
+  }
+  @keyframes opp-defeated {
+    0%   { transform: translateY(0) rotate(0); opacity: 1; }
+    30%  { transform: translateY(20px) rotate(8deg); opacity: 0.9; }
+    100% { transform: translateY(60vh) rotate(45deg); opacity: 0; }
+  }
+
+  /* Opponent HP bar (above kaiju) */
+  .opp-hp {
+    position: absolute;
+    z-index: 14;
+    pointer-events: none;
+    width: clamp(160px, 28vw, 240px);
+    text-align: center;
+  }
+  .opp-name {
+    font-size: clamp(16px, 2.6vw, 24px);
+    color: currentColor;
+    letter-spacing: 3px;
+    text-shadow: 0 0 10px currentColor, 2px 2px 0 #000;
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+  .opp-hp-track {
+    position: relative;
+    height: 14px;
+    background: rgba(0,0,0,0.7);
+    border: 2px solid currentColor;
+    border-radius: 7px;
+    overflow: hidden;
+    box-shadow: 0 0 12px currentColor;
+  }
+  .opp-hp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff3030, #ffaa00, #5fffaa);
+    transition: width 0.4s ease;
+  }
+  .opp-hp-pips {
+    margin-top: 4px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: currentColor;
+    text-shadow: 1px 1px 0 #000;
+  }
+  /* Opponent word label (where the player types) */
+  .opponent .word {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(24px, 3.6vw, 38px);
+    color: #fff;
+    background: rgba(0,0,0,0.9);
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 3px solid currentColor;
+    text-shadow: 0 0 8px currentColor, 0 0 16px currentColor;
+    letter-spacing: 2px;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  /* Opponent fireball (their attack) */
+  .opp-fireball {
+    position: absolute;
+    z-index: 12;
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffffff 0%, #ffeb6a 20%, #ff5500 60%, transparent 100%);
+    box-shadow: 0 0 30px #ff5500, 0 0 60px #ff8800;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+
   /* Combo escalation tiers — body classes control overall vibe */
   body.combo-3 #godzilla {
     filter: drop-shadow(0 0 40px var(--gz-glow)) drop-shadow(0 0 70px rgba(255,170,0,0.4));
@@ -1722,7 +1824,7 @@ const Voice = (() => {
 })();
 
 // ---------- Version ----------
-const GAME_VERSION = "v2.5 · PICK + CYBER REBUILD";
+const GAME_VERSION = "v2.6 · OPPONENT BOSSES";
 const GAME_BUILD_DATE = "2026-05-16";
 
 // ---------- Characters ----------
@@ -2151,6 +2253,237 @@ const CHARACTERS = {
 };
 const CHARACTER_ORDER = ["gojira","space","fire","cyber","ghidorah"];
 
+// ============================================================
+// OPPONENTS — enemy kaiju the player FIGHTS at boss levels
+// Each has HP, periodic attacks, and its own SVG.
+// ============================================================
+
+const CHARIZARD_SVG = `
+<defs>
+  <linearGradient id="g-chari-body" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%"  stop-color="#ffa040"/>
+    <stop offset="60%" stop-color="#ff5a08"/>
+    <stop offset="100%" stop-color="#aa2200"/>
+  </linearGradient>
+  <linearGradient id="g-chari-belly" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%"  stop-color="#ffdf80"/>
+    <stop offset="100%" stop-color="#e6a430"/>
+  </linearGradient>
+  <linearGradient id="g-chari-wing" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%"  stop-color="#5fbfff"/>
+    <stop offset="100%" stop-color="#1a4a8a"/>
+  </linearGradient>
+  <radialGradient id="g-chari-flame" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#ffffff"/>
+    <stop offset="40%" stop-color="#ffeb6a"/>
+    <stop offset="100%" stop-color="#ff5500"/>
+  </radialGradient>
+</defs>
+<g>
+  <!-- Tail with flame -->
+  <path d="M 145 240 Q 180 245 195 220 Q 205 200 195 185 Q 188 196 178 215 Q 165 228 145 230 Z" fill="url(#g-chari-body)" stroke="#000" stroke-width="2"/>
+  <ellipse cx="200" cy="180" rx="14" ry="20" fill="url(#g-chari-flame)" stroke="#cc4400" stroke-width="1"/>
+  <ellipse cx="200" cy="172" rx="6" ry="10" fill="#ffffff" opacity="0.9"/>
+  <!-- Wings (behind body) -->
+  <path d="M 60 170 Q 5 130 0 200 Q 15 210 30 198 Q 50 188 70 195 Z" fill="url(#g-chari-wing)" stroke="#000" stroke-width="2"/>
+  <path d="M 140 170 Q 195 130 200 200 Q 185 210 170 198 Q 150 188 130 195 Z" fill="url(#g-chari-wing)" stroke="#000" stroke-width="2"/>
+  <line x1="40" y1="160" x2="20" y2="195" stroke="#000" stroke-width="1.5"/>
+  <line x1="160" y1="160" x2="180" y2="195" stroke="#000" stroke-width="1.5"/>
+  <!-- Legs -->
+  <path d="M 75 270 Q 65 290 80 295 L 95 295 Q 95 282 92 268 Z" fill="url(#g-chari-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 125 270 Q 115 290 120 295 L 135 295 Q 135 282 128 268 Z" fill="url(#g-chari-body)" stroke="#000" stroke-width="2"/>
+  <!-- Body -->
+  <ellipse cx="100" cy="200" rx="45" ry="58" fill="url(#g-chari-body)" stroke="#000" stroke-width="2"/>
+  <!-- Belly -->
+  <ellipse cx="100" cy="215" rx="28" ry="38" fill="url(#g-chari-belly)" stroke="#000" stroke-width="1"/>
+  <!-- Arms -->
+  <path d="M 60 175 Q 50 200 60 215 Q 70 218 75 200 Q 78 185 80 178 Z" fill="url(#g-chari-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 140 175 Q 150 200 140 215 Q 130 218 125 200 Q 122 185 120 178 Z" fill="url(#g-chari-body)" stroke="#000" stroke-width="2"/>
+  <!-- Claws -->
+  <polygon points="58,215 53,225 64,220" fill="#fff" stroke="#000" stroke-width="0.5"/>
+  <polygon points="142,215 147,225 136,220" fill="#fff" stroke="#000" stroke-width="0.5"/>
+  <!-- Neck -->
+  <path d="M 85 145 Q 80 130 90 115 L 110 115 Q 120 130 115 145 Z" fill="url(#g-chari-body)" stroke="#000" stroke-width="2"/>
+  <!-- Head -->
+  <ellipse cx="100" cy="100" rx="40" ry="34" fill="url(#g-chari-body)" stroke="#000" stroke-width="2"/>
+  <!-- Snout -->
+  <ellipse cx="100" cy="115" rx="22" ry="12" fill="url(#g-chari-body)" stroke="#000" stroke-width="2"/>
+  <!-- Horns (back of head, pointing up-back) -->
+  <polygon points="78,80 70,52 90,76" fill="#e6a430" stroke="#000" stroke-width="1.5"/>
+  <polygon points="122,80 130,52 110,76" fill="#e6a430" stroke="#000" stroke-width="1.5"/>
+  <!-- Eyes (angry, blue) -->
+  <ellipse cx="86" cy="92" rx="6" ry="8" fill="#ffffff"/>
+  <ellipse cx="114" cy="92" rx="6" ry="8" fill="#ffffff"/>
+  <circle cx="86" cy="94" r="3" fill="#1a8aff"/>
+  <circle cx="114" cy="94" r="3" fill="#1a8aff"/>
+  <!-- Angry brows -->
+  <path d="M 78 82 L 92 80 L 90 85 L 80 87 Z" fill="#aa2200" stroke="#000" stroke-width="1"/>
+  <path d="M 122 82 L 108 80 L 110 85 L 120 87 Z" fill="#aa2200" stroke="#000" stroke-width="1"/>
+  <!-- Nostrils -->
+  <ellipse cx="93" cy="115" rx="1.5" ry="2.5" fill="#000"/>
+  <ellipse cx="107" cy="115" rx="1.5" ry="2.5" fill="#000"/>
+  <!-- Mouth + fangs -->
+  <path d="M 80 122 Q 100 132 120 122" stroke="#000" stroke-width="2" fill="none"/>
+  <polygon points="90,123 92,131 94,123" fill="#ffffff"/>
+  <polygon points="106,123 108,131 110,123" fill="#ffffff"/>
+</g>
+`;
+
+const RIVAL_GZ_SVG = `
+<defs>
+  <linearGradient id="g-rival-body" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%"  stop-color="#4a3a3a"/>
+    <stop offset="60%" stop-color="#1a1010"/>
+    <stop offset="100%" stop-color="#000000"/>
+  </linearGradient>
+  <linearGradient id="g-rival-belly" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#6a3030"/>
+    <stop offset="100%" stop-color="#3a1010"/>
+  </linearGradient>
+</defs>
+<g>
+  <!-- Tail -->
+  <path d="M 80 260 Q 30 250 10 200 Q 5 180 18 175 Q 35 180 45 220 Q 60 245 80 250 Z" fill="url(#g-rival-body)" stroke="#000" stroke-width="2"/>
+  <!-- Legs -->
+  <path d="M 70 270 Q 60 285 70 295 L 90 295 Q 90 280 88 265 Z" fill="url(#g-rival-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 110 270 Q 100 285 110 295 L 130 295 Q 130 280 128 265 Z" fill="url(#g-rival-body)" stroke="#000" stroke-width="2"/>
+  <!-- Body -->
+  <ellipse cx="100" cy="200" rx="52" ry="68" fill="url(#g-rival-body)" stroke="#000" stroke-width="2"/>
+  <ellipse cx="100" cy="215" rx="30" ry="42" fill="url(#g-rival-belly)" stroke="#000" stroke-width="1"/>
+  <!-- Cracks (red glow seeping through) -->
+  <path d="M 85 175 Q 92 195 88 215" stroke="#ff3030" stroke-width="2" fill="none" opacity="0.85"/>
+  <path d="M 115 180 Q 110 200 118 220" stroke="#ff3030" stroke-width="2" fill="none" opacity="0.85"/>
+  <path d="M 100 190 Q 96 210 104 225" stroke="#ff5a30" stroke-width="1.5" fill="none" opacity="0.7"/>
+  <!-- Arms -->
+  <path d="M 60 175 Q 45 200 50 220 Q 55 225 65 215 Q 70 195 75 180 Z" fill="url(#g-rival-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 140 175 Q 155 200 150 220 Q 145 225 135 215 Q 130 195 125 180 Z" fill="url(#g-rival-body)" stroke="#000" stroke-width="2"/>
+  <!-- Claws -->
+  <polygon points="48,222 45,232 52,225" fill="#aa3030"/>
+  <polygon points="152,222 155,232 148,225" fill="#aa3030"/>
+  <!-- Neck + Head -->
+  <path d="M 80 145 Q 75 130 85 115 L 115 115 Q 125 130 120 145 Z" fill="url(#g-rival-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 75 110 Q 70 80 95 70 L 140 75 Q 160 85 165 100 Q 165 115 155 120 L 95 125 Q 75 122 75 110 Z" fill="url(#g-rival-body)" stroke="#000" stroke-width="2"/>
+  <!-- Jaw -->
+  <path d="M 95 118 Q 100 132 130 130 Q 150 128 155 120 L 145 122 Q 120 125 95 118 Z" fill="#1a0a0a" stroke="#000" stroke-width="2"/>
+  <!-- Teeth -->
+  <polygon points="105,121 107,128 109,121" fill="#fff"/>
+  <polygon points="115,122 117,129 119,122" fill="#fff"/>
+  <polygon points="125,122 127,129 129,122" fill="#fff"/>
+  <polygon points="135,121 137,128 139,121" fill="#fff"/>
+  <!-- Glowing RED rage eye -->
+  <circle cx="120" cy="92" r="16" fill="#ff0000" opacity="0.45"/>
+  <circle cx="120" cy="92" r="8" fill="#ff0000"/>
+  <circle cx="121" cy="93" r="3" fill="#ffeb6a"/>
+  <!-- Scar across eye -->
+  <line x1="105" y1="80" x2="135" y2="105" stroke="#000" stroke-width="2"/>
+  <!-- Head spikes -->
+  <polygon points="85,75 88,55 95,72" fill="#5a2020" stroke="#000" stroke-width="1.5"/>
+  <polygon points="100,72 105,50 112,68" fill="#5a2020" stroke="#000" stroke-width="1.5"/>
+  <!-- Back spikes (jagged, red-glowing tips) -->
+  <polygon points="80,165 75,140 90,155" fill="#ff3030" stroke="#000" stroke-width="1.5"/>
+  <polygon points="90,180 80,150 100,170" fill="#ff3030" stroke="#000" stroke-width="1.5"/>
+  <polygon points="105,195 95,160 115,185" fill="#ff3030" stroke="#000" stroke-width="1.5"/>
+  <polygon points="115,215 105,180 125,205" fill="#ff3030" stroke="#000" stroke-width="1.5"/>
+  <polygon points="100,235 90,205 110,225" fill="#ff3030" stroke="#000" stroke-width="1.5"/>
+  <polygon points="85,250 75,225 95,240" fill="#ff3030" stroke="#000" stroke-width="1.5"/>
+</g>
+`;
+
+const DRAGON_SVG = `
+<defs>
+  <linearGradient id="g-drag-body" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%"  stop-color="#8a3aff"/>
+    <stop offset="60%" stop-color="#5a1a8a"/>
+    <stop offset="100%" stop-color="#1a0030"/>
+  </linearGradient>
+  <linearGradient id="g-drag-belly" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#cc6acc"/>
+    <stop offset="100%" stop-color="#5a1a8a"/>
+  </linearGradient>
+  <linearGradient id="g-drag-wing" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%"  stop-color="#aa5aff"/>
+    <stop offset="100%" stop-color="#3a0a6a"/>
+  </linearGradient>
+</defs>
+<g>
+  <!-- LONG sinuous tail -->
+  <path d="M 100 250 Q 50 270 20 245 Q 5 220 22 215 Q 35 230 60 235 Q 85 240 100 240 Z" fill="url(#g-drag-body)" stroke="#000" stroke-width="2"/>
+  <!-- Spade tail tip -->
+  <polygon points="20,225 5,205 12,228 25,225" fill="url(#g-drag-body)" stroke="#000" stroke-width="2"/>
+  <!-- Wings -->
+  <path d="M 55 165 Q 0 130 5 200 Q 20 208 35 198 Q 50 192 70 195 Z" fill="url(#g-drag-wing)" stroke="#000" stroke-width="2"/>
+  <path d="M 145 165 Q 200 130 195 200 Q 180 208 165 198 Q 150 192 130 195 Z" fill="url(#g-drag-wing)" stroke="#000" stroke-width="2"/>
+  <line x1="35" y1="155" x2="15" y2="190" stroke="#000" stroke-width="1.5"/>
+  <line x1="45" y1="170" x2="30" y2="200" stroke="#000" stroke-width="1.5"/>
+  <line x1="165" y1="155" x2="185" y2="190" stroke="#000" stroke-width="1.5"/>
+  <line x1="155" y1="170" x2="170" y2="200" stroke="#000" stroke-width="1.5"/>
+  <!-- Legs (4 — quadrupedal) -->
+  <path d="M 70 250 Q 60 275 72 290 L 90 290 Q 90 270 85 248 Z" fill="url(#g-drag-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 115 250 Q 105 275 117 290 L 135 290 Q 135 270 130 248 Z" fill="url(#g-drag-body)" stroke="#000" stroke-width="2"/>
+  <!-- Body (more elongated) -->
+  <ellipse cx="100" cy="200" rx="48" ry="55" fill="url(#g-drag-body)" stroke="#000" stroke-width="2"/>
+  <!-- Belly scales -->
+  <ellipse cx="100" cy="215" rx="26" ry="35" fill="url(#g-drag-belly)" stroke="#000" stroke-width="1"/>
+  <path d="M 85 200 Q 100 205 115 200 M 85 220 Q 100 225 115 220 M 85 235 Q 100 240 115 235" stroke="#000" stroke-width="0.8" fill="none" opacity="0.5"/>
+  <!-- LONG curved neck -->
+  <path d="M 90 145 Q 70 110 90 75 Q 110 60 120 70 Q 130 90 115 120 Q 105 135 110 145 Z" fill="url(#g-drag-body)" stroke="#000" stroke-width="2"/>
+  <!-- Head (sleek, snake-like) -->
+  <ellipse cx="110" cy="55" rx="22" ry="14" fill="url(#g-drag-body)" stroke="#000" stroke-width="2"/>
+  <!-- Snout -->
+  <ellipse cx="128" cy="62" rx="12" ry="8" fill="url(#g-drag-body)" stroke="#000" stroke-width="2"/>
+  <!-- Horns swept back -->
+  <polygon points="105,42 98,18 112,40" fill="#cc6acc" stroke="#000" stroke-width="1.5"/>
+  <polygon points="118,38 122,16 128,42" fill="#cc6acc" stroke="#000" stroke-width="1.5"/>
+  <!-- Magenta GLOWING eye -->
+  <ellipse cx="118" cy="52" rx="4" ry="5" fill="#ff44dd"/>
+  <ellipse cx="118" cy="52" rx="7" ry="8" fill="#ff44dd" opacity="0.4"/>
+  <circle cx="119" cy="53" r="1.5" fill="#ffffff"/>
+  <!-- Nostril -->
+  <ellipse cx="136" cy="60" rx="1.5" ry="2" fill="#000"/>
+  <!-- Open mouth + fangs -->
+  <path d="M 122 66 Q 132 72 140 64" stroke="#000" stroke-width="1.5" fill="none"/>
+  <polygon points="126,67 127,72 129,67" fill="#fff"/>
+  <polygon points="132,67 133,72 135,67" fill="#fff"/>
+  <!-- Spine ridge -->
+  <polygon points="92,158 88,140 100,152" fill="#cc6acc" stroke="#000" stroke-width="1"/>
+  <polygon points="100,180 96,160 110,170" fill="#cc6acc" stroke="#000" stroke-width="1"/>
+  <polygon points="108,205 104,182 118,195" fill="#cc6acc" stroke="#000" stroke-width="1"/>
+  <polygon points="105,230 100,205 115,215" fill="#cc6acc" stroke="#000" stroke-width="1"/>
+</g>
+`;
+
+const OPPONENTS = {
+  charizard: {
+    name: "CHARIZARD",
+    subtitle: "Fire dragon swoops in!",
+    svg: CHARIZARD_SVG,
+    color: "#ff7a08",
+    hp: 5,
+    attackInterval: 9000,
+    voice: "Charizard appears!"
+  },
+  rival: {
+    name: "RIVAL GODZILLA",
+    subtitle: "Another kaiju challenges you!",
+    svg: RIVAL_GZ_SVG,
+    color: "#ff3030",
+    hp: 6,
+    attackInterval: 8500,
+    voice: "Rival Godzilla! Showdown!"
+  },
+  dragon: {
+    name: "ANCIENT DRAGON",
+    subtitle: "A legendary purple dragon!",
+    svg: DRAGON_SVG,
+    color: "#cc44ff",
+    hp: 7,
+    attackInterval: 8000,
+    voice: "Ancient dragon attacks!"
+  }
+};
+// One opponent per boss level (5/10/15/20)
+const OPPONENT_AT_LEVEL = { 5: "charizard", 10: "rival", 15: "dragon", 20: "rival" };
+
 // ---------- Biomes ----------
 const BIOMES = [
   { key: "tokyo",  label: "TOKYO NIGHT",  ambient: "spark",  count: 25, lightning: true,  buildingStyle: "skyscraper" },
@@ -2336,6 +2669,7 @@ const State = {
   powerUps: { slomo: 0, doubleScore: 0 }, // ms remaining
   bossSpawnedThisLevel: false,
   startingCharacter: null, // set from start-screen kaiju pick
+  currentOpponent: null,   // active opponent fight, if any
 };
 
 // ---------- DOM ----------
@@ -2853,14 +3187,22 @@ function handleKey(rawCh) {
     return;
   }
   b.typed++;
-  renderWord(b);
+  if (b.kind === "opponent") {
+    renderOpponentWord(b);
+  } else {
+    renderWord(b);
+  }
   Audio.correctChime();
   State.score += 10 * State.combo;
   shootBeam(b);
   spawnPraise(PRAISE_PER_KEY[Math.floor(Math.random()*PRAISE_PER_KEY.length)], b.el, false);
 
   if (b.typed >= b.word.length) {
-    destroyBuilding(b);
+    if (b.kind === "opponent") {
+      hitOpponent(b);
+    } else {
+      destroyBuilding(b);
+    }
   } else {
     updateNextPrompt();
   }
@@ -3297,6 +3639,251 @@ function spawnBoss() {
   speakForPhonics(word);
 }
 
+// ============================================================
+// OPPONENT BOSS FIGHT
+// ============================================================
+function pickOpponentWord() {
+  // Use a slightly tougher word from the current level pool (with fallbacks).
+  const lv = LEVELS[State.level];
+  const pool = (lv.pool || []).filter(w => w.length >= 3 && !w.includes(" "));
+  if (pool.length === 0) {
+    return ["fire","roar","kaiju","smash","tokyo"][Math.floor(Math.random() * 5)];
+  }
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function spawnOpponent(typeKey) {
+  if (!State.running || State.paused) return;
+  if (State.currentOpponent) return;
+  const opp = OPPONENTS[typeKey];
+  if (!opp) return;
+  // Halt regular spawn loop while the fight is in progress.
+  if (State.spawnTimer) { clearTimeout(State.spawnTimer); State.spawnTimer = null; }
+  // Remove any in-flight buildings so the player can focus on the fight.
+  for (const b of State.buildings) {
+    if (b.dead) continue;
+    b.dead = true;
+    b.el.classList.add("destroyed");
+    setTimeout(() => b.el.remove(), 600);
+  }
+  State.buildings = [];
+  State.currentTarget = null;
+
+  const playW = $playfield.clientWidth;
+  const playH = $playfield.clientHeight;
+  const portrait = document.body.classList.contains("layout-portrait");
+
+  // OPPONENT element
+  const el = document.createElement("div");
+  el.className = "opponent";
+  el.style.color = opp.color;
+  el.innerHTML =
+    '<svg viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">' +
+    opp.svg + '</svg>';
+
+  // Word that the player types to attack
+  const wordEl = document.createElement("div");
+  wordEl.className = "word";
+  el.appendChild(wordEl);
+
+  // HP bar floating above the opponent
+  const hpEl = document.createElement("div");
+  hpEl.className = "opp-hp";
+  hpEl.style.color = opp.color;
+  hpEl.innerHTML =
+    '<div class="opp-name">' + opp.name + '</div>' +
+    '<div class="opp-hp-track"><div class="opp-hp-fill"></div></div>' +
+    '<div class="opp-hp-pips"></div>';
+
+  // Position: opposite the player Godzilla.
+  // Landscape: right side. Portrait: top-center.
+  if (portrait) {
+    el.style.left = "50%";
+    el.style.top = "12vh";
+    el.style.transform = "translateX(-50%)";
+    hpEl.style.left = "50%";
+    hpEl.style.top = "4vh";
+    hpEl.style.transform = "translateX(-50%)";
+  } else {
+    el.style.right = "5%";
+    el.style.bottom = "10%";
+    hpEl.style.right = "5%";
+    hpEl.style.bottom = "calc(10% + 32vh)";
+    hpEl.style.minWidth = "240px";
+    hpEl.style.transform = "translateX(50%)";
+  }
+
+  $playfield.appendChild(el);
+  $playfield.appendChild(hpEl);
+
+  // Compose state and pick the first word
+  const opponentState = {
+    typeKey,
+    config: opp,
+    el, wordEl, hpEl,
+    hp: opp.hp,
+    maxHp: opp.hp,
+    typed: 0,
+    word: pickOpponentWord(),
+    dead: false,
+    kind: "opponent",
+    // attack scheduling
+    attackTimer: null,
+  };
+  renderOpponentHP(opponentState);
+  renderOpponentWord(opponentState);
+  State.currentOpponent = opponentState;
+  // Pretend the opponent is a "building" so the typing logic can target it.
+  State.buildings.push(opponentState);
+  pickTarget();
+
+  // Drama
+  showBanner("⚠ " + opp.name + " ⚠");
+  Voice.speak(opp.voice, { priority: true });
+  Audio.roar(true);
+  $game.classList.remove("big-shake");
+  void $game.offsetWidth;
+  $game.classList.add("big-shake");
+
+  // Schedule periodic attacks
+  scheduleOpponentAttack(opponentState);
+}
+
+function renderOpponentHP(o) {
+  const pct = Math.max(0, o.hp / o.maxHp) * 100;
+  const fill = o.hpEl.querySelector(".opp-hp-fill");
+  const pips = o.hpEl.querySelector(".opp-hp-pips");
+  if (fill) fill.style.width = pct + "%";
+  if (pips) pips.textContent = "HP " + o.hp + " / " + o.maxHp;
+}
+
+function renderOpponentWord(o) {
+  const word = o.word.toUpperCase();
+  const t = o.typed;
+  const typed = word.slice(0, t);
+  const next = word[t] || "";
+  const rest = word.slice(t + 1);
+  o.wordEl.innerHTML =
+    '<span class="typed">' + typed + '</span>' +
+    '<span class="next">' + next + '</span>' + rest;
+}
+
+function scheduleOpponentAttack(o) {
+  if (!o || o.dead) return;
+  clearTimeout(o.attackTimer);
+  o.attackTimer = setTimeout(() => opponentAttack(o), o.config.attackInterval);
+}
+
+function opponentAttack(o) {
+  if (!o || o.dead || !State.running) return;
+  // Visual fireball flies from opponent toward Godzilla
+  const oRect = o.el.getBoundingClientRect();
+  const gzRect = $godzilla.getBoundingClientRect();
+  const fb = document.createElement("div");
+  fb.className = "opp-fireball";
+  const startX = oRect.left + oRect.width / 2;
+  const startY = oRect.top + oRect.height / 2;
+  fb.style.left = (startX - 25) + "px";
+  fb.style.top  = (startY - 25) + "px";
+  $game.appendChild(fb);
+  const endX = gzRect.left + gzRect.width / 2;
+  const endY = gzRect.top + gzRect.height / 2;
+  const dx = endX - startX, dy = endY - startY;
+  requestAnimationFrame(() => {
+    fb.style.transition = "transform 0.55s ease-in, opacity 0.15s ease-out 0.45s";
+    fb.style.transform = "translate(" + dx + "px," + dy + "px) scale(1.6)";
+    fb.style.opacity = "0";
+  });
+  // Visible attack animation
+  o.el.classList.remove("attacking");
+  void o.el.offsetWidth;
+  o.el.classList.add("attacking");
+  // Damage when fireball lands
+  setTimeout(() => {
+    fb.remove();
+    if (!State.running) return;
+    State.health = Math.max(0, State.health - 12);
+    $godzilla.classList.remove("hurt");
+    void $godzilla.offsetWidth;
+    $godzilla.classList.add("hurt");
+    $game.classList.remove("shake");
+    void $game.offsetWidth;
+    $game.classList.add("shake");
+    Audio.explosion();
+    flashScreen("rgba(255,80,0,0.35)");
+    updateHUD();
+    if (State.health <= 0) {
+      gameOver(false);
+      return;
+    }
+    // Schedule next attack if opponent is still alive
+    if (!o.dead) scheduleOpponentAttack(o);
+  }, 560);
+}
+
+function hitOpponent(o) {
+  o.hp = Math.max(0, o.hp - 1);
+  // Visual: shoot beam at opponent, particles, screen flash
+  shootBeam(o);
+  Audio.explosion();
+  spawnParticles(o.el);
+  flashScreen("rgba(255,255,255,0.25)");
+  // Bonus score per hit
+  const gained = 200 * State.combo;
+  State.score += gained;
+  spawnScorePop(o.el, gained);
+  bumpCombo();
+  renderOpponentHP(o);
+  if (o.hp <= 0) {
+    defeatOpponent(o);
+  } else {
+    // Pick a new word for the next hit
+    o.typed = 0;
+    o.word = pickOpponentWord();
+    renderOpponentWord(o);
+    speakForPhonics(o.word);
+    Voice.speak("Hit! " + o.hp + " left.", { priority: false });
+  }
+}
+
+function defeatOpponent(o) {
+  o.dead = true;
+  if (o.attackTimer) { clearTimeout(o.attackTimer); o.attackTimer = null; }
+  // Big celebration
+  o.el.classList.add("defeated");
+  setTimeout(() => { o.el.remove(); }, 1500);
+  o.hpEl.style.transition = "opacity 0.4s ease-out";
+  o.hpEl.style.opacity = "0";
+  setTimeout(() => o.hpEl.remove(), 500);
+  // Massive points + bonus
+  const bonus = 2000;
+  State.score += bonus;
+  spawnScorePop(o.el, bonus);
+  State.destroyed++; // credit for level progress
+  trackSmash();
+  showBanner("VICTORY! " + o.config.name + " DEFEATED!");
+  Voice.speak("Victory! " + o.config.name + " defeated!", { priority: true });
+  Audio.levelUpFanfare();
+  setTimeout(() => Audio.roar(true), 400);
+  // Heavy confetti
+  for (let i = 0; i < 3; i++) {
+    setTimeout(() => spawnConfetti(o.el), i * 200);
+  }
+  flashScreen("rgba(95,255,170,0.4)");
+  // Remove opponent from buildings array
+  State.buildings = State.buildings.filter(b => b !== o);
+  State.currentTarget = null;
+  State.currentOpponent = null;
+  // Resume normal spawning + check level progress
+  updateHUD();
+  setTimeout(() => {
+    if (State.running) {
+      checkLevelProgress();
+      if (State.running) scheduleSpawns();
+    }
+  }, 1400);
+}
+
 // ---------- Flow ----------
 function checkLevelProgress() {
   const lv = LEVELS[State.level];
@@ -3421,6 +4008,14 @@ function startGame(startLevel) {
   State.buildings.forEach(b => b.el.remove());
   State.buildings = [];
   State.currentTarget = null;
+  // Tear down any lingering opponent fight
+  if (State.currentOpponent) {
+    if (State.currentOpponent.attackTimer) clearTimeout(State.currentOpponent.attackTimer);
+    if (State.currentOpponent.el) State.currentOpponent.el.remove();
+    if (State.currentOpponent.hpEl) State.currentOpponent.hpEl.remove();
+    State.currentOpponent = null;
+  }
+  document.querySelectorAll(".opp-fireball, .opponent, .opp-hp").forEach(n => n.remove());
 
   Audio.ensure();
   resetLevelStats();
@@ -3463,27 +4058,34 @@ function pauseGame() {
   State.paused = true;
   if (State.spawnTimer) { clearTimeout(State.spawnTimer); State.spawnTimer = null; }
   if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+  if (State.currentOpponent && State.currentOpponent.attackTimer) {
+    clearTimeout(State.currentOpponent.attackTimer);
+    State.currentOpponent.attackTimer = null;
+  }
 }
 
 let spawnCounter = 0;
 function scheduleSpawns() {
   if (State.spawnTimer) clearTimeout(State.spawnTimer);
+  // Opponent boss fight is in progress — DO NOT spawn buildings, the
+  // fight has its own loop. scheduleSpawns will be restarted after victory.
+  if (State.currentOpponent) return;
   const lv = LEVELS[State.level];
   spawnCounter++;
-  // Boss spawn: on every 5th level (5,10,15,20), when we're 2 buildings away
-  // from completing the level, drop the boss (only once per level).
-  const isBossLevel = ((State.level + 1) % 5 === 0);
-  if (isBossLevel && !State.bossSpawnedThisLevel && State.destroyed === lv.target - 2) {
-    spawnBoss();
+  // Opponent boss fight on every 5th level (5,10,15,20) — start when the
+  // player has 2 buildings left to clear. Replaces the old boss-building.
+  const isBossLevel = OPPONENT_AT_LEVEL[State.level + 1];
+  if (isBossLevel && !State.bossSpawnedThisLevel && State.destroyed >= lv.target - 2) {
+    spawnOpponent(isBossLevel);
+    return;
+  }
+  // Curveball: from level 3 onward, every ~6th spawn is a flying creature
+  const allowFlyer = State.level >= 2 && spawnCounter >= 4;
+  if (allowFlyer && Math.random() < 0.18) {
+    spawnFlyer();
+    spawnCounter = 0;
   } else {
-    // Curveball: from level 3 onward, every ~6th spawn is a flying creature
-    const allowFlyer = State.level >= 2 && spawnCounter >= 4;
-    if (allowFlyer && Math.random() < 0.18) {
-      spawnFlyer();
-      spawnCounter = 0;
-    } else {
-      spawnBuilding();
-    }
+    spawnBuilding();
   }
   // Slo-mo power-up stretches the spawn interval
   const slow = State.powerUps.slomo > performance.now() ? 1.8 : 1;

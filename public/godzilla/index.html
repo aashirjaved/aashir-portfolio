@@ -1826,13 +1826,15 @@ $ipadInput.addEventListener("input", () => {
   }
 });
 $ipadInput.addEventListener("blur", () => {
-  if (State.running && isTouchDevice() && !document.body.classList.contains("vkb-off")) {
+  // Only refocus (to keep native keyboard alive) when the on-screen keyboard is NOT visible
+  if (State.running && isTouchDevice() && !document.body.classList.contains("kb-visible")) {
     setTimeout(() => { try { $ipadInput.focus(); } catch (e) {} }, 100);
   }
 });
 
 function focusInput() {
-  if (isTouchDevice() && !document.body.classList.contains("vkb-off")) {
+  // Only summon the native iPad keyboard when the on-screen keyboard is HIDDEN
+  if (isTouchDevice() && !document.body.classList.contains("kb-visible")) {
     setTimeout(() => { try { $ipadInput.focus(); } catch (e) {} }, 30);
   }
 }
@@ -1841,7 +1843,9 @@ function isTouchDevice() {
 }
 
 document.addEventListener("touchstart", () => {
-  if (State.running && isTouchDevice() && !document.body.classList.contains("vkb-off")) {
+  // Only refocus the hidden input when the on-screen keyboard is HIDDEN —
+  // otherwise iPad would show both the on-screen keyboard AND the native one.
+  if (State.running && isTouchDevice() && !document.body.classList.contains("kb-visible")) {
     try { $ipadInput.focus(); } catch (e) {}
   }
 }, { passive: true });
@@ -1889,15 +1893,21 @@ function highlightVKey(ch) {
 function setKbVisible(on) {
   if (on) {
     document.body.classList.add("kb-visible");
-    document.body.classList.remove("vkb-off");
     $kbToggle.classList.add("active");
     $kbToggle.textContent = "⌨ HIDE KB";
+    // Block the native iPad keyboard: blur + make input non-focusable + tell iOS no keyboard
     try { $ipadInput.blur(); } catch (e) {}
+    $ipadInput.setAttribute("inputmode", "none");
+    $ipadInput.setAttribute("readonly", "readonly");
+    $ipadInput.tabIndex = -1;
   } else {
     document.body.classList.remove("kb-visible");
-    document.body.classList.add("vkb-off");
     $kbToggle.classList.remove("active");
     $kbToggle.textContent = "⌨ KEYBOARD";
+    // Restore the input so the native iPad keyboard can appear on focus
+    $ipadInput.setAttribute("inputmode", "text");
+    $ipadInput.removeAttribute("readonly");
+    $ipadInput.tabIndex = 0;
     if (State.running) focusInput();
   }
 }
@@ -1924,7 +1934,8 @@ $voiceToggle.addEventListener("click", () => {
 function attachStartHandler(btn) {
   function trigger(e) {
     e.preventDefault();
-    if (isTouchDevice() && !document.body.classList.contains("vkb-off")) {
+    // Only summon native iPad keyboard when the on-screen keyboard is HIDDEN
+    if (isTouchDevice() && !document.body.classList.contains("kb-visible")) {
       try { $ipadInput.focus(); } catch (er) {}
     }
     startGame();
@@ -1938,7 +1949,8 @@ attachStartHandler($restartBtn);
 function attachContinueHandler(btn) {
   function trigger(e) {
     e.preventDefault();
-    if (isTouchDevice() && !document.body.classList.contains("vkb-off")) {
+    // Only summon native iPad keyboard when the on-screen keyboard is HIDDEN
+    if (isTouchDevice() && !document.body.classList.contains("kb-visible")) {
       try { $ipadInput.focus(); } catch (er) {}
     }
     continueLevel();

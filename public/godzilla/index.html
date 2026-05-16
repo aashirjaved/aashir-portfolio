@@ -9,6 +9,87 @@
 <meta name="theme-color" content="#0a0a14" />
 <title>GODZILLA TYPING RAMPAGE</title>
 <style>
+  /* =========================================================
+     BIOME THEME VARIABLES (defaults: Tokyo Night)
+     ========================================================= */
+  :root {
+    --sky-1: #0a0a14;
+    --sky-2: #1a0808;
+    --sky-3: #2a0606;
+    --glow:  #ff3030;
+    --accent:#ffeb6a;
+    --gz-tint: 0;        /* hue-rotate deg on the Godzilla SVG */
+    --gz-glow: rgba(80,255,100,0.45);
+    --ground-1: #1a0a0a;
+    --ground-2: #000000;
+    --ground-border: #3a1a1a;
+    --bg-building: #1a1424;
+    --bg-building-2: #221428;
+    --window-glow: rgba(255,200,80,0.4);
+    --building-front-1: #4a3a2a;
+    --building-front-2: #2a1a1a;
+    --particle-color: rgba(255,235,106,0.5);
+  }
+
+  body.biome-tokyo {
+    --sky-1: #0a0a14; --sky-2: #1a0808; --sky-3: #2a0606;
+    --glow: #ff3030; --accent: #ffeb6a;
+    --gz-tint: 0deg; --gz-glow: rgba(80,255,100,0.45);
+    --bg-building: #1a1424; --bg-building-2: #221428;
+    --window-glow: rgba(255,200,80,0.4);
+    --particle-color: #ffeb6a;
+  }
+  body.biome-snow {
+    --sky-1: #0a1a30; --sky-2: #1a3a5a; --sky-3: #4a7aaa;
+    --glow: #88ccff; --accent: #ffffff;
+    --gz-tint: 200deg; --gz-glow: rgba(180,220,255,0.65);
+    --ground-1: #d8e8f0; --ground-2: #88aacc; --ground-border: #b8d0e0;
+    --bg-building: #4a6680; --bg-building-2: #5a7a98;
+    --window-glow: rgba(255,255,255,0.6);
+    --building-front-1: #5a7090; --building-front-2: #3a5070;
+    --particle-color: #ffffff;
+  }
+  body.biome-forest {
+    --sky-1: #0a2a14; --sky-2: #1a4a28; --sky-3: #2a6a3a;
+    --glow: #aaff5a; --accent: #ffee44;
+    --gz-tint: 80deg; --gz-glow: rgba(170,255,90,0.7);
+    --ground-1: #1a3a14; --ground-2: #0a1a08; --ground-border: #2a5a1a;
+    --bg-building: #2a3a18; --bg-building-2: #1a2a08;
+    --window-glow: rgba(170,255,90,0.5);
+    --building-front-1: #5a4a2a; --building-front-2: #3a2a1a;
+    --particle-color: #aaff5a;
+  }
+  body.biome-lava {
+    --sky-1: #2a0808; --sky-2: #6a1a08; --sky-3: #aa3a08;
+    --glow: #ff5a08; --accent: #ffee08;
+    --gz-tint: -20deg; --gz-glow: rgba(255,130,30,0.85);
+    --ground-1: #4a0a08; --ground-2: #1a0000; --ground-border: #ff5a08;
+    --bg-building: #2a0a08; --bg-building-2: #4a1a08;
+    --window-glow: rgba(255,200,80,0.9);
+    --building-front-1: #5a2a18; --building-front-2: #2a0a08;
+    --particle-color: #ff8800;
+  }
+  body.biome-ocean {
+    --sky-1: #001a2a; --sky-2: #003a5a; --sky-3: #006a8a;
+    --glow: #5fffff; --accent: #aaffff;
+    --gz-tint: 160deg; --gz-glow: rgba(95,255,255,0.7);
+    --ground-1: #002a3a; --ground-2: #001020; --ground-border: #006a8a;
+    --bg-building: #003a5a; --bg-building-2: #002a4a;
+    --window-glow: rgba(170,255,255,0.5);
+    --building-front-1: #006a8a; --building-front-2: #003a5a;
+    --particle-color: #aaffff;
+  }
+  body.biome-neon {
+    --sky-1: #0a0028; --sky-2: #28004a; --sky-3: #4a0a6a;
+    --glow: #ff44dd; --accent: #44ffff;
+    --gz-tint: 280deg; --gz-glow: rgba(255,68,221,0.85);
+    --ground-1: #1a0028; --ground-2: #000000; --ground-border: #ff44dd;
+    --bg-building: #1a0040; --bg-building-2: #2a0060;
+    --window-glow: rgba(255,68,221,0.7);
+    --building-front-1: #2a0060; --building-front-2: #100020;
+    --particle-color: #ff44dd;
+  }
+
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body {
     width: 100%; height: 100%; overflow: hidden;
@@ -18,38 +99,30 @@
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
+    overscroll-behavior: none;
   }
   #game {
     position: fixed; inset: 0;
     background:
-      radial-gradient(ellipse at 50% 100%, #1a0808 0%, #0a0a14 40%, #000 100%),
-      linear-gradient(180deg, #0a0a14 0%, #1a0808 60%, #2a0606 100%);
+      radial-gradient(ellipse at 50% 100%, var(--sky-2) 0%, var(--sky-1) 40%, #000 100%),
+      linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 60%, var(--sky-3) 100%);
     overflow: hidden;
+    transition: background 1s ease;
   }
-  /* Lightning flash overlay */
   #lightning {
-    position: absolute; inset: 0;
-    background: #fff;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 30;
+    position: absolute; inset: 0; background: #fff;
+    opacity: 0; pointer-events: none; z-index: 30;
   }
   #lightning.flash { animation: flash 0.5s ease-out; }
   @keyframes flash {
-    0% { opacity: 0; }
+    0%, 25%, 100% { opacity: 0; }
     10% { opacity: 0.8; }
-    25% { opacity: 0; }
     35% { opacity: 0.6; }
-    100% { opacity: 0; }
   }
 
-  /* Stars */
   .star {
-    position: absolute;
-    width: 2px; height: 2px;
-    background: #fff;
-    border-radius: 50%;
-    opacity: 0.6;
+    position: absolute; width: 2px; height: 2px;
+    background: #fff; border-radius: 50%; opacity: 0.6;
     animation: twinkle 3s ease-in-out infinite;
   }
   @keyframes twinkle {
@@ -57,69 +130,145 @@
     50% { opacity: 0.9; }
   }
 
-  /* Skyline (back layer) */
-  #skyline {
+  /* Ambient particles (snow, leaves, embers, bubbles, sparks) */
+  .ambient {
     position: absolute;
-    left: 0; right: 0; bottom: 0;
-    height: 55%;
     pointer-events: none;
+    opacity: 0.85;
+    z-index: 6;
+  }
+  .ambient.snow {
+    width: 8px; height: 8px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(255,255,255,0.6);
+    animation: fall-soft linear infinite;
+  }
+  .ambient.leaf {
+    width: 14px; height: 14px;
+    background: var(--particle-color);
+    border-radius: 0 100% 0 100%;
+    animation: leaf-fall linear infinite;
+  }
+  .ambient.ember {
+    width: 6px; height: 6px;
+    background: var(--particle-color);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--particle-color);
+    animation: ember-rise linear infinite;
+  }
+  .ambient.bubble {
+    width: 14px; height: 14px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(170,255,255,0.15));
+    border: 1px solid rgba(170,255,255,0.5);
+    border-radius: 50%;
+    animation: bubble-rise linear infinite;
+  }
+  .ambient.spark {
+    width: 4px; height: 12px;
+    background: linear-gradient(180deg, var(--particle-color), transparent);
+    animation: fall-soft linear infinite;
+  }
+  @keyframes fall-soft {
+    0% { transform: translate(0, -20px) rotate(0); opacity: 0; }
+    10% { opacity: 0.9; }
+    100% { transform: translate(40px, 100vh) rotate(360deg); opacity: 0; }
+  }
+  @keyframes leaf-fall {
+    0% { transform: translate(0, -20px) rotate(0); opacity: 0; }
+    10% { opacity: 0.9; }
+    50% { transform: translate(40px, 50vh) rotate(180deg); }
+    100% { transform: translate(-30px, 100vh) rotate(720deg); opacity: 0; }
+  }
+  @keyframes ember-rise {
+    0% { transform: translate(0, 100vh) scale(0.5); opacity: 0; }
+    20% { opacity: 1; }
+    100% { transform: translate(-30px, -20px) scale(1.2); opacity: 0; }
+  }
+  @keyframes bubble-rise {
+    0% { transform: translate(0, 100vh) scale(0.5); opacity: 0; }
+    20% { opacity: 0.8; }
+    50% { transform: translate(20px, 50vh) scale(1); }
+    100% { transform: translate(-20px, -40px) scale(1.3); opacity: 0; }
   }
 
-  /* Ground */
+  #skyline {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: 55%; pointer-events: none;
+  }
   #ground {
-    position: absolute; left: 0; right: 0; bottom: 0; height: 10%;
-    background: linear-gradient(180deg, #1a0a0a 0%, #000 100%);
-    border-top: 2px solid #3a1a1a;
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: 10%;
+    background: linear-gradient(180deg, var(--ground-1) 0%, var(--ground-2) 100%);
+    border-top: 3px solid var(--ground-border);
     z-index: 5;
+    transition: background 1s ease, border-color 1s ease;
   }
 
-  /* Godzilla */
+  #playfield { position: absolute; inset: 0; transition: bottom 0.3s ease; }
+  body.kb-visible #playfield { bottom: 38vh; }
+  body.kb-visible #skyline,
+  body.kb-visible #ground { display: none; }
+
   #godzilla {
     position: absolute;
     left: 2%;
     bottom: 8%;
-    height: 60%;
+    height: 56%;
     width: auto;
     z-index: 15;
-    filter: drop-shadow(0 0 30px rgba(80, 255, 100, 0.4));
+    filter:
+      drop-shadow(0 0 30px var(--gz-glow))
+      hue-rotate(var(--gz-tint));
     transform-origin: bottom center;
     animation: gz-breathe 2.5s ease-in-out infinite;
+    transition: filter 1s ease;
   }
   @keyframes gz-breathe {
     0%, 100% { transform: scaleY(1) scaleX(1); }
-    50% { transform: scaleY(1.02) scaleX(0.99); }
+    50% { transform: scaleY(1.025) scaleX(0.99); }
   }
   #godzilla.attacking { animation: gz-attack 0.4s ease-out; }
   @keyframes gz-attack {
-    0% { transform: translateX(0) rotate(0deg); }
+    0% { transform: translateX(0) rotate(0); }
     30% { transform: translateX(15px) rotate(-3deg); }
-    100% { transform: translateX(0) rotate(0deg); }
+    100% { transform: translateX(0) rotate(0); }
   }
   #godzilla.hurt { animation: gz-hurt 0.4s ease-out; }
   @keyframes gz-hurt {
-    0%, 100% { transform: translateX(0); filter: drop-shadow(0 0 30px rgba(80, 255, 100, 0.4)); }
-    25% { transform: translateX(-8px); filter: drop-shadow(0 0 30px rgba(255, 60, 60, 0.9)); }
-    75% { transform: translateX(8px); filter: drop-shadow(0 0 30px rgba(255, 60, 60, 0.9)); }
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); filter: drop-shadow(0 0 30px rgba(255, 60, 60, 0.95)) hue-rotate(var(--gz-tint)); }
+    75% { transform: translateX(8px); filter: drop-shadow(0 0 30px rgba(255, 60, 60, 0.95)) hue-rotate(var(--gz-tint)); }
+  }
+  #godzilla.cheer { animation: gz-cheer 0.6s ease-out; }
+  @keyframes gz-cheer {
+    0% { transform: translateY(0); }
+    40% { transform: translateY(-30px) rotate(-4deg); }
+    100% { transform: translateY(0); }
+  }
+  #godzilla.arriving { animation: gz-arrive 1.2s ease-out; }
+  @keyframes gz-arrive {
+    0% { transform: translate(-60vw, 0) scale(0.7); opacity: 0; }
+    100% { transform: translate(0,0) scale(1); opacity: 1; }
   }
 
-  /* Atomic breath */
   .beam {
     position: absolute;
-    height: 18px;
+    height: 22px;
     background: linear-gradient(90deg,
       rgba(150, 255, 200, 0) 0%,
-      rgba(150, 255, 200, 0.8) 10%,
-      rgba(80, 255, 160, 1) 50%,
-      rgba(120, 255, 220, 1) 90%,
+      rgba(150, 255, 200, 0.85) 10%,
+      var(--accent) 50%,
+      var(--glow) 90%,
       rgba(255, 255, 255, 1) 100%);
     box-shadow:
-      0 0 20px #5fffaa,
-      0 0 40px #5fffaa,
+      0 0 20px var(--accent),
+      0 0 40px var(--glow),
       0 0 60px rgba(255,255,255,0.7);
     z-index: 14;
     transform-origin: left center;
     pointer-events: none;
-    border-radius: 9px;
+    border-radius: 11px;
     animation: beam-flicker 0.05s linear infinite;
   }
   @keyframes beam-flicker {
@@ -127,33 +276,28 @@
     50% { filter: brightness(1.4); }
   }
 
-  /* Buildings (foreground with words) */
   .building {
     position: absolute;
     bottom: 10%;
-    background:
-      linear-gradient(180deg, #4a3a2a 0%, #2a1a1a 100%);
+    background: linear-gradient(180deg, var(--building-front-1) 0%, var(--building-front-2) 100%);
     border: 2px solid #1a0a0a;
     border-bottom: none;
     box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 0 8px rgba(0,0,0,0.6);
     z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-start;
     padding-top: 12px;
     transition: transform 0.1s;
   }
   .building::before {
-    /* Windows pattern */
     content: "";
     position: absolute;
     inset: 30% 8px 8px 8px;
     background-image:
-      radial-gradient(circle at 25% 25%, #ffeb6a 1.5px, transparent 2.5px),
-      radial-gradient(circle at 75% 25%, #ffeb6a 1.5px, transparent 2.5px),
-      radial-gradient(circle at 25% 60%, #ffeb6a 1.5px, transparent 2.5px),
-      radial-gradient(circle at 75% 60%, #ffeb6a 1.5px, transparent 2.5px);
+      radial-gradient(circle at 25% 25%, var(--window-glow) 1.5px, transparent 2.5px),
+      radial-gradient(circle at 75% 25%, var(--window-glow) 1.5px, transparent 2.5px),
+      radial-gradient(circle at 25% 60%, var(--window-glow) 1.5px, transparent 2.5px),
+      radial-gradient(circle at 75% 60%, var(--window-glow) 1.5px, transparent 2.5px);
     background-size: 100% 35%;
     background-repeat: repeat-y;
     opacity: 0.7;
@@ -161,28 +305,41 @@
   .building .word {
     position: relative;
     z-index: 2;
-    font-size: 28px;
+    font-size: 30px;
     color: #fff;
     background: rgba(0,0,0,0.85);
-    padding: 4px 10px;
-    border-radius: 4px;
-    border: 2px solid #ff3030;
-    text-shadow: 0 0 6px #ff3030, 0 0 12px #ff3030;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 2px solid var(--glow);
+    text-shadow: 0 0 6px var(--glow), 0 0 12px var(--glow);
     letter-spacing: 2px;
     font-weight: 900;
     white-space: nowrap;
   }
   .building .word .typed {
     color: #5fffaa;
-    text-shadow: 0 0 6px #5fffaa;
+    text-shadow: 0 0 6px #5fffaa, 0 0 14px #5fffaa;
+  }
+  .building .word .next {
+    color: var(--accent);
+    text-shadow: 0 0 10px var(--accent), 0 0 20px var(--glow);
+    background: rgba(255, 235, 106, 0.2);
+    padding: 0 4px;
+    border-radius: 3px;
+    animation: next-pulse 0.6s ease-in-out infinite alternate;
+    display: inline-block;
+  }
+  @keyframes next-pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.25); }
   }
   .building.targeted {
-    box-shadow: 0 0 30px #ff5050, inset 0 0 20px rgba(0,0,0,0.6);
+    box-shadow: 0 0 30px var(--glow), inset 0 0 20px rgba(0,0,0,0.6);
     animation: target-pulse 0.4s ease-in-out infinite alternate;
   }
   @keyframes target-pulse {
-    from { box-shadow: 0 0 20px #ff5050, inset 0 0 20px rgba(0,0,0,0.6); }
-    to { box-shadow: 0 0 50px #ff8888, inset 0 0 20px rgba(0,0,0,0.6); }
+    from { box-shadow: 0 0 20px var(--glow), inset 0 0 20px rgba(0,0,0,0.6); }
+    to { box-shadow: 0 0 50px var(--accent), inset 0 0 20px rgba(0,0,0,0.6); }
   }
   .building.destroyed { animation: collapse 0.8s ease-in forwards; }
   @keyframes collapse {
@@ -191,82 +348,178 @@
     100% { transform: translateY(50vh) rotate(20deg); opacity: 0; }
   }
 
-  /* Explosion particles */
   .particle {
     position: absolute;
-    width: 8px; height: 8px;
     border-radius: 50%;
     pointer-events: none;
     z-index: 12;
+  }
+  .confetti {
+    position: absolute;
+    width: 10px; height: 14px;
+    pointer-events: none;
+    z-index: 28;
+  }
+
+  /* Biome transition overlay */
+  #biome-flash {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle, #fff 0%, transparent 70%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 35;
+  }
+  #biome-flash.show { animation: biome-flash 1.2s ease-out; }
+  @keyframes biome-flash {
+    0% { opacity: 0; transform: scale(0); }
+    40% { opacity: 1; transform: scale(2); }
+    100% { opacity: 0; transform: scale(3); }
+  }
+  #biome-name {
+    position: absolute;
+    top: 35%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: clamp(40px, 8vw, 80px);
+    color: var(--accent);
+    text-shadow: 0 0 20px var(--glow), 4px 4px 0 #000;
+    z-index: 36; pointer-events: none;
+    letter-spacing: 4px;
+    opacity: 0;
+    text-align: center;
+    line-height: 1;
+    font-weight: 900;
+  }
+  #biome-name.show { animation: biome-name-anim 2.5s ease-out forwards; }
+  @keyframes biome-name-anim {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    20% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+    70% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
   }
 
   /* HUD */
   #hud {
     position: absolute;
     top: 0; left: 0; right: 0;
-    padding: 16px 24px;
+    padding: 12px 16px;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 8px;
     z-index: 20;
     pointer-events: none;
-    text-shadow: 2px 2px 4px #000, 0 0 8px #ff3030;
+    text-shadow: 2px 2px 4px #000, 0 0 8px var(--glow);
+    flex-wrap: wrap;
   }
-  .hud-block { background: rgba(0,0,0,0.5); padding: 8px 14px; border: 2px solid #ff3030; border-radius: 6px; }
-  .hud-label { font-size: 12px; letter-spacing: 2px; color: #ff8888; }
-  .hud-value { font-size: 28px; color: #fff; letter-spacing: 2px; }
+  .hud-block {
+    background: rgba(0,0,0,0.6);
+    padding: 6px 12px;
+    border: 2px solid var(--glow);
+    border-radius: 6px;
+  }
+  .hud-label { font-size: 11px; letter-spacing: 2px; color: var(--accent); opacity: 0.8; }
+  .hud-value { font-size: 24px; color: #fff; letter-spacing: 2px; line-height: 1.1; }
   #combo { color: #5fffaa; text-shadow: 0 0 8px #5fffaa; }
   #combo.big { animation: combo-pop 0.4s ease-out; }
   @keyframes combo-pop {
-    0% { transform: scale(1); }
+    0%, 100% { transform: scale(1); }
     50% { transform: scale(1.4); }
-    100% { transform: scale(1); }
   }
 
-  /* Health bar */
   #health-wrap {
-    width: 200px;
-    height: 24px;
+    width: 160px; height: 22px;
     background: #220a0a;
-    border: 2px solid #ff3030;
+    border: 2px solid var(--glow);
     border-radius: 4px;
     overflow: hidden;
     position: relative;
   }
   #health-bar {
     height: 100%;
-    background: linear-gradient(90deg, #ff0000, #ffaa00);
+    background: linear-gradient(90deg, #ff0000, #ffaa00, #5fffaa);
     width: 100%;
     transition: width 0.4s ease;
   }
   #health-wrap::after {
-    content: "TOKYO";
+    content: "HOME";
     position: absolute; inset: 0;
     display: flex; align-items: center; justify-content: center;
-    font-size: 14px; letter-spacing: 4px;
+    font-size: 13px; letter-spacing: 3px;
     color: #fff; mix-blend-mode: difference;
   }
 
-  /* Screens (start, game over, level up) */
-  .screen {
+  /* Big next-letter prompt */
+  #next-key-prompt {
     position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 50;
+    top: 14%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    font-size: clamp(60px, 14vw, 160px);
+    color: var(--accent);
+    text-shadow:
+      0 0 20px var(--glow),
+      0 0 40px var(--glow),
+      4px 4px 0 #000,
+      8px 8px 0 rgba(0,0,0,0.5);
+    z-index: 18;
+    pointer-events: none;
+    letter-spacing: 4px;
+    line-height: 1;
+    opacity: 0;
+    transition: opacity 0.2s;
     text-align: center;
+    font-weight: 900;
+  }
+  #next-key-prompt.show { opacity: 1; animation: prompt-pulse 0.9s ease-in-out infinite alternate; }
+  @keyframes prompt-pulse {
+    from { transform: translate(-50%, 0) scale(1); }
+    to { transform: translate(-50%, 0) scale(1.12); }
+  }
+  #next-key-prompt .hint {
+    display: block;
+    font-size: clamp(14px, 2.4vw, 22px);
+    letter-spacing: 4px;
+    color: var(--accent);
+    opacity: 0.7;
+    text-shadow: 2px 2px 0 #000;
+    margin-bottom: 6px;
+  }
+
+  .praise {
+    position: absolute;
+    font-size: clamp(28px, 5vw, 56px);
+    color: #5fffaa;
+    text-shadow: 0 0 12px #5fffaa, 3px 3px 0 #001a0a;
+    pointer-events: none;
+    z-index: 27;
+    letter-spacing: 3px;
+    font-weight: 900;
+    animation: praise-rise 1s ease-out forwards;
+  }
+  @keyframes praise-rise {
+    0% { transform: translateY(0) scale(0.5); opacity: 0; }
+    20% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+    100% { transform: translateY(-100px) scale(1); opacity: 0; }
+  }
+  .praise.gold { color: var(--accent); text-shadow: 0 0 12px var(--glow), 3px 3px 0 #000; }
+
+  /* Screens */
+  .screen {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.9);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 60; text-align: center;
     padding: 20px;
   }
   .screen h1 {
     font-size: clamp(40px, 9vw, 110px);
-    color: #ff3030;
+    color: var(--glow);
     letter-spacing: 4px;
-    text-shadow: 0 0 20px #ff3030, 4px 4px 0 #5a0000;
-    margin-bottom: 20px;
+    text-shadow: 0 0 20px var(--glow), 4px 4px 0 #000;
+    margin-bottom: 16px;
     animation: title-shake 3s ease-in-out infinite;
+    line-height: 1;
   }
   @keyframes title-shake {
     0%, 100% { transform: rotate(-1deg) translateY(0); }
@@ -275,108 +528,177 @@
     75% { transform: rotate(2deg) translateY(-2px); }
   }
   .screen h2 {
-    font-size: clamp(24px, 4vw, 42px);
-    color: #ffeb6a;
+    font-size: clamp(20px, 3.5vw, 38px);
+    color: var(--accent);
     letter-spacing: 3px;
-    margin-bottom: 16px;
-    text-shadow: 0 0 12px #ffaa00;
+    margin-bottom: 14px;
+    text-shadow: 0 0 12px var(--glow);
   }
   .screen p {
-    font-size: clamp(16px, 2.4vw, 22px);
+    font-size: clamp(14px, 2vw, 20px);
     color: #ddd;
-    margin: 8px 0;
+    margin: 6px 0;
     max-width: 600px;
     letter-spacing: 1px;
   }
   .btn {
-    margin-top: 30px;
+    margin-top: 24px;
     padding: 20px 40px;
     font-size: clamp(20px, 3vw, 32px);
     font-family: inherit;
     letter-spacing: 4px;
     color: #fff;
-    background: linear-gradient(180deg, #ff3030 0%, #8a0000 100%);
-    border: 4px solid #ffeb6a;
+    background: linear-gradient(180deg, var(--glow) 0%, #5a0000 100%);
+    border: 4px solid var(--accent);
     border-radius: 10px;
     cursor: pointer;
     box-shadow: 0 0 30px rgba(255, 50, 50, 0.6);
-    text-shadow: 2px 2px 0 #5a0000;
+    text-shadow: 2px 2px 0 #000;
     transition: transform 0.15s, box-shadow 0.15s;
+    -webkit-tap-highlight-color: transparent;
   }
   .btn:hover, .btn:active {
     transform: scale(1.05);
     box-shadow: 0 0 50px rgba(255, 100, 100, 0.9);
   }
+  .btn.green { background: linear-gradient(180deg, #2faf5a 0%, #0a5a2a 100%); }
 
   .hidden { display: none !important; }
 
-  /* Combo banner */
   #combo-banner {
     position: absolute;
-    top: 30%;
-    left: 50%;
+    top: 30%; left: 50%;
     transform: translate(-50%, -50%) scale(0);
-    font-size: 80px;
-    color: #ffeb6a;
-    text-shadow: 0 0 20px #ff8800, 4px 4px 0 #5a0000;
+    font-size: clamp(50px, 10vw, 110px);
+    color: var(--accent);
+    text-shadow: 0 0 20px var(--glow), 4px 4px 0 #000;
     letter-spacing: 4px;
-    z-index: 25;
-    pointer-events: none;
-    opacity: 0;
+    z-index: 25; pointer-events: none;
+    opacity: 0; text-align: center; line-height: 1;
   }
-  #combo-banner.show { animation: banner-pop 1.2s ease-out forwards; }
+  #combo-banner.show { animation: banner-pop 1.4s ease-out forwards; }
   @keyframes banner-pop {
     0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-    20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+    20% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
     60% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+    100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
   }
 
-  /* Hidden input to trigger iPad keyboard */
+  /* Hidden iPad input */
   #ipad-input {
-    position: absolute;
-    left: -9999px;
-    top: -9999px;
+    position: fixed;
+    left: 50%; bottom: -100px;
+    transform: translateX(-50%);
     opacity: 0;
-    width: 1px; height: 1px;
+    width: 2px; height: 2px;
     font-size: 16px;
+    border: none; background: transparent;
   }
 
-  /* iPad keyboard hint button */
-  #kb-btn {
+  /* On-screen virtual keyboard — BIG, kid-friendly */
+  #vkb {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    background: linear-gradient(180deg, rgba(10,5,20,0.97) 0%, rgba(0,0,5,0.98) 100%);
+    border-top: 4px solid var(--glow);
+    padding: 10px 6px 14px;
+    z-index: 55;
+    display: none;
+    box-shadow: 0 -10px 40px rgba(255, 50, 50, 0.4);
+  }
+  body.kb-visible #vkb { display: block; }
+  .kb-row {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 5px;
+  }
+  .vkey {
+    flex: 1 1 0;
+    max-width: 10vw;
+    min-width: 30px;
+    height: 56px;
+    background: linear-gradient(180deg, #3a1f3a 0%, #1a0820 100%);
+    border: 3px solid #5a2a5a;
+    border-radius: 10px;
+    color: #fff;
+    font-family: inherit;
+    font-size: clamp(16px, 3vw, 26px);
+    font-weight: 900;
+    letter-spacing: 1px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.05s, background 0.1s, border-color 0.1s, box-shadow 0.1s;
+    padding: 0;
+    text-shadow: 1px 1px 0 #000;
+    box-shadow: 0 4px 0 #1a0820, 0 4px 8px rgba(0,0,0,0.6);
+  }
+  .vkey:active, .vkey.press {
+    transform: translateY(3px);
+    background: linear-gradient(180deg, #6a3a6a 0%, #3a1a3a 100%);
+    box-shadow: 0 1px 0 #1a0820;
+  }
+  .vkey.next-hint {
+    background: linear-gradient(180deg, #ffeb6a 0%, #ff8800 100%) !important;
+    border-color: #fff !important;
+    color: #2a0000 !important;
+    text-shadow: none !important;
+    animation: keyhint 0.55s ease-in-out infinite alternate;
+    box-shadow: 0 0 24px #ffeb6a, 0 0 44px rgba(255,136,0,0.7), 0 4px 0 #aa5500;
+    z-index: 2;
+  }
+  @keyframes keyhint {
+    from { transform: scale(1); }
+    to { transform: scale(1.14); }
+  }
+  .vkey.wide { flex: 4 1 0; max-width: 40vw; }
+
+  /* Floating toggles */
+  #kb-toggle, #sound-toggle, #voice-toggle {
     position: absolute;
-    bottom: 12px; right: 12px;
     z-index: 25;
-    padding: 12px 18px;
+    padding: 10px 14px;
     background: rgba(0,0,0,0.7);
     color: #fff;
-    border: 2px solid #ffeb6a;
+    border: 2px solid var(--accent);
     border-radius: 8px;
     font-family: inherit;
-    font-size: 16px;
+    font-size: 14px;
     letter-spacing: 2px;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
+  #kb-toggle { bottom: 12px; right: 12px; }
+  #sound-toggle { bottom: 12px; right: 132px; }
+  #voice-toggle { bottom: 12px; right: 232px; }
+  body.kb-visible #kb-toggle,
+  body.kb-visible #sound-toggle,
+  body.kb-visible #voice-toggle {
+    bottom: calc(38vh + 10px);
+  }
+  #kb-toggle.active { background: var(--accent); color: #2a0000; }
 
-  /* Tutorial hint */
   #hint {
     position: absolute;
-    bottom: 16%;
+    bottom: 18%;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 20px;
-    color: #ffeb6a;
-    text-shadow: 0 0 10px #ff8800, 2px 2px 0 #000;
+    font-size: clamp(16px, 3vw, 22px);
+    color: var(--accent);
+    text-shadow: 0 0 10px var(--glow), 2px 2px 0 #000;
     letter-spacing: 2px;
     z-index: 20;
     opacity: 0;
     transition: opacity 0.4s;
     pointer-events: none;
     text-align: center;
+    max-width: 80%;
   }
   #hint.show { opacity: 1; }
 
-  /* Screen shake */
   #game.shake { animation: shake 0.4s ease-out; }
   @keyframes shake {
     0%, 100% { transform: translate(0, 0); }
@@ -390,88 +712,75 @@
     80% { transform: translate(2px, -2px); }
     90% { transform: translate(-1px, 1px); }
   }
+  #game.big-shake { animation: big-shake 0.7s ease-out; }
+  @keyframes big-shake {
+    0%, 100% { transform: translate(0, 0); }
+    10%, 30%, 50%, 70%, 90% { transform: translate(-14px, -8px); }
+    20%, 40%, 60%, 80% { transform: translate(14px, 8px); }
+  }
 </style>
 </head>
-<body>
+<body class="biome-tokyo">
 <div id="game">
   <div id="lightning"></div>
-  <div id="skyline"></div>
-  <div id="ground"></div>
+  <div id="biome-flash"></div>
+  <div id="biome-name"></div>
 
-  <!-- Godzilla SVG -->
-  <svg id="godzilla" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
-    <defs>
-      <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#2a4a2a"/>
-        <stop offset="60%" stop-color="#1a3a1a"/>
-        <stop offset="100%" stop-color="#0a1a0a"/>
-      </linearGradient>
-      <linearGradient id="bellyGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#5a6a3a"/>
-        <stop offset="100%" stop-color="#3a4a2a"/>
-      </linearGradient>
-    </defs>
+  <div id="playfield">
+    <div id="skyline"></div>
+    <div id="ground"></div>
 
-    <!-- Tail -->
-    <path d="M 80 260 Q 30 250 10 200 Q 5 180 18 175 Q 35 180 45 220 Q 60 245 80 250 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
-    <!-- Back spikes on tail -->
-    <polygon points="40,210 45,195 50,210" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
-    <polygon points="55,215 60,200 65,215" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
+    <svg id="godzilla" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+      <defs>
+        <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#2a4a2a"/>
+          <stop offset="60%" stop-color="#1a3a1a"/>
+          <stop offset="100%" stop-color="#0a1a0a"/>
+        </linearGradient>
+        <linearGradient id="bellyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#5a6a3a"/>
+          <stop offset="100%" stop-color="#3a4a2a"/>
+        </linearGradient>
+      </defs>
+      <path d="M 80 260 Q 30 250 10 200 Q 5 180 18 175 Q 35 180 45 220 Q 60 245 80 250 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
+      <polygon points="40,210 45,195 50,210" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
+      <polygon points="55,215 60,200 65,215" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
+      <path d="M 70 270 Q 60 285 70 295 L 90 295 Q 90 280 88 265 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
+      <path d="M 110 270 Q 100 285 110 295 L 130 295 Q 130 280 128 265 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
+      <ellipse cx="100" cy="200" rx="50" ry="65" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
+      <ellipse cx="100" cy="215" rx="28" ry="42" fill="url(#bellyGrad)" stroke="#000" stroke-width="1"/>
+      <path d="M 85 190 Q 100 195 115 190 M 85 210 Q 100 215 115 210 M 85 230 Q 100 235 115 230" stroke="#000" stroke-width="1" fill="none" opacity="0.4"/>
+      <path d="M 60 175 Q 45 200 50 220 Q 55 225 65 215 Q 70 195 75 180 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
+      <path d="M 140 175 Q 155 200 150 220 Q 145 225 135 215 Q 130 195 125 180 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
+      <polygon points="48,222 45,232 52,225" fill="#000"/>
+      <polygon points="52,225 50,236 56,228" fill="#000"/>
+      <polygon points="152,222 155,232 148,225" fill="#000"/>
+      <polygon points="148,225 150,236 144,228" fill="#000"/>
+      <path d="M 80 145 Q 75 130 85 115 L 115 115 Q 125 130 120 145 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
+      <path d="M 75 110 Q 70 80 95 70 L 140 75 Q 160 85 165 100 Q 165 115 155 120 L 95 125 Q 75 122 75 110 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
+      <path d="M 95 118 Q 100 132 130 130 Q 150 128 155 120 L 145 122 Q 120 125 95 118 Z" fill="#2a3a2a" stroke="#000" stroke-width="2"/>
+      <polygon points="105,121 107,128 109,121" fill="#fff"/>
+      <polygon points="115,122 117,129 119,122" fill="#fff"/>
+      <polygon points="125,122 127,129 129,122" fill="#fff"/>
+      <polygon points="135,121 137,128 139,121" fill="#fff"/>
+      <circle cx="120" cy="92" r="6" fill="#ffeb6a"/>
+      <circle cx="121" cy="93" r="2.5" fill="#000"/>
+      <circle cx="120" cy="92" r="10" fill="#ffeb6a" opacity="0.3"/>
+      <ellipse cx="158" cy="98" rx="2" ry="1.5" fill="#000"/>
+      <polygon points="85,75 88,60 95,72" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
+      <polygon points="100,72 105,55 112,68" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
+      <polygon points="80,165 75,140 90,155" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+      <polygon points="90,180 80,150 100,170" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+      <polygon points="105,195 95,160 115,185" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+      <polygon points="115,215 105,180 125,205" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+      <polygon points="100,235 90,205 110,225" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+      <polygon points="85,250 75,225 95,240" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+    </svg>
 
-    <!-- Legs -->
-    <path d="M 70 270 Q 60 285 70 295 L 90 295 Q 90 280 88 265 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
-    <path d="M 110 270 Q 100 285 110 295 L 130 295 Q 130 280 128 265 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
-
-    <!-- Body -->
-    <ellipse cx="100" cy="200" rx="50" ry="65" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
-    <!-- Belly -->
-    <ellipse cx="100" cy="215" rx="28" ry="42" fill="url(#bellyGrad)" stroke="#000" stroke-width="1"/>
-    <!-- Belly scales -->
-    <path d="M 85 190 Q 100 195 115 190 M 85 210 Q 100 215 115 210 M 85 230 Q 100 235 115 230" stroke="#000" stroke-width="1" fill="none" opacity="0.4"/>
-
-    <!-- Arms -->
-    <path d="M 60 175 Q 45 200 50 220 Q 55 225 65 215 Q 70 195 75 180 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
-    <path d="M 140 175 Q 155 200 150 220 Q 145 225 135 215 Q 130 195 125 180 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
-    <!-- Claws -->
-    <polygon points="48,222 45,232 52,225" fill="#000"/>
-    <polygon points="52,225 50,236 56,228" fill="#000"/>
-    <polygon points="152,222 155,232 148,225" fill="#000"/>
-    <polygon points="148,225 150,236 144,228" fill="#000"/>
-
-    <!-- Neck -->
-    <path d="M 80 145 Q 75 130 85 115 L 115 115 Q 125 130 120 145 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
-
-    <!-- Head -->
-    <path d="M 75 110 Q 70 80 95 70 L 140 75 Q 160 85 165 100 Q 165 115 155 120 L 95 125 Q 75 122 75 110 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
-    <!-- Jaw -->
-    <path d="M 95 118 Q 100 132 130 130 Q 150 128 155 120 L 145 122 Q 120 125 95 118 Z" fill="#2a3a2a" stroke="#000" stroke-width="2"/>
-    <!-- Teeth -->
-    <polygon points="105,121 107,128 109,121" fill="#fff"/>
-    <polygon points="115,122 117,129 119,122" fill="#fff"/>
-    <polygon points="125,122 127,129 129,122" fill="#fff"/>
-    <polygon points="135,121 137,128 139,121" fill="#fff"/>
-
-    <!-- Eye -->
-    <circle cx="120" cy="92" r="6" fill="#ffeb6a"/>
-    <circle cx="121" cy="93" r="2.5" fill="#000"/>
-    <!-- Eye glow -->
-    <circle cx="120" cy="92" r="10" fill="#ffeb6a" opacity="0.3"/>
-
-    <!-- Nostril -->
-    <ellipse cx="158" cy="98" rx="2" ry="1.5" fill="#000"/>
-
-    <!-- Head spikes -->
-    <polygon points="85,75 88,60 95,72" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
-    <polygon points="100,72 105,55 112,68" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
-
-    <!-- Back spikes (large) -->
-    <polygon points="80,165 75,140 90,155" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
-    <polygon points="90,180 80,150 100,170" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
-    <polygon points="105,195 95,160 115,185" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
-    <polygon points="115,215 105,180 125,205" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
-    <polygon points="100,235 90,205 110,225" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
-    <polygon points="85,250 75,225 95,240" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
-  </svg>
+    <div id="next-key-prompt"><span class="hint">PRESS</span><span id="next-key-letter">A</span></div>
+    <div id="combo-banner"></div>
+    <div id="hint"></div>
+  </div>
 
   <div id="hud">
     <div class="hud-block">
@@ -487,67 +796,66 @@
       <div class="hud-value" id="combo">x1</div>
     </div>
     <div class="hud-block">
-      <div class="hud-label">CITY HEALTH</div>
+      <div class="hud-label">CITY</div>
       <div id="health-wrap"><div id="health-bar"></div></div>
     </div>
   </div>
 
-  <div id="combo-banner"></div>
-  <div id="hint"></div>
-
-  <!-- Start screen -->
   <div id="start" class="screen">
     <h1>GODZILLA<br/>TYPING<br/>RAMPAGE</h1>
-    <p>Type the words on the buildings to make Godzilla destroy them with his ATOMIC BREATH!</p>
-    <p style="color:#ffeb6a">Miss too many and the city stops Godzilla. SMASH them all and become KING OF MONSTERS!</p>
-    <button class="btn" id="startBtn">ROAR!! START</button>
-    <p style="margin-top:20px; font-size:14px; color:#888">Tip: For best fun, plug in a keyboard. iPad? Tap the screen anytime to bring up the on-screen keyboard.</p>
+    <p style="color:var(--accent); font-size: clamp(18px, 3vw, 24px); margin-bottom: 8px;">Type the words on the buildings.<br/>Godzilla SMASHES them with his ATOMIC BREATH!</p>
+    <p style="font-size:14px; color:#888;">Yellow letter = press this next!<br/>6 worlds: Tokyo · Snow · Forest · Lava · Ocean · Neon</p>
+    <button class="btn" id="startBtn">🦖 ROAR!! START</button>
+    <p style="margin-top:14px; font-size:14px; color:#888;">iPad? The on-screen keyboard pops up automatically.</p>
   </div>
 
-  <!-- Game over screen -->
   <div id="gameover" class="screen hidden">
     <h1 id="endTitle">CITY DEFENDED</h1>
     <h2 id="endSubtitle">Godzilla retreats... for now</h2>
     <p>Final Score: <span id="finalScore">0</span></p>
     <p>Best Combo: <span id="finalCombo">x1</span></p>
-    <p>Buildings Destroyed: <span id="finalSmashed">0</span></p>
-    <button class="btn" id="restartBtn">RAMPAGE AGAIN</button>
+    <p>Buildings Smashed: <span id="finalSmashed">0</span></p>
+    <button class="btn" id="restartBtn">🦖 RAMPAGE AGAIN</button>
   </div>
 
-  <!-- Level up screen -->
   <div id="levelup" class="screen hidden">
     <h1 style="color:#5fffaa; text-shadow: 0 0 20px #5fffaa, 4px 4px 0 #003a1a;">LEVEL UP!</h1>
     <h2 id="levelTitle">GODZILLA AWAKENS</h2>
     <p id="levelDesc">Now bigger words appear! Type fast, type true!</p>
-    <button class="btn" id="continueBtn">CONTINUE RAMPAGE</button>
+    <p id="biomeAnnounce" style="color:var(--accent); font-size:18px; margin-top: 10px;"></p>
+    <button class="btn green" id="continueBtn">CONTINUE RAMPAGE</button>
   </div>
 
-  <input id="ipad-input" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
-  <button id="kb-btn">⌨ KEYBOARD</button>
+  <input id="ipad-input" type="text" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" />
+
+  <button id="kb-toggle" type="button">⌨ KEYBOARD</button>
+  <button id="sound-toggle" type="button">🔊 SOUND</button>
+  <button id="voice-toggle" type="button">🗣 VOICE</button>
+
+  <div id="vkb"></div>
 </div>
 
 <script>
-/* ============================================================
- * GODZILLA TYPING RAMPAGE
- * Plain HTML/CSS/JS — no external assets
- * ============================================================ */
+/* =================================================================
+ * GODZILLA TYPING RAMPAGE — biome edition
+ * ================================================================= */
 
-// ---------- Audio engine (Web Audio API) ----------
+// ---------- Audio engine ----------
 const Audio = (() => {
   let ctx = null;
   let musicNodes = [];
   let musicGain = null;
   let musicTimer = null;
+  let beatTimer = null;
   let musicOn = false;
+  let soundEnabled = true;
+  let currentMusicKey = null;
 
   function ensure() {
-    if (!ctx) {
-      ctx = new (window.AudioContext || window.webkitAudioContext)();
-    }
+    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
     if (ctx.state === "suspended") ctx.resume();
     return ctx;
   }
-
   function envelope(node, attack, decay, sustain, release, peak = 1) {
     const t = ctx.currentTime;
     node.gain.setValueAtTime(0, t);
@@ -557,14 +865,14 @@ const Audio = (() => {
   }
 
   function roar(deep = false) {
+    if (!soundEnabled) return;
     ensure();
     const dur = deep ? 1.6 : 1.0;
     const osc1 = ctx.createOscillator();
     const osc2 = ctx.createOscillator();
     const filt = ctx.createBiquadFilter();
     const g = ctx.createGain();
-    osc1.type = "sawtooth";
-    osc2.type = "square";
+    osc1.type = "sawtooth"; osc2.type = "square";
     osc1.frequency.setValueAtTime(deep ? 80 : 110, ctx.currentTime);
     osc1.frequency.exponentialRampToValueAtTime(deep ? 40 : 60, ctx.currentTime + dur);
     osc2.frequency.setValueAtTime(deep ? 60 : 90, ctx.currentTime);
@@ -573,17 +881,16 @@ const Audio = (() => {
     filt.frequency.setValueAtTime(800, ctx.currentTime);
     filt.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + dur);
     filt.Q.value = 8;
-    envelope(g, 0.05, 0.2, 0.7, dur - 0.25, 0.5);
+    envelope(g, 0.05, 0.2, 0.7, dur - 0.25, 0.55);
     osc1.connect(filt); osc2.connect(filt); filt.connect(g); g.connect(ctx.destination);
     osc1.start(); osc2.start();
-    osc1.stop(ctx.currentTime + dur);
-    osc2.stop(ctx.currentTime + dur);
+    osc1.stop(ctx.currentTime + dur); osc2.stop(ctx.currentTime + dur);
   }
 
   function atomicBreath() {
+    if (!soundEnabled) return;
     ensure();
     const dur = 0.5;
-    // Noise burst
     const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
     const data = buf.getChannelData(0);
     for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1);
@@ -598,8 +905,6 @@ const Audio = (() => {
     envelope(g, 0.01, 0.1, 0.6, dur - 0.1, 0.4);
     src.connect(filt); filt.connect(g); g.connect(ctx.destination);
     src.start();
-
-    // High whine
     const osc = ctx.createOscillator();
     const og = ctx.createGain();
     osc.type = "sawtooth";
@@ -608,11 +913,11 @@ const Audio = (() => {
     osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + dur);
     envelope(og, 0.01, 0.1, 0.4, dur - 0.1, 0.15);
     osc.connect(og); og.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + dur);
+    osc.start(); osc.stop(ctx.currentTime + dur);
   }
 
   function explosion() {
+    if (!soundEnabled) return;
     ensure();
     const dur = 0.8;
     const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
@@ -628,11 +933,9 @@ const Audio = (() => {
     filt.frequency.setValueAtTime(2500, ctx.currentTime);
     filt.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + dur);
     const g = ctx.createGain();
-    envelope(g, 0.005, 0.05, 0.6, dur - 0.05, 0.7);
+    envelope(g, 0.005, 0.05, 0.6, dur - 0.05, 0.75);
     src.connect(filt); filt.connect(g); g.connect(ctx.destination);
     src.start();
-
-    // Low boom
     const osc = ctx.createOscillator();
     const og = ctx.createGain();
     osc.type = "sine";
@@ -640,11 +943,11 @@ const Audio = (() => {
     osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + dur);
     envelope(og, 0.005, 0.05, 0.5, dur - 0.05, 0.7);
     osc.connect(og); og.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + dur);
+    osc.start(); osc.stop(ctx.currentTime + dur);
   }
 
   function correctChime() {
+    if (!soundEnabled) return;
     ensure();
     const t = ctx.currentTime;
     [880, 1100, 1320].forEach((f, i) => {
@@ -653,28 +956,28 @@ const Audio = (() => {
       o.type = "triangle";
       o.frequency.setValueAtTime(f, t + i * 0.04);
       g.gain.setValueAtTime(0, t + i * 0.04);
-      g.gain.linearRampToValueAtTime(0.15, t + i * 0.04 + 0.01);
+      g.gain.linearRampToValueAtTime(0.18, t + i * 0.04 + 0.01);
       g.gain.linearRampToValueAtTime(0, t + i * 0.04 + 0.12);
       o.connect(g); g.connect(ctx.destination);
-      o.start(t + i * 0.04);
-      o.stop(t + i * 0.04 + 0.13);
+      o.start(t + i * 0.04); o.stop(t + i * 0.04 + 0.13);
     });
   }
 
   function wrongBuzz() {
+    if (!soundEnabled) return;
     ensure();
     const o = ctx.createOscillator();
     const g = ctx.createGain();
     o.type = "square";
     o.frequency.setValueAtTime(140, ctx.currentTime);
     o.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.2);
-    envelope(g, 0.005, 0.05, 0.4, 0.15, 0.25);
+    envelope(g, 0.005, 0.05, 0.4, 0.15, 0.22);
     o.connect(g); g.connect(ctx.destination);
-    o.start();
-    o.stop(ctx.currentTime + 0.25);
+    o.start(); o.stop(ctx.currentTime + 0.25);
   }
 
   function levelUpFanfare() {
+    if (!soundEnabled) return;
     ensure();
     const t = ctx.currentTime;
     [523, 659, 784, 1047].forEach((f, i) => {
@@ -683,52 +986,56 @@ const Audio = (() => {
       o.type = "sawtooth";
       o.frequency.setValueAtTime(f, t + i * 0.12);
       g.gain.setValueAtTime(0, t + i * 0.12);
-      g.gain.linearRampToValueAtTime(0.2, t + i * 0.12 + 0.02);
+      g.gain.linearRampToValueAtTime(0.22, t + i * 0.12 + 0.02);
       g.gain.linearRampToValueAtTime(0, t + i * 0.12 + 0.35);
       o.connect(g); g.connect(ctx.destination);
-      o.start(t + i * 0.12);
-      o.stop(t + i * 0.12 + 0.36);
+      o.start(t + i * 0.12); o.stop(t + i * 0.12 + 0.36);
     });
   }
 
-  // Dramatic background music — slow ominous bass + occasional brass-like hits
-  function startMusic() {
+  // Per-biome music: different bass note + scale
+  const BIOME_MUSIC = {
+    tokyo:  { bass: 55,   notes: [110, 110, 130.81, 146.83, 130.81, 110, 98, 110], beat: 1600, lp: 220 },
+    snow:   { bass: 65,   notes: [130, 155, 174, 196, 174, 155, 130, 116], beat: 1800, lp: 280 },
+    forest: { bass: 73,   notes: [146, 164, 196, 220, 196, 164, 146, 130], beat: 1500, lp: 320 },
+    lava:   { bass: 49,   notes: [98,  98, 116, 130, 116, 98, 87, 98], beat: 1400, lp: 200 },
+    ocean:  { bass: 87,   notes: [174, 196, 220, 261, 220, 196, 174, 155], beat: 1900, lp: 300 },
+    neon:   { bass: 41,   notes: [82, 110, 123, 130, 123, 110, 98, 82], beat: 1200, lp: 380 },
+  };
+
+  function startMusic(biome = "tokyo") {
+    if (!soundEnabled) return;
     ensure();
-    if (musicOn) return;
+    if (musicOn && currentMusicKey === biome) return;
+    stopMusic();
     musicOn = true;
+    currentMusicKey = biome;
+    const conf = BIOME_MUSIC[biome] || BIOME_MUSIC.tokyo;
+
     musicGain = ctx.createGain();
-    musicGain.gain.value = 0.12;
+    musicGain.gain.value = 0.1;
     musicGain.connect(ctx.destination);
 
-    // Drone bass
     const bassOsc = ctx.createOscillator();
     const bassOsc2 = ctx.createOscillator();
-    bassOsc.type = "sawtooth";
-    bassOsc2.type = "sawtooth";
-    bassOsc.frequency.value = 55;
-    bassOsc2.frequency.value = 55.4; // slight detune
+    bassOsc.type = "sawtooth"; bassOsc2.type = "sawtooth";
+    bassOsc.frequency.value = conf.bass;
+    bassOsc2.frequency.value = conf.bass + 0.4;
     const bassFilt = ctx.createBiquadFilter();
-    bassFilt.type = "lowpass";
-    bassFilt.frequency.value = 220;
-    bassFilt.Q.value = 4;
-    const bassG = ctx.createGain();
-    bassG.gain.value = 0.6;
+    bassFilt.type = "lowpass"; bassFilt.frequency.value = conf.lp; bassFilt.Q.value = 4;
+    const bassG = ctx.createGain(); bassG.gain.value = 0.6;
     bassOsc.connect(bassFilt); bassOsc2.connect(bassFilt);
     bassFilt.connect(bassG); bassG.connect(musicGain);
     bassOsc.start(); bassOsc2.start();
     musicNodes.push(bassOsc, bassOsc2);
 
-    // LFO modulating filter for tension
     const lfo = ctx.createOscillator();
     const lfoGain = ctx.createGain();
-    lfo.frequency.value = 0.1;
-    lfoGain.gain.value = 60;
+    lfo.frequency.value = 0.1; lfoGain.gain.value = 60;
     lfo.connect(lfoGain); lfoGain.connect(bassFilt.frequency);
     lfo.start();
     musicNodes.push(lfo);
 
-    // Brass-like motif
-    const notes = [110, 110, 130.81, 146.83, 130.81, 110, 98, 110]; // A minor-ish
     let i = 0;
     function tick() {
       if (!musicOn) return;
@@ -737,23 +1044,18 @@ const Audio = (() => {
       const g = ctx.createGain();
       const f = ctx.createBiquadFilter();
       o.type = "sawtooth";
-      o.frequency.value = notes[i % notes.length];
-      f.type = "lowpass";
-      f.frequency.value = 800;
-      f.Q.value = 6;
+      o.frequency.value = conf.notes[i % conf.notes.length];
+      f.type = "lowpass"; f.frequency.value = 800; f.Q.value = 6;
       g.gain.setValueAtTime(0, t);
-      g.gain.linearRampToValueAtTime(0.25, t + 0.05);
+      g.gain.linearRampToValueAtTime(0.22, t + 0.05);
       g.gain.linearRampToValueAtTime(0, t + 0.7);
       o.connect(f); f.connect(g); g.connect(musicGain);
-      o.start(t);
-      o.stop(t + 0.75);
+      o.start(t); o.stop(t + 0.75);
       i++;
       musicTimer = setTimeout(tick, 800);
     }
     tick();
 
-    // Heartbeat-ish kick every 1.6s
-    let beatTimer;
     function beat() {
       if (!musicOn) return;
       const t = ctx.currentTime;
@@ -763,22 +1065,23 @@ const Audio = (() => {
       o.frequency.setValueAtTime(80, t);
       o.frequency.exponentialRampToValueAtTime(35, t + 0.15);
       g.gain.setValueAtTime(0, t);
-      g.gain.linearRampToValueAtTime(0.4, t + 0.005);
+      g.gain.linearRampToValueAtTime(0.35, t + 0.005);
       g.gain.linearRampToValueAtTime(0, t + 0.18);
       o.connect(g); g.connect(musicGain);
-      o.start(t);
-      o.stop(t + 0.2);
-      beatTimer = setTimeout(beat, 1600);
+      o.start(t); o.stop(t + 0.2);
+      beatTimer = setTimeout(beat, conf.beat);
     }
     beat();
   }
 
   function stopMusic() {
     musicOn = false;
-    if (musicTimer) clearTimeout(musicTimer);
+    currentMusicKey = null;
+    if (musicTimer) { clearTimeout(musicTimer); musicTimer = null; }
+    if (beatTimer) { clearTimeout(beatTimer); beatTimer = null; }
     musicNodes.forEach(n => { try { n.stop(); } catch (e) {} });
     musicNodes = [];
-    if (musicGain) {
+    if (musicGain && ctx) {
       try {
         musicGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5);
         setTimeout(() => { try { musicGain.disconnect(); } catch (e) {} }, 600);
@@ -786,88 +1089,100 @@ const Audio = (() => {
     }
   }
 
-  function duckMusic(amount = 0.04, duration = 1.5) {
-    if (!musicGain) return;
-    const t = ctx.currentTime;
-    musicGain.gain.cancelScheduledValues(t);
-    musicGain.gain.setValueAtTime(musicGain.gain.value, t);
-    musicGain.gain.linearRampToValueAtTime(amount, t + 0.1);
-    musicGain.gain.linearRampToValueAtTime(0.12, t + duration);
+  function setEnabled(on) {
+    soundEnabled = on;
+    if (!on) stopMusic();
   }
 
-  return { ensure, roar, atomicBreath, explosion, correctChime, wrongBuzz, levelUpFanfare, startMusic, stopMusic, duckMusic };
+  return { ensure, roar, atomicBreath, explosion, correctChime, wrongBuzz, levelUpFanfare, startMusic, stopMusic, setEnabled, isEnabled: () => soundEnabled };
 })();
 
-// ---------- Level definitions ----------
+// ---------- Voice ----------
+const Voice = (() => {
+  let enabled = true;
+  let lastSpoke = 0;
+  function speak(text, opts = {}) {
+    if (!enabled || !window.speechSynthesis) return;
+    const now = Date.now();
+    if (now - lastSpoke < 700) return;
+    lastSpoke = now;
+    try {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.rate = opts.rate || 1.1;
+      u.pitch = opts.pitch || 1.0;
+      u.volume = opts.volume || 1.0;
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  return {
+    speak,
+    setEnabled: (on) => { enabled = on; if (!on && window.speechSynthesis) window.speechSynthesis.cancel(); },
+    isEnabled: () => enabled,
+  };
+})();
+
+// ---------- Biomes ----------
+const BIOMES = [
+  { key: "tokyo",  label: "TOKYO NIGHT",  gz: "GREEN GODZILLA",     ambient: "spark",  count: 25, lightning: true  },
+  { key: "snow",   label: "SNOW CITY",    gz: "ICE GODZILLA",       ambient: "snow",   count: 60, lightning: false },
+  { key: "forest", label: "GREEN FOREST", gz: "PLANT GODZILLA",     ambient: "leaf",   count: 30, lightning: false },
+  { key: "lava",   label: "LAVA VOLCANO", gz: "FIRE GODZILLA",      ambient: "ember",  count: 50, lightning: true  },
+  { key: "ocean",  label: "DEEP OCEAN",   gz: "AQUA GODZILLA",      ambient: "bubble", count: 40, lightning: false },
+  { key: "neon",   label: "NEON DOWNTOWN",gz: "CYBER GODZILLA",     ambient: "spark",  count: 35, lightning: true  },
+];
+
+// ---------- Levels ----------
 const LEVELS = [
   {
     title: "BABY KAIJU",
-    desc: "Type single letters! Use home row: A S D F  J K L ;",
+    desc: "Type one letter at a time. Watch the YELLOW letter!",
     pool: ["a","s","d","f","j","k","l","g","h"],
-    spawnEvery: 2200,
-    fallSpeed: 18, // seconds to fall across viewport
-    target: 10,
-    minLen: 1, maxLen: 1
+    spawnEvery: 2800, fallSpeed: 22, target: 8,
+    biome: 0, // tokyo
   },
   {
     title: "YOUNG GODZILLA",
-    desc: "All letters now! Type the letters to ROAR!",
+    desc: "All letters of the alphabet!",
     pool: "abcdefghijklmnopqrstuvwxyz".split(""),
-    spawnEvery: 1800,
-    fallSpeed: 16,
-    target: 12,
-    minLen: 1, maxLen: 1
+    spawnEvery: 2400, fallSpeed: 20, target: 10,
+    biome: 1, // snow
   },
   {
     title: "GODZILLA AWAKENS",
-    desc: "Real words! Smash them with atomic breath!",
+    desc: "Real words! SMASH the buildings!",
     pool: ["cat","dog","run","sun","fun","big","top","mom","dad","hit","map","fox","bug","red","pop","bat","jam"],
-    spawnEvery: 2400,
-    fallSpeed: 18,
-    target: 12,
-    minLen: 3, maxLen: 3
+    spawnEvery: 2800, fallSpeed: 20, target: 10,
+    biome: 2, // forest
   },
   {
     title: "ATOMIC BREATH",
-    desc: "Bigger buildings! Bigger words! BIGGER ROAR!",
-    pool: ["fire","roar","city","jump","kick","fast","bomb","loud","fish","bird","tree","king","fish","wind","wave","cool"],
-    spawnEvery: 2400,
-    fallSpeed: 17,
-    target: 14,
-    minLen: 4, maxLen: 4
+    desc: "Bigger words! Bigger ROAR!",
+    pool: ["fire","roar","lava","jump","kick","fast","bomb","loud","fish","bird","tree","king","wind","wave","cool"],
+    spawnEvery: 2800, fallSpeed: 19, target: 12,
+    biome: 3, // lava
   },
   {
     title: "KAIJU CARNAGE",
-    desc: "Godzilla-power words. Show no mercy!",
-    pool: ["smash","crash","stomp","roar!","tokyo","kaiju","laser","power","giant","scary","brave","strong","attack","danger","monster","destroy","rampage"],
-    spawnEvery: 2600,
-    fallSpeed: 18,
-    target: 14,
-    minLen: 5, maxLen: 8
+    desc: "Big monster words!",
+    pool: ["smash","crash","stomp","tokyo","kaiju","laser","power","giant","scary","brave","strong","attack","danger","monster","destroy","rampage"],
+    spawnEvery: 3000, fallSpeed: 20, target: 12,
+    biome: 4, // ocean
   },
   {
     title: "KING OF MONSTERS",
-    desc: "Short sentences! Use the space bar!",
+    desc: "Sentences! Use the SPACE BAR!",
     pool: [
-      "godzilla wins",
-      "smash the city",
-      "kaiju attack",
-      "atomic breath",
-      "save tokyo",
-      "monster king",
-      "i can type",
-      "you are fast",
-      "roar loud now",
-      "fire and smoke"
+      "godzilla wins","smash the city","kaiju attack","atomic breath",
+      "save tokyo","monster king","i can type","you are fast",
+      "roar loud now","fire and smoke"
     ],
-    spawnEvery: 4500,
-    fallSpeed: 22,
-    target: 8,
-    minLen: 8, maxLen: 20
+    spawnEvery: 5000, fallSpeed: 24, target: 6,
+    biome: 5, // neon
   }
 ];
 
-// ---------- Game state ----------
+// ---------- State ----------
 const State = {
   running: false,
   paused: false,
@@ -878,12 +1193,14 @@ const State = {
   health: 100,
   destroyed: 0,
   spawnTimer: null,
-  buildings: [], // {el, word, typed, x, spawnAt, duration}
-  currentTarget: null
+  buildings: [],
+  currentTarget: null,
+  currentBiome: 0,
 };
 
-// ---------- DOM refs ----------
+// ---------- DOM ----------
 const $game = document.getElementById("game");
+const $playfield = document.getElementById("playfield");
 const $skyline = document.getElementById("skyline");
 const $godzilla = document.getElementById("godzilla");
 const $score = document.getElementById("score");
@@ -898,6 +1215,7 @@ const $levelup = document.getElementById("levelup");
 const $continueBtn = document.getElementById("continueBtn");
 const $levelTitle = document.getElementById("levelTitle");
 const $levelDesc = document.getElementById("levelDesc");
+const $biomeAnnounce = document.getElementById("biomeAnnounce");
 const $endTitle = document.getElementById("endTitle");
 const $endSubtitle = document.getElementById("endSubtitle");
 const $finalScore = document.getElementById("finalScore");
@@ -907,22 +1225,33 @@ const $banner = document.getElementById("combo-banner");
 const $hint = document.getElementById("hint");
 const $lightning = document.getElementById("lightning");
 const $ipadInput = document.getElementById("ipad-input");
-const $kbBtn = document.getElementById("kb-btn");
+const $kbToggle = document.getElementById("kb-toggle");
+const $soundToggle = document.getElementById("sound-toggle");
+const $voiceToggle = document.getElementById("voice-toggle");
+const $vkb = document.getElementById("vkb");
+const $nextPrompt = document.getElementById("next-key-prompt");
+const $nextLetter = document.getElementById("next-key-letter");
+const $biomeFlash = document.getElementById("biome-flash");
+const $biomeName = document.getElementById("biome-name");
 
-// ---------- Setup decorative scene ----------
+// ---------- Decorative ----------
 function buildSkyline() {
   $skyline.innerHTML = "";
-  // Stars
-  for (let i = 0; i < 60; i++) {
-    const s = document.createElement("div");
-    s.className = "star";
-    s.style.left = Math.random() * 100 + "%";
-    s.style.top = Math.random() * 60 + "%";
-    s.style.animationDelay = Math.random() * 3 + "s";
-    $game.appendChild(s);
+  document.querySelectorAll(".star").forEach(s => s.remove());
+  const biome = BIOMES[State.currentBiome];
+
+  // Stars only in tokyo/snow/ocean/neon (dark skies)
+  if (["tokyo","snow","ocean","neon"].includes(biome.key)) {
+    for (let i = 0; i < 60; i++) {
+      const s = document.createElement("div");
+      s.className = "star";
+      s.style.left = Math.random() * 100 + "%";
+      s.style.top = Math.random() * 60 + "%";
+      s.style.animationDelay = Math.random() * 3 + "s";
+      $game.appendChild(s);
+    }
   }
-  // Background silhouette buildings (decoration, not gameplay)
-  const colors = ["#1a1424", "#221428", "#1a0a18", "#26182c"];
+
   const skyW = window.innerWidth;
   let x = 0;
   while (x < skyW) {
@@ -934,24 +1263,54 @@ function buildSkyline() {
     b.style.bottom = "0";
     b.style.width = w + "px";
     b.style.height = h + "px";
-    b.style.background = colors[Math.floor(Math.random()*colors.length)];
-    b.style.borderTop = "2px solid #3a2840";
+    b.style.background = `var(--bg-building${Math.random() < 0.5 ? "" : "-2"})`;
+    b.style.borderTop = "2px solid var(--ground-border)";
     b.style.opacity = "0.85";
-    // Dots for windows
     b.style.backgroundImage =
-      `radial-gradient(circle at 30% 30%, rgba(255,200,80,0.4) 1px, transparent 1.5px),
-       radial-gradient(circle at 70% 50%, rgba(255,200,80,0.3) 1px, transparent 1.5px),
-       radial-gradient(circle at 30% 70%, rgba(255,200,80,0.4) 1px, transparent 1.5px)`;
+      `radial-gradient(circle at 30% 30%, var(--window-glow) 1px, transparent 1.5px),
+       radial-gradient(circle at 70% 50%, var(--window-glow) 1px, transparent 1.5px),
+       radial-gradient(circle at 30% 70%, var(--window-glow) 1px, transparent 1.5px)`;
     b.style.backgroundSize = "30px 40px";
     $skyline.appendChild(b);
     x += w - 4;
   }
 }
 
-// ---------- Lightning random ----------
+// Ambient particle field
+let ambientInterval = null;
+function startAmbient() {
+  if (ambientInterval) clearInterval(ambientInterval);
+  document.querySelectorAll(".ambient").forEach(a => a.remove());
+  const biome = BIOMES[State.currentBiome];
+  const type = biome.ambient;
+
+  function spawn() {
+    if (!State.running) return;
+    const a = document.createElement("div");
+    a.className = "ambient " + type;
+    a.style.left = Math.random() * 100 + "vw";
+    const dur = 6 + Math.random() * 6;
+    a.style.animationDuration = dur + "s";
+    a.style.animationDelay = "0s";
+    if (type === "leaf") {
+      a.style.background = ["#aaff5a","#ffaa44","#ff8866","#ddff66"][Math.floor(Math.random()*4)];
+    }
+    $game.appendChild(a);
+    setTimeout(() => a.remove(), dur * 1000 + 500);
+  }
+
+  // Initial fill
+  for (let i = 0; i < biome.count; i++) {
+    setTimeout(spawn, Math.random() * 4000);
+  }
+  // Steady spawn
+  ambientInterval = setInterval(spawn, Math.max(120, 2400 / biome.count));
+}
+
 function maybeLightning() {
   if (!State.running) return;
-  if (Math.random() < 0.3) {
+  const biome = BIOMES[State.currentBiome];
+  if (biome.lightning && Math.random() < 0.4) {
     $lightning.classList.remove("flash");
     void $lightning.offsetWidth;
     $lightning.classList.add("flash");
@@ -959,40 +1318,73 @@ function maybeLightning() {
   setTimeout(maybeLightning, 5000 + Math.random() * 8000);
 }
 
-// ---------- HUD updates ----------
+// ---------- Biome switch ----------
+function switchToBiome(index) {
+  State.currentBiome = index;
+  const biome = BIOMES[index];
+  // Update body class
+  BIOMES.forEach(b => document.body.classList.remove("biome-" + b.key));
+  document.body.classList.add("biome-" + biome.key);
+
+  // Flash transition
+  $biomeFlash.classList.remove("show");
+  void $biomeFlash.offsetWidth;
+  $biomeFlash.classList.add("show");
+
+  // Announce name
+  $biomeName.textContent = biome.label + "\n" + biome.gz;
+  $biomeName.style.whiteSpace = "pre-line";
+  $biomeName.classList.remove("show");
+  void $biomeName.offsetWidth;
+  $biomeName.classList.add("show");
+
+  // Rebuild skyline + ambient
+  buildSkyline();
+  startAmbient();
+
+  // Godzilla arriving animation
+  $godzilla.classList.remove("arriving");
+  void $godzilla.offsetWidth;
+  $godzilla.classList.add("arriving");
+
+  // Switch music
+  if (Audio.isEnabled() && State.running) {
+    Audio.startMusic(biome.key);
+  }
+  Audio.roar(true);
+  Voice.speak(biome.gz);
+}
+
+// ---------- HUD ----------
 function updateHUD() {
   $score.textContent = State.score;
   $level.textContent = State.level + 1;
   $combo.textContent = "x" + State.combo;
   $healthBar.style.width = State.health + "%";
 }
-
 function bumpCombo() {
   $combo.classList.remove("big");
   void $combo.offsetWidth;
   $combo.classList.add("big");
 }
 
-// ---------- Spawning buildings ----------
+// ---------- Spawn ----------
 function pickWord(level) {
   const lv = LEVELS[level];
-  const w = lv.pool[Math.floor(Math.random() * lv.pool.length)];
-  return w;
+  return lv.pool[Math.floor(Math.random() * lv.pool.length)];
 }
 
 function spawnBuilding() {
   if (!State.running || State.paused) return;
   const lv = LEVELS[State.level];
   const word = pickWord(State.level);
-  const screenW = window.innerWidth;
+  const playW = $playfield.clientWidth;
 
-  const charW = Math.max(20, word.length * 18 + 40);
-  const bWidth = Math.max(70, charW);
-  const bHeight = 120 + Math.random() * 100;
+  const bWidth = Math.max(80, word.length * 18 + 50);
+  const bHeight = 110 + Math.random() * 90;
 
-  // Right-to-left approach: start off-screen right, approach Godzilla on left
-  const startX = screenW + 40;
-  const endX = screenW * 0.30; // stop near godzilla's right edge
+  const startX = playW + 40;
+  const endX = playW * 0.28;
 
   const el = document.createElement("div");
   el.className = "building";
@@ -1005,7 +1397,7 @@ function spawnBuilding() {
   wordEl.textContent = word.toUpperCase();
   el.appendChild(wordEl);
 
-  $game.appendChild(el);
+  $playfield.appendChild(el);
 
   const b = {
     el, wordEl, word: word.toLowerCase(),
@@ -1016,12 +1408,10 @@ function spawnBuilding() {
     dead: false
   };
   State.buildings.push(b);
-
-  // Try to auto-target if no current target
   pickTarget();
 }
 
-// ---------- Animation loop ----------
+// ---------- Loop ----------
 let rafId = null;
 function loop() {
   if (!State.running) return;
@@ -1031,26 +1421,23 @@ function loop() {
     const t = Math.min(1, (now - b.spawnAt) / b.duration);
     const x = b.startX + (b.endX - b.startX) * t;
     b.el.style.left = x + "px";
-
-    // Reached city center → damage
     if (t >= 1) {
       b.dead = true;
       damageCity(b);
     }
   }
-  // Remove dead
   State.buildings = State.buildings.filter(b => !b.dead);
   rafId = requestAnimationFrame(loop);
 }
 
-// ---------- Target picking ----------
+// ---------- Target ----------
 function pickTarget() {
-  // Target = oldest live building whose first letter matches OR oldest if none typed
-  // Simpler: pick the leftmost (closest to godzilla) untyped building
-  if (State.currentTarget && !State.currentTarget.dead && State.buildings.includes(State.currentTarget)) return;
+  if (State.currentTarget && !State.currentTarget.dead && State.buildings.includes(State.currentTarget)) {
+    updateNextPrompt();
+    return;
+  }
   State.currentTarget = null;
-  let best = null;
-  let bestX = Infinity;
+  let best = null; let bestX = Infinity;
   for (const b of State.buildings) {
     if (b.dead) continue;
     const x = parseFloat(b.el.style.left);
@@ -1062,27 +1449,51 @@ function pickTarget() {
 function setTarget(b) {
   if (State.currentTarget && State.currentTarget !== b) {
     State.currentTarget.el.classList.remove("targeted");
-    // Reset typed progress on old target
     State.currentTarget.typed = 0;
     renderWord(State.currentTarget);
   }
   State.currentTarget = b;
   if (b) b.el.classList.add("targeted");
+  updateNextPrompt();
 }
 
 function renderWord(b) {
   const word = b.word.toUpperCase();
   const t = b.typed;
+  const typed = word.slice(0, t);
+  const next = word[t] || "";
+  const rest = word.slice(t + 1);
   b.wordEl.innerHTML =
-    '<span class="typed">' + word.slice(0, t) + '</span>' + word.slice(t);
+    '<span class="typed">' + typed + '</span>' +
+    '<span class="next">' + next + '</span>' + rest;
 }
 
-// ---------- Key handling ----------
+function updateNextPrompt() {
+  const b = State.currentTarget;
+  if (!b || b.dead) {
+    $nextPrompt.classList.remove("show");
+    highlightVKey(null);
+    return;
+  }
+  const nextChar = b.word[b.typed];
+  if (!nextChar) {
+    $nextPrompt.classList.remove("show");
+    highlightVKey(null);
+    return;
+  }
+  $nextLetter.textContent = nextChar === " " ? "␣ SPACE" : nextChar.toUpperCase();
+  $nextPrompt.classList.add("show");
+  highlightVKey(nextChar);
+}
+
+// ---------- Input ----------
+const PRAISE_PER_KEY = ["YES!","GO!","NICE","ZAP!","BAM!","YEAH","POW","ROAR","WOW"];
+const PRAISE_PER_WORD = ["AWESOME!","AMAZING!","GREAT JOB!","ROAR!","MEGA SMASH!","SUPER!","INCREDIBLE!","FANTASTIC!","BOOM!","HUGE!"];
+const SPOKEN_PRAISE = ["great job","awesome","amazing","you're so fast","incredible","fantastic","roar","mega smash","wow"];
+
 function handleKey(rawCh) {
   if (!State.running || State.paused) return;
   const ch = rawCh.toLowerCase();
-
-  // If no target, try to auto-pick one whose first letter matches
   if (!State.currentTarget || State.currentTarget.dead) {
     let match = null;
     for (const b of State.buildings) {
@@ -1092,11 +1503,8 @@ function handleKey(rawCh) {
     if (match) setTarget(match);
     else { wrongKey(); return; }
   }
-
-  // Allow switching target if current first char doesn't match but another building does
   const b = State.currentTarget;
   if (b.word[b.typed] !== ch) {
-    // Try switching to another building whose next char matches and is closer
     let alt = null;
     for (const ob of State.buildings) {
       if (ob.dead || ob === b) continue;
@@ -1104,25 +1512,21 @@ function handleKey(rawCh) {
         if (!alt || parseFloat(ob.el.style.left) < parseFloat(alt.el.style.left)) alt = ob;
       }
     }
-    if (alt) {
-      setTarget(alt);
-      return handleKey(rawCh);
-    }
+    if (alt) { setTarget(alt); return handleKey(rawCh); }
     wrongKey();
     return;
   }
-
-  // Correct keystroke
   b.typed++;
   renderWord(b);
   Audio.correctChime();
   State.score += 10 * State.combo;
-
-  // Mini atomic beam pulse on each correct key
-  shootBeam(b, false);
+  shootBeam(b);
+  spawnPraise(PRAISE_PER_KEY[Math.floor(Math.random()*PRAISE_PER_KEY.length)], b.el, false);
 
   if (b.typed >= b.word.length) {
     destroyBuilding(b);
+  } else {
+    updateNextPrompt();
   }
   updateHUD();
 }
@@ -1131,14 +1535,12 @@ function wrongKey() {
   Audio.wrongBuzz();
   State.combo = 1;
   updateHUD();
-  // Mini shake
   $game.classList.remove("shake");
   void $game.offsetWidth;
   $game.classList.add("shake");
 }
 
-// ---------- Beam, destruction, damage ----------
-function shootBeam(b, full) {
+function shootBeam(b) {
   Audio.atomicBreath();
   $godzilla.classList.remove("attacking");
   void $godzilla.offsetWidth;
@@ -1150,8 +1552,7 @@ function shootBeam(b, full) {
   const startY = gzRect.top + gzRect.height * 0.35;
   const endX = bRect.left + bRect.width / 2;
   const endY = bRect.top + bRect.height / 2;
-  const dx = endX - startX;
-  const dy = endY - startY;
+  const dx = endX - startX, dy = endY - startY;
   const len = Math.sqrt(dx*dx + dy*dy);
   const angle = Math.atan2(dy, dx) * 180 / Math.PI;
 
@@ -1162,7 +1563,6 @@ function shootBeam(b, full) {
   beam.style.width = "0px";
   beam.style.transform = `rotate(${angle}deg)`;
   $game.appendChild(beam);
-  // Animate
   requestAnimationFrame(() => {
     beam.style.transition = "width 0.08s linear, opacity 0.25s linear 0.08s";
     beam.style.width = len + "px";
@@ -1174,27 +1574,38 @@ function shootBeam(b, full) {
 
 function destroyBuilding(b) {
   b.dead = true;
-  shootBeam(b, true);
+  shootBeam(b);
   Audio.explosion();
-  Audio.duckMusic();
   spawnParticles(b.el);
+  spawnConfetti(b.el);
   b.el.classList.add("destroyed");
   setTimeout(() => b.el.remove(), 900);
 
-  State.score += 100;
+  State.score += 100 * State.combo;
   State.destroyed++;
   State.combo++;
   if (State.combo > State.bestCombo) State.bestCombo = State.combo;
   bumpCombo();
 
-  if (State.combo >= 5 && State.combo % 5 === 0) {
-    showBanner(["MEGA SMASH!", "RAMPAGE!", "DEVASTATING!", "ROOOAAR!!", "CITY CRUSHER!"][Math.floor(Math.random()*5)]);
-    Audio.roar(false);
-  }
+  spawnPraise(PRAISE_PER_WORD[Math.floor(Math.random()*PRAISE_PER_WORD.length)], b.el, true);
+  if (Math.random() < 0.55) Voice.speak(SPOKEN_PRAISE[Math.floor(Math.random()*SPOKEN_PRAISE.length)]);
 
-  $game.classList.remove("shake");
-  void $game.offsetWidth;
-  $game.classList.add("shake");
+  if (State.combo >= 4 && State.combo % 4 === 0) {
+    showBanner(["MEGA SMASH!","RAMPAGE!","DEVASTATING!","ROOOAAR!!","CITY CRUSHER!","UNSTOPPABLE!"][Math.floor(Math.random()*6)]);
+    Audio.roar(false);
+    Voice.speak("rampage");
+    $game.classList.remove("big-shake");
+    void $game.offsetWidth;
+    $game.classList.add("big-shake");
+    State.health = Math.min(100, State.health + 8);
+    $godzilla.classList.remove("cheer");
+    void $godzilla.offsetWidth;
+    $godzilla.classList.add("cheer");
+  } else {
+    $game.classList.remove("shake");
+    void $game.offsetWidth;
+    $game.classList.add("shake");
+  }
 
   if (State.currentTarget === b) State.currentTarget = null;
   pickTarget();
@@ -1203,7 +1614,6 @@ function destroyBuilding(b) {
 }
 
 function damageCity(b) {
-  // Building reached Godzilla without being typed — Godzilla takes damage (or "attention is lost"!)
   b.el.classList.add("destroyed");
   setTimeout(() => b.el.remove(), 900);
   State.health = Math.max(0, State.health - 15);
@@ -1225,29 +1635,69 @@ function spawnParticles(el) {
   const rect = el.getBoundingClientRect();
   const cx = rect.left + rect.width/2;
   const cy = rect.top + rect.height/2;
-  const colors = ["#ff8800", "#ffaa00", "#ff3030", "#ffeb6a", "#ffffff"];
-  for (let i = 0; i < 18; i++) {
+  const colors = ["#ff8800","#ffaa00","#ff3030","#ffeb6a","#ffffff"];
+  for (let i = 0; i < 22; i++) {
     const p = document.createElement("div");
     p.className = "particle";
-    p.style.left = cx + "px";
-    p.style.top = cy + "px";
+    const sz = 6 + Math.random() * 8;
+    p.style.width = sz + "px"; p.style.height = sz + "px";
+    p.style.left = cx + "px"; p.style.top = cy + "px";
     p.style.background = colors[Math.floor(Math.random()*colors.length)];
     p.style.boxShadow = "0 0 8px " + p.style.background;
     $game.appendChild(p);
-    const angle = (Math.PI * 2 * i / 18) + Math.random() * 0.5;
-    const speed = 80 + Math.random() * 200;
+    const angle = (Math.PI * 2 * i / 22) + Math.random() * 0.5;
+    const speed = 90 + Math.random() * 230;
     const dx = Math.cos(angle) * speed;
     const dy = Math.sin(angle) * speed - 60;
     const start = performance.now();
     function step(now) {
-      const t = (now - start) / 700;
+      const t = (now - start) / 750;
       if (t >= 1) { p.remove(); return; }
-      p.style.transform = `translate(${dx*t}px, ${dy*t + 400*t*t}px) scale(${1-t})`;
+      p.style.transform = `translate(${dx*t}px, ${dy*t + 450*t*t}px) scale(${1-t})`;
       p.style.opacity = (1 - t).toFixed(2);
       requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
   }
+}
+
+function spawnConfetti(el) {
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top;
+  const colors = ["#ffeb6a","#5fffaa","#ff8800","#ff5050","#ffffff","#88ccff","#ff44dd","#aaffff"];
+  for (let i = 0; i < 28; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = cx + "px"; c.style.top = cy + "px";
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    $game.appendChild(c);
+    const dx = (Math.random() - 0.5) * 600;
+    const dy = -180 - Math.random() * 200;
+    const rot = (Math.random() - 0.5) * 720;
+    const start = performance.now();
+    function step(now) {
+      const t = (now - start) / 1500;
+      if (t >= 1) { c.remove(); return; }
+      c.style.transform = `translate(${dx*t}px, ${dy*t + 700*t*t}px) rotate(${rot*t}deg)`;
+      c.style.opacity = (1 - t*0.9).toFixed(2);
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+}
+
+function spawnPraise(text, anchor, big) {
+  const rect = anchor.getBoundingClientRect();
+  const p = document.createElement("div");
+  p.className = "praise" + (big ? " gold" : "");
+  p.textContent = text;
+  p.style.left = (rect.left + rect.width/2) + "px";
+  p.style.top = (rect.top - 10) + "px";
+  p.style.transform = "translateX(-50%)";
+  if (big) p.style.fontSize = "clamp(40px, 8vw, 84px)";
+  $game.appendChild(p);
+  setTimeout(() => p.remove(), 1100);
 }
 
 function showBanner(text) {
@@ -1257,14 +1707,13 @@ function showBanner(text) {
   $banner.classList.add("show");
 }
 
-// ---------- Hints ----------
 function showHint(text, ms = 3000) {
   $hint.textContent = text;
   $hint.classList.add("show");
   setTimeout(() => $hint.classList.remove("show"), ms);
 }
 
-// ---------- Level progress ----------
+// ---------- Flow ----------
 function checkLevelProgress() {
   const lv = LEVELS[State.level];
   if (State.destroyed >= lv.target) {
@@ -1273,10 +1722,12 @@ function checkLevelProgress() {
       State.level++;
       State.destroyed = 0;
       const nlv = LEVELS[State.level];
+      const nb = BIOMES[nlv.biome];
       $levelTitle.textContent = nlv.title;
       $levelDesc.textContent = nlv.desc;
+      $biomeAnnounce.textContent = "Next world: " + nb.label + " — " + nb.gz;
       Audio.levelUpFanfare();
-      Audio.roar(true);
+      Voice.speak("level up! " + nb.gz);
       $levelup.classList.remove("hidden");
     } else {
       gameOver(true);
@@ -1284,7 +1735,6 @@ function checkLevelProgress() {
   }
 }
 
-// ---------- Game flow ----------
 function startGame() {
   $start.classList.add("hidden");
   $gameover.classList.add("hidden");
@@ -1302,19 +1752,20 @@ function startGame() {
   State.currentTarget = null;
 
   Audio.ensure();
-  Audio.startMusic();
-  Audio.roar(true);
+  Voice.speak("godzilla rampage");
   updateHUD();
+  switchToBiome(LEVELS[0].biome);
   scheduleSpawns();
   loop();
   maybeLightning();
-  showHint("TYPE THE WORDS ON BUILDINGS!", 3500);
+  showHint("PRESS THE YELLOW LETTER!", 4000);
   focusInput();
 }
 
 function continueLevel() {
   $levelup.classList.add("hidden");
   State.paused = false;
+  switchToBiome(LEVELS[State.level].biome);
   scheduleSpawns();
   loop();
   showHint(LEVELS[State.level].title + "!", 2500);
@@ -1340,84 +1791,186 @@ function gameOver(victory) {
   Audio.stopMusic();
   $finalScore.textContent = State.score;
   $finalCombo.textContent = "x" + State.bestCombo;
-  $finalSmashed.textContent = State.destroyed + " (this level)";
+  $finalSmashed.textContent = State.destroyed + " on level " + (State.level + 1);
   if (victory) {
     $endTitle.textContent = "KING OF MONSTERS!";
-    $endSubtitle.textContent = "Godzilla has conquered every city!";
+    $endSubtitle.textContent = "Godzilla conquered every world!";
     Audio.levelUpFanfare();
+    Voice.speak("you are the king of monsters!");
     setTimeout(() => Audio.roar(true), 600);
   } else {
-    $endTitle.textContent = "CITY DEFENDED";
-    $endSubtitle.textContent = "Godzilla retreats... regroup and try again!";
+    $endTitle.textContent = "GODZILLA TIRED";
+    $endSubtitle.textContent = "Take a breath... and rampage again!";
   }
   $gameover.classList.remove("hidden");
 }
 
-// ---------- Input handling ----------
+// ---------- Input wiring ----------
 document.addEventListener("keydown", (e) => {
   if (!State.running || State.paused) return;
   if (e.key.length === 1 && /[a-zA-Z]/.test(e.key)) {
-    e.preventDefault();
-    handleKey(e.key);
+    e.preventDefault(); handleKey(e.key);
   } else if (e.key === " ") {
-    e.preventDefault();
-    handleKey(" ");
-  } else if (e.key === "!" || e.key === "?" || e.key === ".") {
-    e.preventDefault();
-    handleKey(e.key);
+    e.preventDefault(); handleKey(" ");
   }
 });
 
-// iPad: hidden input captures keystrokes
-$ipadInput.addEventListener("input", (e) => {
+$ipadInput.addEventListener("input", () => {
   const v = $ipadInput.value;
   if (v.length > 0) {
-    const ch = v[v.length - 1];
-    handleKey(ch);
+    for (let i = 0; i < v.length; i++) {
+      const ch = v[i];
+      if (/[a-zA-Z ]/.test(ch)) handleKey(ch);
+    }
     $ipadInput.value = "";
+  }
+});
+$ipadInput.addEventListener("blur", () => {
+  if (State.running && isTouchDevice() && !document.body.classList.contains("vkb-off")) {
+    setTimeout(() => { try { $ipadInput.focus(); } catch (e) {} }, 100);
   }
 });
 
 function focusInput() {
-  // Helpful on iPad — focus the hidden input so the soft keyboard appears
-  if (isTouchDevice()) {
-    setTimeout(() => $ipadInput.focus(), 50);
+  if (isTouchDevice() && !document.body.classList.contains("vkb-off")) {
+    setTimeout(() => { try { $ipadInput.focus(); } catch (e) {} }, 30);
   }
 }
-
 function isTouchDevice() {
   return "ontouchstart" in window || navigator.maxTouchPoints > 0;
 }
 
-// Tap anywhere to refocus input on touch devices
-document.addEventListener("touchstart", (e) => {
-  if (State.running && isTouchDevice()) {
-    $ipadInput.focus();
+document.addEventListener("touchstart", () => {
+  if (State.running && isTouchDevice() && !document.body.classList.contains("vkb-off")) {
+    try { $ipadInput.focus(); } catch (e) {}
   }
 }, { passive: true });
 
-$kbBtn.addEventListener("click", () => {
-  $ipadInput.focus();
+// ---------- Virtual keyboard ----------
+const KB_ROWS = [
+  ["q","w","e","r","t","y","u","i","o","p"],
+  ["a","s","d","f","g","h","j","k","l"],
+  ["z","x","c","v","b","n","m"],
+  ["space"]
+];
+function buildVKB() {
+  $vkb.innerHTML = "";
+  KB_ROWS.forEach((row) => {
+    const r = document.createElement("div");
+    r.className = "kb-row";
+    row.forEach(k => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "vkey" + (k === "space" ? " wide" : "");
+      btn.textContent = k === "space" ? "SPACE" : k.toUpperCase();
+      btn.dataset.key = k === "space" ? " " : k;
+      btn.addEventListener("touchstart", onVKeyTouch, { passive: false });
+      btn.addEventListener("mousedown", onVKeyTouch);
+      r.appendChild(btn);
+    });
+    $vkb.appendChild(r);
+  });
+}
+function onVKeyTouch(e) {
+  e.preventDefault();
+  const k = e.currentTarget.dataset.key;
+  e.currentTarget.classList.add("press");
+  setTimeout(() => e.currentTarget.classList.remove("press"), 120);
+  handleKey(k);
+}
+function highlightVKey(ch) {
+  $vkb.querySelectorAll(".vkey.next-hint").forEach(b => b.classList.remove("next-hint"));
+  if (!ch) return;
+  const target = $vkb.querySelector(`.vkey[data-key="${ch === " " ? " " : ch}"]`);
+  if (target) target.classList.add("next-hint");
+}
+
+// ---------- Toggles ----------
+function setKbVisible(on) {
+  if (on) {
+    document.body.classList.add("kb-visible");
+    document.body.classList.remove("vkb-off");
+    $kbToggle.classList.add("active");
+    $kbToggle.textContent = "⌨ HIDE KB";
+    try { $ipadInput.blur(); } catch (e) {}
+  } else {
+    document.body.classList.remove("kb-visible");
+    document.body.classList.add("vkb-off");
+    $kbToggle.classList.remove("active");
+    $kbToggle.textContent = "⌨ KEYBOARD";
+    if (State.running) focusInput();
+  }
+}
+
+$kbToggle.addEventListener("click", () => {
+  const showing = document.body.classList.contains("kb-visible");
+  setKbVisible(!showing);
+});
+$soundToggle.addEventListener("click", () => {
+  const on = !Audio.isEnabled();
+  Audio.setEnabled(on);
+  $soundToggle.textContent = on ? "🔊 SOUND" : "🔇 MUTED";
+  if (on && State.running) {
+    Audio.startMusic(BIOMES[State.currentBiome].key);
+  }
+});
+$voiceToggle.addEventListener("click", () => {
+  const on = !Voice.isEnabled();
+  Voice.setEnabled(on);
+  $voiceToggle.textContent = on ? "🗣 VOICE" : "🤐 QUIET";
+  if (on) Voice.speak("voice on");
 });
 
-// ---------- Buttons ----------
-$startBtn.addEventListener("click", startGame);
-$restartBtn.addEventListener("click", startGame);
-$continueBtn.addEventListener("click", continueLevel);
+function attachStartHandler(btn) {
+  function trigger(e) {
+    e.preventDefault();
+    if (isTouchDevice() && !document.body.classList.contains("vkb-off")) {
+      try { $ipadInput.focus(); } catch (er) {}
+    }
+    startGame();
+  }
+  btn.addEventListener("click", trigger);
+  btn.addEventListener("touchend", trigger, { passive: false });
+}
+attachStartHandler($startBtn);
+attachStartHandler($restartBtn);
+
+function attachContinueHandler(btn) {
+  function trigger(e) {
+    e.preventDefault();
+    if (isTouchDevice() && !document.body.classList.contains("vkb-off")) {
+      try { $ipadInput.focus(); } catch (er) {}
+    }
+    continueLevel();
+  }
+  btn.addEventListener("click", trigger);
+  btn.addEventListener("touchend", trigger, { passive: false });
+}
+attachContinueHandler($continueBtn);
 
 // ---------- Boot ----------
 buildSkyline();
-window.addEventListener("resize", () => {
-  $skyline.innerHTML = "";
-  // Remove the dynamically appended stars too (they were appended to #game directly)
-  document.querySelectorAll(".star").forEach(s => s.remove());
-  buildSkyline();
-});
+buildVKB();
 
-// Show keyboard hint button only on touch devices
-if (!isTouchDevice()) {
-  $kbBtn.style.display = "none";
+if (isTouchDevice()) {
+  setKbVisible(true);
+} else {
+  $kbToggle.textContent = "⌨ ON-SCREEN KB";
 }
+
+window.addEventListener("resize", () => { buildSkyline(); });
+
+document.addEventListener("touchmove", (e) => {
+  if (e.touches.length > 1) e.preventDefault();
+}, { passive: false });
+document.addEventListener("gesturestart", (e) => e.preventDefault());
+
+document.addEventListener("touchstart", () => {
+  if (window.speechSynthesis) window.speechSynthesis.getVoices();
+}, { once: true, passive: true });
+document.addEventListener("mousedown", () => {
+  if (window.speechSynthesis) window.speechSynthesis.getVoices();
+}, { once: true });
 </script>
 </body>
 </html>

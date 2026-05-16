@@ -276,6 +276,7 @@
     50% { filter: brightness(1.4); }
   }
 
+  /* ============ Building base + 6 biome variants ============ */
   .building {
     position: absolute;
     bottom: 10%;
@@ -284,11 +285,9 @@
     border-bottom: none;
     box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 0 8px rgba(0,0,0,0.6);
     z-index: 10;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: flex-start;
-    padding-top: 12px;
     transition: transform 0.1s;
   }
+  /* Windows pattern overlay (most variants use this; some hide it) */
   .building::before {
     content: "";
     position: absolute;
@@ -301,14 +300,19 @@
     background-size: 100% 35%;
     background-repeat: repeat-y;
     opacity: 0.7;
+    pointer-events: none;
   }
+  /* Word label floats ABOVE the building so any shape stays readable */
   .building .word {
-    position: relative;
-    z-index: 2;
-    font-size: 30px;
+    position: absolute;
+    top: -38px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 12;
+    font-size: clamp(18px, 2.6vw, 28px);
     color: #fff;
-    background: rgba(0,0,0,0.85);
-    padding: 6px 12px;
+    background: rgba(0,0,0,0.9);
+    padding: 5px 12px;
     border-radius: 6px;
     border: 2px solid var(--glow);
     text-shadow: 0 0 6px var(--glow), 0 0 12px var(--glow);
@@ -316,11 +320,181 @@
     font-weight: 900;
     white-space: nowrap;
   }
-  .building .word .typed {
+
+  /* --- Tokyo: skyscraper with antenna --- */
+  .building--skyscraper { border-radius: 2px 2px 0 0; }
+  .building--skyscraper::after {
+    content: "";
+    position: absolute;
+    top: -22px; left: 50%; transform: translateX(-50%);
+    width: 3px; height: 22px;
+    background: var(--glow);
+    box-shadow: 0 0 8px var(--glow);
+  }
+
+  /* --- Snow: igloo dome with cap --- */
+  .building--igloo {
+    border-radius: 70% 70% 4px 4px / 60% 60% 4px 4px;
+    background: linear-gradient(180deg, #d8e8f0 0%, #88aacc 100%);
+    border-color: #5a7090;
+  }
+  .building--igloo::before {
+    inset: 45% 12px 8px 12px;
+    background-image:
+      radial-gradient(circle at 50% 50%, rgba(80,120,160,0.5) 4px, transparent 6px);
+    background-size: 30% 50%;
+  }
+  .building--igloo::after {
+    content: "";
+    position: absolute;
+    top: -8px; left: 30%; right: 30%;
+    height: 14px;
+    background: #fff;
+    border-radius: 100% 100% 0 0;
+    box-shadow: 0 0 12px rgba(255,255,255,0.8);
+  }
+
+  /* --- Forest: tree-house with green leafy roof --- */
+  .building--treehouse {
+    background: linear-gradient(180deg, #5a3a18 0%, #2a1a08 100%);
+    border-color: #3a2a08;
+  }
+  .building--treehouse::before {
+    inset: 40% 10px 10px 10px;
+    background-image:
+      radial-gradient(circle at 50% 50%, rgba(255,200,80,0.6) 2px, transparent 3px);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  .building--treehouse::after {
+    content: "";
+    position: absolute;
+    top: -28px; left: -12px; right: -12px;
+    height: 40px;
+    background:
+      radial-gradient(circle at 30% 100%, #2faf5a 40%, transparent 42%),
+      radial-gradient(circle at 70% 100%, #2faf5a 40%, transparent 42%),
+      radial-gradient(circle at 50% 70%, #5fcf6a 50%, transparent 52%);
+  }
+
+  /* --- Lava: temple pyramid (trapezoid via clip-path) --- */
+  .building--temple {
+    background: linear-gradient(180deg, #6a3a28 0%, #2a0a08 100%);
+    border: none;
+    clip-path: polygon(20% 0, 80% 0, 100% 100%, 0 100%);
+  }
+  .building--temple::before {
+    inset: 20% 0 0 0;
+    background-image:
+      linear-gradient(to bottom, transparent 0, transparent 8px, rgba(0,0,0,0.4) 8px, rgba(0,0,0,0.4) 11px, transparent 11px);
+    background-size: 100% 22%;
+    background-repeat: repeat-y;
+    opacity: 0.9;
+  }
+  .building--temple::after {
+    content: "";
+    position: absolute;
+    top: 8px; left: 50%; transform: translateX(-50%);
+    width: 14px; height: 14px;
+    background: var(--glow);
+    border-radius: 50%;
+    box-shadow: 0 0 16px var(--glow);
+  }
+
+  /* --- Ocean: coral/wavy organic shape --- */
+  .building--coral {
+    background: linear-gradient(180deg, #ff88aa 0%, #cc4488 60%, #6a1a4a 100%);
+    border-radius: 50% 30% 8% 12% / 30% 50% 8% 12%;
+    border-color: #aa3a6a;
+  }
+  .building--coral::before {
+    inset: 25% 10px 10px 10px;
+    background-image:
+      radial-gradient(circle at 40% 30%, rgba(170,255,255,0.7) 3px, transparent 4px),
+      radial-gradient(circle at 60% 70%, rgba(170,255,255,0.7) 3px, transparent 4px);
+    background-size: 50% 60%;
+  }
+
+  /* --- Neon: cyberpunk with neon stripes + hologram --- */
+  .building--cyber {
+    background: linear-gradient(180deg, #1a0040 0%, #050010 100%);
+    border-color: var(--glow);
+    box-shadow:
+      inset 0 0 20px rgba(0,0,0,0.6),
+      0 0 12px var(--glow),
+      0 0 22px rgba(255, 68, 221, 0.5);
+  }
+  .building--cyber::before {
+    inset: 20% 4px 8px 4px;
+    background-image:
+      linear-gradient(to bottom, transparent 0, transparent 8px, var(--glow) 8px, var(--glow) 10px, transparent 10px),
+      linear-gradient(to bottom, transparent 0, transparent 18px, var(--accent) 18px, var(--accent) 19px, transparent 19px);
+    background-size: 100% 28px;
+    opacity: 0.85;
+  }
+  .building--cyber::after {
+    content: "";
+    position: absolute;
+    top: -32px; left: 50%; transform: translateX(-50%);
+    width: 24px; height: 32px;
+    background:
+      conic-gradient(from 0deg at 50% 100%, var(--glow), var(--accent), var(--glow));
+    clip-path: polygon(50% 0, 100% 80%, 50% 100%, 0 80%);
+    opacity: 0.7;
+    filter: blur(0.5px);
+  }
+
+  /* --- Flying creature curveball (Rodan-style) --- */
+  .flyer {
+    position: absolute;
+    z-index: 11;
+    width: 90px; height: 70px;
+    pointer-events: none;
+  }
+  .flyer svg { width: 100%; height: 100%; display: block; }
+  .flyer .word {
+    position: absolute;
+    top: -34px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 13;
+    font-size: clamp(18px, 2.6vw, 28px);
+    color: #fff;
+    background: rgba(0,0,0,0.9);
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 2px solid #ff5fff;
+    text-shadow: 0 0 6px #ff5fff, 0 0 12px #ff5fff;
+    letter-spacing: 2px;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+  .flyer.targeted .word { animation: target-pulse 0.4s ease-in-out infinite alternate; }
+  .flyer .wing {
+    transform-origin: 50px 35px;
+    animation: wing-flap 0.28s ease-in-out infinite alternate;
+  }
+  .flyer .wing-r { transform-origin: 50px 35px; }
+  @keyframes wing-flap {
+    from { transform: scaleY(1); }
+    to   { transform: scaleY(0.5); }
+  }
+  .flyer.destroyed { animation: flyer-shot 0.6s ease-in forwards; }
+  @keyframes flyer-shot {
+    0%   { transform: translateY(0) rotate(0); opacity: 1; }
+    100% { transform: translateY(60vh) rotate(540deg); opacity: 0; }
+  }
+  .flyer.escaped { animation: flyer-escape 0.4s ease-out forwards; }
+  @keyframes flyer-escape {
+    0%   { transform: translateX(0); opacity: 1; }
+    100% { transform: translateX(-40vw); opacity: 0; }
+  }
+
+  .word .typed {
     color: #5fffaa;
     text-shadow: 0 0 6px #5fffaa, 0 0 14px #5fffaa;
   }
-  .building .word .next {
+  .word .next {
     color: var(--accent);
     text-shadow: 0 0 10px var(--accent), 0 0 20px var(--glow);
     background: rgba(255, 235, 106, 0.2);
@@ -1342,7 +1516,7 @@ const Voice = (() => {
 })();
 
 // ---------- Version ----------
-const GAME_VERSION = "v2.1 · KAIJU BRIEFING";
+const GAME_VERSION = "v2.2 · TERRAIN + CURVEBALLS";
 const GAME_BUILD_DATE = "2026-05-16";
 
 // ---------- Characters ----------
@@ -1709,12 +1883,12 @@ const CHARACTER_ORDER = ["gojira","space","fire","cyber","ghidorah"];
 
 // ---------- Biomes ----------
 const BIOMES = [
-  { key: "tokyo",  label: "TOKYO NIGHT",  ambient: "spark",  count: 25, lightning: true  },
-  { key: "snow",   label: "SNOW CITY",    ambient: "snow",   count: 60, lightning: false },
-  { key: "forest", label: "GREEN FOREST", ambient: "leaf",   count: 30, lightning: false },
-  { key: "lava",   label: "LAVA VOLCANO", ambient: "ember",  count: 50, lightning: true  },
-  { key: "ocean",  label: "DEEP OCEAN",   ambient: "bubble", count: 40, lightning: false },
-  { key: "neon",   label: "NEON DOWNTOWN",ambient: "spark",  count: 35, lightning: true  },
+  { key: "tokyo",  label: "TOKYO NIGHT",  ambient: "spark",  count: 25, lightning: true,  buildingStyle: "skyscraper" },
+  { key: "snow",   label: "SNOW CITY",    ambient: "snow",   count: 60, lightning: false, buildingStyle: "igloo"      },
+  { key: "forest", label: "GREEN FOREST", ambient: "leaf",   count: 30, lightning: false, buildingStyle: "treehouse"  },
+  { key: "lava",   label: "LAVA VOLCANO", ambient: "ember",  count: 50, lightning: true,  buildingStyle: "temple"     },
+  { key: "ocean",  label: "DEEP OCEAN",   ambient: "bubble", count: 40, lightning: false, buildingStyle: "coral"      },
+  { key: "neon",   label: "NEON DOWNTOWN",ambient: "spark",  count: 35, lightning: true,  buildingStyle: "cyber"      },
 ];
 
 // ---------- Levels ----------
@@ -2099,15 +2273,21 @@ function spawnBuilding() {
   const lv = LEVELS[State.level];
   const word = pickWord(State.level);
   const playW = $playfield.clientWidth;
+  const biome = BIOMES[lv.biome];
 
-  const bWidth = Math.max(80, word.length * 18 + 50);
-  const bHeight = 110 + Math.random() * 90;
+  // Per-biome size variation
+  const tall = biome.buildingStyle === "skyscraper" || biome.buildingStyle === "cyber";
+  const wide = biome.buildingStyle === "temple" || biome.buildingStyle === "coral";
+  let bWidth = Math.max(80, word.length * 18 + 50);
+  let bHeight = 110 + Math.random() * 90;
+  if (tall) bHeight = 150 + Math.random() * 120;
+  if (wide) { bWidth += 40; bHeight = 90 + Math.random() * 70; }
 
   const startX = playW + 40;
   const endX = playW * 0.28;
 
   const el = document.createElement("div");
-  el.className = "building";
+  el.className = "building building--" + biome.buildingStyle;
   el.style.width = bWidth + "px";
   el.style.height = bHeight + "px";
   el.style.left = startX + "px";
@@ -2125,11 +2305,86 @@ function spawnBuilding() {
     startX, endX,
     spawnAt: performance.now(),
     duration: lv.fallSpeed * 1000,
-    dead: false
+    dead: false,
+    kind: "building"
   };
   State.buildings.push(b);
   pickTarget();
   // PHONICS: pronounce the word/letter as it spawns so the kid hears the sound
+  speakForPhonics(word);
+}
+
+// ---------- CURVEBALL: flying creature ----------
+// A bat/Rodan-style flier crosses the screen with a word. Type it before it
+// escapes off the left edge or it costs the player health.
+const FLYER_SVG = `
+<svg viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg">
+  <!-- left wing -->
+  <path class="wing wing-l" d="M 50 30 Q 20 5 5 25 Q 15 35 30 38 Q 40 38 50 35 Z"
+        fill="#3a1a4a" stroke="#000" stroke-width="2"/>
+  <!-- right wing -->
+  <path class="wing wing-r" d="M 50 30 Q 80 5 95 25 Q 85 35 70 38 Q 60 38 50 35 Z"
+        fill="#3a1a4a" stroke="#000" stroke-width="2"/>
+  <!-- body -->
+  <ellipse cx="50" cy="38" rx="10" ry="14" fill="#2a0a3a" stroke="#000" stroke-width="2"/>
+  <!-- head -->
+  <ellipse cx="50" cy="22" rx="8" ry="7" fill="#3a1a4a" stroke="#000" stroke-width="2"/>
+  <!-- ears -->
+  <polygon points="44,18 42,8 48,16" fill="#3a1a4a" stroke="#000" stroke-width="1"/>
+  <polygon points="56,18 58,8 52,16" fill="#3a1a4a" stroke="#000" stroke-width="1"/>
+  <!-- glowing eyes -->
+  <circle cx="46" cy="22" r="2" fill="#ff44dd"/>
+  <circle cx="54" cy="22" r="2" fill="#ff44dd"/>
+  <circle cx="46" cy="22" r="3.5" fill="#ff44dd" opacity="0.5"/>
+  <circle cx="54" cy="22" r="3.5" fill="#ff44dd" opacity="0.5"/>
+  <!-- feet -->
+  <polygon points="44,52 42,58 48,54" fill="#000"/>
+  <polygon points="56,52 58,58 52,54" fill="#000"/>
+</svg>`;
+
+function spawnFlyer() {
+  if (!State.running || State.paused) return;
+  const lv = LEVELS[State.level];
+  // Flier uses a SHORTER word so the kid can react in time
+  const shortPool = (lv.pool || []).filter(w => w.length <= 4 && !w.includes(" "));
+  const word = shortPool.length > 0
+    ? shortPool[Math.floor(Math.random() * shortPool.length)]
+    : pickWord(State.level);
+
+  const playW = $playfield.clientWidth;
+  const playH = $playfield.clientHeight;
+  const startX = playW + 80;
+  const endX = -120;
+  const yTop = playH * (0.18 + Math.random() * 0.25);
+
+  const el = document.createElement("div");
+  el.className = "flyer";
+  el.style.left = startX + "px";
+  el.style.top = yTop + "px";
+  el.innerHTML = FLYER_SVG;
+
+  const wordEl = document.createElement("div");
+  wordEl.className = "word";
+  wordEl.textContent = word.toUpperCase();
+  el.appendChild(wordEl);
+
+  $playfield.appendChild(el);
+
+  // Flier travels faster than buildings — adds urgency
+  const duration = Math.max(7000, lv.fallSpeed * 700);
+  const b = {
+    el, wordEl, word: word.toLowerCase(),
+    typed: 0,
+    startX, endX,
+    spawnAt: performance.now(),
+    duration,
+    dead: false,
+    kind: "flyer"
+  };
+  State.buildings.push(b);
+  pickTarget();
+  // Quick screech roar to alert the player
+  Audio.roar(false);
   speakForPhonics(word);
 }
 
@@ -2165,11 +2420,23 @@ function loop() {
     b.el.style.left = x + "px";
     if (t >= 1) {
       b.dead = true;
-      damageCity(b);
+      if (b.kind === "flyer") escapeFlyer(b);
+      else damageCity(b);
     }
   }
   State.buildings = State.buildings.filter(b => !b.dead);
   rafId = requestAnimationFrame(loop);
+}
+
+function escapeFlyer(b) {
+  b.el.classList.add("escaped");
+  setTimeout(() => b.el.remove(), 500);
+  State.health = Math.max(0, State.health - 5);
+  State.combo = 1;
+  if (State.currentTarget === b) State.currentTarget = null;
+  pickTarget();
+  updateHUD();
+  if (State.health <= 0) gameOver(false);
 }
 
 // ---------- Target ----------
@@ -2608,10 +2875,20 @@ function pauseGame() {
   if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
 }
 
+let spawnCounter = 0;
 function scheduleSpawns() {
   if (State.spawnTimer) clearTimeout(State.spawnTimer);
   const lv = LEVELS[State.level];
-  spawnBuilding();
+  spawnCounter++;
+  // CURVEBALL: from level 3 onward, every ~6th spawn is a flying creature
+  // instead of a building. Adds a "wait, what?!" moment for the kid.
+  const allowFlyer = State.level >= 2 && spawnCounter >= 4;
+  if (allowFlyer && Math.random() < 0.18) {
+    spawnFlyer();
+    spawnCounter = 0;
+  } else {
+    spawnBuilding();
+  }
   State.spawnTimer = setTimeout(scheduleSpawns, lv.spawnEvery);
 }
 

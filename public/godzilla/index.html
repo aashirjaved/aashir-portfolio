@@ -951,6 +951,59 @@
     100% { opacity: 0; }
   }
 
+  /* ============ PORTRAIT / MOBILE LAYOUT ============ */
+  /* When the screen is taller than wide (phones, narrow tablets),
+     flip the gameplay axis: Godzilla bottom-center, buildings drop from
+     top down, beam shoots upward. */
+  body.layout-portrait #godzilla {
+    left: 50%;
+    width: 50vw;
+    height: auto;
+    margin-left: -25vw;
+    bottom: 2%;
+    max-height: 38vh;
+    max-width: 25vh; /* preserve aspect ratio at very tall viewports */
+  }
+  body.layout-portrait .building {
+    bottom: auto; /* falling buildings use top instead */
+  }
+  body.layout-portrait .building::before {
+    /* keep windows pattern but compress */
+    inset: 30% 6px 6px 6px;
+  }
+  body.layout-portrait .building .word,
+  body.layout-portrait .flyer .word {
+    font-size: clamp(14px, 4vw, 22px);
+    top: -32px;
+  }
+  body.layout-portrait #hud {
+    padding: 8px 8px;
+    gap: 4px;
+  }
+  body.layout-portrait .hud-block {
+    padding: 4px 8px;
+  }
+  body.layout-portrait .hud-label { font-size: 9px; letter-spacing: 1px; }
+  body.layout-portrait .hud-value { font-size: 18px; letter-spacing: 1px; }
+  body.layout-portrait #health-wrap { width: 100px; height: 18px; }
+  body.layout-portrait #health-wrap::after { font-size: 11px; letter-spacing: 1.5px; }
+  body.layout-portrait #next-key-prompt {
+    top: auto;
+    bottom: calc(42vh + 8px);
+    font-size: clamp(50px, 18vw, 110px);
+  }
+  body.layout-portrait.kb-visible #next-key-prompt {
+    bottom: calc(38vh + 8px);
+  }
+  /* Skyline still useful in portrait (it's a backdrop). Ground hidden when narrow */
+  body.layout-portrait #ground { display: none; }
+  body.layout-portrait #skyline { height: 35%; }
+  /* When the on-screen keyboard occupies the bottom, also pull Godzilla up */
+  body.layout-portrait.kb-visible #godzilla {
+    bottom: calc(38vh + 4px);
+    max-height: 28vh;
+  }
+
   /* On-screen virtual keyboard — BIG, kid-friendly */
   #vkb {
     position: fixed;
@@ -1516,7 +1569,7 @@ const Voice = (() => {
 })();
 
 // ---------- Version ----------
-const GAME_VERSION = "v2.2 · TERRAIN + CURVEBALLS";
+const GAME_VERSION = "v2.3 · MOBILE PORTRAIT";
 const GAME_BUILD_DATE = "2026-05-16";
 
 // ---------- Characters ----------
@@ -2273,41 +2326,62 @@ function spawnBuilding() {
   const lv = LEVELS[State.level];
   const word = pickWord(State.level);
   const playW = $playfield.clientWidth;
+  const playH = $playfield.clientHeight;
   const biome = BIOMES[lv.biome];
+  const portrait = document.body.classList.contains("layout-portrait");
 
   // Per-biome size variation
   const tall = biome.buildingStyle === "skyscraper" || biome.buildingStyle === "cyber";
   const wide = biome.buildingStyle === "temple" || biome.buildingStyle === "coral";
-  let bWidth = Math.max(80, word.length * 18 + 50);
-  let bHeight = 110 + Math.random() * 90;
-  if (tall) bHeight = 150 + Math.random() * 120;
-  if (wide) { bWidth += 40; bHeight = 90 + Math.random() * 70; }
-
-  const startX = playW + 40;
-  const endX = playW * 0.28;
+  let bWidth, bHeight;
+  if (portrait) {
+    // Narrower buildings so several can coexist in a phone column
+    bWidth = Math.min(playW - 24, Math.max(72, word.length * 14 + 36));
+    bHeight = 80 + Math.random() * 60;
+    if (tall) bHeight = 110 + Math.random() * 80;
+    if (wide) { bWidth = Math.min(playW - 24, bWidth + 20); bHeight = 70 + Math.random() * 50; }
+  } else {
+    bWidth = Math.max(80, word.length * 18 + 50);
+    bHeight = 110 + Math.random() * 90;
+    if (tall) bHeight = 150 + Math.random() * 120;
+    if (wide) { bWidth += 40; bHeight = 90 + Math.random() * 70; }
+  }
 
   const el = document.createElement("div");
   el.className = "building building--" + biome.buildingStyle;
   el.style.width = bWidth + "px";
   el.style.height = bHeight + "px";
-  el.style.left = startX + "px";
 
   const wordEl = document.createElement("div");
   wordEl.className = "word";
   wordEl.textContent = word.toUpperCase();
   el.appendChild(wordEl);
-
   $playfield.appendChild(el);
 
   const b = {
     el, wordEl, word: word.toLowerCase(),
     typed: 0,
-    startX, endX,
     spawnAt: performance.now(),
     duration: lv.fallSpeed * 1000,
     dead: false,
-    kind: "building"
+    kind: "building",
+    vertical: portrait,
   };
+  if (portrait) {
+    // Buildings DROP from above, land just above Godzilla's head
+    const startY = -bHeight - 20;
+    const endY = playH * 0.55 - bHeight;
+    const xCol = 6 + Math.random() * (playW - bWidth - 12);
+    el.style.left = xCol + "px";
+    el.style.top = startY + "px";
+    b.startY = startY; b.endY = endY;
+  } else {
+    // Classic right-to-left approach
+    const startX = playW + 40;
+    const endX = playW * 0.28;
+    el.style.left = startX + "px";
+    b.startX = startX; b.endX = endX;
+  }
   State.buildings.push(b);
   pickTarget();
   // PHONICS: pronounce the word/letter as it spawns so the kid hears the sound
@@ -2416,8 +2490,13 @@ function loop() {
   for (const b of State.buildings) {
     if (b.dead) continue;
     const t = Math.min(1, (now - b.spawnAt) / b.duration);
-    const x = b.startX + (b.endX - b.startX) * t;
-    b.el.style.left = x + "px";
+    if (b.vertical) {
+      const y = b.startY + (b.endY - b.startY) * t;
+      b.el.style.top = y + "px";
+    } else {
+      const x = b.startX + (b.endX - b.startX) * t;
+      b.el.style.left = x + "px";
+    }
     if (t >= 1) {
       b.dead = true;
       if (b.kind === "flyer") escapeFlyer(b);
@@ -2446,11 +2525,17 @@ function pickTarget() {
     return;
   }
   State.currentTarget = null;
-  let best = null; let bestX = Infinity;
+  let best = null;
+  // "Closest to Godzilla" depends on orientation:
+  //  - portrait: highest top: value (i.e. lowest on screen, nearest the floor)
+  //  - landscape: lowest left: value (i.e. furthest left, nearest Godzilla on left)
+  let bestScore = -Infinity;
   for (const b of State.buildings) {
     if (b.dead) continue;
-    const x = parseFloat(b.el.style.left);
-    if (x < bestX) { bestX = x; best = b; }
+    const score = b.vertical
+      ? parseFloat(b.el.style.top) || 0
+      : -(parseFloat(b.el.style.left) || 0);
+    if (score > bestScore) { bestScore = score; best = b; }
   }
   setTarget(best);
 }
@@ -2515,10 +2600,16 @@ function handleKey(rawCh) {
   const b = State.currentTarget;
   if (b.word[b.typed] !== ch) {
     let alt = null;
+    function closeness(x) {
+      // Higher = closer to Godzilla regardless of orientation.
+      return x.vertical
+        ? parseFloat(x.el.style.top) || 0
+        : -(parseFloat(x.el.style.left) || 0);
+    }
     for (const ob of State.buildings) {
       if (ob.dead || ob === b) continue;
       if (ob.word[ob.typed] === ch) {
-        if (!alt || parseFloat(ob.el.style.left) < parseFloat(alt.el.style.left)) alt = ob;
+        if (!alt || closeness(ob) > closeness(alt)) alt = ob;
       }
     }
     if (alt) { setTarget(alt); return handleKey(rawCh); }
@@ -2557,8 +2648,15 @@ function shootBeam(b) {
 
   const gzRect = $godzilla.getBoundingClientRect();
   const bRect = b.el.getBoundingClientRect();
-  const startX = gzRect.right - 10;
-  const startY = gzRect.top + gzRect.height * 0.35;
+  const portrait = document.body.classList.contains("layout-portrait");
+  // In portrait, Godzilla is bottom-center → beam emerges from top of head.
+  // In landscape, Godzilla is on the left → beam emerges from his mouth (right side).
+  const startX = portrait
+    ? gzRect.left + gzRect.width / 2
+    : gzRect.right - 10;
+  const startY = portrait
+    ? gzRect.top + 8
+    : gzRect.top + gzRect.height * 0.35;
   const endX = bRect.left + bRect.width / 2;
   const endY = bRect.top + bRect.height / 2;
   const dx = endX - startX, dy = endY - startY;
@@ -3131,13 +3229,30 @@ attachContinueHandler($continueBtn);
 buildSkyline();
 buildVKB();
 
+// Detect portrait/mobile and toggle the layout-portrait class.
+// In portrait, gameplay flips vertical (buildings drop top→bottom).
+function isPortrait() {
+  return window.innerHeight > window.innerWidth || window.innerWidth < 700;
+}
+function updateLayout() {
+  document.body.classList.toggle("layout-portrait", isPortrait());
+}
+updateLayout();
+
 if (isTouchDevice()) {
   setKbVisible(true);
 } else {
   $kbToggle.textContent = "⌨ ON-SCREEN KB";
 }
 
-window.addEventListener("resize", () => { buildSkyline(); });
+window.addEventListener("resize", () => {
+  updateLayout();
+  buildSkyline();
+});
+window.addEventListener("orientationchange", () => {
+  updateLayout();
+  buildSkyline();
+});
 
 document.addEventListener("touchmove", (e) => {
   if (e.touches.length > 1) e.preventDefault();

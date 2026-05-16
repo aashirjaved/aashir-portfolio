@@ -511,7 +511,10 @@
     align-items: center; justify-content: center;
     z-index: 60; text-align: center;
     padding: 20px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
+  #start h1 { font-size: clamp(32px, 7vw, 80px); margin-bottom: 10px; }
   .screen h1 {
     font-size: clamp(40px, 9vw, 110px);
     color: var(--glow);
@@ -593,6 +596,101 @@
     width: 2px; height: 2px;
     font-size: 16px;
     border: none; background: transparent;
+  }
+
+  /* ============ Kaiju roster on start screen ============ */
+  #kaiju-roster {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 14px auto 18px;
+    max-width: min(720px, 96vw);
+  }
+  .kaiju-card {
+    width: clamp(86px, 16vw, 130px);
+    background: rgba(255, 235, 106, 0.06);
+    border: 2px solid var(--accent);
+    border-radius: 10px;
+    padding: 6px 4px 8px;
+    text-align: center;
+    box-shadow: 0 0 14px rgba(255, 80, 80, 0.25);
+  }
+  .kaiju-card svg {
+    width: 100%;
+    height: clamp(80px, 14vw, 110px);
+    display: block;
+    filter: drop-shadow(0 0 10px currentColor);
+  }
+  .kaiju-card .nm {
+    margin-top: 4px;
+    font-size: clamp(10px, 1.8vw, 13px);
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    text-shadow: 1px 1px 0 #000;
+    line-height: 1.1;
+  }
+  .kaiju-card .sub {
+    font-size: 9px;
+    color: #aaa;
+    margin-top: 2px;
+    letter-spacing: 1px;
+  }
+  @keyframes roster-glow {
+    0%, 100% { box-shadow: 0 0 14px rgba(255, 80, 80, 0.25); }
+    50%      { box-shadow: 0 0 24px rgba(255, 200, 80, 0.55); }
+  }
+  .kaiju-card { animation: roster-glow 3s ease-in-out infinite; }
+  .kaiju-card:nth-child(2) { animation-delay: 0.3s; }
+  .kaiju-card:nth-child(3) { animation-delay: 0.6s; }
+  .kaiju-card:nth-child(4) { animation-delay: 0.9s; }
+  .kaiju-card:nth-child(5) { animation-delay: 1.2s; }
+
+  /* ============ Dramatic loss screen ============ */
+  #gameover.lost {
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(120,0,0,0.4) 0%, rgba(0,0,0,0.95) 60%),
+      #000;
+  }
+  #gameover.lost h1 {
+    animation: lost-title 1.6s ease-out;
+  }
+  @keyframes lost-title {
+    0%   { transform: scale(0.3) rotate(-8deg); opacity: 0; }
+    40%  { transform: scale(1.3) rotate(2deg); opacity: 1; }
+    70%  { transform: scale(0.95) rotate(-1deg); }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  #gameover.lost .btn {
+    animation: retry-pulse 1.3s ease-in-out infinite;
+  }
+  @keyframes retry-pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(255, 50, 50, 0.6); }
+    50%      { transform: scale(1.07); box-shadow: 0 0 60px rgba(255, 100, 100, 1), 0 0 100px rgba(255, 50, 50, 0.6); }
+  }
+  /* Defeated kaiju "slumped" animation on loss */
+  #godzilla.defeated { animation: gz-defeated 1.4s ease-out forwards; }
+  @keyframes gz-defeated {
+    0%   { transform: translateY(0) rotate(0); opacity: 1; }
+    30%  { transform: translateY(20px) rotate(-8deg); }
+    60%  { transform: translateY(50px) rotate(-15deg); opacity: 0.8; }
+    100% { transform: translateY(90px) rotate(-25deg); opacity: 0.5; }
+  }
+  /* Red vignette pulse */
+  #defeat-vignette {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle, transparent 50%, rgba(255,0,0,0.5) 100%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 38;
+  }
+  #defeat-vignette.show {
+    animation: defeat-vignette-anim 2s ease-out;
+  }
+  @keyframes defeat-vignette-anim {
+    0% { opacity: 0; }
+    30% { opacity: 1; }
+    100% { opacity: 0; }
   }
 
   /* On-screen virtual keyboard — BIG, kid-friendly */
@@ -724,6 +822,7 @@
 <div id="game">
   <div id="lightning"></div>
   <div id="biome-flash"></div>
+  <div id="defeat-vignette"></div>
   <div id="biome-name"></div>
 
   <div id="playfield">
@@ -731,50 +830,7 @@
     <div id="ground"></div>
 
     <svg id="godzilla" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
-      <defs>
-        <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#2a4a2a"/>
-          <stop offset="60%" stop-color="#1a3a1a"/>
-          <stop offset="100%" stop-color="#0a1a0a"/>
-        </linearGradient>
-        <linearGradient id="bellyGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#5a6a3a"/>
-          <stop offset="100%" stop-color="#3a4a2a"/>
-        </linearGradient>
-      </defs>
-      <path d="M 80 260 Q 30 250 10 200 Q 5 180 18 175 Q 35 180 45 220 Q 60 245 80 250 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
-      <polygon points="40,210 45,195 50,210" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
-      <polygon points="55,215 60,200 65,215" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
-      <path d="M 70 270 Q 60 285 70 295 L 90 295 Q 90 280 88 265 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
-      <path d="M 110 270 Q 100 285 110 295 L 130 295 Q 130 280 128 265 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
-      <ellipse cx="100" cy="200" rx="50" ry="65" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
-      <ellipse cx="100" cy="215" rx="28" ry="42" fill="url(#bellyGrad)" stroke="#000" stroke-width="1"/>
-      <path d="M 85 190 Q 100 195 115 190 M 85 210 Q 100 215 115 210 M 85 230 Q 100 235 115 230" stroke="#000" stroke-width="1" fill="none" opacity="0.4"/>
-      <path d="M 60 175 Q 45 200 50 220 Q 55 225 65 215 Q 70 195 75 180 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
-      <path d="M 140 175 Q 155 200 150 220 Q 145 225 135 215 Q 130 195 125 180 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
-      <polygon points="48,222 45,232 52,225" fill="#000"/>
-      <polygon points="52,225 50,236 56,228" fill="#000"/>
-      <polygon points="152,222 155,232 148,225" fill="#000"/>
-      <polygon points="148,225 150,236 144,228" fill="#000"/>
-      <path d="M 80 145 Q 75 130 85 115 L 115 115 Q 125 130 120 145 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
-      <path d="M 75 110 Q 70 80 95 70 L 140 75 Q 160 85 165 100 Q 165 115 155 120 L 95 125 Q 75 122 75 110 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
-      <path d="M 95 118 Q 100 132 130 130 Q 150 128 155 120 L 145 122 Q 120 125 95 118 Z" fill="#2a3a2a" stroke="#000" stroke-width="2"/>
-      <polygon points="105,121 107,128 109,121" fill="#fff"/>
-      <polygon points="115,122 117,129 119,122" fill="#fff"/>
-      <polygon points="125,122 127,129 129,122" fill="#fff"/>
-      <polygon points="135,121 137,128 139,121" fill="#fff"/>
-      <circle cx="120" cy="92" r="6" fill="#ffeb6a"/>
-      <circle cx="121" cy="93" r="2.5" fill="#000"/>
-      <circle cx="120" cy="92" r="10" fill="#ffeb6a" opacity="0.3"/>
-      <ellipse cx="158" cy="98" rx="2" ry="1.5" fill="#000"/>
-      <polygon points="85,75 88,60 95,72" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
-      <polygon points="100,72 105,55 112,68" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
-      <polygon points="80,165 75,140 90,155" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
-      <polygon points="90,180 80,150 100,170" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
-      <polygon points="105,195 95,160 115,185" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
-      <polygon points="115,215 105,180 125,205" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
-      <polygon points="100,235 90,205 110,225" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
-      <polygon points="85,250 75,225 95,240" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+      <!-- Character content injected at runtime by setCharacter() -->
     </svg>
 
     <div id="next-key-prompt"><span class="hint">PRESS</span><span id="next-key-letter">A</span></div>
@@ -803,12 +859,14 @@
 
   <div id="start" class="screen">
     <h1>GODZILLA<br/>TYPING<br/>RAMPAGE</h1>
-    <p style="color:var(--accent); font-size: clamp(18px, 3vw, 24px); margin-bottom: 8px;">Type the words on the buildings.<br/>Godzilla SMASHES them with his ATOMIC BREATH!</p>
-    <p style="font-size:14px; color:#888;">Yellow letter = press this next!<br/>20 levels · 6 worlds · slow and steady</p>
+    <p style="color:var(--accent); font-size: clamp(16px, 2.6vw, 22px); margin-bottom: 6px;">Type the words. SMASH the city with ATOMIC BREATH!</p>
+    <p style="font-size:13px; color:#888; margin-bottom: 4px;">Yellow letter = press this next!</p>
+    <div id="kaiju-roster"></div>
     <button class="btn" id="startBtn">🦖 START FROM LEVEL 1</button>
     <button class="btn green hidden" id="continueRunBtn" style="margin-top:14px;">▶ CONTINUE</button>
     <p id="progressNote" style="margin-top:14px; font-size:14px; color:var(--accent); opacity:0.8;"></p>
-    <p style="margin-top:14px; font-size:14px; color:#888;">iPad? The on-screen keyboard pops up automatically.</p>
+    <p style="margin-top:14px; font-size:12px; color:#666;">iPad? On-screen keyboard pops up automatically.</p>
+    <p id="versionLine" style="margin-top:10px; font-size:11px; color:#5a5a5a; letter-spacing: 2px;"></p>
   </div>
 
   <div id="gameover" class="screen hidden">
@@ -995,6 +1053,59 @@ const Audio = (() => {
     });
   }
 
+  // Dramatic defeat sting — descending minor chord with sub-boom + low rumble
+  function defeatSting() {
+    if (!soundEnabled) return;
+    ensure();
+    const t = ctx.currentTime;
+    // Descending tones (minor pentatonic descending): A4, F4, D4, A3
+    const notes = [440, 349.23, 293.66, 220, 165, 110];
+    notes.forEach((f, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      const filt = ctx.createBiquadFilter();
+      o.type = "sawtooth";
+      o.frequency.setValueAtTime(f, t + i * 0.18);
+      filt.type = "lowpass";
+      filt.frequency.value = 900;
+      filt.Q.value = 4;
+      g.gain.setValueAtTime(0, t + i * 0.18);
+      g.gain.linearRampToValueAtTime(0.28, t + i * 0.18 + 0.04);
+      g.gain.linearRampToValueAtTime(0, t + i * 0.18 + 0.55);
+      o.connect(filt); filt.connect(g); g.connect(ctx.destination);
+      o.start(t + i * 0.18); o.stop(t + i * 0.18 + 0.6);
+    });
+    // Final boom on landing
+    const boom = ctx.createOscillator();
+    const bg = ctx.createGain();
+    boom.type = "sine";
+    boom.frequency.setValueAtTime(80, t + 1.1);
+    boom.frequency.exponentialRampToValueAtTime(25, t + 2.2);
+    bg.gain.setValueAtTime(0, t + 1.1);
+    bg.gain.linearRampToValueAtTime(0.55, t + 1.15);
+    bg.gain.linearRampToValueAtTime(0, t + 2.3);
+    boom.connect(bg); bg.connect(ctx.destination);
+    boom.start(t + 1.1); boom.stop(t + 2.4);
+
+    // Rumble noise
+    const buf = ctx.createBuffer(1, ctx.sampleRate * 2.5, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) {
+      const decay = i / data.length;
+      data[i] = (Math.random() * 2 - 1) * (1 - decay) * 0.6;
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const noiseFilt = ctx.createBiquadFilter();
+    noiseFilt.type = "lowpass";
+    noiseFilt.frequency.value = 200;
+    const ng = ctx.createGain();
+    ng.gain.setValueAtTime(0.4, t);
+    ng.gain.linearRampToValueAtTime(0, t + 2.3);
+    src.connect(noiseFilt); noiseFilt.connect(ng); ng.connect(ctx.destination);
+    src.start(t);
+  }
+
   // Per-biome music: different bass note + scale
   const BIOME_MUSIC = {
     tokyo:  { bass: 55,   notes: [110, 110, 130.81, 146.83, 130.81, 110, 98, 110], beat: 1600, lp: 220 },
@@ -1096,18 +1207,29 @@ const Audio = (() => {
     if (!on) stopMusic();
   }
 
-  return { ensure, roar, atomicBreath, explosion, correctChime, wrongBuzz, levelUpFanfare, startMusic, stopMusic, setEnabled, isEnabled: () => soundEnabled };
+  return { ensure, roar, atomicBreath, explosion, correctChime, wrongBuzz, levelUpFanfare, defeatSting, startMusic, stopMusic, setEnabled, isEnabled: () => soundEnabled };
 })();
 
 // ---------- Voice ----------
 const Voice = (() => {
   let enabled = true;
   let lastSpoke = 0;
+  let lastWasPriority = false;
   function speak(text, opts = {}) {
     if (!enabled || !window.speechSynthesis) return;
     const now = Date.now();
-    if (now - lastSpoke < 700) return;
+    const priority = !!opts.priority;
+    // Priority speech (phonics, kaiju names) ALWAYS plays.
+    // Non-priority speech (praise, banners) skips if we'd interrupt
+    // something currently being spoken — especially a priority utterance.
+    if (!priority) {
+      if (now - lastSpoke < 700) return;
+      try {
+        if (window.speechSynthesis.speaking) return;
+      } catch (e) {}
+    }
     lastSpoke = now;
+    lastWasPriority = priority;
     try {
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
@@ -1124,14 +1246,330 @@ const Voice = (() => {
   };
 })();
 
+// ---------- Version ----------
+const GAME_VERSION = "v2.0 · KAIJU ROSTER";
+const GAME_BUILD_DATE = "2026-05-16";
+
+// ---------- Characters ----------
+// Each character is a kaiju with its own SVG body. Levels reference a character
+// key; the SVG is injected into #godzilla on level change.
+// All SVGs use viewBox 240x300 with creature centered around x=120.
+
+const GOJIRA_SVG = `
+<defs>
+  <linearGradient id="g-gojira-body" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#2a4a2a"/>
+    <stop offset="60%" stop-color="#1a3a1a"/>
+    <stop offset="100%" stop-color="#0a1a0a"/>
+  </linearGradient>
+  <linearGradient id="g-gojira-belly" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#5a6a3a"/>
+    <stop offset="100%" stop-color="#3a4a2a"/>
+  </linearGradient>
+</defs>
+<g>
+  <path d="M 80 260 Q 30 250 10 200 Q 5 180 18 175 Q 35 180 45 220 Q 60 245 80 250 Z" fill="url(#g-gojira-body)" stroke="#000" stroke-width="2"/>
+  <polygon points="40,210 45,195 50,210" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
+  <polygon points="55,215 60,200 65,215" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
+  <path d="M 70 270 Q 60 285 70 295 L 90 295 Q 90 280 88 265 Z" fill="url(#g-gojira-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 110 270 Q 100 285 110 295 L 130 295 Q 130 280 128 265 Z" fill="url(#g-gojira-body)" stroke="#000" stroke-width="2"/>
+  <ellipse cx="100" cy="200" rx="50" ry="65" fill="url(#g-gojira-body)" stroke="#000" stroke-width="2"/>
+  <ellipse cx="100" cy="215" rx="28" ry="42" fill="url(#g-gojira-belly)" stroke="#000" stroke-width="1"/>
+  <path d="M 85 190 Q 100 195 115 190 M 85 210 Q 100 215 115 210 M 85 230 Q 100 235 115 230" stroke="#000" stroke-width="1" fill="none" opacity="0.4"/>
+  <path d="M 60 175 Q 45 200 50 220 Q 55 225 65 215 Q 70 195 75 180 Z" fill="url(#g-gojira-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 140 175 Q 155 200 150 220 Q 145 225 135 215 Q 130 195 125 180 Z" fill="url(#g-gojira-body)" stroke="#000" stroke-width="2"/>
+  <polygon points="48,222 45,232 52,225" fill="#000"/>
+  <polygon points="152,222 155,232 148,225" fill="#000"/>
+  <path d="M 80 145 Q 75 130 85 115 L 115 115 Q 125 130 120 145 Z" fill="url(#g-gojira-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 75 110 Q 70 80 95 70 L 140 75 Q 160 85 165 100 Q 165 115 155 120 L 95 125 Q 75 122 75 110 Z" fill="url(#g-gojira-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 95 118 Q 100 132 130 130 Q 150 128 155 120 L 145 122 Q 120 125 95 118 Z" fill="#2a3a2a" stroke="#000" stroke-width="2"/>
+  <polygon points="105,121 107,128 109,121" fill="#fff"/>
+  <polygon points="115,122 117,129 119,122" fill="#fff"/>
+  <polygon points="125,122 127,129 129,122" fill="#fff"/>
+  <polygon points="135,121 137,128 139,121" fill="#fff"/>
+  <circle cx="120" cy="92" r="6" fill="#ffeb6a"/>
+  <circle cx="121" cy="93" r="2.5" fill="#000"/>
+  <circle cx="120" cy="92" r="10" fill="#ffeb6a" opacity="0.3"/>
+  <ellipse cx="158" cy="98" rx="2" ry="1.5" fill="#000"/>
+  <polygon points="80,165 75,140 90,155" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+  <polygon points="90,180 80,150 100,170" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+  <polygon points="105,195 95,160 115,185" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+  <polygon points="115,215 105,180 125,205" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+  <polygon points="100,235 90,205 110,225" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+  <polygon points="85,250 75,225 95,240" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+</g>
+`;
+
+const SPACE_SVG = `
+<defs>
+  <linearGradient id="g-space-body" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#5a4aff"/>
+    <stop offset="60%" stop-color="#2a1a8a"/>
+    <stop offset="100%" stop-color="#0a0a4a"/>
+  </linearGradient>
+  <linearGradient id="g-space-crystal" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#fff"/>
+    <stop offset="40%" stop-color="#aaffff"/>
+    <stop offset="100%" stop-color="#4477ff"/>
+  </linearGradient>
+</defs>
+<g>
+  <!-- tail -->
+  <path d="M 80 260 Q 30 250 10 200 Q 5 180 18 175 Q 35 180 45 220 Q 60 245 80 250 Z" fill="url(#g-space-body)" stroke="#000" stroke-width="2"/>
+  <!-- legs -->
+  <path d="M 70 270 Q 60 285 70 295 L 90 295 Q 90 280 88 265 Z" fill="url(#g-space-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 110 270 Q 100 285 110 295 L 130 295 Q 130 280 128 265 Z" fill="url(#g-space-body)" stroke="#000" stroke-width="2"/>
+  <!-- body -->
+  <ellipse cx="100" cy="200" rx="50" ry="65" fill="url(#g-space-body)" stroke="#000" stroke-width="2"/>
+  <ellipse cx="100" cy="215" rx="28" ry="42" fill="#3a3aaa" stroke="#000" stroke-width="1"/>
+  <!-- arms -->
+  <path d="M 60 175 Q 45 200 50 220 Q 55 225 65 215 Q 70 195 75 180 Z" fill="url(#g-space-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 140 175 Q 155 200 150 220 Q 145 225 135 215 Q 130 195 125 180 Z" fill="url(#g-space-body)" stroke="#000" stroke-width="2"/>
+  <!-- neck + head -->
+  <path d="M 80 145 Q 75 130 85 115 L 115 115 Q 125 130 120 145 Z" fill="url(#g-space-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 75 110 Q 70 80 95 70 L 140 75 Q 160 85 165 100 Q 165 115 155 120 L 95 125 Q 75 122 75 110 Z" fill="url(#g-space-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 95 118 Q 100 132 130 130 Q 150 128 155 120 L 145 122 Q 120 125 95 118 Z" fill="#1a1a5a" stroke="#000" stroke-width="2"/>
+  <polygon points="105,121 107,128 109,121" fill="#fff"/>
+  <polygon points="115,122 117,129 119,122" fill="#fff"/>
+  <polygon points="125,122 127,129 129,122" fill="#fff"/>
+  <!-- magenta glowing eye -->
+  <circle cx="120" cy="92" r="14" fill="#ff44dd" opacity="0.3"/>
+  <circle cx="120" cy="92" r="7" fill="#ff44dd"/>
+  <circle cx="121" cy="93" r="3" fill="#fff"/>
+  <!-- HUGE crystal shoulder shards -->
+  <polygon points="50,170 35,110 70,150" fill="url(#g-space-crystal)" stroke="#000" stroke-width="1.5"/>
+  <polygon points="65,160 55,100 85,140" fill="url(#g-space-crystal)" stroke="#000" stroke-width="1.5"/>
+  <polygon points="150,170 165,110 130,150" fill="url(#g-space-crystal)" stroke="#000" stroke-width="1.5"/>
+  <polygon points="135,160 145,100 115,140" fill="url(#g-space-crystal)" stroke="#000" stroke-width="1.5"/>
+  <!-- back crystal spikes -->
+  <polygon points="80,170 78,130 92,150" fill="url(#g-space-crystal)" stroke="#000" stroke-width="1.5"/>
+  <polygon points="100,195 95,150 110,180" fill="url(#g-space-crystal)" stroke="#000" stroke-width="1.5"/>
+  <polygon points="115,220 110,180 125,210" fill="url(#g-space-crystal)" stroke="#000" stroke-width="1.5"/>
+  <!-- head spikes (crystal) -->
+  <polygon points="85,75 88,55 95,72" fill="url(#g-space-crystal)" stroke="#000" stroke-width="1"/>
+  <polygon points="100,72 105,50 112,68" fill="url(#g-space-crystal)" stroke="#000" stroke-width="1"/>
+  <!-- tail crystals -->
+  <polygon points="30,200 18,170 42,195" fill="url(#g-space-crystal)" stroke="#000" stroke-width="1"/>
+</g>
+`;
+
+const FIRE_SVG = `
+<defs>
+  <linearGradient id="g-fire-body" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#ff8800"/>
+    <stop offset="50%" stop-color="#cc1a08"/>
+    <stop offset="100%" stop-color="#3a0000"/>
+  </linearGradient>
+  <linearGradient id="g-fire-flame" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#fff"/>
+    <stop offset="40%" stop-color="#ffeb6a"/>
+    <stop offset="100%" stop-color="#ff5a00"/>
+  </linearGradient>
+</defs>
+<g>
+  <!-- tail -->
+  <path d="M 80 260 Q 30 250 10 200 Q 5 180 18 175 Q 35 180 45 220 Q 60 245 80 250 Z" fill="url(#g-fire-body)" stroke="#000" stroke-width="2"/>
+  <!-- legs -->
+  <path d="M 70 270 Q 60 285 70 295 L 90 295 Q 90 280 88 265 Z" fill="url(#g-fire-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 110 270 Q 100 285 110 295 L 130 295 Q 130 280 128 265 Z" fill="url(#g-fire-body)" stroke="#000" stroke-width="2"/>
+  <!-- body -->
+  <ellipse cx="100" cy="200" rx="50" ry="65" fill="url(#g-fire-body)" stroke="#000" stroke-width="2"/>
+  <ellipse cx="100" cy="215" rx="28" ry="42" fill="#ff5a00" stroke="#000" stroke-width="1"/>
+  <!-- LAVA CRACKS (yellow veins) -->
+  <path d="M 80 170 Q 90 185 85 200 Q 95 215 90 230" stroke="#ffeb6a" stroke-width="2" fill="none" opacity="0.9"/>
+  <path d="M 115 165 Q 110 185 120 200 Q 115 220 125 235" stroke="#ffeb6a" stroke-width="2" fill="none" opacity="0.9"/>
+  <path d="M 100 180 Q 95 200 105 215" stroke="#ffaa00" stroke-width="1.5" fill="none" opacity="0.9"/>
+  <!-- arms -->
+  <path d="M 60 175 Q 45 200 50 220 Q 55 225 65 215 Q 70 195 75 180 Z" fill="url(#g-fire-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 140 175 Q 155 200 150 220 Q 145 225 135 215 Q 130 195 125 180 Z" fill="url(#g-fire-body)" stroke="#000" stroke-width="2"/>
+  <polygon points="48,222 45,232 52,225" fill="#000"/>
+  <polygon points="152,222 155,232 148,225" fill="#000"/>
+  <!-- neck + head -->
+  <path d="M 80 145 Q 75 130 85 115 L 115 115 Q 125 130 120 145 Z" fill="url(#g-fire-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 75 110 Q 70 80 95 70 L 140 75 Q 160 85 165 100 Q 165 115 155 120 L 95 125 Q 75 122 75 110 Z" fill="url(#g-fire-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 95 118 Q 100 132 130 130 Q 150 128 155 120 L 145 122 Q 120 125 95 118 Z" fill="#3a0000" stroke="#000" stroke-width="2"/>
+  <polygon points="105,121 107,128 109,121" fill="#fff"/>
+  <polygon points="115,122 117,129 119,122" fill="#fff"/>
+  <polygon points="125,122 127,129 129,122" fill="#fff"/>
+  <polygon points="135,121 137,128 139,121" fill="#fff"/>
+  <!-- glowing yellow eye -->
+  <circle cx="120" cy="92" r="14" fill="#ffeb6a" opacity="0.4"/>
+  <circle cx="120" cy="92" r="7" fill="#ffeb6a"/>
+  <circle cx="121" cy="93" r="3" fill="#ff0000"/>
+  <!-- smoke from nostril -->
+  <ellipse cx="158" cy="98" rx="2" ry="1.5" fill="#000"/>
+  <circle cx="172" cy="92" r="3" fill="#888" opacity="0.6"/>
+  <circle cx="180" cy="84" r="4" fill="#666" opacity="0.5"/>
+  <!-- FLAMES coming off back spikes -->
+  <polygon points="80,165 70,110 90,150" fill="url(#g-fire-flame)" stroke="#cc1a08" stroke-width="1"/>
+  <polygon points="100,180 88,115 112,165" fill="url(#g-fire-flame)" stroke="#cc1a08" stroke-width="1"/>
+  <polygon points="118,200 108,135 130,180" fill="url(#g-fire-flame)" stroke="#cc1a08" stroke-width="1"/>
+  <polygon points="105,225 95,165 120,210" fill="url(#g-fire-flame)" stroke="#cc1a08" stroke-width="1"/>
+  <!-- head fire spikes -->
+  <polygon points="85,75 82,45 95,72" fill="url(#g-fire-flame)" stroke="#cc1a08" stroke-width="1"/>
+  <polygon points="100,72 102,38 112,68" fill="url(#g-fire-flame)" stroke="#cc1a08" stroke-width="1"/>
+</g>
+`;
+
+const CYBER_SVG = `
+<defs>
+  <linearGradient id="g-cyber-body" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#d8dde8"/>
+    <stop offset="50%" stop-color="#9099aa"/>
+    <stop offset="100%" stop-color="#4a5060"/>
+  </linearGradient>
+  <linearGradient id="g-cyber-panel" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#aab0c0"/>
+    <stop offset="100%" stop-color="#606878"/>
+  </linearGradient>
+</defs>
+<g>
+  <!-- mechanical tail (segmented) -->
+  <rect x="10" y="190" width="20" height="20" rx="3" fill="url(#g-cyber-panel)" stroke="#000" stroke-width="2"/>
+  <rect x="30" y="200" width="20" height="20" rx="3" fill="url(#g-cyber-panel)" stroke="#000" stroke-width="2"/>
+  <rect x="50" y="220" width="22" height="22" rx="3" fill="url(#g-cyber-panel)" stroke="#000" stroke-width="2"/>
+  <!-- legs (boxy) -->
+  <rect x="65" y="245" width="28" height="50" rx="4" fill="url(#g-cyber-body)" stroke="#000" stroke-width="2"/>
+  <rect x="105" y="245" width="28" height="50" rx="4" fill="url(#g-cyber-body)" stroke="#000" stroke-width="2"/>
+  <rect x="68" y="288" width="22" height="8" fill="#3a3a4a" stroke="#000" stroke-width="1"/>
+  <rect x="108" y="288" width="22" height="8" fill="#3a3a4a" stroke="#000" stroke-width="1"/>
+  <!-- body (rectangular with panels) -->
+  <rect x="55" y="145" width="90" height="105" rx="8" fill="url(#g-cyber-body)" stroke="#000" stroke-width="2"/>
+  <rect x="70" y="170" width="60" height="55" rx="4" fill="url(#g-cyber-panel)" stroke="#000" stroke-width="1.5"/>
+  <line x1="100" y1="170" x2="100" y2="225" stroke="#000" stroke-width="1"/>
+  <line x1="70" y1="197" x2="130" y2="197" stroke="#000" stroke-width="1"/>
+  <!-- chest light -->
+  <circle cx="100" cy="160" r="6" fill="#ff3030" stroke="#000" stroke-width="1"/>
+  <circle cx="100" cy="160" r="3" fill="#ffeb6a"/>
+  <!-- rivets -->
+  <circle cx="62" cy="152" r="2" fill="#333"/>
+  <circle cx="138" cy="152" r="2" fill="#333"/>
+  <circle cx="62" cy="242" r="2" fill="#333"/>
+  <circle cx="138" cy="242" r="2" fill="#333"/>
+  <!-- mechanical arms -->
+  <rect x="40" y="160" width="22" height="55" rx="3" fill="url(#g-cyber-body)" stroke="#000" stroke-width="2"/>
+  <rect x="138" y="160" width="22" height="55" rx="3" fill="url(#g-cyber-body)" stroke="#000" stroke-width="2"/>
+  <!-- claws (metallic) -->
+  <polygon points="40,215 35,228 48,222" fill="#888" stroke="#000" stroke-width="1"/>
+  <polygon points="48,222 50,235 55,222" fill="#888" stroke="#000" stroke-width="1"/>
+  <polygon points="160,215 165,228 152,222" fill="#888" stroke="#000" stroke-width="1"/>
+  <polygon points="152,222 150,235 145,222" fill="#888" stroke="#000" stroke-width="1"/>
+  <!-- neck -->
+  <rect x="88" y="120" width="24" height="28" fill="url(#g-cyber-panel)" stroke="#000" stroke-width="2"/>
+  <!-- head (boxy) -->
+  <path d="M 70 85 L 70 125 L 165 125 L 165 95 Q 165 80 150 80 L 80 78 Q 70 78 70 85 Z" fill="url(#g-cyber-body)" stroke="#000" stroke-width="2"/>
+  <!-- visor/eye band -->
+  <rect x="80" y="90" width="80" height="15" fill="#1a0a0a" stroke="#000" stroke-width="1.5"/>
+  <!-- glowing red eye sensor -->
+  <circle cx="135" cy="97" r="6" fill="#ff0000"/>
+  <circle cx="135" cy="97" r="11" fill="#ff0000" opacity="0.4"/>
+  <circle cx="136" cy="98" r="2" fill="#fff"/>
+  <!-- jaw with teeth -->
+  <rect x="85" y="108" width="70" height="14" fill="#3a4050" stroke="#000" stroke-width="2"/>
+  <polygon points="92,114 95,121 98,114" fill="#fff"/>
+  <polygon points="105,114 108,121 111,114" fill="#fff"/>
+  <polygon points="120,114 123,121 126,114" fill="#fff"/>
+  <polygon points="135,114 138,121 141,114" fill="#fff"/>
+  <polygon points="148,114 150,121 152,114" fill="#fff"/>
+  <!-- antenna -->
+  <line x1="110" y1="78" x2="110" y2="50" stroke="#000" stroke-width="2"/>
+  <circle cx="110" cy="48" r="4" fill="#ff3030"/>
+  <line x1="130" y1="78" x2="130" y2="55" stroke="#000" stroke-width="2"/>
+  <circle cx="130" cy="53" r="3" fill="#ffeb6a"/>
+  <!-- mechanical back fins -->
+  <polygon points="80,165 75,135 92,155" fill="url(#g-cyber-panel)" stroke="#000" stroke-width="1.5"/>
+  <polygon points="100,185 90,155 110,175" fill="url(#g-cyber-panel)" stroke="#000" stroke-width="1.5"/>
+  <polygon points="115,210 105,180 125,200" fill="url(#g-cyber-panel)" stroke="#000" stroke-width="1.5"/>
+</g>
+`;
+
+const GHIDORAH_SVG = `
+<defs>
+  <linearGradient id="g-ghid-body" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#ffeb6a"/>
+    <stop offset="50%" stop-color="#cc9a08"/>
+    <stop offset="100%" stop-color="#6a4a08"/>
+  </linearGradient>
+  <linearGradient id="g-ghid-wing" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#ffcc44"/>
+    <stop offset="60%" stop-color="#aa7a08"/>
+    <stop offset="100%" stop-color="#4a2a04"/>
+  </linearGradient>
+</defs>
+<g>
+  <!-- two tails -->
+  <path d="M 90 260 Q 50 270 30 290 Q 25 295 35 295 Q 65 275 100 268 Z" fill="url(#g-ghid-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 110 260 Q 150 270 170 290 Q 175 295 165 295 Q 135 275 100 268 Z" fill="url(#g-ghid-body)" stroke="#000" stroke-width="2"/>
+  <!-- legs -->
+  <path d="M 80 270 Q 70 285 80 295 L 95 295 Q 95 280 92 265 Z" fill="url(#g-ghid-body)" stroke="#000" stroke-width="2"/>
+  <path d="M 105 270 Q 95 285 105 295 L 120 295 Q 120 280 117 265 Z" fill="url(#g-ghid-body)" stroke="#000" stroke-width="2"/>
+  <!-- LEFT WING -->
+  <path d="M 60 165 Q 5 140 0 200 Q 5 210 18 200 Q 30 195 50 200 Q 65 205 75 210 Z" fill="url(#g-ghid-wing)" stroke="#000" stroke-width="2"/>
+  <!-- wing ribs left -->
+  <line x1="50" y1="170" x2="18" y2="195" stroke="#000" stroke-width="1.5"/>
+  <line x1="55" y1="180" x2="25" y2="205" stroke="#000" stroke-width="1.5"/>
+  <line x1="60" y1="195" x2="40" y2="208" stroke="#000" stroke-width="1.5"/>
+  <!-- RIGHT WING -->
+  <path d="M 140 165 Q 195 140 200 200 Q 195 210 182 200 Q 170 195 150 200 Q 135 205 125 210 Z" fill="url(#g-ghid-wing)" stroke="#000" stroke-width="2"/>
+  <line x1="150" y1="170" x2="182" y2="195" stroke="#000" stroke-width="1.5"/>
+  <line x1="145" y1="180" x2="175" y2="205" stroke="#000" stroke-width="1.5"/>
+  <line x1="140" y1="195" x2="160" y2="208" stroke="#000" stroke-width="1.5"/>
+  <!-- body (smaller, sitting between wings) -->
+  <ellipse cx="100" cy="215" rx="32" ry="50" fill="url(#g-ghid-body)" stroke="#000" stroke-width="2"/>
+  <ellipse cx="100" cy="225" rx="20" ry="35" fill="#aa7a08" stroke="#000" stroke-width="1"/>
+  <!-- LEFT NECK + HEAD -->
+  <path d="M 80 175 Q 50 130 35 90 Q 30 75 45 70 Q 50 60 60 65 Q 75 80 85 110 Q 90 140 95 170 Z" fill="url(#g-ghid-body)" stroke="#000" stroke-width="2"/>
+  <ellipse cx="45" cy="68" rx="14" ry="9" fill="url(#g-ghid-body)" stroke="#000" stroke-width="2" transform="rotate(-20 45 68)"/>
+  <!-- left head jaw -->
+  <path d="M 32 72 Q 38 78 55 75 Q 58 73 55 70 L 35 68 Z" fill="#3a2a04" stroke="#000" stroke-width="1.5"/>
+  <!-- left head horns -->
+  <polygon points="38,57 42,42 47,58" fill="#ffaa44" stroke="#000" stroke-width="1"/>
+  <polygon points="48,55 53,40 58,57" fill="#ffaa44" stroke="#000" stroke-width="1"/>
+  <!-- left head eye (glowing) -->
+  <circle cx="50" cy="63" r="3.5" fill="#ff3030"/>
+  <circle cx="50" cy="63" r="6" fill="#ff3030" opacity="0.4"/>
+  <!-- CENTER NECK + HEAD -->
+  <path d="M 90 165 Q 90 110 95 70 Q 100 45 110 50 Q 120 50 115 70 Q 115 110 120 165 Z" fill="url(#g-ghid-body)" stroke="#000" stroke-width="2"/>
+  <ellipse cx="105" cy="40" rx="16" ry="10" fill="url(#g-ghid-body)" stroke="#000" stroke-width="2"/>
+  <!-- center head jaw -->
+  <path d="M 92 45 Q 100 52 118 47 Q 120 44 117 41 L 95 41 Z" fill="#3a2a04" stroke="#000" stroke-width="1.5"/>
+  <!-- center head horns -->
+  <polygon points="98,32 100,16 106,32" fill="#ffaa44" stroke="#000" stroke-width="1"/>
+  <polygon points="108,30 113,14 116,32" fill="#ffaa44" stroke="#000" stroke-width="1"/>
+  <!-- center head eye -->
+  <circle cx="112" cy="36" r="3.5" fill="#ff3030"/>
+  <circle cx="112" cy="36" r="6" fill="#ff3030" opacity="0.4"/>
+  <!-- RIGHT NECK + HEAD -->
+  <path d="M 120 175 Q 150 130 165 90 Q 170 75 155 70 Q 150 60 140 65 Q 125 80 115 110 Q 110 140 105 170 Z" fill="url(#g-ghid-body)" stroke="#000" stroke-width="2"/>
+  <ellipse cx="155" cy="68" rx="14" ry="9" fill="url(#g-ghid-body)" stroke="#000" stroke-width="2" transform="rotate(20 155 68)"/>
+  <!-- right head jaw -->
+  <path d="M 168 72 Q 162 78 145 75 Q 142 73 145 70 L 165 68 Z" fill="#3a2a04" stroke="#000" stroke-width="1.5"/>
+  <!-- right head horns -->
+  <polygon points="162,57 158,42 153,58" fill="#ffaa44" stroke="#000" stroke-width="1"/>
+  <polygon points="152,55 147,40 142,57" fill="#ffaa44" stroke="#000" stroke-width="1"/>
+  <!-- right head eye -->
+  <circle cx="150" cy="63" r="3.5" fill="#ff3030"/>
+  <circle cx="150" cy="63" r="6" fill="#ff3030" opacity="0.4"/>
+</g>
+`;
+
+const CHARACTERS = {
+  gojira:   { name: "GOJIRA",         subtitle: "The Original King",     svg: GOJIRA_SVG,   color: "#5fffaa", mouthX: 175 },
+  space:    { name: "SPACE GODZILLA", subtitle: "Crystal Kaiju from Stars", svg: SPACE_SVG, color: "#aa88ff", mouthX: 175 },
+  fire:     { name: "FIRE GODZILLA",  subtitle: "Burning Heart, Hotter Rage", svg: FIRE_SVG, color: "#ff8800", mouthX: 175 },
+  cyber:    { name: "CYBER GODZILLA", subtitle: "Machine of Pure Power", svg: CYBER_SVG,  color: "#ff4040", mouthX: 175 },
+  ghidorah: { name: "KING GHIDORAH",  subtitle: "Three-Headed Final Boss", svg: GHIDORAH_SVG, color: "#ffeb6a", mouthX: 165 },
+};
+const CHARACTER_ORDER = ["gojira","space","fire","cyber","ghidorah"];
+
 // ---------- Biomes ----------
 const BIOMES = [
-  { key: "tokyo",  label: "TOKYO NIGHT",  gz: "GREEN GODZILLA",     ambient: "spark",  count: 25, lightning: true  },
-  { key: "snow",   label: "SNOW CITY",    gz: "ICE GODZILLA",       ambient: "snow",   count: 60, lightning: false },
-  { key: "forest", label: "GREEN FOREST", gz: "PLANT GODZILLA",     ambient: "leaf",   count: 30, lightning: false },
-  { key: "lava",   label: "LAVA VOLCANO", gz: "FIRE GODZILLA",      ambient: "ember",  count: 50, lightning: true  },
-  { key: "ocean",  label: "DEEP OCEAN",   gz: "AQUA GODZILLA",      ambient: "bubble", count: 40, lightning: false },
-  { key: "neon",   label: "NEON DOWNTOWN",gz: "CYBER GODZILLA",     ambient: "spark",  count: 35, lightning: true  },
+  { key: "tokyo",  label: "TOKYO NIGHT",  ambient: "spark",  count: 25, lightning: true  },
+  { key: "snow",   label: "SNOW CITY",    ambient: "snow",   count: 60, lightning: false },
+  { key: "forest", label: "GREEN FOREST", ambient: "leaf",   count: 30, lightning: false },
+  { key: "lava",   label: "LAVA VOLCANO", ambient: "ember",  count: 50, lightning: true  },
+  { key: "ocean",  label: "DEEP OCEAN",   ambient: "bubble", count: 40, lightning: false },
+  { key: "neon",   label: "NEON DOWNTOWN",ambient: "spark",  count: 35, lightning: true  },
 ];
 
 // ---------- Levels ----------
@@ -1428,20 +1866,48 @@ function maybeLightning() {
 }
 
 // ---------- Biome switch ----------
+function characterForLevel(idx) {
+  if (idx < 4)  return "gojira";
+  if (idx < 8)  return "space";
+  if (idx < 13) return "fire";
+  if (idx < 17) return "cyber";
+  return "ghidorah";
+}
+
+let currentCharacterKey = null;
+function setCharacter(key) {
+  const ch = CHARACTERS[key];
+  if (!ch) return;
+  if (currentCharacterKey === key) return;
+  currentCharacterKey = key;
+  $godzilla.innerHTML = ch.svg;
+  $godzilla.style.setProperty("--gz-glow", ch.color);
+}
+
 function switchToBiome(index) {
   State.currentBiome = index;
   const biome = BIOMES[index];
+  const charKey = characterForLevel(State.level);
+  const ch = CHARACTERS[charKey];
+  const previousCharacter = currentCharacterKey;
+
   // Update body class
   BIOMES.forEach(b => document.body.classList.remove("biome-" + b.key));
   document.body.classList.add("biome-" + biome.key);
+
+  // Swap kaiju character if it changed
+  setCharacter(charKey);
 
   // Flash transition
   $biomeFlash.classList.remove("show");
   void $biomeFlash.offsetWidth;
   $biomeFlash.classList.add("show");
 
-  // Announce name
-  $biomeName.textContent = biome.label + "\n" + biome.gz;
+  // Announce the kaiju + biome (bigger drama when character changes)
+  const characterChanged = previousCharacter !== charKey;
+  $biomeName.textContent = characterChanged
+    ? ch.name + "\n" + biome.label
+    : biome.label + "\n" + ch.subtitle;
   $biomeName.style.whiteSpace = "pre-line";
   $biomeName.classList.remove("show");
   void $biomeName.offsetWidth;
@@ -1461,7 +1927,7 @@ function switchToBiome(index) {
     Audio.startMusic(biome.key);
   }
   Audio.roar(true);
-  Voice.speak(biome.gz);
+  Voice.speak(characterChanged ? ch.name : biome.label, { priority: true });
 }
 
 // ---------- HUD ----------
@@ -1518,6 +1984,28 @@ function spawnBuilding() {
   };
   State.buildings.push(b);
   pickTarget();
+  // PHONICS: pronounce the word/letter as it spawns so the kid hears the sound
+  speakForPhonics(word);
+}
+
+// Phonics-friendly pronunciation. Single letters speak the letter sound
+// where possible (a → "ah", b → "buh"); multi-character words are spoken
+// as the whole word.
+const LETTER_SOUNDS = {
+  a: "ay", b: "bee", c: "see", d: "dee", e: "ee",
+  f: "ef", g: "jee", h: "aitch", i: "eye", j: "jay",
+  k: "kay", l: "el", m: "em", n: "en", o: "oh",
+  p: "pee", q: "queue", r: "ar", s: "ess", t: "tee",
+  u: "you", v: "vee", w: "double you", x: "ex", y: "why", z: "zee"
+};
+function speakForPhonics(word) {
+  if (!Voice.isEnabled()) return;
+  const w = word.toLowerCase().trim();
+  if (w.length === 1 && LETTER_SOUNDS[w]) {
+    Voice.speak(LETTER_SOUNDS[w], { rate: 0.85, pitch: 1.05, priority: true });
+  } else if (w.length > 0) {
+    Voice.speak(w, { rate: 0.95, pitch: 1.0, priority: true });
+  }
 }
 
 // ---------- Loop ----------
@@ -1697,7 +2185,16 @@ function destroyBuilding(b) {
   bumpCombo();
 
   spawnPraise(PRAISE_PER_WORD[Math.floor(Math.random()*PRAISE_PER_WORD.length)], b.el, true);
-  if (Math.random() < 0.55) Voice.speak(SPOKEN_PRAISE[Math.floor(Math.random()*SPOKEN_PRAISE.length)]);
+  // Phonics reinforcement: speak the word again on smash so the kid
+  // hears the sound twice (on spawn + on smash). Higher priority than
+  // generic praise so it doesn't get clobbered.
+  if (b.word.length > 1) {
+    Voice.speak(b.word, { rate: 1.0, priority: true });
+  } else if (LETTER_SOUNDS[b.word]) {
+    Voice.speak(LETTER_SOUNDS[b.word], { rate: 0.9, priority: true });
+  } else if (Math.random() < 0.35) {
+    Voice.speak(SPOKEN_PRAISE[Math.floor(Math.random()*SPOKEN_PRAISE.length)]);
+  }
 
   if (State.combo >= 4 && State.combo % 4 === 0) {
     showBanner(["MEGA SMASH!","RAMPAGE!","DEVASTATING!","ROOOAAR!!","CITY CRUSHER!","UNSTOPPABLE!"][Math.floor(Math.random()*6)]);
@@ -1833,11 +2330,16 @@ function checkLevelProgress() {
       State.destroyed = 0;
       const nlv = LEVELS[State.level];
       const nb = BIOMES[nlv.biome];
+      const ncKey = characterForLevel(State.level);
+      const nc = CHARACTERS[ncKey];
+      const charChanged = ncKey !== currentCharacterKey;
       $levelTitle.textContent = "LEVEL " + (State.level + 1) + " / " + LEVELS.length + " — " + nlv.title;
       $levelDesc.textContent = nlv.desc;
-      $biomeAnnounce.textContent = "Next world: " + nb.label + " — " + nb.gz;
+      $biomeAnnounce.textContent = charChanged
+        ? "🦖 NEW KAIJU: " + nc.name + " — " + nc.subtitle
+        : "Next world: " + nb.label;
       Audio.levelUpFanfare();
-      Voice.speak("level up! " + nb.gz);
+      Voice.speak(charChanged ? "new kaiju, " + nc.name : "level up");
       $levelup.classList.remove("hidden");
     } else {
       gameOver(true);
@@ -1928,18 +2430,41 @@ function gameOver(victory) {
   $finalScore.textContent = State.score;
   $finalCombo.textContent = "x" + State.bestCombo;
   $finalSmashed.textContent = State.destroyed + " on level " + (State.level + 1);
+  $gameover.classList.remove("lost");
   if (victory) {
     $endTitle.textContent = "KING OF MONSTERS!";
     $endSubtitle.textContent = "Godzilla conquered all " + LEVELS.length + " levels!";
     Audio.levelUpFanfare();
     Voice.speak("you are the king of monsters!");
     setTimeout(() => Audio.roar(true), 600);
+    refreshStartScreenProgress();
+    $gameover.classList.remove("hidden");
   } else {
-    $endTitle.textContent = "GODZILLA TIRED";
-    $endSubtitle.textContent = "Take a breath... and rampage again!";
+    // DRAMATIC LOSS sequence
+    const charName = (CHARACTERS[currentCharacterKey] || CHARACTERS.gojira).name;
+    $endTitle.textContent = charName + " RETREATS...";
+    $endSubtitle.textContent = "You made it to LEVEL " + (State.level + 1) + " / " + LEVELS.length + ". TRY AGAIN!";
+    // red vignette + screen shake + Godzilla slump
+    const $vignette = document.getElementById("defeat-vignette");
+    $vignette.classList.remove("show");
+    void $vignette.offsetWidth;
+    $vignette.classList.add("show");
+    $game.classList.remove("big-shake");
+    void $game.offsetWidth;
+    $game.classList.add("big-shake");
+    $godzilla.classList.remove("defeated");
+    void $godzilla.offsetWidth;
+    $godzilla.classList.add("defeated");
+    Audio.defeatSting();
+    setTimeout(() => Voice.speak("don't give up. try again!"), 1500);
+    setTimeout(() => {
+      // Reset slumped Godzilla so it looks normal on the gameover screen
+      $godzilla.classList.remove("defeated");
+      refreshStartScreenProgress();
+      $gameover.classList.add("lost");
+      $gameover.classList.remove("hidden");
+    }, 2200);
   }
-  refreshStartScreenProgress();
-  $gameover.classList.remove("hidden");
 }
 
 // ---------- Input wiring ----------
@@ -2098,6 +2623,25 @@ function refreshStartScreenProgress() {
   }
 }
 refreshStartScreenProgress();
+
+// Build kaiju roster on the start screen + version line
+(function buildKaijuRoster() {
+  const $roster = document.getElementById("kaiju-roster");
+  CHARACTER_ORDER.forEach(key => {
+    const c = CHARACTERS[key];
+    const card = document.createElement("div");
+    card.className = "kaiju-card";
+    card.style.color = c.color;
+    card.innerHTML =
+      '<svg viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">' +
+      c.svg + '</svg>' +
+      '<div class="nm">' + c.name + '</div>' +
+      '<div class="sub">' + c.subtitle + '</div>';
+    $roster.appendChild(card);
+  });
+  const $ver = document.getElementById("versionLine");
+  if ($ver) $ver.textContent = GAME_VERSION + " · build " + GAME_BUILD_DATE;
+})();
 
 function attachContinueHandler(btn) {
   function trigger(e) {

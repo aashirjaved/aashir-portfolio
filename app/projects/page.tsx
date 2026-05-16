@@ -10,6 +10,29 @@ import {
 
 const projects: Omit<ProjectCardProps, "number">[] = [
   {
+    title: "Godzilla Typing Rampage",
+    company: "Built for my son",
+    period: "2026",
+    status: "Beta",
+    description:
+      "A Godzilla-themed typing game built to teach my son to type. Atomic-breath letters, building-smash combos, dramatic synth score. iPad-friendly.",
+    details: [
+      "Plain HTML/CSS/JS · zero dependencies, zero asset files",
+      "All sound generated live via Web Audio API (roars, beams, explosions, fanfare)",
+      "Six difficulty tiers: home-row letters → words → short sentences",
+      "iPad: hidden input pops native soft keyboard; touch-safe layout",
+      "Combo system, screen shake, lightning, collapsing buildings",
+    ],
+    technologies: ["html", "css", "javascript", "web audio", "svg"],
+    metrics: [
+      { label: "Levels", value: "6" },
+      { label: "Assets", value: "0" },
+      { label: "For", value: "1 son" },
+    ],
+    featured: true,
+    link: { href: "/godzilla/", label: "▶ Play the game" },
+  },
+  {
     title: "MoonPay Consumer App — Product Engineering",
     company: "MoonPay",
     period: "Present",

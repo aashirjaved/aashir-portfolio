@@ -11,6 +11,7 @@ export type ProjectCardProps = {
   technologies: string[];
   metrics?: { label: string; value: string }[];
   featured?: boolean;
+  link?: { href: string; label: string };
 };
 
 export function ProjectCard(p: ProjectCardProps) {
@@ -71,6 +72,18 @@ export function ProjectCard(p: ProjectCardProps) {
             <Pill key={t}>{t}</Pill>
           ))}
         </div>
+
+        {p.link && (
+          <a
+            href={p.link.href}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-6 inline-flex items-center gap-2 mono text-xs uppercase tracking-wider text-ink hover:text-accent border-b border-rule pb-0.5"
+          >
+            {p.link.label}
+            <span aria-hidden>↗</span>
+          </a>
+        )}
       </div>
     </article>
   );

@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="theme-color" content="#0a0a14" />
+<title>GODZILLA TYPING RAMPAGE</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    width: 100%; height: 100%; overflow: hidden;
+    background: #000;
+    font-family: "Impact", "Arial Black", system-ui, sans-serif;
+    color: #fff;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+  #game {
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 100%, #1a0808 0%, #0a0a14 40%, #000 100%),
+      linear-gradient(180deg, #0a0a14 0%, #1a0808 60%, #2a0606 100%);
+    overflow: hidden;
+  }
+  /* Lightning flash overlay */
+  #lightning {
+    position: absolute; inset: 0;
+    background: #fff;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 30;
+  }
+  #lightning.flash { animation: flash 0.5s ease-out; }
+  @keyframes flash {
+    0% { opacity: 0; }
+    10% { opacity: 0.8; }
+    25% { opacity: 0; }
+    35% { opacity: 0.6; }
+    100% { opacity: 0; }
+  }
+
+  /* Stars */
+  .star {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.9; }
+  }
+
+  /* Skyline (back layer) */
+  #skyline {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 55%;
+    pointer-events: none;
+  }
+
+  /* Ground */
+  #ground {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 10%;
+    background: linear-gradient(180deg, #1a0a0a 0%, #000 100%);
+    border-top: 2px solid #3a1a1a;
+    z-index: 5;
+  }
+
+  /* Godzilla */
+  #godzilla {
+    position: absolute;
+    left: 2%;
+    bottom: 8%;
+    height: 60%;
+    width: auto;
+    z-index: 15;
+    filter: drop-shadow(0 0 30px rgba(80, 255, 100, 0.4));
+    transform-origin: bottom center;
+    animation: gz-breathe 2.5s ease-in-out infinite;
+  }
+  @keyframes gz-breathe {
+    0%, 100% { transform: scaleY(1) scaleX(1); }
+    50% { transform: scaleY(1.02) scaleX(0.99); }
+  }
+  #godzilla.attacking { animation: gz-attack 0.4s ease-out; }
+  @keyframes gz-attack {
+    0% { transform: translateX(0) rotate(0deg); }
+    30% { transform: translateX(15px) rotate(-3deg); }
+    100% { transform: translateX(0) rotate(0deg); }
+  }
+  #godzilla.hurt { animation: gz-hurt 0.4s ease-out; }
+  @keyframes gz-hurt {
+    0%, 100% { transform: translateX(0); filter: drop-shadow(0 0 30px rgba(80, 255, 100, 0.4)); }
+    25% { transform: translateX(-8px); filter: drop-shadow(0 0 30px rgba(255, 60, 60, 0.9)); }
+    75% { transform: translateX(8px); filter: drop-shadow(0 0 30px rgba(255, 60, 60, 0.9)); }
+  }
+
+  /* Atomic breath */
+  .beam {
+    position: absolute;
+    height: 18px;
+    background: linear-gradient(90deg,
+      rgba(150, 255, 200, 0) 0%,
+      rgba(150, 255, 200, 0.8) 10%,
+      rgba(80, 255, 160, 1) 50%,
+      rgba(120, 255, 220, 1) 90%,
+      rgba(255, 255, 255, 1) 100%);
+    box-shadow:
+      0 0 20px #5fffaa,
+      0 0 40px #5fffaa,
+      0 0 60px rgba(255,255,255,0.7);
+    z-index: 14;
+    transform-origin: left center;
+    pointer-events: none;
+    border-radius: 9px;
+    animation: beam-flicker 0.05s linear infinite;
+  }
+  @keyframes beam-flicker {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.4); }
+  }
+
+  /* Buildings (foreground with words) */
+  .building {
+    position: absolute;
+    bottom: 10%;
+    background:
+      linear-gradient(180deg, #4a3a2a 0%, #2a1a1a 100%);
+    border: 2px solid #1a0a0a;
+    border-bottom: none;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 0 8px rgba(0,0,0,0.6);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 12px;
+    transition: transform 0.1s;
+  }
+  .building::before {
+    /* Windows pattern */
+    content: "";
+    position: absolute;
+    inset: 30% 8px 8px 8px;
+    background-image:
+      radial-gradient(circle at 25% 25%, #ffeb6a 1.5px, transparent 2.5px),
+      radial-gradient(circle at 75% 25%, #ffeb6a 1.5px, transparent 2.5px),
+      radial-gradient(circle at 25% 60%, #ffeb6a 1.5px, transparent 2.5px),
+      radial-gradient(circle at 75% 60%, #ffeb6a 1.5px, transparent 2.5px);
+    background-size: 100% 35%;
+    background-repeat: repeat-y;
+    opacity: 0.7;
+  }
+  .building .word {
+    position: relative;
+    z-index: 2;
+    font-size: 28px;
+    color: #fff;
+    background: rgba(0,0,0,0.85);
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 2px solid #ff3030;
+    text-shadow: 0 0 6px #ff3030, 0 0 12px #ff3030;
+    letter-spacing: 2px;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+  .building .word .typed {
+    color: #5fffaa;
+    text-shadow: 0 0 6px #5fffaa;
+  }
+  .building.targeted {
+    box-shadow: 0 0 30px #ff5050, inset 0 0 20px rgba(0,0,0,0.6);
+    animation: target-pulse 0.4s ease-in-out infinite alternate;
+  }
+  @keyframes target-pulse {
+    from { box-shadow: 0 0 20px #ff5050, inset 0 0 20px rgba(0,0,0,0.6); }
+    to { box-shadow: 0 0 50px #ff8888, inset 0 0 20px rgba(0,0,0,0.6); }
+  }
+  .building.destroyed { animation: collapse 0.8s ease-in forwards; }
+  @keyframes collapse {
+    0% { transform: translateY(0) rotate(0); opacity: 1; }
+    30% { transform: translateY(-10px) rotate(2deg); }
+    100% { transform: translateY(50vh) rotate(20deg); opacity: 0; }
+  }
+
+  /* Explosion particles */
+  .particle {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 12;
+  }
+
+  /* HUD */
+  #hud {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 20;
+    pointer-events: none;
+    text-shadow: 2px 2px 4px #000, 0 0 8px #ff3030;
+  }
+  .hud-block { background: rgba(0,0,0,0.5); padding: 8px 14px; border: 2px solid #ff3030; border-radius: 6px; }
+  .hud-label { font-size: 12px; letter-spacing: 2px; color: #ff8888; }
+  .hud-value { font-size: 28px; color: #fff; letter-spacing: 2px; }
+  #combo { color: #5fffaa; text-shadow: 0 0 8px #5fffaa; }
+  #combo.big { animation: combo-pop 0.4s ease-out; }
+  @keyframes combo-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+    100% { transform: scale(1); }
+  }
+
+  /* Health bar */
+  #health-wrap {
+    width: 200px;
+    height: 24px;
+    background: #220a0a;
+    border: 2px solid #ff3030;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  #health-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #ff0000, #ffaa00);
+    width: 100%;
+    transition: width 0.4s ease;
+  }
+  #health-wrap::after {
+    content: "TOKYO";
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; letter-spacing: 4px;
+    color: #fff; mix-blend-mode: difference;
+  }
+
+  /* Screens (start, game over, level up) */
+  .screen {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    text-align: center;
+    padding: 20px;
+  }
+  .screen h1 {
+    font-size: clamp(40px, 9vw, 110px);
+    color: #ff3030;
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px #ff3030, 4px 4px 0 #5a0000;
+    margin-bottom: 20px;
+    animation: title-shake 3s ease-in-out infinite;
+  }
+  @keyframes title-shake {
+    0%, 100% { transform: rotate(-1deg) translateY(0); }
+    25% { transform: rotate(1deg) translateY(-3px); }
+    50% { transform: rotate(-2deg) translateY(2px); }
+    75% { transform: rotate(2deg) translateY(-2px); }
+  }
+  .screen h2 {
+    font-size: clamp(24px, 4vw, 42px);
+    color: #ffeb6a;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+    text-shadow: 0 0 12px #ffaa00;
+  }
+  .screen p {
+    font-size: clamp(16px, 2.4vw, 22px);
+    color: #ddd;
+    margin: 8px 0;
+    max-width: 600px;
+    letter-spacing: 1px;
+  }
+  .btn {
+    margin-top: 30px;
+    padding: 20px 40px;
+    font-size: clamp(20px, 3vw, 32px);
+    font-family: inherit;
+    letter-spacing: 4px;
+    color: #fff;
+    background: linear-gradient(180deg, #ff3030 0%, #8a0000 100%);
+    border: 4px solid #ffeb6a;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 30px rgba(255, 50, 50, 0.6);
+    text-shadow: 2px 2px 0 #5a0000;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn:hover, .btn:active {
+    transform: scale(1.05);
+    box-shadow: 0 0 50px rgba(255, 100, 100, 0.9);
+  }
+
+  .hidden { display: none !important; }
+
+  /* Combo banner */
+  #combo-banner {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: 80px;
+    color: #ffeb6a;
+    text-shadow: 0 0 20px #ff8800, 4px 4px 0 #5a0000;
+    letter-spacing: 4px;
+    z-index: 25;
+    pointer-events: none;
+    opacity: 0;
+  }
+  #combo-banner.show { animation: banner-pop 1.2s ease-out forwards; }
+  @keyframes banner-pop {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+    60% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+  }
+
+  /* Hidden input to trigger iPad keyboard */
+  #ipad-input {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    opacity: 0;
+    width: 1px; height: 1px;
+    font-size: 16px;
+  }
+
+  /* iPad keyboard hint button */
+  #kb-btn {
+    position: absolute;
+    bottom: 12px; right: 12px;
+    z-index: 25;
+    padding: 12px 18px;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    border: 2px solid #ffeb6a;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 16px;
+    letter-spacing: 2px;
+    cursor: pointer;
+  }
+
+  /* Tutorial hint */
+  #hint {
+    position: absolute;
+    bottom: 16%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    color: #ffeb6a;
+    text-shadow: 0 0 10px #ff8800, 2px 2px 0 #000;
+    letter-spacing: 2px;
+    z-index: 20;
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+    text-align: center;
+  }
+  #hint.show { opacity: 1; }
+
+  /* Screen shake */
+  #game.shake { animation: shake 0.4s ease-out; }
+  @keyframes shake {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-6px, -3px); }
+    20% { transform: translate(6px, 3px); }
+    30% { transform: translate(-5px, 4px); }
+    40% { transform: translate(5px, -4px); }
+    50% { transform: translate(-3px, 3px); }
+    60% { transform: translate(3px, -3px); }
+    70% { transform: translate(-2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    90% { transform: translate(-1px, 1px); }
+  }
+</style>
+</head>
+<body>
+<div id="game">
+  <div id="lightning"></div>
+  <div id="skyline"></div>
+  <div id="ground"></div>
+
+  <!-- Godzilla SVG -->
+  <svg id="godzilla" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+    <defs>
+      <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#2a4a2a"/>
+        <stop offset="60%" stop-color="#1a3a1a"/>
+        <stop offset="100%" stop-color="#0a1a0a"/>
+      </linearGradient>
+      <linearGradient id="bellyGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#5a6a3a"/>
+        <stop offset="100%" stop-color="#3a4a2a"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Tail -->
+    <path d="M 80 260 Q 30 250 10 200 Q 5 180 18 175 Q 35 180 45 220 Q 60 245 80 250 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
+    <!-- Back spikes on tail -->
+    <polygon points="40,210 45,195 50,210" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
+    <polygon points="55,215 60,200 65,215" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
+
+    <!-- Legs -->
+    <path d="M 70 270 Q 60 285 70 295 L 90 295 Q 90 280 88 265 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
+    <path d="M 110 270 Q 100 285 110 295 L 130 295 Q 130 280 128 265 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
+
+    <!-- Body -->
+    <ellipse cx="100" cy="200" rx="50" ry="65" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
+    <!-- Belly -->
+    <ellipse cx="100" cy="215" rx="28" ry="42" fill="url(#bellyGrad)" stroke="#000" stroke-width="1"/>
+    <!-- Belly scales -->
+    <path d="M 85 190 Q 100 195 115 190 M 85 210 Q 100 215 115 210 M 85 230 Q 100 235 115 230" stroke="#000" stroke-width="1" fill="none" opacity="0.4"/>
+
+    <!-- Arms -->
+    <path d="M 60 175 Q 45 200 50 220 Q 55 225 65 215 Q 70 195 75 180 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
+    <path d="M 140 175 Q 155 200 150 220 Q 145 225 135 215 Q 130 195 125 180 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
+    <!-- Claws -->
+    <polygon points="48,222 45,232 52,225" fill="#000"/>
+    <polygon points="52,225 50,236 56,228" fill="#000"/>
+    <polygon points="152,222 155,232 148,225" fill="#000"/>
+    <polygon points="148,225 150,236 144,228" fill="#000"/>
+
+    <!-- Neck -->
+    <path d="M 80 145 Q 75 130 85 115 L 115 115 Q 125 130 120 145 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
+
+    <!-- Head -->
+    <path d="M 75 110 Q 70 80 95 70 L 140 75 Q 160 85 165 100 Q 165 115 155 120 L 95 125 Q 75 122 75 110 Z" fill="url(#bodyGrad)" stroke="#000" stroke-width="2"/>
+    <!-- Jaw -->
+    <path d="M 95 118 Q 100 132 130 130 Q 150 128 155 120 L 145 122 Q 120 125 95 118 Z" fill="#2a3a2a" stroke="#000" stroke-width="2"/>
+    <!-- Teeth -->
+    <polygon points="105,121 107,128 109,121" fill="#fff"/>
+    <polygon points="115,122 117,129 119,122" fill="#fff"/>
+    <polygon points="125,122 127,129 129,122" fill="#fff"/>
+    <polygon points="135,121 137,128 139,121" fill="#fff"/>
+
+    <!-- Eye -->
+    <circle cx="120" cy="92" r="6" fill="#ffeb6a"/>
+    <circle cx="121" cy="93" r="2.5" fill="#000"/>
+    <!-- Eye glow -->
+    <circle cx="120" cy="92" r="10" fill="#ffeb6a" opacity="0.3"/>
+
+    <!-- Nostril -->
+    <ellipse cx="158" cy="98" rx="2" ry="1.5" fill="#000"/>
+
+    <!-- Head spikes -->
+    <polygon points="85,75 88,60 95,72" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
+    <polygon points="100,72 105,55 112,68" fill="#3a5a3a" stroke="#000" stroke-width="1"/>
+
+    <!-- Back spikes (large) -->
+    <polygon points="80,165 75,140 90,155" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+    <polygon points="90,180 80,150 100,170" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+    <polygon points="105,195 95,160 115,185" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+    <polygon points="115,215 105,180 125,205" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+    <polygon points="100,235 90,205 110,225" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+    <polygon points="85,250 75,225 95,240" fill="#5a8a5a" stroke="#000" stroke-width="1.5"/>
+  </svg>
+
+  <div id="hud">
+    <div class="hud-block">
+      <div class="hud-label">SCORE</div>
+      <div class="hud-value" id="score">0</div>
+    </div>
+    <div class="hud-block">
+      <div class="hud-label">LEVEL</div>
+      <div class="hud-value" id="level">1</div>
+    </div>
+    <div class="hud-block">
+      <div class="hud-label">COMBO</div>
+      <div class="hud-value" id="combo">x1</div>
+    </div>
+    <div class="hud-block">
+      <div class="hud-label">CITY HEALTH</div>
+      <div id="health-wrap"><div id="health-bar"></div></div>
+    </div>
+  </div>
+
+  <div id="combo-banner"></div>
+  <div id="hint"></div>
+
+  <!-- Start screen -->
+  <div id="start" class="screen">
+    <h1>GODZILLA<br/>TYPING<br/>RAMPAGE</h1>
+    <p>Type the words on the buildings to make Godzilla destroy them with his ATOMIC BREATH!</p>
+    <p style="color:#ffeb6a">Miss too many and the city stops Godzilla. SMASH them all and become KING OF MONSTERS!</p>
+    <button class="btn" id="startBtn">ROAR!! START</button>
+    <p style="margin-top:20px; font-size:14px; color:#888">Tip: For best fun, plug in a keyboard. iPad? Tap the screen anytime to bring up the on-screen keyboard.</p>
+  </div>
+
+  <!-- Game over screen -->
+  <div id="gameover" class="screen hidden">
+    <h1 id="endTitle">CITY DEFENDED</h1>
+    <h2 id="endSubtitle">Godzilla retreats... for now</h2>
+    <p>Final Score: <span id="finalScore">0</span></p>
+    <p>Best Combo: <span id="finalCombo">x1</span></p>
+    <p>Buildings Destroyed: <span id="finalSmashed">0</span></p>
+    <button class="btn" id="restartBtn">RAMPAGE AGAIN</button>
+  </div>
+
+  <!-- Level up screen -->
+  <div id="levelup" class="screen hidden">
+    <h1 style="color:#5fffaa; text-shadow: 0 0 20px #5fffaa, 4px 4px 0 #003a1a;">LEVEL UP!</h1>
+    <h2 id="levelTitle">GODZILLA AWAKENS</h2>
+    <p id="levelDesc">Now bigger words appear! Type fast, type true!</p>
+    <button class="btn" id="continueBtn">CONTINUE RAMPAGE</button>
+  </div>
+
+  <input id="ipad-input" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+  <button id="kb-btn">⌨ KEYBOARD</button>
+</div>
+
+<script>
+/* ============================================================
+ * GODZILLA TYPING RAMPAGE
+ * Plain HTML/CSS/JS — no external assets
+ * ============================================================ */
+
+// ---------- Audio engine (Web Audio API) ----------
+const Audio = (() => {
+  let ctx = null;
+  let musicNodes = [];
+  let musicGain = null;
+  let musicTimer = null;
+  let musicOn = false;
+
+  function ensure() {
+    if (!ctx) {
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (ctx.state === "suspended") ctx.resume();
+    return ctx;
+  }
+
+  function envelope(node, attack, decay, sustain, release, peak = 1) {
+    const t = ctx.currentTime;
+    node.gain.setValueAtTime(0, t);
+    node.gain.linearRampToValueAtTime(peak, t + attack);
+    node.gain.linearRampToValueAtTime(peak * sustain, t + attack + decay);
+    node.gain.linearRampToValueAtTime(0, t + attack + decay + release);
+  }
+
+  function roar(deep = false) {
+    ensure();
+    const dur = deep ? 1.6 : 1.0;
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    const filt = ctx.createBiquadFilter();
+    const g = ctx.createGain();
+    osc1.type = "sawtooth";
+    osc2.type = "square";
+    osc1.frequency.setValueAtTime(deep ? 80 : 110, ctx.currentTime);
+    osc1.frequency.exponentialRampToValueAtTime(deep ? 40 : 60, ctx.currentTime + dur);
+    osc2.frequency.setValueAtTime(deep ? 60 : 90, ctx.currentTime);
+    osc2.frequency.exponentialRampToValueAtTime(deep ? 30 : 50, ctx.currentTime + dur);
+    filt.type = "lowpass";
+    filt.frequency.setValueAtTime(800, ctx.currentTime);
+    filt.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + dur);
+    filt.Q.value = 8;
+    envelope(g, 0.05, 0.2, 0.7, dur - 0.25, 0.5);
+    osc1.connect(filt); osc2.connect(filt); filt.connect(g); g.connect(ctx.destination);
+    osc1.start(); osc2.start();
+    osc1.stop(ctx.currentTime + dur);
+    osc2.stop(ctx.currentTime + dur);
+  }
+
+  function atomicBreath() {
+    ensure();
+    const dur = 0.5;
+    // Noise burst
+    const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const filt = ctx.createBiquadFilter();
+    filt.type = "bandpass";
+    filt.frequency.setValueAtTime(2000, ctx.currentTime);
+    filt.frequency.exponentialRampToValueAtTime(500, ctx.currentTime + dur);
+    filt.Q.value = 4;
+    const g = ctx.createGain();
+    envelope(g, 0.01, 0.1, 0.6, dur - 0.1, 0.4);
+    src.connect(filt); filt.connect(g); g.connect(ctx.destination);
+    src.start();
+
+    // High whine
+    const osc = ctx.createOscillator();
+    const og = ctx.createGain();
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(800, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(2200, ctx.currentTime + 0.15);
+    osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + dur);
+    envelope(og, 0.01, 0.1, 0.4, dur - 0.1, 0.15);
+    osc.connect(og); og.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + dur);
+  }
+
+  function explosion() {
+    ensure();
+    const dur = 0.8;
+    const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) {
+      const decay = 1 - (i / data.length);
+      data[i] = (Math.random() * 2 - 1) * decay * decay;
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const filt = ctx.createBiquadFilter();
+    filt.type = "lowpass";
+    filt.frequency.setValueAtTime(2500, ctx.currentTime);
+    filt.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + dur);
+    const g = ctx.createGain();
+    envelope(g, 0.005, 0.05, 0.6, dur - 0.05, 0.7);
+    src.connect(filt); filt.connect(g); g.connect(ctx.destination);
+    src.start();
+
+    // Low boom
+    const osc = ctx.createOscillator();
+    const og = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(120, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + dur);
+    envelope(og, 0.005, 0.05, 0.5, dur - 0.05, 0.7);
+    osc.connect(og); og.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + dur);
+  }
+
+  function correctChime() {
+    ensure();
+    const t = ctx.currentTime;
+    [880, 1100, 1320].forEach((f, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = "triangle";
+      o.frequency.setValueAtTime(f, t + i * 0.04);
+      g.gain.setValueAtTime(0, t + i * 0.04);
+      g.gain.linearRampToValueAtTime(0.15, t + i * 0.04 + 0.01);
+      g.gain.linearRampToValueAtTime(0, t + i * 0.04 + 0.12);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t + i * 0.04);
+      o.stop(t + i * 0.04 + 0.13);
+    });
+  }
+
+  function wrongBuzz() {
+    ensure();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = "square";
+    o.frequency.setValueAtTime(140, ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.2);
+    envelope(g, 0.005, 0.05, 0.4, 0.15, 0.25);
+    o.connect(g); g.connect(ctx.destination);
+    o.start();
+    o.stop(ctx.currentTime + 0.25);
+  }
+
+  function levelUpFanfare() {
+    ensure();
+    const t = ctx.currentTime;
+    [523, 659, 784, 1047].forEach((f, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = "sawtooth";
+      o.frequency.setValueAtTime(f, t + i * 0.12);
+      g.gain.setValueAtTime(0, t + i * 0.12);
+      g.gain.linearRampToValueAtTime(0.2, t + i * 0.12 + 0.02);
+      g.gain.linearRampToValueAtTime(0, t + i * 0.12 + 0.35);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t + i * 0.12);
+      o.stop(t + i * 0.12 + 0.36);
+    });
+  }
+
+  // Dramatic background music — slow ominous bass + occasional brass-like hits
+  function startMusic() {
+    ensure();
+    if (musicOn) return;
+    musicOn = true;
+    musicGain = ctx.createGain();
+    musicGain.gain.value = 0.12;
+    musicGain.connect(ctx.destination);
+
+    // Drone bass
+    const bassOsc = ctx.createOscillator();
+    const bassOsc2 = ctx.createOscillator();
+    bassOsc.type = "sawtooth";
+    bassOsc2.type = "sawtooth";
+    bassOsc.frequency.value = 55;
+    bassOsc2.frequency.value = 55.4; // slight detune
+    const bassFilt = ctx.createBiquadFilter();
+    bassFilt.type = "lowpass";
+    bassFilt.frequency.value = 220;
+    bassFilt.Q.value = 4;
+    const bassG = ctx.createGain();
+    bassG.gain.value = 0.6;
+    bassOsc.connect(bassFilt); bassOsc2.connect(bassFilt);
+    bassFilt.connect(bassG); bassG.connect(musicGain);
+    bassOsc.start(); bassOsc2.start();
+    musicNodes.push(bassOsc, bassOsc2);
+
+    // LFO modulating filter for tension
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+    lfo.frequency.value = 0.1;
+    lfoGain.gain.value = 60;
+    lfo.connect(lfoGain); lfoGain.connect(bassFilt.frequency);
+    lfo.start();
+    musicNodes.push(lfo);
+
+    // Brass-like motif
+    const notes = [110, 110, 130.81, 146.83, 130.81, 110, 98, 110]; // A minor-ish
+    let i = 0;
+    function tick() {
+      if (!musicOn) return;
+      const t = ctx.currentTime;
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      const f = ctx.createBiquadFilter();
+      o.type = "sawtooth";
+      o.frequency.value = notes[i % notes.length];
+      f.type = "lowpass";
+      f.frequency.value = 800;
+      f.Q.value = 6;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.25, t + 0.05);
+      g.gain.linearRampToValueAtTime(0, t + 0.7);
+      o.connect(f); f.connect(g); g.connect(musicGain);
+      o.start(t);
+      o.stop(t + 0.75);
+      i++;
+      musicTimer = setTimeout(tick, 800);
+    }
+    tick();
+
+    // Heartbeat-ish kick every 1.6s
+    let beatTimer;
+    function beat() {
+      if (!musicOn) return;
+      const t = ctx.currentTime;
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = "sine";
+      o.frequency.setValueAtTime(80, t);
+      o.frequency.exponentialRampToValueAtTime(35, t + 0.15);
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.4, t + 0.005);
+      g.gain.linearRampToValueAtTime(0, t + 0.18);
+      o.connect(g); g.connect(musicGain);
+      o.start(t);
+      o.stop(t + 0.2);
+      beatTimer = setTimeout(beat, 1600);
+    }
+    beat();
+  }
+
+  function stopMusic() {
+    musicOn = false;
+    if (musicTimer) clearTimeout(musicTimer);
+    musicNodes.forEach(n => { try { n.stop(); } catch (e) {} });
+    musicNodes = [];
+    if (musicGain) {
+      try {
+        musicGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5);
+        setTimeout(() => { try { musicGain.disconnect(); } catch (e) {} }, 600);
+      } catch (e) {}
+    }
+  }
+
+  function duckMusic(amount = 0.04, duration = 1.5) {
+    if (!musicGain) return;
+    const t = ctx.currentTime;
+    musicGain.gain.cancelScheduledValues(t);
+    musicGain.gain.setValueAtTime(musicGain.gain.value, t);
+    musicGain.gain.linearRampToValueAtTime(amount, t + 0.1);
+    musicGain.gain.linearRampToValueAtTime(0.12, t + duration);
+  }
+
+  return { ensure, roar, atomicBreath, explosion, correctChime, wrongBuzz, levelUpFanfare, startMusic, stopMusic, duckMusic };
+})();
+
+// ---------- Level definitions ----------
+const LEVELS = [
+  {
+    title: "BABY KAIJU",
+    desc: "Type single letters! Use home row: A S D F  J K L ;",
+    pool: ["a","s","d","f","j","k","l","g","h"],
+    spawnEvery: 2200,
+    fallSpeed: 18, // seconds to fall across viewport
+    target: 10,
+    minLen: 1, maxLen: 1
+  },
+  {
+    title: "YOUNG GODZILLA",
+    desc: "All letters now! Type the letters to ROAR!",
+    pool: "abcdefghijklmnopqrstuvwxyz".split(""),
+    spawnEvery: 1800,
+    fallSpeed: 16,
+    target: 12,
+    minLen: 1, maxLen: 1
+  },
+  {
+    title: "GODZILLA AWAKENS",
+    desc: "Real words! Smash them with atomic breath!",
+    pool: ["cat","dog","run","sun","fun","big","top","mom","dad","hit","map","fox","bug","red","pop","bat","jam"],
+    spawnEvery: 2400,
+    fallSpeed: 18,
+    target: 12,
+    minLen: 3, maxLen: 3
+  },
+  {
+    title: "ATOMIC BREATH",
+    desc: "Bigger buildings! Bigger words! BIGGER ROAR!",
+    pool: ["fire","roar","city","jump","kick","fast","bomb","loud","fish","bird","tree","king","fish","wind","wave","cool"],
+    spawnEvery: 2400,
+    fallSpeed: 17,
+    target: 14,
+    minLen: 4, maxLen: 4
+  },
+  {
+    title: "KAIJU CARNAGE",
+    desc: "Godzilla-power words. Show no mercy!",
+    pool: ["smash","crash","stomp","roar!","tokyo","kaiju","laser","power","giant","scary","brave","strong","attack","danger","monster","destroy","rampage"],
+    spawnEvery: 2600,
+    fallSpeed: 18,
+    target: 14,
+    minLen: 5, maxLen: 8
+  },
+  {
+    title: "KING OF MONSTERS",
+    desc: "Short sentences! Use the space bar!",
+    pool: [
+      "godzilla wins",
+      "smash the city",
+      "kaiju attack",
+      "atomic breath",
+      "save tokyo",
+      "monster king",
+      "i can type",
+      "you are fast",
+      "roar loud now",
+      "fire and smoke"
+    ],
+    spawnEvery: 4500,
+    fallSpeed: 22,
+    target: 8,
+    minLen: 8, maxLen: 20
+  }
+];
+
+// ---------- Game state ----------
+const State = {
+  running: false,
+  paused: false,
+  level: 0,
+  score: 0,
+  combo: 1,
+  bestCombo: 1,
+  health: 100,
+  destroyed: 0,
+  spawnTimer: null,
+  buildings: [], // {el, word, typed, x, spawnAt, duration}
+  currentTarget: null
+};
+
+// ---------- DOM refs ----------
+const $game = document.getElementById("game");
+const $skyline = document.getElementById("skyline");
+const $godzilla = document.getElementById("godzilla");
+const $score = document.getElementById("score");
+const $level = document.getElementById("level");
+const $combo = document.getElementById("combo");
+const $healthBar = document.getElementById("health-bar");
+const $start = document.getElementById("start");
+const $startBtn = document.getElementById("startBtn");
+const $gameover = document.getElementById("gameover");
+const $restartBtn = document.getElementById("restartBtn");
+const $levelup = document.getElementById("levelup");
+const $continueBtn = document.getElementById("continueBtn");
+const $levelTitle = document.getElementById("levelTitle");
+const $levelDesc = document.getElementById("levelDesc");
+const $endTitle = document.getElementById("endTitle");
+const $endSubtitle = document.getElementById("endSubtitle");
+const $finalScore = document.getElementById("finalScore");
+const $finalCombo = document.getElementById("finalCombo");
+const $finalSmashed = document.getElementById("finalSmashed");
+const $banner = document.getElementById("combo-banner");
+const $hint = document.getElementById("hint");
+const $lightning = document.getElementById("lightning");
+const $ipadInput = document.getElementById("ipad-input");
+const $kbBtn = document.getElementById("kb-btn");
+
+// ---------- Setup decorative scene ----------
+function buildSkyline() {
+  $skyline.innerHTML = "";
+  // Stars
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement("div");
+    s.className = "star";
+    s.style.left = Math.random() * 100 + "%";
+    s.style.top = Math.random() * 60 + "%";
+    s.style.animationDelay = Math.random() * 3 + "s";
+    $game.appendChild(s);
+  }
+  // Background silhouette buildings (decoration, not gameplay)
+  const colors = ["#1a1424", "#221428", "#1a0a18", "#26182c"];
+  const skyW = window.innerWidth;
+  let x = 0;
+  while (x < skyW) {
+    const w = 40 + Math.random() * 100;
+    const h = 60 + Math.random() * 200;
+    const b = document.createElement("div");
+    b.style.position = "absolute";
+    b.style.left = x + "px";
+    b.style.bottom = "0";
+    b.style.width = w + "px";
+    b.style.height = h + "px";
+    b.style.background = colors[Math.floor(Math.random()*colors.length)];
+    b.style.borderTop = "2px solid #3a2840";
+    b.style.opacity = "0.85";
+    // Dots for windows
+    b.style.backgroundImage =
+      `radial-gradient(circle at 30% 30%, rgba(255,200,80,0.4) 1px, transparent 1.5px),
+       radial-gradient(circle at 70% 50%, rgba(255,200,80,0.3) 1px, transparent 1.5px),
+       radial-gradient(circle at 30% 70%, rgba(255,200,80,0.4) 1px, transparent 1.5px)`;
+    b.style.backgroundSize = "30px 40px";
+    $skyline.appendChild(b);
+    x += w - 4;
+  }
+}
+
+// ---------- Lightning random ----------
+function maybeLightning() {
+  if (!State.running) return;
+  if (Math.random() < 0.3) {
+    $lightning.classList.remove("flash");
+    void $lightning.offsetWidth;
+    $lightning.classList.add("flash");
+  }
+  setTimeout(maybeLightning, 5000 + Math.random() * 8000);
+}
+
+// ---------- HUD updates ----------
+function updateHUD() {
+  $score.textContent = State.score;
+  $level.textContent = State.level + 1;
+  $combo.textContent = "x" + State.combo;
+  $healthBar.style.width = State.health + "%";
+}
+
+function bumpCombo() {
+  $combo.classList.remove("big");
+  void $combo.offsetWidth;
+  $combo.classList.add("big");
+}
+
+// ---------- Spawning buildings ----------
+function pickWord(level) {
+  const lv = LEVELS[level];
+  const w = lv.pool[Math.floor(Math.random() * lv.pool.length)];
+  return w;
+}
+
+function spawnBuilding() {
+  if (!State.running || State.paused) return;
+  const lv = LEVELS[State.level];
+  const word = pickWord(State.level);
+  const screenW = window.innerWidth;
+
+  const charW = Math.max(20, word.length * 18 + 40);
+  const bWidth = Math.max(70, charW);
+  const bHeight = 120 + Math.random() * 100;
+
+  // Right-to-left approach: start off-screen right, approach Godzilla on left
+  const startX = screenW + 40;
+  const endX = screenW * 0.30; // stop near godzilla's right edge
+
+  const el = document.createElement("div");
+  el.className = "building";
+  el.style.width = bWidth + "px";
+  el.style.height = bHeight + "px";
+  el.style.left = startX + "px";
+
+  const wordEl = document.createElement("div");
+  wordEl.className = "word";
+  wordEl.textContent = word.toUpperCase();
+  el.appendChild(wordEl);
+
+  $game.appendChild(el);
+
+  const b = {
+    el, wordEl, word: word.toLowerCase(),
+    typed: 0,
+    startX, endX,
+    spawnAt: performance.now(),
+    duration: lv.fallSpeed * 1000,
+    dead: false
+  };
+  State.buildings.push(b);
+
+  // Try to auto-target if no current target
+  pickTarget();
+}
+
+// ---------- Animation loop ----------
+let rafId = null;
+function loop() {
+  if (!State.running) return;
+  const now = performance.now();
+  for (const b of State.buildings) {
+    if (b.dead) continue;
+    const t = Math.min(1, (now - b.spawnAt) / b.duration);
+    const x = b.startX + (b.endX - b.startX) * t;
+    b.el.style.left = x + "px";
+
+    // Reached city center → damage
+    if (t >= 1) {
+      b.dead = true;
+      damageCity(b);
+    }
+  }
+  // Remove dead
+  State.buildings = State.buildings.filter(b => !b.dead);
+  rafId = requestAnimationFrame(loop);
+}
+
+// ---------- Target picking ----------
+function pickTarget() {
+  // Target = oldest live building whose first letter matches OR oldest if none typed
+  // Simpler: pick the leftmost (closest to godzilla) untyped building
+  if (State.currentTarget && !State.currentTarget.dead && State.buildings.includes(State.currentTarget)) return;
+  State.currentTarget = null;
+  let best = null;
+  let bestX = Infinity;
+  for (const b of State.buildings) {
+    if (b.dead) continue;
+    const x = parseFloat(b.el.style.left);
+    if (x < bestX) { bestX = x; best = b; }
+  }
+  setTarget(best);
+}
+
+function setTarget(b) {
+  if (State.currentTarget && State.currentTarget !== b) {
+    State.currentTarget.el.classList.remove("targeted");
+    // Reset typed progress on old target
+    State.currentTarget.typed = 0;
+    renderWord(State.currentTarget);
+  }
+  State.currentTarget = b;
+  if (b) b.el.classList.add("targeted");
+}
+
+function renderWord(b) {
+  const word = b.word.toUpperCase();
+  const t = b.typed;
+  b.wordEl.innerHTML =
+    '<span class="typed">' + word.slice(0, t) + '</span>' + word.slice(t);
+}
+
+// ---------- Key handling ----------
+function handleKey(rawCh) {
+  if (!State.running || State.paused) return;
+  const ch = rawCh.toLowerCase();
+
+  // If no target, try to auto-pick one whose first letter matches
+  if (!State.currentTarget || State.currentTarget.dead) {
+    let match = null;
+    for (const b of State.buildings) {
+      if (b.dead) continue;
+      if (b.word[0] === ch) { match = b; break; }
+    }
+    if (match) setTarget(match);
+    else { wrongKey(); return; }
+  }
+
+  // Allow switching target if current first char doesn't match but another building does
+  const b = State.currentTarget;
+  if (b.word[b.typed] !== ch) {
+    // Try switching to another building whose next char matches and is closer
+    let alt = null;
+    for (const ob of State.buildings) {
+      if (ob.dead || ob === b) continue;
+      if (ob.word[ob.typed] === ch) {
+        if (!alt || parseFloat(ob.el.style.left) < parseFloat(alt.el.style.left)) alt = ob;
+      }
+    }
+    if (alt) {
+      setTarget(alt);
+      return handleKey(rawCh);
+    }
+    wrongKey();
+    return;
+  }
+
+  // Correct keystroke
+  b.typed++;
+  renderWord(b);
+  Audio.correctChime();
+  State.score += 10 * State.combo;
+
+  // Mini atomic beam pulse on each correct key
+  shootBeam(b, false);
+
+  if (b.typed >= b.word.length) {
+    destroyBuilding(b);
+  }
+  updateHUD();
+}
+
+function wrongKey() {
+  Audio.wrongBuzz();
+  State.combo = 1;
+  updateHUD();
+  // Mini shake
+  $game.classList.remove("shake");
+  void $game.offsetWidth;
+  $game.classList.add("shake");
+}
+
+// ---------- Beam, destruction, damage ----------
+function shootBeam(b, full) {
+  Audio.atomicBreath();
+  $godzilla.classList.remove("attacking");
+  void $godzilla.offsetWidth;
+  $godzilla.classList.add("attacking");
+
+  const gzRect = $godzilla.getBoundingClientRect();
+  const bRect = b.el.getBoundingClientRect();
+  const startX = gzRect.right - 10;
+  const startY = gzRect.top + gzRect.height * 0.35;
+  const endX = bRect.left + bRect.width / 2;
+  const endY = bRect.top + bRect.height / 2;
+  const dx = endX - startX;
+  const dy = endY - startY;
+  const len = Math.sqrt(dx*dx + dy*dy);
+  const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+
+  const beam = document.createElement("div");
+  beam.className = "beam";
+  beam.style.left = startX + "px";
+  beam.style.top = startY + "px";
+  beam.style.width = "0px";
+  beam.style.transform = `rotate(${angle}deg)`;
+  $game.appendChild(beam);
+  // Animate
+  requestAnimationFrame(() => {
+    beam.style.transition = "width 0.08s linear, opacity 0.25s linear 0.08s";
+    beam.style.width = len + "px";
+    beam.style.opacity = "1";
+    setTimeout(() => { beam.style.opacity = "0"; }, 120);
+    setTimeout(() => beam.remove(), 400);
+  });
+}
+
+function destroyBuilding(b) {
+  b.dead = true;
+  shootBeam(b, true);
+  Audio.explosion();
+  Audio.duckMusic();
+  spawnParticles(b.el);
+  b.el.classList.add("destroyed");
+  setTimeout(() => b.el.remove(), 900);
+
+  State.score += 100;
+  State.destroyed++;
+  State.combo++;
+  if (State.combo > State.bestCombo) State.bestCombo = State.combo;
+  bumpCombo();
+
+  if (State.combo >= 5 && State.combo % 5 === 0) {
+    showBanner(["MEGA SMASH!", "RAMPAGE!", "DEVASTATING!", "ROOOAAR!!", "CITY CRUSHER!"][Math.floor(Math.random()*5)]);
+    Audio.roar(false);
+  }
+
+  $game.classList.remove("shake");
+  void $game.offsetWidth;
+  $game.classList.add("shake");
+
+  if (State.currentTarget === b) State.currentTarget = null;
+  pickTarget();
+  checkLevelProgress();
+  updateHUD();
+}
+
+function damageCity(b) {
+  // Building reached Godzilla without being typed — Godzilla takes damage (or "attention is lost"!)
+  b.el.classList.add("destroyed");
+  setTimeout(() => b.el.remove(), 900);
+  State.health = Math.max(0, State.health - 15);
+  State.combo = 1;
+  Audio.wrongBuzz();
+  $godzilla.classList.remove("hurt");
+  void $godzilla.offsetWidth;
+  $godzilla.classList.add("hurt");
+  $game.classList.remove("shake");
+  void $game.offsetWidth;
+  $game.classList.add("shake");
+  if (State.currentTarget === b) State.currentTarget = null;
+  pickTarget();
+  updateHUD();
+  if (State.health <= 0) gameOver(false);
+}
+
+function spawnParticles(el) {
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top + rect.height/2;
+  const colors = ["#ff8800", "#ffaa00", "#ff3030", "#ffeb6a", "#ffffff"];
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement("div");
+    p.className = "particle";
+    p.style.left = cx + "px";
+    p.style.top = cy + "px";
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.boxShadow = "0 0 8px " + p.style.background;
+    $game.appendChild(p);
+    const angle = (Math.PI * 2 * i / 18) + Math.random() * 0.5;
+    const speed = 80 + Math.random() * 200;
+    const dx = Math.cos(angle) * speed;
+    const dy = Math.sin(angle) * speed - 60;
+    const start = performance.now();
+    function step(now) {
+      const t = (now - start) / 700;
+      if (t >= 1) { p.remove(); return; }
+      p.style.transform = `translate(${dx*t}px, ${dy*t + 400*t*t}px) scale(${1-t})`;
+      p.style.opacity = (1 - t).toFixed(2);
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+}
+
+function showBanner(text) {
+  $banner.textContent = text;
+  $banner.classList.remove("show");
+  void $banner.offsetWidth;
+  $banner.classList.add("show");
+}
+
+// ---------- Hints ----------
+function showHint(text, ms = 3000) {
+  $hint.textContent = text;
+  $hint.classList.add("show");
+  setTimeout(() => $hint.classList.remove("show"), ms);
+}
+
+// ---------- Level progress ----------
+function checkLevelProgress() {
+  const lv = LEVELS[State.level];
+  if (State.destroyed >= lv.target) {
+    if (State.level + 1 < LEVELS.length) {
+      pauseGame();
+      State.level++;
+      State.destroyed = 0;
+      const nlv = LEVELS[State.level];
+      $levelTitle.textContent = nlv.title;
+      $levelDesc.textContent = nlv.desc;
+      Audio.levelUpFanfare();
+      Audio.roar(true);
+      $levelup.classList.remove("hidden");
+    } else {
+      gameOver(true);
+    }
+  }
+}
+
+// ---------- Game flow ----------
+function startGame() {
+  $start.classList.add("hidden");
+  $gameover.classList.add("hidden");
+  $levelup.classList.add("hidden");
+  State.running = true;
+  State.paused = false;
+  State.level = 0;
+  State.score = 0;
+  State.combo = 1;
+  State.bestCombo = 1;
+  State.health = 100;
+  State.destroyed = 0;
+  State.buildings.forEach(b => b.el.remove());
+  State.buildings = [];
+  State.currentTarget = null;
+
+  Audio.ensure();
+  Audio.startMusic();
+  Audio.roar(true);
+  updateHUD();
+  scheduleSpawns();
+  loop();
+  maybeLightning();
+  showHint("TYPE THE WORDS ON BUILDINGS!", 3500);
+  focusInput();
+}
+
+function continueLevel() {
+  $levelup.classList.add("hidden");
+  State.paused = false;
+  scheduleSpawns();
+  loop();
+  showHint(LEVELS[State.level].title + "!", 2500);
+  focusInput();
+}
+
+function pauseGame() {
+  State.paused = true;
+  if (State.spawnTimer) { clearTimeout(State.spawnTimer); State.spawnTimer = null; }
+  if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+}
+
+function scheduleSpawns() {
+  if (State.spawnTimer) clearTimeout(State.spawnTimer);
+  const lv = LEVELS[State.level];
+  spawnBuilding();
+  State.spawnTimer = setTimeout(scheduleSpawns, lv.spawnEvery);
+}
+
+function gameOver(victory) {
+  State.running = false;
+  pauseGame();
+  Audio.stopMusic();
+  $finalScore.textContent = State.score;
+  $finalCombo.textContent = "x" + State.bestCombo;
+  $finalSmashed.textContent = State.destroyed + " (this level)";
+  if (victory) {
+    $endTitle.textContent = "KING OF MONSTERS!";
+    $endSubtitle.textContent = "Godzilla has conquered every city!";
+    Audio.levelUpFanfare();
+    setTimeout(() => Audio.roar(true), 600);
+  } else {
+    $endTitle.textContent = "CITY DEFENDED";
+    $endSubtitle.textContent = "Godzilla retreats... regroup and try again!";
+  }
+  $gameover.classList.remove("hidden");
+}
+
+// ---------- Input handling ----------
+document.addEventListener("keydown", (e) => {
+  if (!State.running || State.paused) return;
+  if (e.key.length === 1 && /[a-zA-Z]/.test(e.key)) {
+    e.preventDefault();
+    handleKey(e.key);
+  } else if (e.key === " ") {
+    e.preventDefault();
+    handleKey(" ");
+  } else if (e.key === "!" || e.key === "?" || e.key === ".") {
+    e.preventDefault();
+    handleKey(e.key);
+  }
+});
+
+// iPad: hidden input captures keystrokes
+$ipadInput.addEventListener("input", (e) => {
+  const v = $ipadInput.value;
+  if (v.length > 0) {
+    const ch = v[v.length - 1];
+    handleKey(ch);
+    $ipadInput.value = "";
+  }
+});
+
+function focusInput() {
+  // Helpful on iPad — focus the hidden input so the soft keyboard appears
+  if (isTouchDevice()) {
+    setTimeout(() => $ipadInput.focus(), 50);
+  }
+}
+
+function isTouchDevice() {
+  return "ontouchstart" in window || navigator.maxTouchPoints > 0;
+}
+
+// Tap anywhere to refocus input on touch devices
+document.addEventListener("touchstart", (e) => {
+  if (State.running && isTouchDevice()) {
+    $ipadInput.focus();
+  }
+}, { passive: true });
+
+$kbBtn.addEventListener("click", () => {
+  $ipadInput.focus();
+});
+
+// ---------- Buttons ----------
+$startBtn.addEventListener("click", startGame);
+$restartBtn.addEventListener("click", startGame);
+$continueBtn.addEventListener("click", continueLevel);
+
+// ---------- Boot ----------
+buildSkyline();
+window.addEventListener("resize", () => {
+  $skyline.innerHTML = "";
+  // Remove the dynamically appended stars too (they were appended to #game directly)
+  document.querySelectorAll(".star").forEach(s => s.remove());
+  buildSkyline();
+});
+
+// Show keyboard hint button only on touch devices
+if (!isTouchDevice()) {
+  $kbBtn.style.display = "none";
+}
+</script>
+</body>
+</html>

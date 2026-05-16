@@ -702,6 +702,59 @@
     to   { transform: rotate(8deg) scale(1.15); }
   }
   /* Boss building — bigger, scarier, pulsing border */
+  /* ============ LEARNING BUILDINGS ============ */
+  .building-math {
+    background: linear-gradient(180deg, #ff6ad8 0%, #5a0a6a 100%) !important;
+    border-color: #ffe066 !important;
+    box-shadow:
+      inset 0 0 22px rgba(0,0,0,0.6),
+      0 0 18px #ff6ad8,
+      0 0 36px rgba(255, 106, 216, 0.6) !important;
+  }
+  .building-math .word {
+    border-color: #ffe066 !important;
+    text-shadow: 0 0 8px #ffe066, 0 0 18px #ff6ad8 !important;
+  }
+  .math-question {
+    position: absolute;
+    top: 18%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ffffff;
+    font-size: clamp(20px, 3.4vw, 30px);
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-shadow: 0 0 8px #ffe066, 2px 2px 0 #000;
+    white-space: nowrap;
+    z-index: 4;
+  }
+  .building-listen {
+    background: linear-gradient(180deg, #5fbfff 0%, #1a3a8a 100%) !important;
+    border-color: #ffffff !important;
+    box-shadow:
+      inset 0 0 22px rgba(0,0,0,0.6),
+      0 0 18px #5fbfff,
+      0 0 36px rgba(95, 191, 255, 0.6) !important;
+  }
+  .building-listen .word {
+    border-color: #ffffff !important;
+    text-shadow: 0 0 8px #ffffff, 0 0 16px #5fbfff !important;
+  }
+  .listen-icon {
+    position: absolute;
+    top: 18%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(28px, 4.5vw, 44px);
+    text-shadow: 0 0 12px #ffffff;
+    z-index: 4;
+    animation: listen-pulse 0.9s ease-in-out infinite alternate;
+  }
+  @keyframes listen-pulse {
+    from { transform: translateX(-50%) scale(1); }
+    to   { transform: translateX(-50%) scale(1.18); }
+  }
+
   .building-boss {
     border-color: #ff44dd !important;
     box-shadow:
@@ -793,21 +846,39 @@
     text-shadow: 1px 1px 0 #000;
   }
   /* Opponent word label (where the player types) */
-  .opponent .word {
+  /* Opponent typed-word panel — top-level overlay (NOT a child of .opponent)
+     so it ignores opponent animations and stays above the HUD. */
+  .opp-word {
     position: absolute;
-    top: -50px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: clamp(24px, 3.6vw, 38px);
+    z-index: 50;
+    font-size: clamp(28px, 5vw, 48px);
     color: #fff;
-    background: rgba(0,0,0,0.9);
-    padding: 6px 14px;
-    border-radius: 8px;
-    border: 3px solid currentColor;
-    text-shadow: 0 0 8px currentColor, 0 0 16px currentColor;
-    letter-spacing: 2px;
+    background: rgba(0,0,0,0.92);
+    padding: 8px 18px;
+    border-radius: 10px;
+    border: 4px solid currentColor;
+    text-shadow:
+      0 0 10px currentColor,
+      0 0 20px currentColor,
+      2px 2px 0 #000;
+    letter-spacing: 3px;
     font-weight: 900;
     white-space: nowrap;
+    box-shadow: 0 0 28px currentColor, 0 0 48px rgba(255,255,255,0.2);
+    pointer-events: none;
+  }
+  .opp-word .typed {
+    color: #5fffaa;
+    text-shadow: 0 0 6px #5fffaa, 0 0 14px #5fffaa;
+  }
+  .opp-word .next {
+    color: var(--accent);
+    background: rgba(255,235,106,0.25);
+    padding: 0 4px;
+    border-radius: 4px;
+    animation: next-pulse 0.6s ease-in-out infinite alternate;
+    display: inline-block;
+    text-shadow: 0 0 10px var(--accent), 0 0 20px currentColor;
   }
 
   /* Opponent fireball (their attack) */
@@ -1452,6 +1523,13 @@
     <p>Final Score: <span id="finalScore">0</span></p>
     <p>Best Combo: <span id="finalCombo">x1</span></p>
     <p>Buildings Smashed: <span id="finalSmashed">0</span></p>
+    <div id="learningSummary" style="margin-top: 14px; padding: 12px 16px; background: rgba(95,255,170,0.08); border: 2px solid #5fffaa; border-radius: 8px; max-width: 480px;">
+      <p style="color:#5fffaa; font-size:16px; letter-spacing:2px; margin-bottom:8px;">📚 YOU LEARNED:</p>
+      <p>⌨ Letters typed: <span id="statLetters">0</span></p>
+      <p>📖 Words typed: <span id="statWords">0</span></p>
+      <p>➕ Math problems solved: <span id="statMath">0</span></p>
+      <p>🔊 Listen-and-type wins: <span id="statListen">0</span></p>
+    </div>
     <button class="btn" id="restartBtn">🦖 RAMPAGE AGAIN</button>
   </div>
 
@@ -1824,7 +1902,7 @@ const Voice = (() => {
 })();
 
 // ---------- Version ----------
-const GAME_VERSION = "v2.6 · OPPONENT BOSSES";
+const GAME_VERSION = "v2.7 · LEARNING + KONG";
 const GAME_BUILD_DATE = "2026-05-16";
 
 // ---------- Characters ----------
@@ -2188,6 +2266,95 @@ const GHIDORAH_SVG = `
 </g>
 `;
 
+const KONG_SVG = `
+<defs>
+  <linearGradient id="g-kong-body" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#6a4a28"/>
+    <stop offset="60%" stop-color="#3a2614"/>
+    <stop offset="100%" stop-color="#1a1208"/>
+  </linearGradient>
+  <linearGradient id="g-kong-face" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#c8946a"/>
+    <stop offset="100%" stop-color="#6a4628"/>
+  </linearGradient>
+  <linearGradient id="g-kong-chest" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#8a6440"/>
+    <stop offset="100%" stop-color="#4a3018"/>
+  </linearGradient>
+</defs>
+<g>
+  <!-- LEGS -->
+  <ellipse cx="80"  cy="265" rx="18" ry="34" fill="url(#g-kong-body)" stroke="#000" stroke-width="2"/>
+  <ellipse cx="120" cy="265" rx="18" ry="34" fill="url(#g-kong-body)" stroke="#000" stroke-width="2"/>
+  <!-- FEET -->
+  <ellipse cx="78"  cy="293" rx="20" ry="6" fill="#1a1208" stroke="#000" stroke-width="1.5"/>
+  <ellipse cx="122" cy="293" rx="20" ry="6" fill="#1a1208" stroke="#000" stroke-width="1.5"/>
+  <!-- TOES -->
+  <circle cx="66"  cy="294" r="3" fill="#3a2614"/>
+  <circle cx="78"  cy="296" r="3" fill="#3a2614"/>
+  <circle cx="90"  cy="294" r="3" fill="#3a2614"/>
+  <circle cx="110" cy="294" r="3" fill="#3a2614"/>
+  <circle cx="122" cy="296" r="3" fill="#3a2614"/>
+  <circle cx="134" cy="294" r="3" fill="#3a2614"/>
+  <!-- BIG BARREL BODY -->
+  <path d="M 48 145 Q 28 185 50 240 Q 100 252 150 240 Q 172 185 152 145 Q 100 128 48 145 Z"
+        fill="url(#g-kong-body)" stroke="#000" stroke-width="2.5"/>
+  <!-- CHEST FUR (lighter patch in the middle) -->
+  <path d="M 72 160 Q 100 168 128 160 L 132 215 Q 100 228 68 215 Z"
+        fill="url(#g-kong-chest)" opacity="0.85" stroke="#000" stroke-width="0.5"/>
+  <!-- chest abdomen lines -->
+  <line x1="100" y1="170" x2="100" y2="220" stroke="#3a2614" stroke-width="1.5"/>
+  <line x1="76" y1="190" x2="124" y2="190" stroke="#3a2614" stroke-width="1"/>
+  <!-- MASSIVE ARMS (longer than body) -->
+  <ellipse cx="34"  cy="200" rx="20" ry="58" fill="url(#g-kong-body)" stroke="#000" stroke-width="2.5"/>
+  <ellipse cx="166" cy="200" rx="20" ry="58" fill="url(#g-kong-body)" stroke="#000" stroke-width="2.5"/>
+  <!-- FISTS (round, huge) -->
+  <circle cx="32"  cy="252" r="20" fill="url(#g-kong-body)" stroke="#000" stroke-width="2.5"/>
+  <circle cx="168" cy="252" r="20" fill="url(#g-kong-body)" stroke="#000" stroke-width="2.5"/>
+  <!-- knuckle dimples -->
+  <circle cx="22" cy="248" r="2" fill="#000"/>
+  <circle cx="30" cy="245" r="2" fill="#000"/>
+  <circle cx="38" cy="247" r="2" fill="#000"/>
+  <circle cx="46" cy="249" r="2" fill="#000"/>
+  <circle cx="154" cy="249" r="2" fill="#000"/>
+  <circle cx="162" cy="247" r="2" fill="#000"/>
+  <circle cx="170" cy="245" r="2" fill="#000"/>
+  <circle cx="178" cy="248" r="2" fill="#000"/>
+  <!-- HEAD -->
+  <ellipse cx="100" cy="92" rx="36" ry="34" fill="url(#g-kong-body)" stroke="#000" stroke-width="2.5"/>
+  <!-- FACE (lighter mask) -->
+  <ellipse cx="100" cy="102" rx="26" ry="22" fill="url(#g-kong-face)" stroke="#000" stroke-width="1.5"/>
+  <!-- HEAVY BROW ridge -->
+  <path d="M 78 84 Q 100 74 122 84 L 124 92 Q 100 82 76 92 Z" fill="url(#g-kong-body)" stroke="#000" stroke-width="1"/>
+  <!-- EYES (intense yellow with glow) -->
+  <ellipse cx="89"  cy="96" rx="5" ry="6" fill="#ffffff"/>
+  <ellipse cx="111" cy="96" rx="5" ry="6" fill="#ffffff"/>
+  <circle cx="89"  cy="98" r="2.8" fill="#3a2614"/>
+  <circle cx="111" cy="98" r="2.8" fill="#3a2614"/>
+  <circle cx="89"  cy="96" r="9" fill="#ffaa00" opacity="0.15"/>
+  <circle cx="111" cy="96" r="9" fill="#ffaa00" opacity="0.15"/>
+  <!-- NOSTRILS -->
+  <ellipse cx="95"  cy="108" rx="2" ry="1.5" fill="#000"/>
+  <ellipse cx="105" cy="108" rx="2" ry="1.5" fill="#000"/>
+  <!-- MOUTH (roaring open) -->
+  <path d="M 78 118 Q 100 132 122 118 Q 118 126 100 130 Q 82 126 78 118 Z"
+        fill="#3a1408" stroke="#000" stroke-width="1.5"/>
+  <!-- TEETH -->
+  <polygon points="86,122 88,128 90,122" fill="#fff"/>
+  <polygon points="96,124 98,130 100,124" fill="#fff"/>
+  <polygon points="106,124 108,130 110,124" fill="#fff"/>
+  <polygon points="116,122 118,128 120,122" fill="#fff"/>
+  <!-- canine fang -->
+  <polygon points="89,123 90,131 92,123" fill="#fff"/>
+  <polygon points="110,123 112,131 113,123" fill="#fff"/>
+  <!-- EARS (small, round) -->
+  <ellipse cx="65"  cy="92" rx="7" ry="9" fill="url(#g-kong-body)" stroke="#000" stroke-width="1.5"/>
+  <ellipse cx="135" cy="92" rx="7" ry="9" fill="url(#g-kong-body)" stroke="#000" stroke-width="1.5"/>
+  <ellipse cx="65"  cy="92" rx="3" ry="5" fill="#3a1408"/>
+  <ellipse cx="135" cy="92" rx="3" ry="5" fill="#3a1408"/>
+</g>
+`;
+
 const CHARACTERS = {
   gojira: {
     name: "GOJIRA",
@@ -2250,8 +2417,21 @@ const CHARACTERS = {
       "The most dangerous kaiju in the universe!"
     ]
   },
+  kong: {
+    name: "KING KONG",
+    subtitle: "The Mighty Ape of Skull Island",
+    svg: KONG_SVG, color: "#c8946a", mouthX: 175,
+    biome: 2, // FOREST / jungle
+    lore: [
+      "King Kong! Mighty ape from Skull Island!",
+      "He beats his chest to show how strong he is!",
+      "His huge fists smash buildings in ONE punch!",
+      "He climbs the tallest towers like they are nothing!",
+      "ROAR! The king of all apes has arrived!"
+    ]
+  },
 };
-const CHARACTER_ORDER = ["gojira","space","fire","cyber","ghidorah"];
+const CHARACTER_ORDER = ["gojira","space","fire","cyber","ghidorah","kong"];
 
 // ============================================================
 // OPPONENTS — enemy kaiju the player FIGHTS at boss levels
@@ -2670,6 +2850,8 @@ const State = {
   bossSpawnedThisLevel: false,
   startingCharacter: null, // set from start-screen kaiju pick
   currentOpponent: null,   // active opponent fight, if any
+  // ----- LEARNING STATS (end-of-run summary) -----
+  learnStats: { lettersTyped: 0, wordsTyped: 0, mathSolved: 0, listenSolved: 0 },
 };
 
 // ---------- DOM ----------
@@ -2880,9 +3062,52 @@ function bumpCombo() {
 }
 
 // ---------- Spawn ----------
+// ============================================================
+// LEARNING CONTENT — themes, math, listen-and-type, sight words
+// ============================================================
+// Sight words (kid reading staples). Mixed in at moderate levels.
+const SIGHT_WORDS = [
+  "the","and","is","you","are","for","with","not","this","that","have","see",
+  "can","go","up","in","on","at","my","we","he","she","it","an","of","be","do"
+];
+// Themed vocabulary clusters — voice announces them at level start.
+const THEMES = {
+  animals: { label: "ANIMALS",  words: ["cat","dog","fox","bug","pig","cow","bee","owl","ant","duck","bird","fish","frog"] },
+  colors:  { label: "COLORS",   words: ["red","blue","pink","gold","dark","glow","tan","grey","navy"] },
+  family:  { label: "FAMILY",   words: ["mom","dad","sis","son","baby","papa","mama","kid","family"] },
+  food:    { label: "FOOD",     words: ["cake","milk","egg","jam","bun","pie","tea","ham","soup","rice","fish","bread"] },
+  body:    { label: "BODY",     words: ["arm","leg","ear","eye","head","foot","hand","hair","lip","nose","face"] },
+  nature:  { label: "NATURE",   words: ["tree","sun","moon","star","lake","hill","snow","rain","wind","fire","sky","cloud"] }
+};
+// Assigning a theme to specific levels (kid still gets pool variety —
+// theme words only appear ~50% of the time once introduced).
+const LEVEL_THEME = {
+  5: "animals", 7: "colors", 9: "family",
+  11: "food",   13: "body",  16: "nature"
+};
+
 function pickWord(level) {
   const lv = LEVELS[level];
+  const themeKey = LEVEL_THEME[level + 1]; // levels are 1-indexed in UI
+  // 50% chance to pick a themed word (introduces new vocabulary)
+  if (themeKey && THEMES[themeKey] && Math.random() < 0.5) {
+    const tw = THEMES[themeKey].words;
+    return tw[Math.floor(Math.random() * tw.length)];
+  }
+  // 12% sight-word sprinkle from level 4 onward (after kid knows letters)
+  if (level >= 3 && Math.random() < 0.12) {
+    return SIGHT_WORDS[Math.floor(Math.random() * SIGHT_WORDS.length)];
+  }
   return lv.pool[Math.floor(Math.random() * lv.pool.length)];
+}
+
+// Math problem generator: a + b ≤ 9, returns { question, answerWord }
+const NUM_WORDS = ["zero","one","two","three","four","five","six","seven","eight","nine"];
+function makeMathProblem() {
+  // Bias toward easier problems with small numbers
+  const a = 1 + Math.floor(Math.random() * 4); // 1-4
+  const b = 1 + Math.floor(Math.random() * (9 - a)); // ensures sum ≤ 9
+  return { question: a + " + " + b, answerWord: NUM_WORDS[a + b] };
 }
 
 function spawnBuilding() {
@@ -3028,6 +3253,153 @@ function spawnFlyer() {
   // Quick screech roar to alert the player
   Audio.roar(false);
   speakForPhonics(word);
+}
+
+// ============================================================
+// MATH BUILDING — answer is the number WORD ("five" for 2+3)
+// Teaches addition + spelling of number words in one go.
+// ============================================================
+function spawnMathBuilding() {
+  if (!State.running || State.paused) return;
+  const lv = LEVELS[State.level];
+  const problem = makeMathProblem();
+  const word = problem.answerWord;
+  const playW = $playfield.clientWidth;
+  const playH = $playfield.clientHeight;
+  const portrait = document.body.classList.contains("layout-portrait");
+
+  let bWidth = portrait ? Math.min(playW - 16, 150) : 140;
+  let bHeight = portrait ? 96 : 130;
+
+  const el = document.createElement("div");
+  el.className = "building building-math";
+  el.style.width = bWidth + "px";
+  el.style.height = bHeight + "px";
+
+  const questionEl = document.createElement("div");
+  questionEl.className = "math-question";
+  questionEl.textContent = problem.question + " = ?";
+  el.appendChild(questionEl);
+
+  const wordEl = document.createElement("div");
+  wordEl.className = "word";
+  wordEl.textContent = word.toUpperCase();
+  el.appendChild(wordEl);
+
+  $playfield.appendChild(el);
+
+  const b = {
+    el, wordEl, word: word.toLowerCase(),
+    typed: 0,
+    spawnAt: performance.now(),
+    duration: lv.fallSpeed * 1100, // slightly more time to think
+    dead: false,
+    kind: "math",
+    vertical: portrait,
+    learningKind: "math"
+  };
+  if (portrait) {
+    const startY = -bHeight - 20;
+    const gzRect = $godzilla.getBoundingClientRect();
+    const playRect = $playfield.getBoundingClientRect();
+    const headLine = Math.max(80, gzRect.top - playRect.top - 20);
+    const endY = headLine - bHeight;
+    const xCol = 6 + Math.random() * (playW - bWidth - 12);
+    el.style.left = xCol + "px";
+    el.style.top = startY + "px";
+    b.startY = startY; b.endY = endY;
+  } else {
+    const startX = playW + 40;
+    const endX = playW * 0.30;
+    el.style.left = startX + "px";
+    b.startX = startX; b.endX = endX;
+  }
+  State.buildings.push(b);
+  pickTarget();
+  // Speak the question for accessibility / phonics
+  Voice.speak("What is " + problem.question + "?", { priority: true });
+}
+
+// ============================================================
+// LISTEN-AND-TYPE — pure phonics challenge
+// Word is hidden ("?-?-?"). Voice speaks it. Kid types what they hear.
+// ============================================================
+function spawnListenBuilding() {
+  if (!State.running || State.paused) return;
+  const lv = LEVELS[State.level];
+  // Use a regular word from the level pool (limited to easier ones)
+  const candidates = (lv.pool || []).filter(w => w.length >= 2 && w.length <= 5 && !w.includes(" "));
+  const baseWord = candidates.length > 0
+    ? candidates[Math.floor(Math.random() * candidates.length)]
+    : "cat";
+  const playW = $playfield.clientWidth;
+  const portrait = document.body.classList.contains("layout-portrait");
+
+  let bWidth = portrait ? Math.min(playW - 16, 150) : 150;
+  let bHeight = portrait ? 96 : 130;
+
+  const el = document.createElement("div");
+  el.className = "building building-listen";
+  el.style.width = bWidth + "px";
+  el.style.height = bHeight + "px";
+
+  const iconEl = document.createElement("div");
+  iconEl.className = "listen-icon";
+  iconEl.textContent = "🔊";
+  el.appendChild(iconEl);
+
+  const wordEl = document.createElement("div");
+  wordEl.className = "word";
+  // Initial display is hidden — render as "?" per letter
+  wordEl.innerHTML = '<span class="next">' + "?".repeat(baseWord.length) + '</span>';
+  el.appendChild(wordEl);
+
+  $playfield.appendChild(el);
+
+  const b = {
+    el, wordEl, word: baseWord.toLowerCase(),
+    typed: 0,
+    spawnAt: performance.now(),
+    duration: LEVELS[State.level].fallSpeed * 1100,
+    dead: false,
+    kind: "listen",
+    vertical: portrait,
+    learningKind: "listen",
+  };
+  if (portrait) {
+    const startY = -bHeight - 20;
+    const gzRect = $godzilla.getBoundingClientRect();
+    const playRect = $playfield.getBoundingClientRect();
+    const headLine = Math.max(80, gzRect.top - playRect.top - 20);
+    const endY = headLine - bHeight;
+    const xCol = 6 + Math.random() * (playW - bWidth - 12);
+    el.style.left = xCol + "px";
+    el.style.top = startY + "px";
+    b.startY = startY; b.endY = endY;
+  } else {
+    const startX = playW + 40;
+    const endX = playW * 0.30;
+    el.style.left = startX + "px";
+    b.startX = startX; b.endX = endX;
+  }
+  State.buildings.push(b);
+  pickTarget();
+  // SPEAK the word — kid types what they hear
+  Voice.speak(baseWord, { rate: 0.85, priority: true });
+  // Repeat after a beat for clarity
+  setTimeout(() => { if (!b.dead) Voice.speak(baseWord, { rate: 0.9, priority: true }); }, 1400);
+}
+
+// Custom renderer for "listen" buildings — show "?" for untyped letters
+function renderListenWord(b) {
+  const len = b.word.length;
+  const t = b.typed;
+  const typed = b.word.slice(0, t).toUpperCase();
+  const next = b.word[t] ? "?" : "";
+  const rest = "?".repeat(Math.max(0, len - t - 1));
+  b.wordEl.innerHTML =
+    '<span class="typed">' + typed + '</span>' +
+    '<span class="next">' + next + '</span>' + rest;
 }
 
 // Phonics-friendly pronunciation. Single letters speak the letter sound
@@ -3187,22 +3559,22 @@ function handleKey(rawCh) {
     return;
   }
   b.typed++;
-  if (b.kind === "opponent") {
-    renderOpponentWord(b);
-  } else {
-    renderWord(b);
-  }
+  if (b.kind === "opponent") renderOpponentWord(b);
+  else if (b.kind === "listen") renderListenWord(b);
+  else renderWord(b);
   Audio.correctChime();
   State.score += 10 * State.combo;
+  State.learnStats.lettersTyped++;
   shootBeam(b);
   spawnPraise(PRAISE_PER_KEY[Math.floor(Math.random()*PRAISE_PER_KEY.length)], b.el, false);
 
   if (b.typed >= b.word.length) {
-    if (b.kind === "opponent") {
-      hitOpponent(b);
-    } else {
-      destroyBuilding(b);
-    }
+    // Credit specific learning kinds for the end-of-run stats
+    if (b.learningKind === "math") State.learnStats.mathSolved++;
+    else if (b.learningKind === "listen") State.learnStats.listenSolved++;
+    if (b.word.length >= 2) State.learnStats.wordsTyped++;
+    if (b.kind === "opponent") hitOpponent(b);
+    else destroyBuilding(b);
   } else {
     updateNextPrompt();
   }
@@ -3643,13 +4015,14 @@ function spawnBoss() {
 // OPPONENT BOSS FIGHT
 // ============================================================
 function pickOpponentWord() {
-  // Use a slightly tougher word from the current level pool (with fallbacks).
+  // Always pick a kid-typeable 3-5 letter word. Falls back to a friendly
+  // pool so early boss levels (5) don't ask for top-row letters the kid
+  // hasn't learned yet.
   const lv = LEVELS[State.level];
-  const pool = (lv.pool || []).filter(w => w.length >= 3 && !w.includes(" "));
-  if (pool.length === 0) {
-    return ["fire","roar","kaiju","smash","tokyo"][Math.floor(Math.random() * 5)];
-  }
-  return pool[Math.floor(Math.random() * pool.length)];
+  const fallback = ["cat","dog","fox","run","sun","big","top","jump","kick","fire","roar","king","tree","bird","fish"];
+  const pool = (lv.pool || []).filter(w => w.length >= 2 && w.length <= 5 && !w.includes(" "));
+  const candidates = pool.length > 0 ? pool : fallback;
+  return candidates[Math.floor(Math.random() * candidates.length)];
 }
 
 function spawnOpponent(typeKey) {
@@ -3668,6 +4041,9 @@ function spawnOpponent(typeKey) {
   }
   State.buildings = [];
   State.currentTarget = null;
+  // Clear any stale on-screen keyboard highlight from the previous building
+  highlightVKey(null);
+  State.bossSpawnedThisLevel = true;
 
   const playW = $playfield.clientWidth;
   const playH = $playfield.clientHeight;
@@ -3681,10 +4057,12 @@ function spawnOpponent(typeKey) {
     '<svg viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">' +
     opp.svg + '</svg>';
 
-  // Word that the player types to attack
+  // *** FIX *** the typed word lives as a sibling of the opponent (not inside)
+  // so it doesn't inherit the opponent's arrive/bob transforms, can't get
+  // clipped by parent stacking, and has its own z-index above the HUD.
   const wordEl = document.createElement("div");
-  wordEl.className = "word";
-  el.appendChild(wordEl);
+  wordEl.className = "opp-word";
+  wordEl.style.color = opp.color;
 
   // HP bar floating above the opponent
   const hpEl = document.createElement("div");
@@ -3695,26 +4073,34 @@ function spawnOpponent(typeKey) {
     '<div class="opp-hp-track"><div class="opp-hp-fill"></div></div>' +
     '<div class="opp-hp-pips"></div>';
 
-  // Position: opposite the player Godzilla.
-  // Landscape: right side. Portrait: top-center.
+  // Position everything in playfield-absolute coords for both orientations.
   if (portrait) {
+    // Opponent sits in the upper-middle; word floats below the HP bar.
     el.style.left = "50%";
-    el.style.top = "12vh";
+    el.style.top = "16vh";
     el.style.transform = "translateX(-50%)";
     hpEl.style.left = "50%";
-    hpEl.style.top = "4vh";
+    hpEl.style.top = "8vh";
     hpEl.style.transform = "translateX(-50%)";
+    wordEl.style.left = "50%";
+    wordEl.style.top = "calc(16vh + 24vh + 6px)"; // just under the opponent
+    wordEl.style.transform = "translateX(-50%)";
   } else {
     el.style.right = "5%";
     el.style.bottom = "10%";
     hpEl.style.right = "5%";
-    hpEl.style.bottom = "calc(10% + 32vh)";
+    hpEl.style.bottom = "calc(10% + 36vh)";
     hpEl.style.minWidth = "240px";
     hpEl.style.transform = "translateX(50%)";
+    // The typed word sits above the HP bar in the upper-right.
+    wordEl.style.right = "5%";
+    wordEl.style.bottom = "calc(10% + 42vh)";
+    wordEl.style.transform = "translateX(50%)";
   }
 
   $playfield.appendChild(el);
   $playfield.appendChild(hpEl);
+  $playfield.appendChild(wordEl);
 
   // Compose state and pick the first word
   const opponentState = {
@@ -3727,7 +4113,6 @@ function spawnOpponent(typeKey) {
     word: pickOpponentWord(),
     dead: false,
     kind: "opponent",
-    // attack scheduling
     attackTimer: null,
   };
   renderOpponentHP(opponentState);
@@ -3744,6 +4129,9 @@ function spawnOpponent(typeKey) {
   $game.classList.remove("big-shake");
   void $game.offsetWidth;
   $game.classList.add("big-shake");
+
+  // Read the first target word so the kid hears what to type
+  setTimeout(() => speakForPhonics(opponentState.word), 800);
 
   // Schedule periodic attacks
   scheduleOpponentAttack(opponentState);
@@ -3837,10 +4225,11 @@ function hitOpponent(o) {
   if (o.hp <= 0) {
     defeatOpponent(o);
   } else {
-    // Pick a new word for the next hit
+    // Pick a new word for the next hit and refresh prompt + on-screen kb highlight
     o.typed = 0;
     o.word = pickOpponentWord();
     renderOpponentWord(o);
+    updateNextPrompt();
     speakForPhonics(o.word);
     Voice.speak("Hit! " + o.hp + " left.", { priority: false });
   }
@@ -3855,6 +4244,12 @@ function defeatOpponent(o) {
   o.hpEl.style.transition = "opacity 0.4s ease-out";
   o.hpEl.style.opacity = "0";
   setTimeout(() => o.hpEl.remove(), 500);
+  if (o.wordEl) {
+    o.wordEl.style.transition = "opacity 0.3s ease-out";
+    o.wordEl.style.opacity = "0";
+    setTimeout(() => o.wordEl.remove(), 500);
+  }
+  highlightVKey(null);
   // Massive points + bonus
   const bonus = 2000;
   State.score += bonus;
@@ -3958,23 +4353,29 @@ function briefKaiju(onDone) {
   const ch = CHARACTERS[charKey];
   const biome = BIOMES[biomeForLevel(State.level)];
   const lore = ch.lore[Math.floor(Math.random() * ch.lore.length)];
+  const themeKey = LEVEL_THEME[State.level + 1];
+  const theme = themeKey ? THEMES[themeKey] : null;
 
   const $brief = document.getElementById("kaiju-briefing");
   $brief.querySelector(".brief-level").textContent =
-    "LEVEL " + (State.level + 1) + " / " + LEVELS.length + "  ·  " + biome.label;
+    "LEVEL " + (State.level + 1) + " / " + LEVELS.length + "  ·  " + biome.label
+    + (theme ? "  ·  " + theme.label : "");
   $brief.querySelector(".brief-name").textContent = ch.name;
   $brief.querySelector(".brief-sub").textContent = ch.subtitle;
-  $brief.querySelector(".brief-lore").textContent = lore;
+  $brief.querySelector(".brief-lore").textContent =
+    theme ? lore + "  ·  Look out for " + theme.label + " words!" : lore;
   $brief.style.color = ch.color;
 
   $brief.classList.remove("show");
   void $brief.offsetWidth;
   $brief.classList.add("show");
 
-  // Announce kaiju name, then read the lore
-  // (switchToBiome already roars, so we don't roar again here.)
+  // Announce kaiju name, then read the lore (+ theme if any)
   setTimeout(() => Voice.speak(ch.name, { rate: 0.85, pitch: 0.95, priority: true }), 220);
   setTimeout(() => Voice.speak(lore, { rate: 1.0, priority: true }), 1500);
+  if (theme) {
+    setTimeout(() => Voice.speak(theme.label + " words coming!", { rate: 1.0, priority: true }), 3200);
+  }
 
   if (briefingTimer) { clearTimeout(briefingTimer); briefingTimer = null; }
 
@@ -4005,6 +4406,7 @@ function startGame(startLevel) {
   State.bestCombo = 1;
   State.health = 100;
   State.destroyed = 0;
+  State.learnStats = { lettersTyped: 0, wordsTyped: 0, mathSolved: 0, listenSolved: 0 };
   State.buildings.forEach(b => b.el.remove());
   State.buildings = [];
   State.currentTarget = null;
@@ -4015,7 +4417,7 @@ function startGame(startLevel) {
     if (State.currentOpponent.hpEl) State.currentOpponent.hpEl.remove();
     State.currentOpponent = null;
   }
-  document.querySelectorAll(".opp-fireball, .opponent, .opp-hp").forEach(n => n.remove());
+  document.querySelectorAll(".opp-fireball, .opponent, .opp-hp, .opp-word").forEach(n => n.remove());
 
   Audio.ensure();
   resetLevelStats();
@@ -4079,9 +4481,17 @@ function scheduleSpawns() {
     spawnOpponent(isBossLevel);
     return;
   }
-  // Curveball: from level 3 onward, every ~6th spawn is a flying creature
+  // LEARNING SPAWNS: math (level 6+) and listen-and-type (level 5+)
+  // are rare special events that teach numbers and phonics.
+  const r = Math.random();
   const allowFlyer = State.level >= 2 && spawnCounter >= 4;
-  if (allowFlyer && Math.random() < 0.18) {
+  if (State.level >= 5 && spawnCounter >= 5 && r < 0.10) {
+    spawnMathBuilding();
+    spawnCounter = 0;
+  } else if (State.level >= 4 && spawnCounter >= 4 && r < 0.20) {
+    spawnListenBuilding();
+    spawnCounter = 0;
+  } else if (allowFlyer && r < 0.36) {
     spawnFlyer();
     spawnCounter = 0;
   } else {
@@ -4100,6 +4510,11 @@ function gameOver(victory) {
   $finalScore.textContent = State.score;
   $finalCombo.textContent = "x" + State.bestCombo;
   $finalSmashed.textContent = State.destroyed + " on level " + (State.level + 1);
+  // Learning stats
+  document.getElementById("statLetters").textContent = State.learnStats.lettersTyped;
+  document.getElementById("statWords").textContent   = State.learnStats.wordsTyped;
+  document.getElementById("statMath").textContent    = State.learnStats.mathSolved;
+  document.getElementById("statListen").textContent  = State.learnStats.listenSolved;
   $gameover.classList.remove("lost");
   if (victory) {
     $endTitle.textContent = "KING OF MONSTERS!";

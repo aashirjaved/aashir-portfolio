@@ -655,6 +655,114 @@
     50%      { opacity: 0.9; }
   }
 
+  /* ============ ENGAGEMENT FX ============ */
+  /* Floating +SCORE that flies from smash to HUD */
+  .score-pop {
+    position: absolute;
+    font-size: clamp(22px, 3.4vw, 36px);
+    color: #ffeb6a;
+    text-shadow: 0 0 10px #ff8800, 2px 2px 0 #000;
+    font-weight: 900;
+    letter-spacing: 2px;
+    z-index: 26;
+    pointer-events: none;
+    transform: translateX(-50%);
+    will-change: transform, opacity;
+  }
+  /* Brief full-screen color tint on every smash */
+  .smash-flash {
+    position: absolute; inset: 0;
+    z-index: 24;
+    pointer-events: none;
+    animation: smash-flash 0.28s ease-out forwards;
+  }
+  @keyframes smash-flash {
+    0% { opacity: 0.9; }
+    100% { opacity: 0; }
+  }
+  /* Power-up crystal — floats up and shimmers */
+  .powerup {
+    position: absolute;
+    width: 48px; height: 48px;
+    z-index: 27;
+    pointer-events: none;
+    display: flex; align-items: center; justify-content: center;
+    filter: drop-shadow(0 0 12px currentColor);
+    will-change: transform, opacity;
+  }
+  .powerup .pu-icon {
+    font-size: 36px;
+    color: currentColor;
+    text-shadow: 0 0 8px currentColor, 2px 2px 0 #000;
+    animation: pu-spin 0.6s linear infinite;
+    display: block;
+  }
+  @keyframes pu-spin {
+    from { transform: rotate(-8deg) scale(1); }
+    to   { transform: rotate(8deg) scale(1.15); }
+  }
+  /* Boss building — bigger, scarier, pulsing border */
+  .building-boss {
+    border-color: #ff44dd !important;
+    box-shadow:
+      inset 0 0 28px rgba(0,0,0,0.7),
+      0 0 30px #ff44dd,
+      0 0 60px rgba(255,68,221,0.5) !important;
+    animation: boss-pulse 0.7s ease-in-out infinite alternate;
+  }
+  @keyframes boss-pulse {
+    from { box-shadow: inset 0 0 28px rgba(0,0,0,0.7), 0 0 30px #ff44dd, 0 0 60px rgba(255,68,221,0.5); }
+    to   { box-shadow: inset 0 0 28px rgba(0,0,0,0.7), 0 0 50px #ffeb6a, 0 0 90px rgba(255,235,106,0.7); }
+  }
+  .building-boss .word {
+    font-size: clamp(20px, 3vw, 34px) !important;
+    border-color: #ff44dd !important;
+    text-shadow: 0 0 8px #ff44dd, 0 0 18px #ff44dd !important;
+  }
+
+  /* Combo escalation tiers — body classes control overall vibe */
+  body.combo-3 #godzilla {
+    filter: drop-shadow(0 0 40px var(--gz-glow)) drop-shadow(0 0 70px rgba(255,170,0,0.4));
+  }
+  body.combo-5 #game {
+    background:
+      radial-gradient(ellipse at 50% 100%, rgba(255,170,0,0.18) 0%, var(--sky-1) 40%, #000 100%),
+      linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 60%, var(--sky-3) 100%);
+  }
+  body.combo-5 #godzilla {
+    filter: drop-shadow(0 0 50px #ff8800) drop-shadow(0 0 90px rgba(255,80,0,0.5));
+  }
+  body.combo-10 #game::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 50% 100%, rgba(255,50,200,0.18) 0%, transparent 60%),
+      repeating-conic-gradient(from 0deg, rgba(255,235,106,0.05), rgba(255,68,221,0.05) 30deg, transparent 60deg);
+    pointer-events: none;
+    z-index: 3;
+    animation: combo10-swirl 4s linear infinite;
+  }
+  body.combo-10 #godzilla {
+    filter: drop-shadow(0 0 60px #ff44dd) drop-shadow(0 0 120px rgba(255,68,221,0.7));
+    animation: gz-breathe 1.5s ease-in-out infinite, combo10-shake 0.16s infinite;
+  }
+  @keyframes combo10-swirl { from {transform:rotate(0);} to {transform:rotate(360deg);} }
+  @keyframes combo10-shake {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 1px -1px; }
+  }
+  body.combo-20 #game {
+    background:
+      conic-gradient(from 0deg at 50% 50%,
+        rgba(255,68,221,0.18),
+        rgba(255,235,106,0.18),
+        rgba(95,255,170,0.18),
+        rgba(95,200,255,0.18),
+        rgba(255,68,221,0.18));
+    animation: combo20-rainbow 3s linear infinite;
+  }
+  @keyframes combo20-rainbow { from {filter:hue-rotate(0deg);} to {filter:hue-rotate(360deg);} }
+
   /* HUD */
   #hud {
     position: absolute;
@@ -951,6 +1059,62 @@
     100% { opacity: 0; }
   }
 
+  /* ============ PORTRAIT / MOBILE LAYOUT ============ */
+  /* When the screen is taller than wide (phones, narrow tablets),
+     flip the gameplay axis: Godzilla bottom-center, buildings drop from
+     top down, beam shoots upward. */
+  body.layout-portrait #godzilla {
+    left: 50%;
+    width: 62vw;
+    height: auto;
+    margin-left: -31vw;
+    bottom: 2%;
+    max-height: 42vh;
+    max-width: 28vh; /* preserve aspect ratio at very tall viewports */
+  }
+  body.layout-portrait .building {
+    bottom: auto; /* falling buildings use top instead */
+  }
+  body.layout-portrait .building::before {
+    /* keep windows pattern but compress */
+    inset: 30% 6px 6px 6px;
+  }
+  body.layout-portrait .building .word,
+  body.layout-portrait .flyer .word {
+    font-size: clamp(14px, 4vw, 22px);
+    top: -32px;
+  }
+  body.layout-portrait #hud {
+    padding: 8px 8px;
+    gap: 4px;
+  }
+  body.layout-portrait .hud-block {
+    padding: 4px 8px;
+  }
+  body.layout-portrait .hud-label { font-size: 9px; letter-spacing: 1px; }
+  body.layout-portrait .hud-value { font-size: 18px; letter-spacing: 1px; }
+  body.layout-portrait #health-wrap { width: 100px; height: 18px; }
+  body.layout-portrait #health-wrap::after { font-size: 11px; letter-spacing: 1.5px; }
+  body.layout-portrait #next-key-prompt {
+    top: auto;
+    bottom: calc(42vh + 8px);
+    font-size: clamp(50px, 18vw, 110px);
+  }
+  body.layout-portrait.kb-visible #next-key-prompt {
+    bottom: calc(38vh + 8px);
+  }
+  /* Skyline still useful in portrait (it's a backdrop). Ground hidden when narrow */
+  body.layout-portrait #ground { display: none; }
+  body.layout-portrait #skyline { height: 35%; }
+  /* When the on-screen keyboard occupies the bottom, also pull Godzilla up */
+  body.layout-portrait.kb-visible #godzilla {
+    bottom: calc(38vh + 8px);
+    max-height: 32vh;
+    max-width: 22vh;
+    width: 55vw;
+    margin-left: -27.5vw;
+  }
+
   /* On-screen virtual keyboard — BIG, kid-friendly */
   #vkb {
     position: fixed;
@@ -1036,6 +1200,21 @@
     bottom: calc(38vh + 10px);
   }
   #kb-toggle.active { background: var(--accent); color: #2a0000; }
+  /* Portrait: stack toggles in the top-right corner so they don't compete
+     with Godzilla / playfield for vertical space */
+  body.layout-portrait #kb-toggle,
+  body.layout-portrait #sound-toggle,
+  body.layout-portrait #voice-toggle {
+    bottom: auto;
+    right: 6px;
+    padding: 5px 8px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    border-width: 1px;
+  }
+  body.layout-portrait #voice-toggle { top: 92px; }
+  body.layout-portrait #sound-toggle { top: 128px; }
+  body.layout-portrait #kb-toggle    { top: 164px; }
 
   #hint {
     position: absolute;
@@ -1516,7 +1695,7 @@ const Voice = (() => {
 })();
 
 // ---------- Version ----------
-const GAME_VERSION = "v2.2 · TERRAIN + CURVEBALLS";
+const GAME_VERSION = "v2.4 · ENGAGEMENT BOOST";
 const GAME_BUILD_DATE = "2026-05-16";
 
 // ---------- Characters ----------
@@ -2062,6 +2241,9 @@ const State = {
   buildings: [],
   currentTarget: null,
   currentBiome: 0,
+  levelStats: { destroyed: 0, missed: 0, maxCombo: 1 },
+  powerUps: { slomo: 0, doubleScore: 0 }, // ms remaining
+  bossSpawnedThisLevel: false,
 };
 
 // ---------- DOM ----------
@@ -2273,41 +2455,66 @@ function spawnBuilding() {
   const lv = LEVELS[State.level];
   const word = pickWord(State.level);
   const playW = $playfield.clientWidth;
+  const playH = $playfield.clientHeight;
   const biome = BIOMES[lv.biome];
+  const portrait = document.body.classList.contains("layout-portrait");
 
   // Per-biome size variation
   const tall = biome.buildingStyle === "skyscraper" || biome.buildingStyle === "cyber";
   const wide = biome.buildingStyle === "temple" || biome.buildingStyle === "coral";
-  let bWidth = Math.max(80, word.length * 18 + 50);
-  let bHeight = 110 + Math.random() * 90;
-  if (tall) bHeight = 150 + Math.random() * 120;
-  if (wide) { bWidth += 40; bHeight = 90 + Math.random() * 70; }
-
-  const startX = playW + 40;
-  const endX = playW * 0.28;
+  let bWidth, bHeight;
+  if (portrait) {
+    // Narrower buildings so several can coexist in a phone column
+    bWidth = Math.min(playW - 24, Math.max(72, word.length * 14 + 36));
+    bHeight = 80 + Math.random() * 60;
+    if (tall) bHeight = 110 + Math.random() * 80;
+    if (wide) { bWidth = Math.min(playW - 24, bWidth + 20); bHeight = 70 + Math.random() * 50; }
+  } else {
+    bWidth = Math.max(80, word.length * 18 + 50);
+    bHeight = 110 + Math.random() * 90;
+    if (tall) bHeight = 150 + Math.random() * 120;
+    if (wide) { bWidth += 40; bHeight = 90 + Math.random() * 70; }
+  }
 
   const el = document.createElement("div");
   el.className = "building building--" + biome.buildingStyle;
   el.style.width = bWidth + "px";
   el.style.height = bHeight + "px";
-  el.style.left = startX + "px";
 
   const wordEl = document.createElement("div");
   wordEl.className = "word";
   wordEl.textContent = word.toUpperCase();
   el.appendChild(wordEl);
-
   $playfield.appendChild(el);
 
   const b = {
     el, wordEl, word: word.toLowerCase(),
     typed: 0,
-    startX, endX,
     spawnAt: performance.now(),
     duration: lv.fallSpeed * 1000,
     dead: false,
-    kind: "building"
+    kind: "building",
+    vertical: portrait,
   };
+  if (portrait) {
+    // Buildings DROP from above, land just above Godzilla's head.
+    // Use Godzilla's actual rendered top as the landing line.
+    const startY = -bHeight - 20;
+    const gzRect = $godzilla.getBoundingClientRect();
+    const playRect = $playfield.getBoundingClientRect();
+    const headLineWithinPlayfield = Math.max(80, gzRect.top - playRect.top - 20);
+    const endY = headLineWithinPlayfield - bHeight;
+    const xCol = 6 + Math.random() * (playW - bWidth - 12);
+    el.style.left = xCol + "px";
+    el.style.top = startY + "px";
+    b.startY = startY; b.endY = endY;
+  } else {
+    // Classic right-to-left approach
+    const startX = playW + 40;
+    const endX = playW * 0.28;
+    el.style.left = startX + "px";
+    b.startX = startX; b.endX = endX;
+  }
   State.buildings.push(b);
   pickTarget();
   // PHONICS: pronounce the word/letter as it spawns so the kid hears the sound
@@ -2416,8 +2623,13 @@ function loop() {
   for (const b of State.buildings) {
     if (b.dead) continue;
     const t = Math.min(1, (now - b.spawnAt) / b.duration);
-    const x = b.startX + (b.endX - b.startX) * t;
-    b.el.style.left = x + "px";
+    if (b.vertical) {
+      const y = b.startY + (b.endY - b.startY) * t;
+      b.el.style.top = y + "px";
+    } else {
+      const x = b.startX + (b.endX - b.startX) * t;
+      b.el.style.left = x + "px";
+    }
     if (t >= 1) {
       b.dead = true;
       if (b.kind === "flyer") escapeFlyer(b);
@@ -2433,6 +2645,8 @@ function escapeFlyer(b) {
   setTimeout(() => b.el.remove(), 500);
   State.health = Math.max(0, State.health - 5);
   State.combo = 1;
+  applyComboTier();
+  trackMiss();
   if (State.currentTarget === b) State.currentTarget = null;
   pickTarget();
   updateHUD();
@@ -2446,11 +2660,17 @@ function pickTarget() {
     return;
   }
   State.currentTarget = null;
-  let best = null; let bestX = Infinity;
+  let best = null;
+  // "Closest to Godzilla" depends on orientation:
+  //  - portrait: highest top: value (i.e. lowest on screen, nearest the floor)
+  //  - landscape: lowest left: value (i.e. furthest left, nearest Godzilla on left)
+  let bestScore = -Infinity;
   for (const b of State.buildings) {
     if (b.dead) continue;
-    const x = parseFloat(b.el.style.left);
-    if (x < bestX) { bestX = x; best = b; }
+    const score = b.vertical
+      ? parseFloat(b.el.style.top) || 0
+      : -(parseFloat(b.el.style.left) || 0);
+    if (score > bestScore) { bestScore = score; best = b; }
   }
   setTarget(best);
 }
@@ -2515,10 +2735,16 @@ function handleKey(rawCh) {
   const b = State.currentTarget;
   if (b.word[b.typed] !== ch) {
     let alt = null;
+    function closeness(x) {
+      // Higher = closer to Godzilla regardless of orientation.
+      return x.vertical
+        ? parseFloat(x.el.style.top) || 0
+        : -(parseFloat(x.el.style.left) || 0);
+    }
     for (const ob of State.buildings) {
       if (ob.dead || ob === b) continue;
       if (ob.word[ob.typed] === ch) {
-        if (!alt || parseFloat(ob.el.style.left) < parseFloat(alt.el.style.left)) alt = ob;
+        if (!alt || closeness(ob) > closeness(alt)) alt = ob;
       }
     }
     if (alt) { setTarget(alt); return handleKey(rawCh); }
@@ -2543,6 +2769,8 @@ function handleKey(rawCh) {
 function wrongKey() {
   Audio.wrongBuzz();
   State.combo = 1;
+  applyComboTier();
+  trackMiss();
   updateHUD();
   $game.classList.remove("shake");
   void $game.offsetWidth;
@@ -2557,8 +2785,15 @@ function shootBeam(b) {
 
   const gzRect = $godzilla.getBoundingClientRect();
   const bRect = b.el.getBoundingClientRect();
-  const startX = gzRect.right - 10;
-  const startY = gzRect.top + gzRect.height * 0.35;
+  const portrait = document.body.classList.contains("layout-portrait");
+  // In portrait, Godzilla is bottom-center → beam emerges from top of head.
+  // In landscape, Godzilla is on the left → beam emerges from his mouth (right side).
+  const startX = portrait
+    ? gzRect.left + gzRect.width / 2
+    : gzRect.right - 10;
+  const startY = portrait
+    ? gzRect.top + 8
+    : gzRect.top + gzRect.height * 0.35;
   const endX = bRect.left + bRect.width / 2;
   const endY = bRect.top + bRect.height / 2;
   const dx = endX - startX, dy = endY - startY;
@@ -2590,11 +2825,26 @@ function destroyBuilding(b) {
   b.el.classList.add("destroyed");
   setTimeout(() => b.el.remove(), 900);
 
-  State.score += 100 * State.combo;
+  const doubleActive = State.powerUps.doubleScore > performance.now();
+  const isBoss = b.kind === "boss";
+  let gained = (isBoss ? 400 : 100) * State.combo;
+  if (doubleActive) gained *= 2;
+  State.score += gained;
   State.destroyed++;
   State.combo++;
   if (State.combo > State.bestCombo) State.bestCombo = State.combo;
   bumpCombo();
+  trackSmash();
+  applyComboTier();
+  spawnScorePop(b.el, gained);
+  // Snappy color flash per combo tier
+  flashScreen(
+    State.combo >= 10 ? "rgba(255,68,221,0.35)" :
+    State.combo >= 5  ? "rgba(255,170,0,0.30)" :
+                        "rgba(255,255,255,0.18)"
+  );
+  // Roll for a power-up drop
+  maybeDropPowerUp(b.el);
 
   spawnPraise(PRAISE_PER_WORD[Math.floor(Math.random()*PRAISE_PER_WORD.length)], b.el, true);
   // Phonics reinforcement: speak the word again on smash so the kid
@@ -2636,6 +2886,8 @@ function damageCity(b) {
   setTimeout(() => b.el.remove(), 900);
   State.health = Math.max(0, State.health - 15);
   State.combo = 1;
+  applyComboTier();
+  trackMiss();
   Audio.wrongBuzz();
   $godzilla.classList.remove("hurt");
   void $godzilla.offsetWidth;
@@ -2731,13 +2983,230 @@ function showHint(text, ms = 3000) {
   setTimeout(() => $hint.classList.remove("show"), ms);
 }
 
+// ============================================================
+// ENGAGEMENT: floating score popups, power-ups, stars, bosses
+// ============================================================
+
+// Floating "+SCORE" that flies from a smashed building toward the score HUD
+function spawnScorePop(srcEl, amount) {
+  const rect = srcEl.getBoundingClientRect();
+  const target = $score.getBoundingClientRect();
+  const pop = document.createElement("div");
+  pop.className = "score-pop";
+  pop.textContent = "+" + amount;
+  const startX = rect.left + rect.width / 2;
+  const startY = rect.top + rect.height * 0.25;
+  pop.style.left = startX + "px";
+  pop.style.top  = startY + "px";
+  $game.appendChild(pop);
+  const dx = (target.left + target.width / 2) - startX;
+  const dy = (target.top  + target.height / 2) - startY;
+  requestAnimationFrame(() => {
+    pop.style.transition = "transform 0.7s cubic-bezier(0.5, 0.05, 0.6, 1), opacity 0.7s ease-out";
+    pop.style.transform = "translate(" + dx + "px," + dy + "px) scale(0.35)";
+    pop.style.opacity = "0";
+  });
+  setTimeout(() => pop.remove(), 800);
+}
+
+// Full-screen brief color tint flash on every smash for snappy feedback
+function flashScreen(color) {
+  const f = document.createElement("div");
+  f.className = "smash-flash";
+  f.style.background = color;
+  $game.appendChild(f);
+  setTimeout(() => f.remove(), 280);
+}
+
+// Combo tier class on body so CSS can react (red glow, rainbow at high tiers)
+function applyComboTier() {
+  document.body.classList.remove("combo-3","combo-5","combo-10","combo-20");
+  if (State.combo >= 20) document.body.classList.add("combo-20");
+  else if (State.combo >= 10) document.body.classList.add("combo-10");
+  else if (State.combo >= 5)  document.body.classList.add("combo-5");
+  else if (State.combo >= 3)  document.body.classList.add("combo-3");
+}
+
+// ---------- Power-up crystals ----------
+const POWERUPS = [
+  { kind: "heal",    label: "HEAL +25",    color: "#5fffaa", icon: "❤" },
+  { kind: "slomo",   label: "SLO-MO!",     color: "#88ccff", icon: "⌛" },
+  { kind: "double",  label: "DOUBLE!",     color: "#ffeb6a", icon: "★" },
+  { kind: "blast",   label: "BLAST!",      color: "#ff44dd", icon: "⚡" },
+];
+function maybeDropPowerUp(srcEl) {
+  if (State.level < 1) return; // not on level 1
+  if (Math.random() > 0.10) return; // ~10% per smash
+  const pu = POWERUPS[Math.floor(Math.random() * POWERUPS.length)];
+  spawnPowerUp(srcEl, pu);
+}
+function spawnPowerUp(srcEl, pu) {
+  const rect = srcEl.getBoundingClientRect();
+  const el = document.createElement("div");
+  el.className = "powerup";
+  el.style.left = (rect.left + rect.width / 2 - 24) + "px";
+  el.style.top  = (rect.top  + rect.height / 4) + "px";
+  el.style.color = pu.color;
+  el.innerHTML = '<span class="pu-icon">' + pu.icon + '</span>';
+  $game.appendChild(el);
+  // Drift up then collect after 1.4s
+  requestAnimationFrame(() => {
+    el.style.transition = "transform 1.2s ease-out, opacity 0.4s ease-in 1s";
+    el.style.transform = "translateY(-90px) scale(1.3)";
+    el.style.opacity = "0";
+  });
+  setTimeout(() => {
+    el.remove();
+    applyPowerUp(pu);
+  }, 1100);
+}
+function applyPowerUp(pu) {
+  showBanner(pu.label);
+  Voice.speak(pu.label, { priority: true });
+  Audio.levelUpFanfare();
+  flashScreen("rgba(255,255,255,0.4)");
+  if (pu.kind === "heal") {
+    State.health = Math.min(100, State.health + 25);
+  } else if (pu.kind === "slomo") {
+    State.powerUps.slomo = performance.now() + 3500;
+    // Stretch building durations for existing buildings
+    for (const b of State.buildings) {
+      if (b.dead) continue;
+      const remaining = b.duration - (performance.now() - b.spawnAt);
+      if (remaining > 0) {
+        b.duration += Math.max(0, 3500 - 0);
+      }
+    }
+  } else if (pu.kind === "double") {
+    State.powerUps.doubleScore = performance.now() + 5500;
+  } else if (pu.kind === "blast") {
+    // Destroy the closest live target instantly
+    if (State.buildings.length > 0) {
+      const target = State.currentTarget || State.buildings.find(b => !b.dead);
+      if (target) {
+        target.typed = target.word.length;
+        renderWord(target);
+        setTimeout(() => { if (!target.dead) destroyBuilding(target); }, 80);
+      }
+    }
+  }
+  updateHUD();
+}
+
+// ---------- 3-star evaluation per level ----------
+function resetLevelStats() {
+  State.levelStats = { destroyed: 0, missed: 0, maxCombo: 1 };
+  State.bossSpawnedThisLevel = false;
+}
+function trackSmash() {
+  State.levelStats.destroyed++;
+  if (State.combo > State.levelStats.maxCombo) State.levelStats.maxCombo = State.combo;
+}
+function trackMiss() {
+  State.levelStats.missed++;
+}
+function computeStars() {
+  const s = State.levelStats;
+  let stars = 1; // got here = at least one star
+  if (s.maxCombo >= 4) stars++;
+  if (s.missed === 0) stars++;
+  return stars;
+}
+function saveLevelStars(idx, stars) {
+  try {
+    const raw = localStorage.getItem("godzilla.stars.v1");
+    const data = raw ? JSON.parse(raw) : {};
+    data[idx] = Math.max(data[idx] || 0, stars);
+    localStorage.setItem("godzilla.stars.v1", JSON.stringify(data));
+  } catch (e) {}
+}
+function loadLevelStars(idx) {
+  try {
+    const raw = localStorage.getItem("godzilla.stars.v1");
+    if (!raw) return 0;
+    const data = JSON.parse(raw);
+    return data[idx] || 0;
+  } catch (e) { return 0; }
+}
+
+// ---------- Boss building (every 5th level, final spawn) ----------
+const BOSS_WORDS = [
+  "godzilla","kingofkaiju","rampage","atomicwave","megasmash",
+  "destroyer","monsterking","tokyofall"
+];
+function spawnBoss() {
+  if (!State.running || State.paused) return;
+  const lv = LEVELS[State.level];
+  const word = BOSS_WORDS[Math.floor(Math.random() * BOSS_WORDS.length)];
+  const playW = $playfield.clientWidth;
+  const playH = $playfield.clientHeight;
+  const portrait = document.body.classList.contains("layout-portrait");
+
+  // Boss is BIGGER than normal
+  let bWidth, bHeight;
+  if (portrait) {
+    bWidth = Math.min(playW - 16, 220);
+    bHeight = 180;
+  } else {
+    bWidth = Math.max(160, word.length * 22 + 60);
+    bHeight = 220;
+  }
+
+  const el = document.createElement("div");
+  el.className = "building building--" + BIOMES[lv.biome].buildingStyle + " building-boss";
+  el.style.width = bWidth + "px";
+  el.style.height = bHeight + "px";
+
+  const wordEl = document.createElement("div");
+  wordEl.className = "word";
+  wordEl.textContent = word.toUpperCase();
+  el.appendChild(wordEl);
+  $playfield.appendChild(el);
+
+  const b = {
+    el, wordEl, word: word.toLowerCase(),
+    typed: 0,
+    spawnAt: performance.now(),
+    duration: lv.fallSpeed * 1400, // bosses fall slower (more reaction time)
+    dead: false,
+    kind: "boss",
+    vertical: portrait,
+  };
+  if (portrait) {
+    const startY = -bHeight - 20;
+    const gzRect = $godzilla.getBoundingClientRect();
+    const playRect = $playfield.getBoundingClientRect();
+    const headLine = Math.max(80, gzRect.top - playRect.top - 30);
+    const endY = headLine - bHeight;
+    el.style.left = ((playW - bWidth) / 2) + "px";
+    el.style.top = startY + "px";
+    b.startY = startY; b.endY = endY;
+  } else {
+    const startX = playW + 40;
+    const endX = playW * 0.32;
+    el.style.left = startX + "px";
+    b.startX = startX; b.endX = endX;
+  }
+  State.buildings.push(b);
+  State.bossSpawnedThisLevel = true;
+  pickTarget();
+  showBanner("⚠ BOSS ⚠");
+  Voice.speak("boss!", { priority: true });
+  Audio.roar(true);
+  speakForPhonics(word);
+}
+
 // ---------- Flow ----------
 function checkLevelProgress() {
   const lv = LEVELS[State.level];
   if (State.destroyed >= lv.target) {
+    // Score the level (stars + persist)
+    const stars = computeStars();
+    saveLevelStars(State.level, stars);
     saveProgress();
     if (State.level + 1 < LEVELS.length) {
       pauseGame();
+      const finishedLevel = State.level;
       State.level++;
       State.destroyed = 0;
       const nlv = LEVELS[State.level];
@@ -2745,13 +3214,25 @@ function checkLevelProgress() {
       const ncKey = characterForLevel(State.level);
       const nc = CHARACTERS[ncKey];
       const charChanged = ncKey !== currentCharacterKey;
-      $levelTitle.textContent = "LEVEL " + (State.level + 1) + " / " + LEVELS.length + " — " + nlv.title;
-      $levelDesc.textContent = nlv.desc;
+      // Build star row
+      const filled = "⭐".repeat(stars);
+      const empty  = "☆".repeat(3 - stars);
+      $levelTitle.textContent =
+        "LEVEL " + (finishedLevel + 1) + " CLEAR! " + filled + empty;
+      $levelDesc.textContent =
+        (State.levelStats.missed === 0 ? "Perfect! No misses! " : "") +
+        "Best combo: x" + State.levelStats.maxCombo + ". " +
+        "Up next: " + nlv.title + " — " + nlv.desc;
       $biomeAnnounce.textContent = charChanged
         ? "🦖 NEW KAIJU: " + nc.name + " — " + nc.subtitle
         : "Next world: " + nb.label;
       Audio.levelUpFanfare();
-      Voice.speak(charChanged ? "new kaiju, " + nc.name : "level up");
+      Voice.speak(
+        stars === 3 ? "three stars! perfect!"
+        : stars === 2 ? "great job, two stars"
+        : (charChanged ? "new kaiju, " + nc.name : "level up"),
+        { priority: true }
+      );
       $levelup.classList.remove("hidden");
     } else {
       gameOver(true);
@@ -2841,6 +3322,8 @@ function startGame(startLevel) {
   State.currentTarget = null;
 
   Audio.ensure();
+  resetLevelStats();
+  applyComboTier();
   updateHUD();
   switchToBiome(LEVELS[State.level].biome);
   maybeLightning();
@@ -2849,9 +3332,12 @@ function startGame(startLevel) {
     if (!State.running) return;
     scheduleSpawns();
     loop();
-    showHint(State.level > 0
-      ? "LEVEL " + (State.level + 1) + " — " + LEVELS[State.level].title + "!"
-      : "PRESS THE YELLOW LETTER!", 4000);
+    const isBossLevel = ((State.level + 1) % 5 === 0);
+    showHint(isBossLevel
+      ? "⚠ BOSS LEVEL! ⚠"
+      : (State.level > 0
+        ? "LEVEL " + (State.level + 1) + " — " + LEVELS[State.level].title + "!"
+        : "PRESS THE YELLOW LETTER!"), 4000);
     focusInput();
   });
 }
@@ -2859,12 +3345,15 @@ function startGame(startLevel) {
 function continueLevel() {
   $levelup.classList.add("hidden");
   State.paused = false;
+  resetLevelStats();
+  applyComboTier();
   switchToBiome(LEVELS[State.level].biome);
   briefKaiju(() => {
     if (!State.running || State.paused) return;
     scheduleSpawns();
     loop();
-    showHint(LEVELS[State.level].title + "!", 2500);
+    const isBossLevel = ((State.level + 1) % 5 === 0);
+    showHint(isBossLevel ? "⚠ BOSS LEVEL! ⚠" : LEVELS[State.level].title + "!", 2500);
     focusInput();
   });
 }
@@ -2880,16 +3369,24 @@ function scheduleSpawns() {
   if (State.spawnTimer) clearTimeout(State.spawnTimer);
   const lv = LEVELS[State.level];
   spawnCounter++;
-  // CURVEBALL: from level 3 onward, every ~6th spawn is a flying creature
-  // instead of a building. Adds a "wait, what?!" moment for the kid.
-  const allowFlyer = State.level >= 2 && spawnCounter >= 4;
-  if (allowFlyer && Math.random() < 0.18) {
-    spawnFlyer();
-    spawnCounter = 0;
+  // Boss spawn: on every 5th level (5,10,15,20), when we're 2 buildings away
+  // from completing the level, drop the boss (only once per level).
+  const isBossLevel = ((State.level + 1) % 5 === 0);
+  if (isBossLevel && !State.bossSpawnedThisLevel && State.destroyed === lv.target - 2) {
+    spawnBoss();
   } else {
-    spawnBuilding();
+    // Curveball: from level 3 onward, every ~6th spawn is a flying creature
+    const allowFlyer = State.level >= 2 && spawnCounter >= 4;
+    if (allowFlyer && Math.random() < 0.18) {
+      spawnFlyer();
+      spawnCounter = 0;
+    } else {
+      spawnBuilding();
+    }
   }
-  State.spawnTimer = setTimeout(scheduleSpawns, lv.spawnEvery);
+  // Slo-mo power-up stretches the spawn interval
+  const slow = State.powerUps.slomo > performance.now() ? 1.8 : 1;
+  State.spawnTimer = setTimeout(scheduleSpawns, lv.spawnEvery * slow);
 }
 
 function gameOver(victory) {
@@ -3131,13 +3628,30 @@ attachContinueHandler($continueBtn);
 buildSkyline();
 buildVKB();
 
+// Detect portrait/mobile and toggle the layout-portrait class.
+// In portrait, gameplay flips vertical (buildings drop top→bottom).
+function isPortrait() {
+  return window.innerHeight > window.innerWidth || window.innerWidth < 700;
+}
+function updateLayout() {
+  document.body.classList.toggle("layout-portrait", isPortrait());
+}
+updateLayout();
+
 if (isTouchDevice()) {
   setKbVisible(true);
 } else {
   $kbToggle.textContent = "⌨ ON-SCREEN KB";
 }
 
-window.addEventListener("resize", () => { buildSkyline(); });
+window.addEventListener("resize", () => {
+  updateLayout();
+  buildSkyline();
+});
+window.addEventListener("orientationchange", () => {
+  updateLayout();
+  buildSkyline();
+});
 
 document.addEventListener("touchmove", (e) => {
   if (e.touches.length > 1) e.preventDefault();

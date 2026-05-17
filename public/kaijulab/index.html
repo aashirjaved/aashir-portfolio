@@ -40,8 +40,119 @@
   .star{
     position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;
     opacity:.6;animation:twinkle 3s ease-in-out infinite;
+    pointer-events:none;z-index:0;
   }
   @keyframes twinkle{0%,100%{opacity:.2}50%{opacity:.9}}
+
+  /* =========== CONSTANT MOTION BACKGROUND =========== */
+  /* Lava-lamp blobs that float across the screen, hue-shifting */
+  .blob{
+    position:absolute;border-radius:50%;
+    filter:blur(40px);
+    opacity:.55;pointer-events:none;z-index:0;
+    mix-blend-mode:screen;
+  }
+  .blob-a{ width:340px;height:340px;background:#ff44dd; animation:float-a 22s ease-in-out infinite; }
+  .blob-b{ width:280px;height:280px;background:#5fffaa; animation:float-b 28s ease-in-out infinite; }
+  .blob-c{ width:300px;height:300px;background:#ffeb6a; animation:float-c 26s ease-in-out infinite; }
+  .blob-d{ width:260px;height:260px;background:#88ccff; animation:float-d 24s ease-in-out infinite; }
+  @keyframes float-a{
+    0%,100%{transform:translate(-20vw,-10vh) scale(1);}
+    33%   {transform:translate(60vw,30vh) scale(1.2);}
+    66%   {transform:translate(20vw,70vh) scale(.9);}
+  }
+  @keyframes float-b{
+    0%,100%{transform:translate(80vw,20vh) scale(.9);}
+    33%   {transform:translate(10vw,50vh) scale(1.1);}
+    66%   {transform:translate(70vw,80vh) scale(1.3);}
+  }
+  @keyframes float-c{
+    0%,100%{transform:translate(50vw,90vh) scale(1);}
+    33%   {transform:translate(80vw,10vh) scale(1.2);}
+    66%   {transform:translate(10vw,30vh) scale(.95);}
+  }
+  @keyframes float-d{
+    0%,100%{transform:translate(0vw,60vh) scale(1.1);}
+    33%   {transform:translate(70vw,5vh) scale(.9);}
+    66%   {transform:translate(40vw,40vh) scale(1.2);}
+  }
+  /* Floating tiny sparks rising upward across the screen */
+  .spark{
+    position:absolute;width:4px;height:14px;border-radius:2px;
+    background:linear-gradient(180deg,#ffeb6a,transparent);
+    opacity:.9; z-index:0; pointer-events:none;
+    animation:spark-rise linear infinite;
+  }
+  @keyframes spark-rise{
+    0%   { transform:translate(0, 0) scale(1); opacity:0; }
+    10%  { opacity:.9; }
+    100% { transform:translate(40px, -100vh) scale(0.4); opacity:0; }
+  }
+
+  /* =========== MASCOT in corner that reacts =========== */
+  #mascot{
+    position:absolute;bottom:12px;right:12px;
+    font-size:54px; z-index:6; pointer-events:none;
+    filter:drop-shadow(0 0 14px #ffeb6a);
+    animation:mascot-idle 2.4s ease-in-out infinite;
+  }
+  @keyframes mascot-idle{
+    0%,100%{transform:translateY(0) rotate(-2deg);}
+    50%    {transform:translateY(-8px) rotate(2deg);}
+  }
+  #mascot.cheer{animation:mascot-cheer .8s ease-out;}
+  @keyframes mascot-cheer{
+    0%  {transform:translateY(0) rotate(0) scale(1);}
+    40% {transform:translateY(-40px) rotate(-15deg) scale(1.3);}
+    70% {transform:translateY(0) rotate(15deg) scale(1.1);}
+    100%{transform:translateY(0) rotate(0) scale(1);}
+  }
+  #mascot.sad{animation:mascot-sad .7s ease-out;}
+  @keyframes mascot-sad{
+    0%,100%{transform:translateY(0);}
+    50%    {transform:translateY(10px) scale(0.85);}
+  }
+
+  /* =========== STREAK meter, top-center =========== */
+  #streak{
+    position:absolute;top:14px;left:50%;transform:translateX(-50%);
+    z-index:8;
+    background:rgba(0,0,0,.65);
+    border:2px solid var(--accent);
+    border-radius:24px;
+    padding:6px 18px;
+    color:var(--accent);
+    font-size:14px;letter-spacing:3px;
+    text-shadow:0 0 8px var(--glow);
+    opacity:0;
+    transition:opacity .3s ease;
+    pointer-events:none;
+  }
+  #streak.show{ opacity:1; }
+  #streak.fire{
+    animation:streak-pulse .6s ease-in-out infinite alternate;
+    color:#ff5500; border-color:#ff5500;
+    text-shadow:0 0 14px #ff5500,0 0 28px #ff8800;
+  }
+  @keyframes streak-pulse{
+    from{transform:translateX(-50%) scale(1);}
+    to  {transform:translateX(-50%) scale(1.12);}
+  }
+
+  /* Tap ripple */
+  .ripple{
+    position:absolute;border-radius:50%;
+    pointer-events:none;z-index:30;
+    width:40px;height:40px;
+    transform:translate(-50%,-50%) scale(0);
+    border:3px solid var(--accent);
+    opacity:.85;
+    animation:ripple .55s ease-out forwards;
+  }
+  @keyframes ripple{
+    0%{transform:translate(-50%,-50%) scale(0);opacity:.85;}
+    100%{transform:translate(-50%,-50%) scale(6);opacity:0;}
+  }
 
   /* SCREENS */
   .screen{
@@ -161,7 +272,17 @@
     aspect-ratio:1/1.15;
     perspective:600px;
     cursor:pointer;
+    animation:card-idle 3.6s ease-in-out infinite;
   }
+  .card:nth-child(2n){animation-delay:.4s}
+  .card:nth-child(3n){animation-delay:.8s}
+  .card:nth-child(5n){animation-delay:1.2s}
+  @keyframes card-idle{
+    0%,100%{transform:translateY(0) rotate(-1deg);}
+    50%    {transform:translateY(-6px) rotate(1deg);}
+  }
+  .card:hover .card-inner,.card:focus-visible .card-inner{filter:brightness(1.3) drop-shadow(0 0 18px currentColor);}
+  .card:hover{transform:scale(1.05);}
   .card-inner{
     position:relative;width:100%;height:100%;
     transition:transform .5s;transform-style:preserve-3d;
@@ -212,7 +333,17 @@
     transition:transform .08s ease,box-shadow .12s ease,background .12s ease;
     user-select:none;
     position:relative;
+    animation:simon-idle 2.8s ease-in-out infinite;
   }
+  .simon-pad:nth-child(2){animation-delay:.3s}
+  .simon-pad:nth-child(3){animation-delay:.6s}
+  .simon-pad:nth-child(4){animation-delay:.9s}
+  @keyframes simon-idle{
+    0%,100%{transform:translateY(0) rotate(-2deg);box-shadow:0 0 16px currentColor;}
+    50%    {transform:translateY(-12px) rotate(2deg);box-shadow:0 0 36px currentColor,0 0 60px currentColor;}
+  }
+  .simon-pad:hover,.simon-pad:focus-visible{filter:brightness(1.4);box-shadow:0 0 40px currentColor,inset 0 0 18px currentColor;}
+  .simon-pad:active{transform:scale(.94);}
   .simon-pad .pad-name{
     position:absolute;bottom:10px;left:0;right:0;
     font-size:clamp(11px,2vw,15px);letter-spacing:2px;color:currentColor;
@@ -238,6 +369,22 @@
     font-size:clamp(36px,7vw,56px);
     background:rgba(0,0,0,.45);
     box-shadow:0 0 12px currentColor;
+    animation:pat-idle 3s ease-in-out infinite;
+  }
+  .pat-tile:nth-child(2){animation-delay:.18s}
+  .pat-tile:nth-child(3){animation-delay:.36s}
+  .pat-tile:nth-child(4){animation-delay:.54s}
+  .pat-tile:nth-child(5){animation-delay:.72s}
+  .pat-tile:nth-child(6){animation-delay:.9s}
+  @keyframes pat-idle{
+    0%,100%{transform:translateY(0);}
+    50%    {transform:translateY(-6px);}
+  }
+  .pat-tile.appear{animation:pat-appear .55s cubic-bezier(.2,.7,.2,1) backwards;}
+  @keyframes pat-appear{
+    0%  {transform:translateY(-40px) scale(.4);opacity:0;}
+    60% {transform:translateY(4px) scale(1.12);opacity:1;}
+    100%{transform:translateY(0) scale(1);opacity:1;}
   }
   .pat-tile.question{
     color:var(--accent);
@@ -277,6 +424,14 @@
     cursor:pointer;
     transition:transform .15s ease,box-shadow .15s ease,opacity .2s ease;
     padding:8px;
+    animation:size-idle 2.6s ease-in-out infinite;
+  }
+  .size-tile:nth-child(2){animation-delay:.25s}
+  .size-tile:nth-child(3){animation-delay:.5s}
+  .size-tile:nth-child(4){animation-delay:.75s}
+  @keyframes size-idle{
+    0%,100%{transform:translateY(0);box-shadow:0 0 14px currentColor;}
+    50%    {transform:translateY(-10px);box-shadow:0 0 30px currentColor,0 0 50px currentColor;}
   }
   .size-tile .emoji{font-size:clamp(40px,8vw,64px);filter:drop-shadow(0 0 10px currentColor)}
   .size-tile .nm{font-size:clamp(10px,1.7vw,12px);letter-spacing:1px;color:currentColor;text-shadow:1px 1px 0 #000;margin-top:4px}
@@ -345,6 +500,17 @@
 </head>
 <body>
 <div id="app">
+  <!-- Background motion elements -->
+  <div class="blob blob-a"></div>
+  <div class="blob blob-b"></div>
+  <div class="blob blob-c"></div>
+  <div class="blob blob-d"></div>
+
+  <!-- Streak meter (shown during games) -->
+  <div id="streak">STREAK x0</div>
+
+  <!-- Mascot in corner reacting -->
+  <div id="mascot">🦖</div>
 
   <!-- HUB -->
   <div id="hub" class="screen">
@@ -452,7 +618,7 @@
   <button class="toggle-btn" id="voiceToggle" type="button">🗣 VOICE</button>
 
   <div id="toast" class="toast"></div>
-  <div class="version">KAIJU LOGIC LAB · v1.0 · 2026-05-16</div>
+  <div class="version">KAIJU LOGIC LAB · v1.1 · DOPAMINE BOOST</div>
 </div>
 
 <script>
@@ -571,7 +737,101 @@ const Audio = (() => {
   }
   function setEnabled(v){enabled=v}
   function isEnabled(){return enabled}
-  return {ensure,chime,buzz,roar,tone,explode,fanfare,setEnabled,isEnabled};
+  // Ambient music loop — energetic pulsing bass + arpeggio
+  let musicOn=false, musicTimer=null, beatTimer=null, musicGain=null, musicNodes=[];
+  function startMusic(){
+    if(!enabled||musicOn) return;
+    ensure();
+    musicOn=true;
+    musicGain=ctx.createGain();
+    musicGain.gain.value=0.10;
+    musicGain.connect(ctx.destination);
+    // detuned bass drone
+    const a=ctx.createOscillator(),b=ctx.createOscillator();
+    a.type="sawtooth"; b.type="sawtooth";
+    a.frequency.value=65; b.frequency.value=65.5;
+    const f=ctx.createBiquadFilter();
+    f.type="lowpass"; f.frequency.value=260; f.Q.value=4;
+    const g=ctx.createGain(); g.gain.value=0.5;
+    a.connect(f); b.connect(f); f.connect(g); g.connect(musicGain);
+    a.start(); b.start();
+    musicNodes.push(a,b);
+    const lfo=ctx.createOscillator(),lg=ctx.createGain();
+    lfo.frequency.value=0.18; lg.gain.value=80;
+    lfo.connect(lg); lg.connect(f.frequency); lfo.start();
+    musicNodes.push(lfo);
+    // arpeggio
+    const notes=[220,261,330,392,330,261];
+    let i=0;
+    (function tick(){
+      if(!musicOn) return;
+      const t=ctx.currentTime;
+      const o=ctx.createOscillator(),og=ctx.createGain(),of=ctx.createBiquadFilter();
+      o.type="square"; o.frequency.value=notes[i%notes.length];
+      of.type="lowpass"; of.frequency.value=1200; of.Q.value=5;
+      og.gain.setValueAtTime(0,t);
+      og.gain.linearRampToValueAtTime(0.13,t+0.04);
+      og.gain.linearRampToValueAtTime(0,t+0.45);
+      o.connect(of); of.connect(og); og.connect(musicGain);
+      o.start(t); o.stop(t+0.5);
+      i++;
+      musicTimer=setTimeout(tick,420);
+    })();
+    (function beat(){
+      if(!musicOn) return;
+      const t=ctx.currentTime;
+      const o=ctx.createOscillator(),og=ctx.createGain();
+      o.type="sine";
+      o.frequency.setValueAtTime(80,t);
+      o.frequency.exponentialRampToValueAtTime(35,t+0.14);
+      og.gain.setValueAtTime(0,t);
+      og.gain.linearRampToValueAtTime(0.4,t+0.005);
+      og.gain.linearRampToValueAtTime(0,t+0.17);
+      o.connect(og); og.connect(musicGain);
+      o.start(t); o.stop(t+0.18);
+      beatTimer=setTimeout(beat,840);
+    })();
+  }
+  function stopMusic(){
+    musicOn=false;
+    if(musicTimer){clearTimeout(musicTimer);musicTimer=null;}
+    if(beatTimer){clearTimeout(beatTimer);beatTimer=null;}
+    musicNodes.forEach(n=>{try{n.stop();}catch(e){}});
+    musicNodes=[];
+    if(musicGain){try{musicGain.gain.linearRampToValueAtTime(0,ctx.currentTime+0.4);}catch(e){}}
+  }
+  function kick(){
+    if(!enabled) return;
+    ensure();
+    const t=ctx.currentTime;
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.type="sine";
+    o.frequency.setValueAtTime(160,t);
+    o.frequency.exponentialRampToValueAtTime(50,t+0.16);
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(0.5,t+0.005);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.2);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t); o.stop(t+0.22);
+  }
+  function whoosh(){
+    if(!enabled) return;
+    ensure();
+    const dur=0.4;
+    const buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate);
+    const data=buf.getChannelData(0);
+    for(let i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*(1-i/data.length);
+    const src=ctx.createBufferSource(); src.buffer=buf;
+    const f=ctx.createBiquadFilter(); f.type="bandpass";
+    f.frequency.setValueAtTime(1500,ctx.currentTime);
+    f.frequency.exponentialRampToValueAtTime(500,ctx.currentTime+dur);
+    const g=ctx.createGain();
+    g.gain.setValueAtTime(0.3,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
+    src.connect(f); f.connect(g); g.connect(ctx.destination);
+    src.start();
+  }
+  return {ensure,chime,buzz,roar,tone,explode,fanfare,setEnabled,isEnabled,startMusic,stopMusic,kick,whoosh};
 })();
 
 // ---------- Voice ----------
@@ -624,6 +884,7 @@ function tween(el, props, opts={}){
 // ---------- HUB navigation ----------
 function navHome(){
   showScreen("hub");
+  if (typeof Streak !== "undefined") Streak.reset();
 }
 document.addEventListener("click",(e)=>{
   const card=e.target.closest("[data-game]");
@@ -696,8 +957,11 @@ function startMatch(){
       matched++;
       pairsEl.textContent = matched + "/6";
       Audio.fanfare();
+      Audio.kick();
       Voice.speak("Match! "+KAIJU[card.dataset.key].say+"!", {priority:true});
-      fireConfetti({origin:{x:.5,y:.4}, particleCount:50, spread:60});
+      Streak.bump();
+      Mascot.cheer();
+      fireConfetti({origin:{x:.5,y:.4}, particleCount:90, spread:100, startVelocity:55, shapes:["star","square","circle"]});
       first=null;
       if(matched===6){
         clearInterval(timer);
@@ -708,6 +972,9 @@ function startMatch(){
       // Mismatch
       lock=true;
       Audio.buzz();
+      Audio.whoosh();
+      Streak.reset();
+      Mascot.sad();
       const a=first, b=card;
       setTimeout(()=>{
         a.classList.remove("flipped");
@@ -810,8 +1077,11 @@ function startSimon(){
         // Round complete
         acceptingInput=false;
         Audio.chime(900);
+        Audio.kick();
+        Streak.bump();
+        Mascot.cheer();
         showToast("GREAT!", "#5fffaa");
-        fireConfetti({origin:{x:.5,y:.5}, particleCount:35, spread:50});
+        fireConfetti({origin:{x:.5,y:.5}, particleCount:70, spread:90, shapes:["star","circle"]});
         const localBest = parseInt(localStorage.getItem("kl.simon.best")||"0",10);
         if(round>localBest){
           localStorage.setItem("kl.simon.best", String(round));
@@ -822,6 +1092,9 @@ function startSimon(){
     } else {
       acceptingInput=false;
       Audio.buzz();
+      Audio.whoosh();
+      Streak.reset();
+      Mascot.sad();
       showToast("OOPS!", "#ff4444");
       Voice.speak("Try again!", {priority:true});
       setTimeout(()=>{
@@ -937,15 +1210,21 @@ function startPattern(){
     if(key === answerKey){
       el.classList.add("right");
       Audio.chime(900);
+      Audio.kick();
       Voice.speak("Yes! "+KAIJU[key].say+"!", {priority:true});
       showToast("YES!", "#5fffaa");
       score += 100;
       scoreEl.textContent = score;
-      fireConfetti({origin:{x:.5,y:.6}, particleCount:40, spread:60});
+      Streak.bump();
+      Mascot.cheer();
+      fireConfetti({origin:{x:.5,y:.6}, particleCount:80, spread:90, shapes:["star","circle","square"]});
       setTimeout(nextRound, 1100);
     } else {
       el.classList.add("wrong");
       Audio.buzz();
+      Audio.whoosh();
+      Streak.reset();
+      Mascot.sad();
       Voice.speak("Try again!", {priority:true});
       showToast("OOPS!", "#ff4444");
       setTimeout(()=>{ el.classList.remove("wrong"); lockInput=false; }, 600);
@@ -1005,6 +1284,7 @@ function startSize(){
     const expected = correct[picked.length];
     if(key === expected){
       Audio.chime(700 + picked.length*100);
+      Audio.kick();
       el.classList.add("picked");
       // Move to stage
       const ghost = el.cloneNode(true);
@@ -1019,18 +1299,27 @@ function startSize(){
         stage.appendChild(arrow);
       }
       stage.appendChild(ghost);
+      // Animate ghost in with GSAP overshoot
+      if(window.gsap){ gsap.fromTo(ghost,{scale:0,rotate:-15},{scale:1,rotate:0,duration:.4,ease:"back.out(2.4)"}); }
+      // Mini confetti for every correct pick
+      fireConfetti({origin:{x:.5,y:.55}, particleCount:30, spread:50, startVelocity:35});
       picked.push(key);
       score += 25;
       scoreEl.textContent = score;
       Voice.speak(KAIJU[key].say);
+      Streak.bump();
+      Mascot.cheer();
       if(picked.length === correct.length){
         Audio.fanfare();
-        fireConfetti({origin:{x:.5,y:.5}, particleCount:60, spread:80});
+        fireConfetti({origin:{x:.5,y:.5}, particleCount:120, spread:120, shapes:["star","circle","square"]});
         showToast("PERFECT!", "#5fffaa");
         setTimeout(newRound, 1400);
       }
     } else {
       Audio.buzz();
+      Audio.whoosh();
+      Streak.reset();
+      Mascot.sad();
       el.classList.add("bad");
       setTimeout(()=>el.classList.remove("bad"), 500);
       showToast("Not yet!", "#ff4444");
@@ -1088,9 +1377,86 @@ document.getElementById("voiceToggle").addEventListener("click",()=>{
   }
 })();
 
-// Tap anywhere on first interaction → warm up audio + voices
+// ---------- Ambient floating sparks (constant motion in background) ----------
+(function ambientSparks(){
+  setInterval(()=>{
+    const s=document.createElement("div");
+    s.className="spark";
+    s.style.left = Math.random()*100+"vw";
+    s.style.bottom = "-20px";
+    s.style.animationDuration = (4+Math.random()*4)+"s";
+    const colors = ["#ffeb6a","#5fffaa","#ff44dd","#88ccff","#ff8800"];
+    s.style.background = `linear-gradient(180deg, ${colors[Math.floor(Math.random()*colors.length)]}, transparent)`;
+    document.getElementById("app").appendChild(s);
+    setTimeout(()=>s.remove(), 9000);
+  }, 320);
+})();
+
+// ---------- Mascot reactions + STREAK system ----------
+const Mascot = (()=>{
+  const $m = document.getElementById("mascot");
+  const happyEmojis = ["🦖","🦍","🐉","🦕","🦎","🐲"];
+  function cheer(){
+    $m.classList.remove("sad","cheer");
+    void $m.offsetWidth;
+    $m.classList.add("cheer");
+    // swap mascot occasionally for variety
+    if(Math.random()<0.45){
+      $m.textContent = happyEmojis[Math.floor(Math.random()*happyEmojis.length)];
+    }
+  }
+  function sad(){
+    $m.classList.remove("sad","cheer");
+    void $m.offsetWidth;
+    $m.classList.add("sad");
+  }
+  return {cheer, sad};
+})();
+
+const Streak = (()=>{
+  const $s = document.getElementById("streak");
+  let n=0;
+  function bump(){
+    n++;
+    $s.textContent = "STREAK x" + n + (n>=5?" 🔥":"");
+    $s.classList.add("show");
+    if(n>=5) $s.classList.add("fire"); else $s.classList.remove("fire");
+    if(window.gsap){
+      gsap.killTweensOf($s);
+      gsap.fromTo($s,{scale:1},{scale:1.4,duration:.12,ease:"back.out(3)",yoyo:true,repeat:1});
+    }
+    if(n===3 || n===5 || n===10){
+      showToast("STREAK x"+n+"!", "#ffeb6a");
+      fireConfetti({origin:{x:.5,y:.4}, particleCount:60, spread:80});
+      Audio.fanfare();
+    }
+  }
+  function reset(){
+    n=0;
+    $s.classList.remove("fire");
+    $s.classList.remove("show");
+  }
+  function count(){ return n; }
+  return {bump, reset, count};
+})();
+
+// ---------- Tap ripples on every click anywhere in app ----------
+document.getElementById("app").addEventListener("pointerdown",(e)=>{
+  const r=document.createElement("div");
+  r.className="ripple";
+  r.style.left = e.clientX+"px";
+  r.style.top = e.clientY+"px";
+  // color by what was tapped (if has color style)
+  const styled = e.target.closest("[style*='color']");
+  r.style.borderColor = styled ? getComputedStyle(styled).color : "var(--accent)";
+  document.body.appendChild(r);
+  setTimeout(()=>r.remove(), 600);
+});
+
+// Tap anywhere on first interaction → warm up audio + voices + START MUSIC
 document.addEventListener("pointerdown", ()=>{
   Audio.ensure();
+  Audio.startMusic();
   if(window.speechSynthesis) window.speechSynthesis.getVoices();
 }, {once:true});
 

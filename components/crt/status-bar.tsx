@@ -10,13 +10,13 @@ export function StatusBar({
   return (
     <div
       className={cn(
-        "font-mono text-[11px] uppercase tracking-[0.18em] text-dim border-t border-b border-rule py-1.5 flex flex-wrap items-center gap-x-5 gap-y-1",
+        "flex flex-wrap items-center gap-x-6 gap-y-2 border-y border-rule/80 py-3 font-mono text-[10px] uppercase tracking-[0.26em] text-dim",
         className,
       )}
     >
       {items.map((it, i) => (
-        <span key={i} className="flex items-center gap-1.5">
-          <span className="text-rule">{it.label}:</span>
+        <span key={i} className="flex items-center gap-2">
+          <span className="text-dim/70">{it.label}</span>
           <span
             className={
               it.tone === "ok"
@@ -25,7 +25,7 @@ export function StatusBar({
                   ? "text-accent"
                   : it.tone === "dim"
                     ? "text-dim"
-                    : "text-fg"
+                    : "text-bright"
             }
           >
             {it.value}

@@ -1,14 +1,12 @@
 import {
   CRTScreen,
   NavBar,
-  Terminal,
-  SectionHeader,
-  AsciiDivider,
   PageFooter,
   PixelButton,
   Tag,
   CRTLink,
   DataRow,
+  Reveal,
 } from "@/components/crt";
 
 const positions = [
@@ -17,10 +15,10 @@ const positions = [
     role: "Senior Software Engineer · Consumer Product",
     when: "Present · London, UK",
     pts: [
-      "Shipping consumer crypto products at scale across iOS, Android, web.",
-      "Polygon transaction path → 8.5× faster after rebuild.",
-      "Balance experience rebuilt with ACH / SEPA / Faster Payments rails.",
-      "Buy/Sell screens redesigned · Liquid Glass UI refresh · onboarding rework.",
+      "Shipping consumer crypto products at scale across iOS, Android, and web.",
+      "Polygon transaction path rebuilt to run 8.5× faster.",
+      "Balance experience rebuilt with ACH, SEPA, and Faster Payments rails.",
+      "Buy/sell screens refreshed with security and onboarding improvements.",
     ],
   },
   {
@@ -28,10 +26,10 @@ const positions = [
     role: "Senior Backend Engineer · Core Engineering Lead",
     when: "Jun 2024 – 2026 · London, UK",
     pts: [
-      "Led Core Engineering: foundational services + platform primitives.",
-      "Decoupled AuthN/AuthZ migration → +7% conversion.",
-      "Operational excellence working group → −15% AWS spend.",
-      "AI incident management with LLM categorisation → −40% MTTR.",
+      "Led Core Engineering across foundational services and platform primitives.",
+      "Decoupled AuthN/AuthZ and improved conversion by 7%.",
+      "Reduced AWS spend by 15% through operational-excellence work.",
+      "AI incident management reduced MTTR by 40%.",
     ],
   },
   {
@@ -39,9 +37,9 @@ const positions = [
     role: "Software Engineer II · Platform / Customer Care",
     when: "May 2022 – Jun 2024 · London, UK",
     pts: [
-      "AI agents shipping 10,000+ daily cases at 95% accuracy.",
-      "2× CSAT, 50% reduction in handling time, £2M annual savings.",
-      "Multi-region k8s + Terraform; engineering gamedays for 100+.",
+      "AI agents handled 10,000+ daily cases at 95% accuracy.",
+      "Delivered 2× CSAT, 50% lower handling time, and £2M annual savings.",
+      "Multi-region Kubernetes and Terraform rollout; gamedays for 100+ engineers.",
     ],
   },
   {
@@ -49,21 +47,32 @@ const positions = [
     role: "Software Engineer · Customer Fulfillment",
     when: "Jan 2021 – May 2022 · Helsinki, FI",
     pts: [
-      "Warehouse integration gateway: 1000+ RPS, −15% latency.",
-      "AI demand forecasting → +25% inventory optimisation.",
-      "Grafana + Prometheus monitoring with custom alerting.",
+      "Warehouse integration gateway with 1000+ RPS Java APIs.",
+      "Reduced latency by 15% and improved inventory accuracy by 25% with forecasting.",
+      "Built Grafana and Prometheus monitoring with custom alerting.",
     ],
   },
   {
-    co: "Nordcloud (IBM)",
+    co: "Nordcloud / IBM",
     role: "Lead Cloud Engineer · Cloud Transformation",
     when: "Aug 2019 – Jan 2021 · Helsinki, FI",
     pts: [
-      "Multi-cloud migration platform across AWS / Azure / GCP.",
-      "30+ enterprise migrations; £5M+ operational savings.",
-      "Zero-data-loss pipelines; +40% deployment velocity.",
+      "Led multi-cloud migrations across AWS, Azure, and GCP.",
+      "Delivered 30+ enterprise migrations and £5M+ operational savings.",
+      "Improved deployment velocity by 40% with secure CI/CD pipelines.",
     ],
   },
+];
+
+const stack = [
+  ["Languages", "Go · Python · TypeScript · JavaScript · Java"],
+  ["Frontend", "React · Next.js · Tailwind · Radix"],
+  ["Backend", "Go · Python · Node · GraphQL · gRPC"],
+  ["Cloud", "AWS · GCP · Azure"],
+  ["Infra", "Terraform · Kubernetes · Docker · CI/CD"],
+  ["Data", "Postgres · Redis · DynamoDB · Mongo · Kafka"],
+  ["AI/ML", "LLMs · Agents · RAG · Fine-tuning · Vector DBs · MLOps"],
+  ["Monitoring", "Grafana · Prometheus · Datadog · Sentry"],
 ];
 
 export default function Resume() {
@@ -71,119 +80,114 @@ export default function Resume() {
     <>
       <NavBar />
       <CRTScreen width="wide">
-        <div className="font-mono text-sm text-dim uppercase tracking-widest mb-2">
-          {"> man aashir"}
-        </div>
-        <h1 className="font-display text-[clamp(1.4rem,4vw,2.2rem)] uppercase glow-strong leading-tight">
-          AASHIR(1)
-        </h1>
-        <p className="mt-3 text-fg/90 font-mono">
-          Plain-text resume. The printable version. Source of truth: this page.
-        </p>
-
-        <div className="flex flex-wrap gap-3 mt-5">
-          <PixelButton href="/Aashir-Javed-Resume.pdf" external>
-            $ download.pdf
-          </PixelButton>
-          <PixelButton href="https://github.com/aashirjaved" variant="ghost" external>
-            $ ssh github
-          </PixelButton>
-        </div>
-
-        <SectionHeader index={1} title="NAME" />
-        <Terminal command="head -n1 aashir.1">
-          <p>aashir — versatile engineer; 8+ years; full-stack, cloud, AI/ML.</p>
-        </Terminal>
-
-        <SectionHeader index={2} title="SYNOPSIS" />
-        <Terminal command="cat synopsis">
-          <p>
-            $ aashir [--lead] [--build] [--ship] [--mentor]{"\n"}
-            $ aashir --area={"{full-stack | cloud | ai-ml}"} --location=london{"\n"}
-            $ aashir --currently=moonpay --status=active
-          </p>
-        </Terminal>
-
-        <SectionHeader index={3} title="EXPERIENCE" />
-        <Terminal command="cat experience">
-          <div className="space-y-6">
-            {positions.map((p) => (
-              <article key={p.co}>
-                <div className="flex flex-wrap items-baseline gap-2 mb-1">
-                  <span className="font-mono text-bright text-sm sm:text-base uppercase tracking-wider">
-                    {p.co}
-                  </span>
-                  <span aria-hidden className="text-rule">·</span>
-                  <span className="font-mono text-fg text-sm">{p.role}</span>
-                </div>
-                <div className="font-mono text-xs text-dim mb-2">{p.when}</div>
-                <ul className="space-y-1">
-                  {p.pts.map((pt) => (
-                    <li key={pt} className="font-mono text-sm text-fg/90 leading-relaxed">
-                      <span className="text-accent select-none mr-2">▸</span>
-                      {pt}
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
+        <section className="grid gap-8 py-12 lg:grid-cols-[minmax(0,1fr)_380px] lg:py-16">
+          <div>
+            <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">Resume</div>
+            <h1 className="mt-5 max-w-[11ch] text-[clamp(4rem,10vw,8rem)] leading-[0.9]">
+              Aashir Javed.
+            </h1>
+            <p className="mt-7 max-w-[64ch] text-lg leading-8 text-fg/80">
+              Senior software engineer with 8+ years across product engineering, platform systems,
+              cloud infrastructure, and production AI.
+            </p>
           </div>
-        </Terminal>
+          <aside className="frame panel-grid self-end p-6">
+            <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">Snapshot</div>
+            <div className="mt-5 space-y-3">
+              <DataRow label="Location" value="London, UK" />
+              <DataRow label="Current" value="MoonPay" />
+              <DataRow label="Focus" value="Product · Platform · AI" />
+              <DataRow label="Experience" value="8+ years" />
+            </div>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <PixelButton href="/Aashir-Javed-Resume.pdf" external>Download PDF</PixelButton>
+              <PixelButton href="/contact" variant="ghost">Contact</PixelButton>
+            </div>
+          </aside>
+        </section>
 
-        <SectionHeader index={4} title="STACK" />
-        <Terminal command="cat stack">
-          <div className="space-y-1">
-            <DataRow label="Languages" value="go · python · typescript · javascript · java" />
-            <DataRow label="Frontend" value="react · next.js · tailwind · radix" />
-            <DataRow label="Backend" value="go · python · node · graphql · grpc" />
-            <DataRow label="Cloud" value="aws · gcp · azure" />
-            <DataRow label="Infra" value="terraform · kubernetes · docker · ci/cd" />
-            <DataRow label="Data" value="postgres · redis · dynamodb · mongo · kafka" />
-            <DataRow label="AI/ML" value="llms · agents · rag · fine-tune · vector dbs · mlops" />
-            <DataRow label="Monitoring" value="grafana · prometheus · datadog · sentry" />
-          </div>
-        </Terminal>
+        <Reveal>
+          <section className="grid gap-4 sm:grid-cols-3">
+            <article className="frame p-6">
+              <div className="font-display text-5xl leading-none text-bright">£7M+</div>
+              <div className="mt-3 font-mono text-[11px] uppercase tracking-[0.24em] text-dim">Savings delivered</div>
+            </article>
+            <article className="frame p-6">
+              <div className="font-display text-5xl leading-none text-bright">10k+</div>
+              <div className="mt-3 font-mono text-[11px] uppercase tracking-[0.24em] text-dim">AI cases / day</div>
+            </article>
+            <article className="frame p-6">
+              <div className="font-display text-5xl leading-none text-bright">100+</div>
+              <div className="mt-3 font-mono text-[11px] uppercase tracking-[0.24em] text-dim">Engineers mentored</div>
+            </article>
+          </section>
+        </Reveal>
 
-        <SectionHeader index={5} title="OPEN SOURCE" />
-        <Terminal command="ls -la github.com/aashirjaved">
-          <div className="flex flex-wrap gap-2 mb-3">
-            <Tag>open source</Tag>
-            <Tag>tooling</Tag>
-            <Tag>llm experiments</Tag>
-          </div>
-          <p>
-            Various tools, side experiments, and the occasional contribution to libraries I rely on.
-            Full listing at <CRTLink href="https://github.com/aashirjaved" external>github.com/aashirjaved</CRTLink>.
-          </p>
-        </Terminal>
+        <Reveal>
+          <section className="mt-16">
+            <div className="mb-6 font-mono text-[11px] uppercase tracking-[0.34em] text-dim">Experience</div>
+            <div className="space-y-3">
+              {positions.map((p, i) => (
+                <article key={p.co} className="frame p-5 sm:p-6">
+                  <div className="grid gap-5 lg:grid-cols-[56px_minmax(0,1fr)]">
+                    <div className="font-mono text-[11px] uppercase tracking-[0.26em] text-dim">{String(i + 1).padStart(2, "0")}</div>
+                    <div>
+                      <h2 className="font-display text-4xl leading-none text-bright">{p.co}</h2>
+                      <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-accent">{p.role}</div>
+                      <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-dim">{p.when}</div>
+                      <ul className="mt-5 space-y-2 text-sm leading-7 text-fg/82">
+                        {p.pts.map((pt) => (
+                          <li key={pt} className="flex gap-3">
+                            <span className="mt-2 h-1.5 w-1.5 shrink-0 bg-accent" aria-hidden />
+                            <span>{pt}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        </Reveal>
 
-        <SectionHeader index={6} title="SEE ALSO" />
-        <Terminal command="man -k aashir">
-          <ul className="space-y-1 font-mono text-sm">
-            <li>
-              <span className="text-dim">about(1)</span> — <CRTLink href="/about">/about</CRTLink>{" "}
-              the longer story
-            </li>
-            <li>
-              <span className="text-dim">projects(1)</span>{" "}
-              — <CRTLink href="/projects">/projects</CRTLink> case files
-            </li>
-            <li>
-              <span className="text-dim">experience(1)</span>{" "}
-              — <CRTLink href="/experience">/experience</CRTLink> career timeline
-            </li>
-            <li>
-              <span className="text-dim">writing(1)</span>{" "}
-              — <CRTLink href="/writing">/writing</CRTLink> notes from production
-            </li>
-            <li>
-              <span className="text-dim">contact(1)</span>{" "}
-              — <CRTLink href="/contact">/contact</CRTLink> get in touch
-            </li>
-          </ul>
-        </Terminal>
+        <Reveal>
+          <section className="mt-16 grid gap-6 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)]">
+            <div>
+              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">Technical stack</div>
+              <h2 className="mt-4 max-w-[8ch] text-[clamp(2.4rem,5vw,4.8rem)] leading-[0.95]">The working set.</h2>
+            </div>
+            <div className="frame panel-grid p-6 sm:p-8">
+              <div className="space-y-4">
+                {stack.map(([label, value]) => (
+                  <DataRow key={label} label={label} value={value} />
+                ))}
+              </div>
+            </div>
+          </section>
+        </Reveal>
 
-        <AsciiDivider variant="block" className="mt-16" />
+        <Reveal>
+          <section className="mt-16 frame panel-grid p-6 sm:p-8">
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+              <div>
+                <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">See also</div>
+                <h2 className="mt-4 max-w-[12ch] text-[clamp(2.4rem,5vw,4.8rem)] leading-[0.95]">
+                  Evidence behind the resume.
+                </h2>
+              </div>
+              <div className="flex flex-wrap gap-3 lg:justify-end">
+                <PixelButton href="/projects">Projects</PixelButton>
+                <PixelButton href="/experience" variant="ghost">Timeline</PixelButton>
+                <PixelButton href="https://github.com/aashirjaved" variant="ghost" external>GitHub</PixelButton>
+              </div>
+            </div>
+            <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.22em] text-dim">
+              Longer story: <CRTLink href="/about">About</CRTLink> / essays: <CRTLink href="/writing">Writing</CRTLink>
+            </p>
+          </section>
+        </Reveal>
+
         <PageFooter />
       </CRTScreen>
     </>

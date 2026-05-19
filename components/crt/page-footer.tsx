@@ -1,29 +1,27 @@
 import { CRTLink } from "./crt-link";
-import { AsciiDivider } from "./ascii-divider";
 
 export function PageFooter() {
   return (
-    <footer className="mt-24 font-mono text-xs sm:text-sm text-dim">
-      <AsciiDivider variant="double" />
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <span aria-hidden className="inline-block w-2 h-2 bg-ok animate-pulse" />
-          <span className="uppercase tracking-widest">[CONNECTION ACTIVE]</span>
+    <footer className="mt-24 border-t border-rule/80 pt-8">
+      <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+        <div>
+          <div className="font-mono text-[11px] uppercase tracking-[0.32em] text-dim">
+            Based in London · available for high-leverage product and platform work
+          </div>
+          <div className="mt-3 font-display text-2xl text-bright">Built with taste, not templates.</div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-4 font-mono text-[11px] uppercase tracking-[0.22em] text-dim">
           <CRTLink href="https://github.com/aashirjaved" external>
-            $ ssh github
+            github
           </CRTLink>
-          <span aria-hidden className="text-rule">·</span>
           <CRTLink href="https://www.linkedin.com/in/aashirjaved/" external>
-            $ open linkedin
+            linkedin
           </CRTLink>
-          <span aria-hidden className="text-rule">·</span>
-          <CRTLink href="mailto:hello@aashir.net">$ mail</CRTLink>
+          <CRTLink href="mailto:hello@aashir.net">email</CRTLink>
         </div>
       </div>
-      <div className="mt-4 text-rule uppercase tracking-widest text-[10px] sm:text-xs">
-        © {new Date().getFullYear()} AASHIR.SYS · BUILT WITH NEXT.JS · BEST VIEWED IN AMBER
+      <div className="mt-6 font-mono text-[11px] uppercase tracking-[0.22em] text-dim/80">
+        © {new Date().getFullYear()} Aashir Javed
       </div>
     </footer>
   );

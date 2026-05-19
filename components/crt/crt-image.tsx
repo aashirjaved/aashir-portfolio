@@ -27,26 +27,18 @@ export function CRTImage({
         height={height}
         priority={priority}
         className={cn(
-          "block w-full h-auto select-none",
+          "block h-auto w-full select-none",
           tone === "amber"
-            ? "[filter:grayscale(1)_contrast(1.05)_sepia(1)_hue-rotate(-12deg)_saturate(2.6)_brightness(0.95)]"
-            : "[filter:grayscale(1)_contrast(1.1)]",
+            ? "[filter:grayscale(1)_sepia(0.24)_contrast(1.02)_brightness(0.94)]"
+            : "[filter:grayscale(1)_contrast(1.08)]",
         )}
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none mix-blend-multiply"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(0deg, rgba(0,0,0,0.35) 0 1px, transparent 1px 3px)",
-        }}
       />
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.5) 100%)",
+            "linear-gradient(180deg, rgba(255,255,255,0.06), transparent 24%), radial-gradient(circle at center, rgba(0,0,0,0) 54%, rgba(0,0,0,0.28) 100%)",
         }}
       />
     </div>

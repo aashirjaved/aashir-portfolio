@@ -7,9 +7,10 @@ import { useState, type ReactNode } from "react";
 type Variant = "primary" | "ghost" | "danger";
 
 const variantClasses: Record<Variant, string> = {
-  primary: "bg-screen text-bright border border-accent hover:bg-accent hover:text-bg",
+  primary:
+    "bg-bright text-bg border border-bright hover:bg-accent hover:border-accent hover:text-bright shadow-[0_20px_50px_rgba(191,109,58,0.18)]",
   ghost:
-    "bg-transparent text-fg border border-rule hover:border-accent hover:text-bright",
+    "bg-transparent text-bright border border-rule hover:border-accent hover:text-bright hover:bg-screen/70",
   danger:
     "bg-transparent text-danger border border-danger hover:bg-danger hover:text-bg",
 };
@@ -22,16 +23,16 @@ type Common = {
 
 function Inner({ children, hovered }: { children: ReactNode; hovered: boolean }) {
   return (
-    <span className="inline-flex items-baseline">
+    <span className="inline-flex items-center gap-3">
       <span>{children}</span>
       <span
         aria-hidden
         className={cn(
-          "ml-1 inline-block w-[0.5em]",
-          hovered ? "opacity-100 cursor-blink text-current" : "opacity-0",
+          "text-[0.9em] transition-transform duration-300",
+          hovered ? "translate-x-0.5 opacity-100" : "opacity-70",
         )}
       >
-        ▌
+        ↗
       </span>
     </span>
   );
@@ -55,8 +56,7 @@ export function PixelButton({
 }) {
   const [hovered, setHovered] = useState(false);
   const cls = cn(
-    "inline-flex items-center gap-2 px-4 py-2 font-mono text-sm uppercase tracking-wider bevel select-none transition-none",
-    "active:bevel-pressed",
+    "inline-flex items-center px-5 py-3 font-mono text-[11px] uppercase tracking-[0.22em] transition-all duration-300",
     "disabled:opacity-50 disabled:cursor-not-allowed",
     variantClasses[variant],
     className,

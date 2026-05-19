@@ -7,7 +7,7 @@ import './globals.css'
 import { Suspense } from 'react'
 
 export const viewport: Viewport = {
-  themeColor: '#1a0e00',
+  themeColor: '#0f0d0b',
   colorScheme: 'dark',
 };
 
@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable} dark`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="theme-color" content="#1a0e00" />
+        <meta name="theme-color" content="#0f0d0b" />
         <link rel="icon" href="/me.png" />
         <link rel="apple-touch-icon" href="/me.png" />
         <link rel="manifest" href="/site.webmanifest" />
@@ -32,7 +32,7 @@ export default function RootLayout({
       <body className="font-body bg-bg text-fg antialiased">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:px-3 focus:py-1 focus:bg-bg focus:border focus:border-accent focus:text-bright focus:font-mono focus:text-xs focus:uppercase focus:tracking-widest"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[200] focus:px-3 focus:py-2 focus:bg-screen focus:border focus:border-accent focus:text-bright focus:font-mono focus:text-xs focus:uppercase focus:tracking-widest"
         >
           skip to content
         </a>
@@ -42,7 +42,7 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <Analytics />
         </Suspense>
-        <div className="crt-flicker">{children}</div>
+        <div>{children}</div>
       </body>
     </html>
   )

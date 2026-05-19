@@ -4,9 +4,9 @@ import {
   StatusBar,
   Tag,
   PageFooter,
-  DataRow,
   CRTLink,
   PixelButton,
+  Reveal,
 } from "@/components/crt";
 
 type Project = {
@@ -24,42 +24,40 @@ type Project = {
 
 const projects: Project[] = [
   {
-    title: "MoonPay Consumer App · Product Engineering",
+    title: "MoonPay Consumer App",
     company: "MoonPay",
     period: "Present",
     category: "Product · Crypto",
     status: "Production",
     description:
-      "Shipping consumer crypto products at scale across iOS, Android, and web. Buy/Sell, balances, payment rails, security.",
+      "Consumer crypto product engineering across iOS, Android, and web: buy/sell, balances, payment rails, security, and transaction reliability.",
     details: [
-      "Polygon transaction path · 8.5× faster after rebuild",
-      "Balance experience rebuilt with ACH / SEPA / Faster Payments rails",
-      "Buy/Sell screens redesigned · Liquid Glass UI refresh",
-      "Tighter device security flows + onboarding rework",
+      "Polygon transaction path rebuilt to run 8.5× faster.",
+      "Balance experience rebuilt with ACH, SEPA, and Faster Payments rails.",
+      "Buy/sell screens refreshed with tighter device security and onboarding flows.",
     ],
-    technologies: ["react", "next.js", "go", "python", "aws", "typescript"],
+    technologies: ["React", "Next.js", "Go", "Python", "AWS", "TypeScript"],
     metrics: [
       { label: "Polygon", value: "8.5×" },
-      { label: "Rails", value: "ACH·SEPA·FPS" },
-      { label: "Surface", value: "iOS·Android·Web" },
+      { label: "Rails", value: "ACH · SEPA · FPS" },
+      { label: "Surface", value: "iOS · Android · Web" },
     ],
     featured: true,
   },
   {
-    title: "Whatify · Financial Simulation Engine",
+    title: "Whatify",
     company: "Side build",
     period: "2026 — Present",
-    category: "Product · Build",
+    category: "Financial simulation",
     status: "Beta",
     description:
-      "Stop guessing, start deciding. Side-by-side scenario simulation for major life decisions — homes, careers, family — stress-tested against rate spikes and cost overruns.",
+      "Scenario simulation for major life decisions: homes, careers, family, and long-range financial tradeoffs stress-tested against messy reality.",
     details: [
-      "5-year net worth projections: best / expected / worst case",
-      "Stress-testing against interest-rate spikes and cost overruns",
-      "2-minute setup; data-driven decisions, not guesswork",
-      "3,847+ on the waitlist",
+      "Five-year projections across best, expected, and worst-case paths.",
+      "Stress-testing against rate spikes, cost overruns, and delayed plans.",
+      "A 2-minute setup designed for decision clarity, not spreadsheet theatre.",
     ],
-    technologies: ["next.js", "typescript", "ai", "postgres"],
+    technologies: ["Next.js", "TypeScript", "AI", "Postgres"],
     metrics: [
       { label: "Waitlist", value: "3.8k+" },
       { label: "Setup", value: "2 min" },
@@ -68,53 +66,36 @@ const projects: Project[] = [
     featured: true,
   },
   {
-    title: "AI Hackathon · 1st place",
+    title: "AI Hackathon Winner",
     company: "w/ Omer Bresinski",
     period: "2026",
-    category: "AI · Hackathon",
+    category: "AI · Prototype",
     status: "Beta",
     description:
-      "Won an AI hackathon over a weekend. Two engineers, one idea, hardware → model → demo in under 48 hours.",
+      "A weekend build taken from idea to hardware-backed AI demo under competition pressure.",
     details: [
-      "End-to-end build under tight time pressure",
-      "Cross-stack: device, backend, model, UI",
-      "Wrote spec, prototyped, and demoed live",
+      "End-to-end build across device, backend, model, and interface.",
+      "Product spec, prototype, and live demo produced in under 48 hours.",
+      "Won first place against a field of AI product prototypes.",
     ],
-    technologies: ["python", "ai", "next.js"],
+    technologies: ["Python", "AI", "Next.js"],
     metrics: [{ label: "Place", value: "1st" }],
     featured: true,
   },
   {
-    title: "Grok · Radio Product",
-    company: "Side prototype",
-    period: "2026",
-    category: "AI · Voice",
-    status: "Beta",
-    description:
-      "Spec, prototype, and product thinking for a Grok-powered radio interface. Voice as the new keyboard.",
-    details: [
-      "Voice-first product framing",
-      "Live AI radio host concept; latency budget under 500ms",
-      "Public thread on X (@aasjav)",
-    ],
-    technologies: ["ai", "audio", "next.js"],
-    metrics: [],
-  },
-  {
-    title: "AI-Powered Customer Care Platform",
+    title: "AI Customer Care Platform",
     company: "Deliveroo",
     period: "2022 — 2024",
-    category: "AI + Full-Stack",
+    category: "AI + Platform",
     status: "Production",
     description:
-      "Customer-care automation: React, Go APIs, fine-tuned LLM agents handling refunds and order resolution at scale.",
+      "Fine-tuned LLM agents and operational tooling for high-volume customer-care automation.",
     details: [
-      "AI agents · 10,000+ cases/day · 95% accuracy",
-      "Prompt-engineering frameworks for service-specific LLMs",
-      "Real-time React UI with seamless agent ↔ human handoff",
-      "Multi-region k8s + Terraform on PostgreSQL",
+      "10,000+ cases/day handled by production AI agents at 95% accuracy.",
+      "2× CSAT and 50% lower handling time across automated journeys.",
+      "Multi-region Kubernetes and Terraform rollout for global operations.",
     ],
-    technologies: ["react", "go", "python", "llm fine-tune", "postgres", "k8s", "terraform"],
+    technologies: ["React", "Go", "Python", "LLMs", "Postgres", "Kubernetes"],
     metrics: [
       { label: "CSAT", value: "2×" },
       { label: "Saved", value: "£2M" },
@@ -123,41 +104,40 @@ const projects: Project[] = [
     featured: true,
   },
   {
-    title: "Core Engineering Infrastructure",
+    title: "Core Engineering Platform",
     company: "Motorway",
-    period: "2024 — Present",
+    period: "2024 — 2026",
     category: "Infra + AI",
     status: "Production",
     description:
-      "Mission-critical platform: monitoring, AI-powered alerting, decoupled auth. Foundation for every product team.",
+      "Mission-critical platform work: monitoring, AI-powered alerting, decoupled auth, and foundational services.",
     details: [
-      "Decoupled AuthN/AuthZ migration → +7% conversion",
-      "AI incident management with LLM categorisation → −40% MTTR",
-      "Real-time React/Next.js observability dashboards",
-      "Operational-excellence working group → −15% AWS spend",
+      "AuthN/AuthZ migration improved checkout conversion by 7%.",
+      "AI incident management reduced MTTR by 40%.",
+      "Operational-excellence work reduced AWS spend by 15%.",
     ],
-    technologies: ["go", "python", "react", "next.js", "aws", "terraform", "llm", "oauth2"],
+    technologies: ["Go", "Python", "React", "AWS", "Terraform", "LLMs", "OAuth2"],
     metrics: [
-      { label: "Volume", value: "+15%" },
       { label: "Conv", value: "+7%" },
+      { label: "MTTR", value: "−40%" },
       { label: "AWS", value: "−15%" },
     ],
     featured: true,
   },
   {
-    title: "High-Performance Warehouse Gateway",
+    title: "Warehouse Integration Gateway",
     company: "Zalando",
     period: "2021 — 2022",
-    category: "Backend + Frontend",
+    category: "Backend systems",
     status: "Production",
     description:
-      "Enterprise gateway between warehouse ops and Zalando core. React dashboards + tight Java APIs.",
+      "Enterprise gateway between warehouse operations and Zalando core systems with tight Java APIs and operational dashboards.",
     details: [
-      "Java APIs handling 1000+ RPS",
-      "AI demand forecasting · +25% inventory accuracy",
-      "Grafana + Prometheus monitoring stack",
+      "Java APIs handling 1000+ requests per second.",
+      "Query and system optimisation reduced latency by 15%.",
+      "AI demand forecasting improved inventory accuracy by 25%.",
     ],
-    technologies: ["java", "react", "typescript", "postgres", "docker", "k8s", "grafana"],
+    technologies: ["Java", "React", "TypeScript", "Postgres", "Kubernetes", "Grafana"],
     metrics: [
       { label: "RPS", value: "1k+" },
       { label: "Latency", value: "−15%" },
@@ -168,40 +148,20 @@ const projects: Project[] = [
     title: "Multi-Cloud Migration Platform",
     company: "Nordcloud / IBM",
     period: "2020 — 2021",
-    category: "Cloud Infra",
+    category: "Cloud transformation",
     status: "Production",
     description:
-      "Enterprise platform converting monoliths into microservices across AWS, Azure, GCP. 30+ migrations.",
+      "Enterprise migration platform and runbooks for moving monoliths into cloud-native architectures across AWS, Azure, and GCP.",
     details: [
-      "Cross-cloud architectural patterns and runbooks",
-      "Zero-data-loss transformation pipelines",
-      "CI/CD with security gates · +40% deploy velocity",
+      "30+ enterprise migrations with zero-data-loss transformation pipelines.",
+      "Cross-cloud architectural patterns and security-gated CI/CD.",
+      "Deployment velocity improved by 40% with £5M+ savings delivered.",
     ],
-    technologies: ["aws", "azure", "gcp", "terraform", "docker", "k8s", "python", "go"],
+    technologies: ["AWS", "Azure", "GCP", "Terraform", "Kubernetes", "Python", "Go"],
     metrics: [
       { label: "Migrations", value: "30+" },
       { label: "Speed", value: "+40%" },
       { label: "Saved", value: "£5M" },
-    ],
-  },
-  {
-    title: "Event-Driven E-Commerce Platform",
-    company: "Freelance",
-    period: "2019 — 2020",
-    category: "Full-Stack",
-    status: "Sunset",
-    description:
-      "Scalable e-commerce: high-volume transactions, real-time inventory, personalised recs.",
-    details: [
-      "Event-driven architecture with message queues",
-      "Recommendation engine via collaborative filtering",
-      "Payment gateways with reconciliation",
-    ],
-    technologies: ["node.js", "react", "next.js", "redis", "postgres", "kafka", "aws"],
-    metrics: [
-      { label: "Uptime", value: "99.9%" },
-      { label: "Conv", value: "3×" },
-      { label: "Orders/d", value: "25k+" },
     ],
   },
 ];
@@ -209,50 +169,48 @@ const projects: Project[] = [
 function ProjectCard({ p, index }: { p: Project; index: number }) {
   const num = String(index + 1).padStart(2, "0");
   return (
-    <article className="frame frame-amber p-5 sm:p-6 bg-screen/40">
-      <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
-        <div className="flex items-baseline gap-3">
-          <span className="font-display text-[10px] text-accent glow">{num}</span>
-          <h2 className="font-mono text-bright text-base sm:text-lg uppercase tracking-wider">
+    <article className="group frame panel-grid p-5 transition-all duration-300 hover:-translate-y-1 hover:border-accent/70 sm:p-7">
+      <div className="grid gap-6 lg:grid-cols-[90px_minmax(0,1fr)_280px]">
+        <div className="font-mono text-[11px] uppercase tracking-[0.28em] text-dim">{num}</div>
+        <div>
+          <div className="mb-4 flex flex-wrap gap-2">
+            <Tag tone="accent">{p.category}</Tag>
+            <Tag tone={p.status === "Production" ? "ok" : "dim"}>{p.status}</Tag>
+            {p.featured && <Tag tone="accent">Featured</Tag>}
+          </div>
+          <h2 className="max-w-[13ch] text-[clamp(2rem,4vw,4.2rem)] leading-[0.96] transition-colors duration-300 group-hover:text-accent">
             {p.title}
           </h2>
+          <p className="mt-5 max-w-[70ch] text-base leading-8 text-fg/80">{p.description}</p>
+          <ul className="mt-5 space-y-2 text-sm leading-7 text-fg/82">
+            {p.details.map((d) => (
+              <li key={d} className="flex gap-3">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 bg-accent" aria-hidden />
+                <span>{d}</span>
+              </li>
+            ))}
+          </ul>
         </div>
-        <div className="flex flex-wrap gap-1">
-          <Tag tone="accent">{p.category}</Tag>
-          <Tag tone={p.status === "Production" ? "ok" : "dim"}>{p.status}</Tag>
-          {p.featured && <Tag tone="accent">★ featured</Tag>}
-        </div>
-      </div>
-
-      <div className="grid sm:grid-cols-[minmax(0,1fr)_auto] gap-x-6 gap-y-3 mb-4 items-start">
-        <div className="space-y-1">
-          <DataRow label="Client" value={p.company} />
-          <DataRow label="Period" value={p.period} />
-        </div>
-        <div className="flex flex-wrap gap-2 sm:justify-end">
-          {p.metrics.map((m) => (
-            <Tag key={m.label} tone="ok" className="text-[11px]">
-              {m.label} {m.value}
-            </Tag>
-          ))}
-        </div>
-      </div>
-
-      <p className="font-mono text-sm text-fg/95 mb-3">{p.description}</p>
-
-      <ul className="space-y-1 mb-4">
-        {p.details.map((d) => (
-          <li key={d} className="font-mono text-sm text-fg/90">
-            <span className="text-accent select-none mr-2">▸</span>
-            {d}
-          </li>
-        ))}
-      </ul>
-
-      <div className="flex flex-wrap gap-1">
-        {p.technologies.map((t) => (
-          <Tag key={t}>{t}</Tag>
-        ))}
+        <aside className="space-y-5 lg:text-right">
+          <div>
+            <div className="font-mono text-[10px] uppercase tracking-[0.26em] text-dim">Client</div>
+            <div className="mt-1 font-display text-2xl text-bright">{p.company}</div>
+          </div>
+          <div>
+            <div className="font-mono text-[10px] uppercase tracking-[0.26em] text-dim">Period</div>
+            <div className="mt-1 text-sm text-fg/82">{p.period}</div>
+          </div>
+          <div className="flex flex-wrap gap-2 lg:justify-end">
+            {p.metrics.map((m) => (
+              <Tag key={m.label} tone="ok">{m.label} {m.value}</Tag>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-2 lg:justify-end">
+            {p.technologies.map((t) => (
+              <Tag key={t} tone="dim">{t}</Tag>
+            ))}
+          </div>
+        </aside>
       </div>
     </article>
   );
@@ -262,37 +220,44 @@ export default function Projects() {
   return (
     <>
       <NavBar />
-      <CRTScreen>
+      <CRTScreen width="wide">
         <StatusBar
           items={[
-            { label: "page", value: "/projects" },
-            { label: "count", value: `${projects.length} case files`, tone: "accent" },
-            { label: "sort", value: "by impact" },
+            { label: "page", value: "selected work" },
+            { label: "case studies", value: `${projects.length}`, tone: "accent" },
+            { label: "sort", value: "impact first" },
           ]}
         />
 
-        <section className="pt-8 mb-10">
-          <div className="font-mono text-xs sm:text-sm text-dim uppercase tracking-[0.25em] mb-2">
-            {"> ls -la /projects"}
+        <section className="grid gap-8 py-12 lg:grid-cols-[minmax(0,1fr)_360px] lg:py-16">
+          <div>
+            <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">Projects</div>
+            <h1 className="mt-5 max-w-[10ch] text-[clamp(4rem,10vw,8rem)] leading-[0.9]">
+              Proof, not screenshots.
+            </h1>
           </div>
-          <h1 className="font-display text-[clamp(1.4rem,4vw,2.2rem)] uppercase glow-strong leading-tight">
-            CASE FILES
-          </h1>
-          <p className="mt-3 font-mono text-fg/90 max-w-[60ch]">
-            Shipped products, won hackathons, side builds. Metrics where they existed; honesty
-            where they did not. Hiring? <CRTLink href="/contact">$ mail me</CRTLink>.
-          </p>
+          <div className="self-end">
+            <p className="text-lg leading-8 text-fg/80">
+              A selection of product, platform, AI, and infrastructure work. The common thread is
+              measurable impact and systems that survived contact with production.
+            </p>
+            <p className="mt-5 font-mono text-[11px] uppercase tracking-[0.22em] text-dim">
+              Hiring? <CRTLink href="/contact">Start here</CRTLink>
+            </p>
+          </div>
         </section>
 
-        <div className="space-y-5">
-          {projects.map((p, i) => (
-            <ProjectCard key={p.title} p={p} index={i} />
-          ))}
-        </div>
+        <Reveal>
+          <div className="space-y-4">
+            {projects.map((p, i) => (
+              <ProjectCard key={p.title} p={p} index={i} />
+            ))}
+          </div>
+        </Reveal>
 
-        <div className="flex flex-wrap gap-3 mt-12">
-          <PixelButton href="/contact">$ talk about a role</PixelButton>
-          <PixelButton href="/experience" variant="ghost">$ tail career.log</PixelButton>
+        <div className="mt-12 flex flex-wrap gap-3">
+          <PixelButton href="/contact">Talk about a role</PixelButton>
+          <PixelButton href="/experience" variant="ghost">View timeline</PixelButton>
         </div>
 
         <PageFooter />

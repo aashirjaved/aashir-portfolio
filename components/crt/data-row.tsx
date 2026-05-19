@@ -10,10 +10,10 @@ export function DataRow({
   className?: string;
 }) {
   return (
-    <div className={cn("dot-leader font-mono text-sm sm:text-[0.95rem]", className)}>
-      <span className="text-dim uppercase tracking-wider whitespace-nowrap">{label}</span>
+    <div className={cn("dot-leader font-mono text-sm", className)}>
+      <span className="whitespace-nowrap uppercase tracking-[0.18em] text-dim">{label}</span>
       <span aria-hidden className="leader" />
-      <span className="text-bright text-right">{value}</span>
+      <span className="text-right text-bright">{value}</span>
     </div>
   );
 }

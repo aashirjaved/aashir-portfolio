@@ -8,8 +8,6 @@ import {
   Tag,
   CRTLink,
   PageFooter,
-  AsciiDivider,
-  Cursor,
   Reveal,
   NotableCard,
 } from "@/components/crt";
@@ -20,43 +18,42 @@ const recentWork = [
   {
     co: "MoonPay",
     role: "Senior Software Engineer",
-    year: "now",
+    year: "Now",
     pts: [
-      "Shipping consumer crypto products at scale across iOS, Android, web",
-      "Polygon transaction path · 8.5× faster after rebuild",
-      "Balance experience rebuilt with ACH / SEPA / Faster Payments",
+      "Rebuilt critical transaction paths for consumer crypto products across iOS, Android, and web.",
+      "Shipped an 8.5× faster Polygon flow with less friction and better reliability.",
+      "Led Balance experience improvements spanning ACH, SEPA, and Faster Payments.",
     ],
-    stack: "react · next.js · go · python · aws",
+    stack: ["React", "Next.js", "Go", "Python", "AWS"],
   },
   {
     co: "Motorway",
-    role: "Senior Backend Engineer · Core Eng Lead",
+    role: "Senior Backend Engineer · Core Engineering Lead",
     year: "2024",
     pts: [
-      "Decoupled AuthN/AuthZ → +7% conversion",
-      "AI incident mgmt → −40% MTTR",
-      "−15% AWS spend",
+      "Decoupled AuthN/AuthZ in a way that improved checkout conversion by 7%.",
+      "Built AI-assisted incident tooling that cut MTTR by 40%.",
+      "Reduced infrastructure spend by 15% without harming delivery speed.",
     ],
-    stack: "go · python · react · aws · llm",
+    stack: ["Go", "Python", "AWS", "Platform", "LLMs"],
   },
   {
     co: "Deliveroo",
-    role: "SWE II · Customer Care Platform",
+    role: "Software Engineer II",
     year: "2022",
     pts: [
-      "Production AI agents · 10k+ cases/day at 95% accuracy",
-      "2× CSAT · 50% lower handling time",
-      "£2M annual savings",
+      "Put AI agents into production across 10k+ support cases per day at 95% accuracy.",
+      "Doubled CSAT while halving handling time.",
+      "Generated roughly £2M in annual savings.",
     ],
-    stack: "go · react · llm fine-tune · k8s",
+    stack: ["Go", "React", "Kubernetes", "LLM fine-tuning"],
   },
-  {
-    co: "Zalando",
-    role: "Software Engineer · Customer Fulfillment",
-    year: "2021",
-    pts: ["1000+ RPS Java APIs · −15% latency", "ML demand forecast · +25% inventory accuracy"],
-    stack: "java · react · postgres · k8s",
-  },
+];
+
+const principles = [
+  "Ship product outcomes, not engineering theatre.",
+  "Use AI where it compounds leverage, not where it adds noise.",
+  "Make systems readable enough to survive Monday morning.",
 ];
 
 export default function Home() {
@@ -67,263 +64,323 @@ export default function Home() {
       <PersonSchema />
       <WebsiteSchema />
       <NavBar />
-      <CRTScreen>
-        {/* Status bar — replaces boot sequence, instant value */}
+      <CRTScreen width="wide">
         <StatusBar
           items={[
-            { label: "node", value: "online", tone: "ok" },
-            { label: "loc", value: "london, uk" },
-            { label: "now", value: "moonpay · sse", tone: "accent" },
-            { label: "open to", value: "staff · founding eng" },
-            { label: "uptime", value: "8 yrs" },
+            { label: "based", value: "London, UK" },
+            { label: "current", value: "MoonPay", tone: "accent" },
+            { label: "focus", value: "Staff · Founding Engineer" },
+            { label: "experience", value: "8 years", tone: "ok" },
           ]}
         />
 
-        {/* HERO — name, value prop, stats, logos, CTA all above fold */}
-        <section className="pt-8 pb-2">
-          <div className="font-mono text-xs sm:text-sm text-dim uppercase tracking-[0.25em] mb-3">
-            {"> whoami"}
-          </div>
-          <h1 className="font-display text-[clamp(1.4rem,4.6vw,2.4rem)] uppercase glow-strong leading-[1.15]">
-            AASHIR JAVED
-            <Cursor />
-          </h1>
-          <p className="mt-4 font-mono text-[1.05rem] sm:text-[1.15rem] text-bright leading-relaxed max-w-[60ch]">
-            Senior software engineer{" "}
-            <span className="text-accent">shipping products at scale</span> and building solutions
-            to complex problems. AI in the loop where it earns its keep. Systems that survive
-            Monday morning.
-          </p>
-          <p className="mt-3 font-mono text-sm text-dim max-w-[60ch]">
-            Currently at <span className="text-bright">MoonPay</span>. Previously Motorway,
-            Deliveroo, Zalando, IBM/Nordcloud. Eight years across full-stack, infra, and AI.
-          </p>
+        <section className="grid gap-10 py-10 lg:grid-cols-[minmax(0,1.45fr)_380px] lg:gap-14 lg:py-16">
+          <Reveal>
+            <div>
+              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">
+                Engineering portfolio
+              </div>
+              <h1 className="mt-5 max-w-[12ch] text-[clamp(4rem,11vw,8.6rem)] leading-[0.88] text-bright">
+                Aashir Javed
+              </h1>
+              <p className="mt-6 max-w-[19ch] text-[clamp(1.4rem,3vw,2.2rem)] leading-[1.08] text-fg/92">
+                I build product systems that scale cleanly, move fast, and still feel intentional.
+              </p>
+              <p className="mt-6 max-w-[63ch] text-base leading-8 text-fg/78 sm:text-lg">
+                Senior software engineer with deep full-stack, platform, and AI-in-production
+                experience. I care about product judgment, operating leverage, and shipping work
+                that survives real users rather than slide decks.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <PixelButton href="/contact">Start a conversation</PixelButton>
+                <PixelButton href="/projects" variant="ghost">
+                  Selected work
+                </PixelButton>
+              </div>
+            </div>
+          </Reveal>
 
-          {/* Stats — anchored first numbers a hiring manager sees */}
-          <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-7">
-            <LcdStat value="£7M+" label="Cost saved" />
-            <LcdStat value="10k+" label="AI cases / day" />
-            <LcdStat value="100+" label="Engineers mentored" />
-          </div>
-
-          {/* Logo strip — authority bias */}
-          <LogoStrip />
-
-          {/* Single primary CTA + one secondary */}
-          <div className="flex flex-wrap items-center gap-3 mt-7">
-            <PixelButton href="/contact">$ hire me →</PixelButton>
-            <PixelButton href="/projects" variant="ghost">$ see work</PixelButton>
-            <span className="ml-auto font-mono text-xs text-dim hidden sm:inline">
-              avg reply: 24 — 48h
-            </span>
-          </div>
+          <Reveal>
+            <aside className="frame panel-grid h-fit p-6 sm:p-7">
+              <div className="font-mono text-[11px] uppercase tracking-[0.32em] text-dim">
+                Current operating mode
+              </div>
+              <div className="mt-5 border-t border-rule/80 pt-5">
+                <div className="font-display text-3xl leading-none text-bright">Building serious things.</div>
+                <p className="mt-4 text-sm leading-7 text-fg/80">
+                  Consumer fintech, infrastructure, AI agents, internal platforms, and the messy
+                  seam where product ambition meets operational reality.
+                </p>
+              </div>
+              <div className="mt-6 space-y-3 border-t border-rule/80 pt-5">
+                {principles.map((principle) => (
+                  <div key={principle} className="flex gap-3 text-sm leading-7 text-fg/84">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 bg-accent" aria-hidden />
+                    <span>{principle}</span>
+                  </div>
+                ))}
+              </div>
+            </aside>
+          </Reveal>
         </section>
 
-        <AsciiDivider variant="rule" className="my-12" />
+        <section className="grid gap-3 sm:grid-cols-3">
+          <LcdStat value="£7M+" label="Cost savings delivered" />
+          <LcdStat value="10k+" label="AI cases per day" />
+          <LcdStat value="100+" label="Engineers mentored" />
+        </section>
 
-        {/* WHAT I SHIP — compact grid, not 3 stacked terminals */}
-        <Reveal><section>
-          <div className="font-mono text-[10px] sm:text-xs text-dim uppercase tracking-[0.25em] mb-2">
-            {"> 01. what i ship"}
-          </div>
-          <h2 className="font-display text-[clamp(1rem,2.6vw,1.4rem)] uppercase glow leading-tight mb-5">
-            BUILT, SHIPPED, MEASURED
-          </h2>
-          <div className="grid sm:grid-cols-3 gap-3">
-            <div className="frame frame-amber p-4 bg-screen/40">
-              <div className="font-display text-[10px] text-accent glow uppercase mb-2">FULL-STACK</div>
-              <p className="font-mono text-sm text-fg/95 leading-relaxed mb-3">
-                React/Next on the front. Go, Python on the back. TypeScript end-to-end where it earns it.
-              </p>
-              <div className="flex flex-wrap gap-1">
-                {["react", "next.js", "go", "python", "typescript"].map((t) => (
-                  <Tag key={t}>{t}</Tag>
-                ))}
-              </div>
-            </div>
-            <div className="frame frame-amber p-4 bg-screen/40">
-              <div className="font-display text-[10px] text-accent glow uppercase mb-2">CLOUD / DEVOPS</div>
-              <p className="font-mono text-sm text-fg/95 leading-relaxed mb-3">
-                AWS by trade. Terraform for everything reproducible. Kubernetes when state demands it.
-              </p>
-              <div className="flex flex-wrap gap-1">
-                {["aws", "terraform", "k8s", "docker", "ci/cd"].map((t) => (
-                  <Tag key={t}>{t}</Tag>
-                ))}
-              </div>
-            </div>
-            <div className="frame frame-amber p-4 bg-screen/40">
-              <div className="font-display text-[10px] text-accent glow uppercase mb-2">AI / ML</div>
-              <p className="font-mono text-sm text-fg/95 leading-relaxed mb-3">
-                Production LLM agents. RAG, evals, fine-tuning when the off-the-shelf falls short.
-              </p>
-              <div className="flex flex-wrap gap-1">
-                {["llm", "agents", "rag", "fine-tune", "mlops"].map((t) => (
-                  <Tag key={t}>{t}</Tag>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section></Reveal>
+        <section className="mt-12">
+          <LogoStrip />
+        </section>
 
-        <AsciiDivider variant="rule" className="my-12" />
-
-        {/* RECENT WORK — teasers, not full case files */}
-        <Reveal><section>
-          <div className="flex items-baseline justify-between mb-5">
+        <Reveal>
+          <section className="mt-20 grid gap-6 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)]">
             <div>
-              <div className="font-mono text-[10px] sm:text-xs text-dim uppercase tracking-[0.25em]">
-                {"> 02. recent work"}
+              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">
+                What I bring
               </div>
-              <h2 className="font-display text-[clamp(1rem,2.6vw,1.4rem)] uppercase glow leading-tight">
-                IMPACT, NOT JOB TITLES
+              <h2 className="mt-4 max-w-[10ch] text-[clamp(2.6rem,5vw,4.6rem)] leading-[0.95]">
+                Taste in systems.
               </h2>
             </div>
-            <CRTLink href="/projects" className="font-mono text-sm whitespace-nowrap">
-              all work →
-            </CRTLink>
-          </div>
-          <div className="space-y-3">
-            {recentWork.map((w) => (
-              <article
-                key={w.co}
-                className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 py-3 border-b border-rule/50 last:border-0"
-              >
-                <div className="font-display text-[10px] text-accent glow uppercase pt-0.5">
-                  {w.year}
+            <div className="grid gap-3 md:grid-cols-3">
+              <article className="frame p-5 sm:p-6">
+                <div className="font-mono text-[11px] uppercase tracking-[0.24em] text-accent">
+                  Product engineering
                 </div>
-                <div>
-                  <div className="font-mono text-bright text-sm sm:text-base uppercase tracking-wider">
-                    {w.co} <span className="text-rule">·</span>{" "}
-                    <span className="text-fg">{w.role}</span>
-                  </div>
-                  <ul className="mt-1.5 space-y-0.5">
-                    {w.pts.map((p) => (
-                      <li key={p} className="font-mono text-sm text-fg/90">
-                        <span className="text-accent select-none mr-2">▸</span>
-                        {p}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-2 font-mono text-xs text-dim">{w.stack}</div>
-                </div>
+                <p className="mt-4 text-sm leading-7 text-fg/82">
+                  Full-stack execution with strong product instincts. Enough speed to prototype,
+                  enough discipline to harden what matters.
+                </p>
               </article>
-            ))}
-          </div>
-        </section></Reveal>
+              <article className="frame p-5 sm:p-6">
+                <div className="font-mono text-[11px] uppercase tracking-[0.24em] text-accent">
+                  Platform and reliability
+                </div>
+                <p className="mt-4 text-sm leading-7 text-fg/82">
+                  Clean service boundaries, practical cloud architecture, and systems that are
+                  debuggable under pressure.
+                </p>
+              </article>
+              <article className="frame p-5 sm:p-6">
+                <div className="font-mono text-[11px] uppercase tracking-[0.24em] text-accent">
+                  AI in production
+                </div>
+                <p className="mt-4 text-sm leading-7 text-fg/82">
+                  Agents, evals, retrieval, and workflow design where the economics and UX justify
+                  the complexity.
+                </p>
+              </article>
+            </div>
+          </section>
+        </Reveal>
 
-        <AsciiDivider variant="rule" className="my-12" />
-
-        {/* NOTABLE — surfaced from LinkedIn / X / live builds */}
-        <Reveal><section>
-          <div className="flex items-baseline justify-between mb-5">
-            <div>
-              <div className="font-mono text-[10px] sm:text-xs text-dim uppercase tracking-[0.25em]">
-                {"> 03. notable"}
+        <Reveal>
+          <section className="mt-20 grid gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]">
+            <article className="frame panel-grid p-6 sm:p-8">
+              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">
+                Featured impact
               </div>
-              <h2 className="font-display text-[clamp(1rem,2.6vw,1.4rem)] uppercase glow leading-tight">
-                IN THE WILD
+              <h2 className="mt-4 max-w-[12ch] text-[clamp(2.4rem,5vw,4.8rem)] leading-[0.94]">
+                Faster transactions. Better rails. Less friction.
+              </h2>
+              <p className="mt-5 max-w-[60ch] text-base leading-8 text-fg/80">
+                At MoonPay, I focus on the hard middle layer between product ambition and system
+                reality: transaction speed, payment rails, balance architecture, and customer trust.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-2">
+                {["Consumer fintech", "Payments", "Reliability", "Mobile + Web"].map((item) => (
+                  <Tag key={item} tone="dim">
+                    {item}
+                  </Tag>
+                ))}
+              </div>
+            </article>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+              <article className="frame p-5 sm:p-6">
+                <div className="font-display text-4xl text-bright">8.5×</div>
+                <p className="mt-3 text-sm leading-7 text-fg/80">
+                  Faster Polygon transaction path after a targeted rebuild.
+                </p>
+              </article>
+              <article className="frame p-5 sm:p-6">
+                <div className="font-display text-4xl text-bright">+7%</div>
+                <p className="mt-3 text-sm leading-7 text-fg/80">
+                  Conversion improvement after decoupling auth concerns at Motorway.
+                </p>
+              </article>
+              <article className="frame p-5 sm:p-6">
+                <div className="font-display text-4xl text-bright">−40%</div>
+                <p className="mt-3 text-sm leading-7 text-fg/80">
+                  Lower MTTR through AI-assisted incident management workflows.
+                </p>
+              </article>
+            </div>
+          </section>
+        </Reveal>
+
+        <Reveal>
+          <section className="mt-20">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">
+                  Selected experience
+                </div>
+                <h2 className="mt-4 text-[clamp(2.4rem,5vw,4.8rem)] leading-[0.95]">
+                  Impact over job titles.
+                </h2>
+              </div>
+              <CRTLink href="/projects" className="font-mono text-[11px] uppercase tracking-[0.22em]">
+                View all work
+              </CRTLink>
+            </div>
+            <div className="mt-8 space-y-4">
+              {recentWork.map((w) => (
+                <article key={w.co} className="frame p-5 sm:p-6 lg:p-7">
+                  <div className="grid gap-4 lg:grid-cols-[120px_minmax(0,1fr)_260px] lg:items-start">
+                    <div className="font-mono text-[11px] uppercase tracking-[0.28em] text-dim">{w.year}</div>
+                    <div>
+                      <h3 className="text-3xl leading-none text-bright">{w.co}</h3>
+                      <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
+                        {w.role}
+                      </div>
+                      <ul className="mt-5 space-y-2 text-sm leading-7 text-fg/84">
+                        {w.pts.map((p) => (
+                          <li key={p} className="flex gap-3">
+                            <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 bg-accent" />
+                            <span>{p}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="flex flex-wrap content-start gap-2 lg:justify-end">
+                      {w.stack.map((item) => (
+                        <Tag key={item} tone="dim">
+                          {item}
+                        </Tag>
+                      ))}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        </Reveal>
+
+        <Reveal>
+          <section className="mt-20 grid gap-6 lg:grid-cols-2">
+            <div>
+              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">
+                In the wild
+              </div>
+              <h2 className="mt-4 max-w-[9ch] text-[clamp(2.4rem,5vw,4.8rem)] leading-[0.95]">
+                Shipped things people can point at.
               </h2>
             </div>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-3">
-            <NotableCard
-              kind="ship"
-              title="MOONLOG · VOL 02"
-              href="https://www.linkedin.com/pulse/moonlog-volume-02-moonpay-vo1ae/"
-              meta="MoonPay · 2026"
-              description="Latest consumer-app product release: redesigned Buy/Sell, 8.5× faster Polygon transactions, rebuilt Balance with ACH/SEPA/Faster Payments, refreshed Liquid Glass UI."
-              stats={[
-                { label: "Polygon", value: "8.5×" },
-                { label: "Rails", value: "ACH·SEPA·FPS" },
-              ]}
-            />
-            <NotableCard
-              kind="win"
-              title="AI HACKATHON · 1ST"
-              href="https://www.linkedin.com/posts/adam-ferguson-7259b6121_two-months-ago-aashir-javed-omer-bresinski-share-7437869877543129088-3Z8q"
-              meta="2026 · w/ Omer Bresinski"
-              description="Built a winning AI product over a weekend. Two engineers, one idea, hardware to model to demo in under 48 hours."
-              stats={[{ label: "Place", value: "1st" }]}
-            />
-            <NotableCard
-              kind="post"
-              title="GROK · RADIO PRODUCT"
-              href="https://x.com/aasjav/status/2013716104271536622"
-              meta="X · @aasjav"
-              description="Spec, prototype, and product thinking for a Grok-powered radio interface. Voice as the new keyboard."
-            />
-            <NotableCard
-              kind="build"
-              title="WHATIFY · FINANCIAL SIM"
-              href="https://whatify.ai"
-              meta="side build · 2026"
-              description="Stop guessing, start deciding. Side-by-side scenario simulation for major life decisions — homes, careers, family — stress-tested against rate spikes and cost overruns."
-              stats={[
-                { label: "Waitlist", value: "3.8k+" },
-                { label: "Setup", value: "2 min" },
-                { label: "Forecast", value: "5 yr" },
-              ]}
-            />
-          </div>
-        </section></Reveal>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <NotableCard
+                kind="ship"
+                title="Moonlog Vol. 02"
+                href="https://www.linkedin.com/pulse/moonlog-volume-02-moonpay-vo1ae/"
+                meta="MoonPay · 2026"
+                description="Latest consumer-app release spanning redesigned buy and sell flows, faster Polygon transactions, rebuilt balance rails, and a refreshed UI system."
+                stats={[
+                  { label: "Polygon", value: "8.5×" },
+                  { label: "Rails", value: "ACH · SEPA · FPS" },
+                ]}
+              />
+              <NotableCard
+                kind="win"
+                title="AI Hackathon, 1st Place"
+                href="https://www.linkedin.com/posts/adam-ferguson-7259b6121_two-months-ago-aashir-javed-omer-bresinski-share-7437869877543129088-3Z8q"
+                meta="2026"
+                description="A winning AI product built from idea to hardware-backed demo in under 48 hours."
+                stats={[{ label: "Team", value: "2 engineers" }]}
+              />
+              <NotableCard
+                kind="post"
+                title="Grok Radio Concept"
+                href="https://x.com/aasjav/status/2013716104271536622"
+                meta="X · @aasjav"
+                description="A product concept exploring voice-first interaction and a radio-like interface for AI." 
+              />
+              <NotableCard
+                kind="build"
+                title="Whatify"
+                href="https://whatify.ai"
+                meta="Side build"
+                description="Scenario simulation for major life decisions, stress-tested across rates, costs, and long-range tradeoffs."
+                stats={[
+                  { label: "Waitlist", value: "3.8k+" },
+                  { label: "Forecast", value: "5 years" },
+                ]}
+              />
+            </div>
+          </section>
+        </Reveal>
 
-        <AsciiDivider variant="rule" className="my-12" />
-
-        {/* WRITING — 3 latest, link out */}
-        <Reveal><section>
-          <div className="flex items-baseline justify-between mb-5">
+        <Reveal>
+          <section className="mt-20 grid gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
             <div>
-              <div className="font-mono text-[10px] sm:text-xs text-dim uppercase tracking-[0.25em]">
-                {"> 04. writing"}
+              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">
+                Writing
               </div>
-              <h2 className="font-display text-[clamp(1rem,2.6vw,1.4rem)] uppercase glow leading-tight">
-                NOTES FROM PRODUCTION
+              <h2 className="mt-4 max-w-[9ch] text-[clamp(2.4rem,5vw,4.8rem)] leading-[0.95]">
+                Notes from production.
               </h2>
             </div>
-            <CRTLink href="/writing" className="font-mono text-sm whitespace-nowrap">
-              archive →
-            </CRTLink>
-          </div>
-          <ul className="space-y-2">
-            {recentPosts.map((p, i) => (
-              <li
-                key={p.slug}
-                className="grid grid-cols-[2.5rem_1fr_auto] gap-3 py-2 border-b border-rule/50 last:border-0"
-              >
-                <span className="font-display text-[10px] text-accent">
-                  {String(i + 1).padStart(3, "0")}
-                </span>
-                <CRTLink href={`/writing/${p.slug}`} className="text-bright no-underline hover:text-accent font-mono">
-                  {p.title}
+            <div className="space-y-3">
+              {recentPosts.map((p, i) => (
+                <article key={p.slug} className="frame p-5 sm:p-6">
+                  <div className="grid gap-3 sm:grid-cols-[52px_minmax(0,1fr)_auto] sm:items-center">
+                    <div className="font-mono text-[11px] uppercase tracking-[0.26em] text-dim">
+                      {String(i + 1).padStart(2, "0")}
+                    </div>
+                    <CRTLink href={`/writing/${p.slug}`} className="font-display text-2xl leading-tight text-bright no-underline hover:text-accent">
+                      {p.title}
+                    </CRTLink>
+                    <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">
+                      {p.readingTime.replace(" min read", "m")}
+                    </div>
+                  </div>
+                </article>
+              ))}
+              <div className="pt-2">
+                <CRTLink href="/writing" className="font-mono text-[11px] uppercase tracking-[0.22em]">
+                  Browse archive
                 </CRTLink>
-                <span className="font-mono text-xs text-dim whitespace-nowrap">
-                  {p.readingTime.replace(" min read", "m")}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section></Reveal>
+              </div>
+            </div>
+          </section>
+        </Reveal>
 
-        <AsciiDivider variant="rule" className="my-12" />
-
-        {/* CLOSING CTA — peak-end rule, strong end */}
-        <Reveal><section className="frame frame-amber p-5 sm:p-6 bg-screen/40">
-          <div className="font-mono text-xs uppercase tracking-[0.25em] text-dim mb-2">
-            $ ./ready-when-you-are
-          </div>
-          <p className="font-mono text-fg/95 max-w-[58ch]">
-            Hiring staff / founding eng for something serious? Building with AI in production?
-            Want a second pair of eyes on a hard product problem? Drop a line — fastest replies via
-            email.
-          </p>
-          <div className="flex flex-wrap gap-3 mt-4">
-            <PixelButton href="mailto:me@aashir.net" external>
-              $ mail me@aashir.net
-            </PixelButton>
-            <PixelButton href="/resume" variant="ghost">$ man aashir</PixelButton>
-          </div>
-        </section></Reveal>
+        <Reveal>
+          <section className="mt-20 frame panel-grid p-6 sm:p-8 lg:p-10">
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+              <div>
+                <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">
+                  If you’re hiring for leverage
+                </div>
+                <h2 className="mt-4 max-w-[12ch] text-[clamp(2.6rem,5vw,5rem)] leading-[0.94]">
+                  Bring me the difficult product and platform problems.
+                </h2>
+                <p className="mt-5 max-w-[62ch] text-base leading-8 text-fg/80">
+                  Staff engineer role, founding engineer seat, or a sharp problem that needs speed,
+                  product judgment, and technical depth.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3 lg:justify-end">
+                <PixelButton href="mailto:me@aashir.net" external>
+                  Email Aashir
+                </PixelButton>
+                <PixelButton href="/resume" variant="ghost">
+                  Read resume
+                </PixelButton>
+              </div>
+            </div>
+          </section>
+        </Reveal>
 
         <PageFooter />
       </CRTScreen>

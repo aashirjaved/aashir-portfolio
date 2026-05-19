@@ -1,15 +1,15 @@
-import { Press_Start_2P, VT323, IBM_Plex_Mono } from "next/font/google";
+import { Bodoni_Moda, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 
-export const display = Press_Start_2P({
-  weight: "400",
+export const display = Bodoni_Moda({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
   variable: "--font-display",
 });
 
-export const body = VT323({
-  weight: "400",
+export const body = IBM_Plex_Sans({
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
   display: "swap",
   variable: "--font-body",
 });

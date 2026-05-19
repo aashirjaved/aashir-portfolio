@@ -15,10 +15,10 @@ export function FigCaption({
   const num = String(index).padStart(2, "0");
   return (
     <figure className={cn("my-10", className)}>
-      <div className="frame frame-amber p-3 sm:p-4 bg-screen/60">{children}</div>
-      <figcaption className="mt-2 font-mono text-[11px] sm:text-xs uppercase tracking-[0.18em] text-dim">
-        <span className="text-accent">Fig. {num}</span>
-        <span className="mx-2 text-rule">│</span>
+      <div className="frame overflow-hidden p-3 sm:p-4">{children}</div>
+      <figcaption className="mt-3 font-mono text-[11px] uppercase tracking-[0.24em] text-dim">
+        <span className="text-accent">Figure {num}</span>
+        <span className="mx-2 text-rule">/</span>
         {title}
       </figcaption>
     </figure>

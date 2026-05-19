@@ -10,16 +10,16 @@ const logos: LogoItem[] = [
   { kind: "img", src: "/logos/ibm.svg", alt: "IBM / Nordcloud" },
 ];
 
-const amberFilter =
-  "brightness(0) saturate(100%) invert(72%) sepia(56%) saturate(2200%) hue-rotate(0deg) brightness(96%) contrast(101%)";
+const markFilter =
+  "brightness(0) saturate(100%) invert(91%) sepia(8%) saturate(683%) hue-rotate(342deg) brightness(98%) contrast(91%)";
 
-export function LogoStrip({ label = "PROOF" }: { label?: string }) {
+export function LogoStrip({ label = "Selected teams" }: { label?: string }) {
   return (
-    <div className="mt-6 border-t border-rule pt-4">
-      <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-dim mb-3">
-        {label} · BUILT THINGS AT
+    <div className="border-t border-rule/80 pt-5">
+      <div className="font-mono text-[11px] uppercase tracking-[0.32em] text-dim mb-4">
+        {label}
       </div>
-      <div className="flex flex-wrap items-center gap-x-7 gap-y-3">
+      <div className="flex flex-wrap items-center gap-x-8 gap-y-4 opacity-90">
         {logos.map((l, i) =>
           l.kind === "img" ? (
             <img
@@ -27,14 +27,14 @@ export function LogoStrip({ label = "PROOF" }: { label?: string }) {
               src={l.src}
               alt={l.alt}
               title={l.alt}
-              className="h-6 w-auto select-none opacity-90"
-              style={{ filter: amberFilter }}
+              className="h-5 w-auto select-none opacity-85"
+              style={{ filter: markFilter }}
             />
           ) : (
             <span
               key={i}
               title={l.alt ?? l.text}
-              className="font-display text-[11px] tracking-[0.25em] text-bright glow uppercase select-none"
+              className="font-mono text-sm tracking-[0.28em] text-bright uppercase select-none"
             >
               {l.text}
             </span>

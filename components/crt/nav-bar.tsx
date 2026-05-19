@@ -4,12 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Cursor } from "./cursor";
 
 const items = [
   { name: "home", href: "/" },
   { name: "work", href: "/projects" },
-  { name: "exp", href: "/experience" },
+  { name: "experience", href: "/experience" },
   { name: "writing", href: "/writing" },
   { name: "about", href: "/about" },
   { name: "resume", href: "/resume" },
@@ -17,8 +16,8 @@ const items = [
 ];
 
 const social = [
-  { label: "gh", href: "https://github.com/aashirjaved" },
-  { label: "in", href: "https://www.linkedin.com/in/aashirjaved/" },
+  { label: "github", href: "https://github.com/aashirjaved" },
+  { label: "linkedin", href: "https://www.linkedin.com/in/aashirjaved/" },
 ];
 
 function isActive(pathname: string, href: string) {
@@ -35,17 +34,17 @@ export function NavBar() {
   }, [pathname]);
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 bg-bg/95 border-b border-rule backdrop-blur-sm">
-      <div className="max-w-[1100px] mx-auto px-4 sm:px-6 h-12 flex items-center justify-between font-mono text-sm">
-        <Link href="/" className="flex items-center gap-2 group" aria-label="Home">
-          <span aria-hidden className="inline-block w-3 h-3 bg-accent group-hover:bg-bright" />
-          <span className="text-bright uppercase tracking-[0.18em] text-xs sm:text-sm">
-            AASHIR<span className="text-dim">.SYS</span>
-          </span>
-          <Cursor className="hidden sm:inline" />
+    <header className="fixed top-0 inset-x-0 z-50 border-b border-rule/80 bg-bg/78 backdrop-blur-xl">
+      <div className="mx-auto flex h-16 max-w-[1320px] items-center justify-between px-5 sm:px-8 lg:px-10">
+        <Link href="/" className="flex items-center gap-3" aria-label="Home">
+          <span aria-hidden className="h-2.5 w-2.5 bg-accent" />
+          <div>
+            <div className="font-mono text-[11px] uppercase tracking-[0.35em] text-dim">Aashir Javed</div>
+            <div className="font-display text-lg leading-none text-bright">Systems, product, AI</div>
+          </div>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-0.5">
+        <nav className="hidden lg:flex items-center gap-1 font-mono text-[11px] uppercase tracking-[0.22em] text-dim">
           {items.map((it) => {
             const active = isActive(pathname, it.href);
             return (
@@ -54,32 +53,26 @@ export function NavBar() {
                 href={it.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "px-2 py-1 uppercase text-xs tracking-widest",
-                  active
-                    ? "bg-accent text-bg shadow-glow"
-                    : "text-fg hover:text-bright hover:bg-screen",
+                  "px-3 py-2 transition-colors",
+                  active ? "text-bright" : "hover:text-bright",
                 )}
               >
-                <span aria-hidden className="text-dim">[</span>
                 {it.name}
-                <span aria-hidden className="text-dim">]</span>
               </Link>
             );
           })}
         </nav>
 
-        <div className="hidden md:flex items-center gap-1">
+        <div className="hidden lg:flex items-center gap-4">
           {social.map((s) => (
             <a
               key={s.label}
               href={s.href}
               target="_blank"
               rel="noreferrer"
-              className="px-2 py-1 uppercase text-xs tracking-widest text-fg hover:bg-screen hover:text-bright border border-rule hover:border-accent"
+              className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim transition-colors hover:text-bright"
             >
-              <span aria-hidden className="text-dim">[</span>
               {s.label}
-              <span aria-hidden className="text-dim">]</span>
             </a>
           ))}
         </div>
@@ -89,15 +82,15 @@ export function NavBar() {
           aria-expanded={open}
           aria-label="Toggle menu"
           onClick={() => setOpen((o) => !o)}
-          className="md:hidden px-2 py-1 border border-rule text-bright uppercase text-xs tracking-widest hover:border-accent"
+          className="lg:hidden border border-rule px-3 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-bright"
         >
-          {open ? "[ × ]" : "[ ≡ ]"}
+          {open ? "close" : "menu"}
         </button>
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-rule bg-bg/98">
-          <nav className="px-4 py-3 flex flex-col gap-1 font-mono text-sm">
+        <div className="lg:hidden border-t border-rule bg-screen/95">
+          <nav className="px-5 py-4 flex flex-col gap-3">
             {items.map((it) => {
               const active = isActive(pathname, it.href);
               return (
@@ -106,28 +99,24 @@ export function NavBar() {
                   href={it.href}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "px-2 py-1.5 uppercase text-xs tracking-widest",
-                    active ? "bg-accent text-bg shadow-glow" : "text-fg hover:bg-screen",
+                    "font-mono text-xs uppercase tracking-[0.22em]",
+                    active ? "text-bright" : "text-dim",
                   )}
                 >
-                  <span aria-hidden className="text-dim">[</span>
                   {it.name}
-                  <span aria-hidden className="text-dim">]</span>
                 </Link>
               );
             })}
-            <div className="flex gap-2 pt-2 border-t border-rule mt-2">
+            <div className="mt-2 flex flex-wrap gap-4 border-t border-rule pt-3">
               {social.map((s) => (
                 <a
                   key={s.label}
                   href={s.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-2 py-1 uppercase text-xs tracking-widest text-fg border border-rule"
+                  className="font-mono text-xs uppercase tracking-[0.22em] text-dim"
                 >
-                  <span aria-hidden className="text-dim">[</span>
                   {s.label}
-                  <span aria-hidden className="text-dim">]</span>
                 </a>
               ))}
             </div>

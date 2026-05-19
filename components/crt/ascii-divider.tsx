@@ -1,50 +1,27 @@
 import { cn } from "@/lib/utils";
 
-const presets = {
-  rule: "─",
-  double: "═",
-  dot: "·",
-  block: "▓",
-  slash: "/",
-  star: "*",
-} as const;
-
 export function AsciiDivider({
-  variant = "rule",
   className,
   label,
 }: {
-  variant?: keyof typeof presets;
+  variant?: "rule" | "double" | "dot" | "block" | "slash" | "star";
   className?: string;
   label?: string;
 }) {
-  const ch = presets[variant];
   if (label) {
     return (
       <div
         className={cn(
-          "flex items-center gap-3 my-8 text-dim font-mono text-sm uppercase tracking-widest",
+          "my-8 flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.24em] text-dim",
           className,
         )}
         aria-hidden
       >
-        <span aria-hidden>{ch.repeat(4)}</span>
+        <span className="h-px w-10 bg-rule" />
         <span className="text-accent">{label}</span>
-        <span aria-hidden className="flex-1 overflow-hidden whitespace-nowrap">
-          {ch.repeat(120)}
-        </span>
+        <span className="h-px flex-1 bg-rule" />
       </div>
     );
   }
-  return (
-    <div
-      aria-hidden
-      className={cn(
-        "my-8 text-dim font-mono text-sm leading-none whitespace-nowrap overflow-hidden",
-        className,
-      )}
-    >
-      {ch.repeat(200)}
-    </div>
-  );
+  return <div aria-hidden className={cn("my-8 h-px w-full bg-rule", className)} />;
 }

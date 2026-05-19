@@ -14,8 +14,8 @@ export function CRTScreen({
     <main
       id="main"
       className={cn(
-        "mx-auto px-5 sm:px-8 pt-20 pb-24",
-        width === "narrow" ? "max-w-[760px]" : "max-w-[920px]",
+        "mx-auto px-5 sm:px-8 lg:px-10 pt-24 pb-24",
+        width === "narrow" ? "max-w-[1180px]" : "max-w-[1320px]",
         className,
       )}
     >

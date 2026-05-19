@@ -20,9 +20,9 @@ export function NotableCard({
 }) {
   const kindMap: Record<typeof kind, { label: string; tone: "ok" | "accent" | "dim" }> = {
     ship: { label: "shipped", tone: "ok" },
-    win: { label: "win", tone: "accent" },
-    build: { label: "build", tone: "accent" },
-    post: { label: "post", tone: "dim" },
+    win: { label: "won", tone: "accent" },
+    build: { label: "built", tone: "accent" },
+    post: { label: "published", tone: "dim" },
   };
   const tone = kindMap[kind];
   return (
@@ -31,27 +31,26 @@ export function NotableCard({
       target="_blank"
       rel="noreferrer"
       className={cn(
-        "group block frame frame-amber p-4 sm:p-5 bg-screen/40 hover:bg-screen/70 transition-none",
+        "group block frame panel-grid p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/70 hover:bg-screen/80",
         className,
       )}
     >
-      <div className="flex items-baseline justify-between gap-3 mb-2">
+      <div className="mb-4 flex items-start justify-between gap-3">
         <Tag tone={tone.tone}>{tone.label}</Tag>
         {meta && (
-          <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-dim">
+          <span className="font-mono text-[10px] uppercase tracking-[0.26em] text-dim">
             {meta}
           </span>
         )}
       </div>
-      <h3 className="font-mono text-bright group-hover:text-accent uppercase tracking-wider text-sm sm:text-base mb-2">
+      <h3 className="max-w-[18ch] font-display text-2xl leading-[1.05] text-bright transition-colors duration-300 group-hover:text-accent">
         {title}
-        <span aria-hidden className="text-dim ml-2">↗</span>
       </h3>
-      <p className="font-mono text-sm text-fg/85 leading-relaxed">{description}</p>
+      <p className="mt-4 text-sm leading-7 text-fg/86">{description}</p>
       {stats && stats.length > 0 && (
-        <div className="mt-3 flex flex-wrap gap-1.5">
+        <div className="mt-5 flex flex-wrap gap-2">
           {stats.map((s) => (
-            <Tag key={s.label} tone="ok" className="text-[10px]">
+            <Tag key={s.label} tone="dim" className="text-[10px]">
               {s.label} {s.value}
             </Tag>
           ))}

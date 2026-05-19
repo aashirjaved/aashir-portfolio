@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import {
-  CRTScreen,
-  NavBar,
-  PageFooter,
-  PixelButton,
-  CRTLink,
-  Tag,
+  Container,
+  Footer,
+  PageHero,
+  SectionLabel,
   Reveal,
-} from "@/components/crt";
+  Pill,
+  EditorialLink,
+} from "@/components/editorial";
 import Newsletter from "@/components/newsletter";
 
 const channels = [
@@ -17,45 +17,51 @@ const channels = [
     label: "Email",
     value: "me@aashir.net",
     href: "mailto:me@aashir.net",
-    note: "Best route for roles, consulting, and direct asks.",
+    note: "Best route. Reply in 24 — 48h.",
   },
   {
     label: "LinkedIn",
-    value: "linkedin.com/in/aashirjaved",
+    value: "/in/aashirjaved",
     href: "https://www.linkedin.com/in/aashirjaved/",
     external: true,
     note: "Professional updates and DMs.",
   },
   {
     label: "GitHub",
-    value: "github.com/aashirjaved",
+    value: "@aashirjaved",
     href: "https://github.com/aashirjaved",
     external: true,
-    note: "Code, side projects, and public experiments.",
+    note: "Code, contributions, occasional rants.",
+  },
+  {
+    label: "X",
+    value: "@aasjav",
+    href: "https://x.com/aasjav",
+    external: true,
+    note: "Half-formed thoughts in real time.",
   },
 ];
 
 const availability = [
   {
-    type: "Full-time",
-    status: "Open" as const,
-    body: "Staff engineer, founding engineer, or senior IC role at a product company that ships.",
+    type: "Full-time roles",
+    status: "Open",
+    body: "Staff / senior / founding engineer at companies that ship.",
+    tone: "ok" as const,
   },
   {
     type: "Consulting",
-    status: "Limited" as const,
-    body: "AI integration, product-system architecture, platform reliability, and infra optimisation.",
+    status: "Limited",
+    body: "Strategic technical consulting, AI integration, infra optimisation.",
+    tone: "accent" as const,
   },
   {
-    type: "Speaking / mentoring",
-    status: "Open" as const,
-    body: "Practical talks on AI in production, platform work, and engineering leadership.",
+    type: "Speaking & mentoring",
+    status: "Open",
+    body: "Conferences, mentoring, technical guidance to growing teams.",
+    tone: "ok" as const,
   },
 ];
-
-function StatusTag({ status }: { status: "Open" | "Limited" | "Closed" }) {
-  return <Tag tone={status === "Open" ? "ok" : status === "Limited" ? "accent" : "danger"}>{status}</Tag>;
-}
 
 export default function Contact() {
   const [name, setName] = useState("");
@@ -66,155 +72,217 @@ export default function Contact() {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const body = encodeURIComponent(`From: ${name} <${email}>\n\n${message}\n\n— sent via aashir.net`);
-    const subj = encodeURIComponent(subject || "hello from aashir.net");
+    const body = encodeURIComponent(
+      `From: ${name} <${email}>\n\n${message}\n\n— sent via aashir.net`,
+    );
+    const subj = encodeURIComponent(subject || "Hello from aashir.net");
     window.location.href = `mailto:me@aashir.net?subject=${subj}&body=${body}`;
     setSent(true);
   };
 
   return (
-    <>
-      <NavBar />
-      <CRTScreen width="wide">
-        <section className="grid gap-8 py-12 lg:grid-cols-[minmax(0,1fr)_380px] lg:py-16">
-          <div>
-            <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">Contact</div>
-            <h1 className="mt-5 max-w-[10ch] text-[clamp(4rem,10vw,8rem)] leading-[0.9]">
-              Bring the hard problem.
-            </h1>
-          </div>
-          <div className="self-end">
-            <p className="text-lg leading-8 text-fg/80">
-              Best fit: serious product and platform work, AI that has to survive production, or a
-              senior/founding engineering role where judgment matters.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-2">
-              <Tag tone="ok">London</Tag>
-              <Tag tone="accent">Open to remote</Tag>
-              <Tag tone="dim">Reply 1–2 days</Tag>
-            </div>
-          </div>
-        </section>
+    <Container>
+      <PageHero
+        eyebrow="Contact"
+        number="C"
+        title="Let's"
+        italic="talk."
+        lede="Four reliable channels and a form. Pick whichever feels right — they all reach me."
+      />
 
+      <section className="pt-8">
         <Reveal>
-          <section className="grid gap-3 lg:grid-cols-3">
-            {channels.map((channel) => (
+          <SectionLabel
+            number="01"
+            title="Where to find"
+            italic="me"
+          />
+        </Reveal>
+        <Reveal>
+          <div>
+            {channels.map((c) => (
               <a
-                key={channel.label}
-                href={channel.href}
-                target={channel.external ? "_blank" : undefined}
-                rel={channel.external ? "noreferrer" : undefined}
-                className="group frame panel-grid p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/70"
+                key={c.label}
+                href={c.href}
+                target={c.external ? "_blank" : undefined}
+                rel={c.external ? "noreferrer" : undefined}
+                className="group grid grid-cols-1 sm:grid-cols-[8rem_1fr_auto] gap-y-2 sm:gap-x-8 py-6 border-b border-rule-soft hover:border-ink transition-colors"
               >
-                <div className="font-mono text-[11px] uppercase tracking-[0.28em] text-dim">{channel.label}</div>
-                <div className="mt-4 break-words font-display text-3xl leading-none text-bright transition-colors duration-300 group-hover:text-accent">
-                  {channel.value}
+                <div className="mono text-xs uppercase tracking-wider text-ink-mute pt-1">
+                  {c.label}
                 </div>
-                <p className="mt-4 text-sm leading-7 text-fg/78">{channel.note}</p>
+                <div>
+                  <div className="display text-[clamp(1.25rem,2.4vw,1.75rem)] leading-tight text-ink group-hover:text-accent transition-colors">
+                    {c.value}
+                    {c.external && (
+                      <span aria-hidden className="ml-2 text-ink-faint group-hover:text-accent transition-colors">
+                        ↗
+                      </span>
+                    )}
+                  </div>
+                  <div className="mt-1 text-sm text-ink-mute">{c.note}</div>
+                </div>
               </a>
             ))}
-          </section>
+          </div>
         </Reveal>
+      </section>
 
+      <section className="pt-24">
         <Reveal>
-          <section className="mt-16 grid gap-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
-            <div>
-              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">Availability</div>
-              <h2 className="mt-4 max-w-[8ch] text-[clamp(2.6rem,5vw,4.8rem)] leading-[0.95]">
-                Current ways to work together.
-              </h2>
-            </div>
-            <div className="space-y-3">
-              {availability.map((item) => (
-                <article key={item.type} className="frame p-5 sm:p-6">
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                    <div>
-                      <h3 className="font-display text-3xl leading-none text-bright">{item.type}</h3>
-                      <p className="mt-3 text-sm leading-7 text-fg/78">{item.body}</p>
-                    </div>
-                    <StatusTag status={item.status} />
+          <SectionLabel
+            number="02"
+            title="What I'm open"
+            italic="to"
+          />
+        </Reveal>
+        <Reveal>
+          <div className="space-y-0">
+            {availability.map((a) => (
+              <div
+                key={a.type}
+                className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-y-3 sm:gap-x-8 py-6 border-b border-rule-soft last:border-0"
+              >
+                <div>
+                  <div className="display text-[clamp(1.25rem,2.4vw,1.75rem)] leading-tight text-ink">
+                    {a.type}
                   </div>
-                </article>
-              ))}
-            </div>
-          </section>
-        </Reveal>
-
-        <Reveal>
-          <section className="mt-16 grid gap-6 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)]">
-            <div>
-              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">Message</div>
-              <h2 className="mt-4 max-w-[8ch] text-[clamp(2.6rem,5vw,4.8rem)] leading-[0.95]">
-                Send signal, not ceremony.
-              </h2>
-              <p className="mt-5 max-w-[42ch] text-base leading-8 text-fg/78">
-                A useful first message includes the problem, why now, constraints, and what a good
-                outcome looks like.
-              </p>
-            </div>
-
-            <form onSubmit={onSubmit} className="frame panel-grid p-5 sm:p-7">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <label className="block">
-                  <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-dim">Name</span>
-                  <input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                    className="mt-2 w-full border border-rule bg-bg/70 px-3 py-3 text-fg outline-none transition-colors focus:border-accent"
-                  />
-                </label>
-                <label className="block">
-                  <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-dim">Email</span>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="mt-2 w-full border border-rule bg-bg/70 px-3 py-3 text-fg outline-none transition-colors focus:border-accent"
-                  />
-                </label>
+                  <p className="mt-2 text-ink-2">{a.body}</p>
+                </div>
+                <div className="self-start sm:self-center">
+                  <Pill tone={a.tone}>
+                    <span
+                      className="mr-2 inline-block w-1.5 h-1.5 rounded-full"
+                      aria-hidden
+                      style={{
+                        background: a.tone === "ok" ? "rgb(var(--ok))" : "rgb(var(--accent))",
+                      }}
+                    />
+                    {a.status}
+                  </Pill>
+                </div>
               </div>
+            ))}
+          </div>
+        </Reveal>
+      </section>
 
-              <label className="mt-4 block">
-                <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-dim">Subject</span>
-                <input
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                  className="mt-2 w-full border border-rule bg-bg/70 px-3 py-3 text-fg outline-none transition-colors focus:border-accent"
-                />
-              </label>
-
-              <label className="mt-4 block">
-                <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-dim">Message</span>
+      <section className="pt-24">
+        <Reveal>
+          <SectionLabel
+            number="03"
+            title="Or send a"
+            italic="message"
+            description="Opens your mail client with a fully composed draft — no third-party in the middle."
+          />
+        </Reveal>
+        <Reveal>
+          <form onSubmit={onSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+            <Field
+              label="Name"
+              value={name}
+              onChange={setName}
+              required
+            />
+            <Field
+              label="Email"
+              type="email"
+              value={email}
+              onChange={setEmail}
+              required
+            />
+            <div className="sm:col-span-2">
+              <Field
+                label="Subject"
+                value={subject}
+                onChange={setSubject}
+              />
+            </div>
+            <div className="sm:col-span-2">
+              <label className="block">
+                <span className="mono text-xs uppercase tracking-wider text-ink-mute mb-2 block">
+                  Message
+                </span>
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  rows={7}
+                  rows={6}
                   required
-                  placeholder="The problem, context, timeline, and what you need from me."
-                  className="mt-2 w-full resize-y border border-rule bg-bg/70 px-3 py-3 text-fg outline-none transition-colors placeholder:text-dim/70 focus:border-accent"
+                  className="w-full bg-transparent border-b border-ink focus:border-accent transition-colors py-3 outline-none resize-y text-ink placeholder:text-ink-faint"
+                  placeholder="What's on your mind?"
                 />
               </label>
-
-              <div className="mt-5 flex flex-wrap items-center gap-3">
-                <PixelButton type="submit">Send email</PixelButton>
-                {sent && (
-                  <span className="text-sm text-ok">
-                    Mail client launched. Fallback: <CRTLink href="mailto:me@aashir.net">me@aashir.net</CRTLink>
-                  </span>
-                )}
-              </div>
-            </form>
-          </section>
+            </div>
+            <div className="sm:col-span-2 flex items-center gap-4 flex-wrap pt-2">
+              <button type="submit" className="btn">
+                Send message →
+              </button>
+              {sent && (
+                <span className="text-sm text-ink-mute">
+                  Mail client launched. Fall back to{" "}
+                  <EditorialLink href="mailto:me@aashir.net">
+                    me@aashir.net
+                  </EditorialLink>
+                  .
+                </span>
+              )}
+            </div>
+          </form>
         </Reveal>
+      </section>
 
-        <div className="mt-16">
+      <Reveal>
+        <section className="pt-24">
           <Newsletter />
-        </div>
+        </section>
+      </Reveal>
 
-        <PageFooter />
-      </CRTScreen>
-    </>
+      <Reveal>
+        <section className="pt-24">
+          <p className="eyebrow mb-4">Based in</p>
+          <p className="display text-[clamp(2.5rem,7vw,5rem)] leading-[0.95] text-ink">
+            London,{" "}
+            <span className="display-italic text-ink-mute">UK.</span>
+          </p>
+          <p className="mt-4 text-ink-2 mono text-sm">
+            51.5074° N · 0.1278° W · GMT/BST
+          </p>
+          <p className="mt-2 text-ink-2">
+            Open to remote and occasional travel.
+          </p>
+        </section>
+      </Reveal>
+
+      <Footer />
+    </Container>
+  );
+}
+
+function Field({
+  label,
+  value,
+  onChange,
+  type = "text",
+  required,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  type?: string;
+  required?: boolean;
+}) {
+  return (
+    <label className="block">
+      <span className="mono text-xs uppercase tracking-wider text-ink-mute mb-2 block">
+        {label}
+      </span>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        required={required}
+        className="w-full bg-transparent border-b border-ink focus:border-accent transition-colors py-3 outline-none text-ink"
+      />
+    </label>
   );
 }

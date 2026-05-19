@@ -1,195 +1,211 @@
 import {
-  CRTScreen,
-  NavBar,
-  PageFooter,
-  PixelButton,
-  Tag,
-  CRTLink,
-  DataRow,
+  Container,
+  Footer,
+  PageHero,
+  SectionLabel,
   Reveal,
-} from "@/components/crt";
+  Pill,
+  LinkButton,
+  EditorialLink,
+} from "@/components/editorial";
 
 const positions = [
   {
     co: "MoonPay",
     role: "Senior Software Engineer · Consumer Product",
-    when: "Present · London, UK",
+    when: "Present · London",
     pts: [
-      "Shipping consumer crypto products at scale across iOS, Android, and web.",
-      "Polygon transaction path rebuilt to run 8.5× faster.",
-      "Balance experience rebuilt with ACH, SEPA, and Faster Payments rails.",
-      "Buy/sell screens refreshed with security and onboarding improvements.",
+      "Shipping consumer crypto products at scale across iOS, Android and web.",
+      "Polygon transaction path → 8.5× faster after rebuild.",
+      "Balance experience rebuilt with ACH / SEPA / Faster Payments rails.",
+      "Buy/Sell screens redesigned · Liquid Glass UI refresh · onboarding rework.",
     ],
   },
   {
     co: "Motorway",
     role: "Senior Backend Engineer · Core Engineering Lead",
-    when: "Jun 2024 – 2026 · London, UK",
+    when: "Jun 2024 — 2026 · London",
     pts: [
-      "Led Core Engineering across foundational services and platform primitives.",
-      "Decoupled AuthN/AuthZ and improved conversion by 7%.",
-      "Reduced AWS spend by 15% through operational-excellence work.",
-      "AI incident management reduced MTTR by 40%.",
+      "Led Core Engineering: foundational services and platform primitives.",
+      "Decoupled AuthN/AuthZ migration → +7% conversion.",
+      "Operational excellence working group → −15% AWS spend.",
+      "AI incident management with LLM categorisation → −40% MTTR.",
     ],
   },
   {
     co: "Deliveroo",
     role: "Software Engineer II · Platform / Customer Care",
-    when: "May 2022 – Jun 2024 · London, UK",
+    when: "May 2022 — Jun 2024 · London",
     pts: [
-      "AI agents handled 10,000+ daily cases at 95% accuracy.",
-      "Delivered 2× CSAT, 50% lower handling time, and £2M annual savings.",
-      "Multi-region Kubernetes and Terraform rollout; gamedays for 100+ engineers.",
+      "AI agents shipping 10,000+ daily cases at 95% accuracy.",
+      "2× CSAT · 50% reduction in handling time · £2M annual savings.",
+      "Multi-region k8s + Terraform; engineering gamedays for 100+ engineers.",
     ],
   },
   {
     co: "Zalando",
     role: "Software Engineer · Customer Fulfillment",
-    when: "Jan 2021 – May 2022 · Helsinki, FI",
+    when: "Jan 2021 — May 2022 · Helsinki",
     pts: [
-      "Warehouse integration gateway with 1000+ RPS Java APIs.",
-      "Reduced latency by 15% and improved inventory accuracy by 25% with forecasting.",
-      "Built Grafana and Prometheus monitoring with custom alerting.",
+      "Warehouse integration gateway · 1000+ RPS · −15% latency.",
+      "AI demand forecasting → +25% inventory optimisation.",
+      "Grafana + Prometheus monitoring with custom alerting.",
     ],
   },
   {
-    co: "Nordcloud / IBM",
+    co: "Nordcloud (IBM)",
     role: "Lead Cloud Engineer · Cloud Transformation",
-    when: "Aug 2019 – Jan 2021 · Helsinki, FI",
+    when: "Aug 2019 — Jan 2021 · Helsinki",
     pts: [
-      "Led multi-cloud migrations across AWS, Azure, and GCP.",
-      "Delivered 30+ enterprise migrations and £5M+ operational savings.",
-      "Improved deployment velocity by 40% with secure CI/CD pipelines.",
+      "Multi-cloud migration platform across AWS / Azure / GCP.",
+      "30+ enterprise migrations · £5M+ operational savings.",
+      "Zero-data-loss pipelines · +40% deployment velocity.",
     ],
   },
 ];
 
 const stack = [
-  ["Languages", "Go · Python · TypeScript · JavaScript · Java"],
-  ["Frontend", "React · Next.js · Tailwind · Radix"],
-  ["Backend", "Go · Python · Node · GraphQL · gRPC"],
-  ["Cloud", "AWS · GCP · Azure"],
-  ["Infra", "Terraform · Kubernetes · Docker · CI/CD"],
-  ["Data", "Postgres · Redis · DynamoDB · Mongo · Kafka"],
-  ["AI/ML", "LLMs · Agents · RAG · Fine-tuning · Vector DBs · MLOps"],
-  ["Monitoring", "Grafana · Prometheus · Datadog · Sentry"],
+  ["Languages", "go · python · typescript · javascript · java"],
+  ["Frontend", "react · next.js · tailwind · radix"],
+  ["Backend", "go · python · node · graphql · grpc"],
+  ["Cloud", "aws · gcp · azure"],
+  ["Infra", "terraform · kubernetes · docker · ci/cd"],
+  ["Data", "postgres · redis · dynamodb · mongo · kafka"],
+  ["AI / ML", "llms · agents · rag · fine-tune · vector dbs · mlops"],
+  ["Monitoring", "grafana · prometheus · datadog · sentry"],
 ];
 
 export default function Resume() {
   return (
-    <>
-      <NavBar />
-      <CRTScreen width="wide">
-        <section className="grid gap-8 py-12 lg:grid-cols-[minmax(0,1fr)_380px] lg:py-16">
-          <div>
-            <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">Resume</div>
-            <h1 className="mt-5 max-w-[11ch] text-[clamp(4rem,10vw,8rem)] leading-[0.9]">
-              Aashir Javed.
-            </h1>
-            <p className="mt-7 max-w-[64ch] text-lg leading-8 text-fg/80">
-              Senior software engineer with 8+ years across product engineering, platform systems,
-              cloud infrastructure, and production AI.
-            </p>
+    <Container size="wide">
+      <PageHero
+        eyebrow="Résumé"
+        number="R"
+        title="Aashir"
+        italic="Javed."
+        lede="Senior software engineer · eight years · full-stack, cloud, AI/ML. London."
+        meta={
+          <div className="flex gap-3 flex-wrap no-print">
+            <LinkButton href="/Aashir-Javed-Resume.pdf" external>
+              Download PDF →
+            </LinkButton>
+            <LinkButton href="https://github.com/aashirjaved" variant="ghost" external>
+              GitHub
+            </LinkButton>
           </div>
-          <aside className="frame panel-grid self-end p-6">
-            <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">Snapshot</div>
-            <div className="mt-5 space-y-3">
-              <DataRow label="Location" value="London, UK" />
-              <DataRow label="Current" value="MoonPay" />
-              <DataRow label="Focus" value="Product · Platform · AI" />
-              <DataRow label="Experience" value="8+ years" />
-            </div>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <PixelButton href="/Aashir-Javed-Resume.pdf" external>Download PDF</PixelButton>
-              <PixelButton href="/contact" variant="ghost">Contact</PixelButton>
-            </div>
-          </aside>
-        </section>
+        }
+      />
 
+      <section className="pt-8">
         <Reveal>
-          <section className="grid gap-4 sm:grid-cols-3">
-            <article className="frame p-6">
-              <div className="font-display text-5xl leading-none text-bright">£7M+</div>
-              <div className="mt-3 font-mono text-[11px] uppercase tracking-[0.24em] text-dim">Savings delivered</div>
-            </article>
-            <article className="frame p-6">
-              <div className="font-display text-5xl leading-none text-bright">10k+</div>
-              <div className="mt-3 font-mono text-[11px] uppercase tracking-[0.24em] text-dim">AI cases / day</div>
-            </article>
-            <article className="frame p-6">
-              <div className="font-display text-5xl leading-none text-bright">100+</div>
-              <div className="mt-3 font-mono text-[11px] uppercase tracking-[0.24em] text-dim">Engineers mentored</div>
-            </article>
-          </section>
+          <SectionLabel
+            number="01"
+            title="Experience"
+            italic=""
+          />
         </Reveal>
-
         <Reveal>
-          <section className="mt-16">
-            <div className="mb-6 font-mono text-[11px] uppercase tracking-[0.34em] text-dim">Experience</div>
-            <div className="space-y-3">
-              {positions.map((p, i) => (
-                <article key={p.co} className="frame p-5 sm:p-6">
-                  <div className="grid gap-5 lg:grid-cols-[56px_minmax(0,1fr)]">
-                    <div className="font-mono text-[11px] uppercase tracking-[0.26em] text-dim">{String(i + 1).padStart(2, "0")}</div>
-                    <div>
-                      <h2 className="font-display text-4xl leading-none text-bright">{p.co}</h2>
-                      <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.2em] text-accent">{p.role}</div>
-                      <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-dim">{p.when}</div>
-                      <ul className="mt-5 space-y-2 text-sm leading-7 text-fg/82">
-                        {p.pts.map((pt) => (
-                          <li key={pt} className="flex gap-3">
-                            <span className="mt-2 h-1.5 w-1.5 shrink-0 bg-accent" aria-hidden />
-                            <span>{pt}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
+          <div>
+            {positions.map((p) => (
+              <article
+                key={p.co}
+                className="grid grid-cols-1 sm:grid-cols-[10rem_1fr] gap-y-3 sm:gap-x-10 py-8 border-b border-rule-soft last:border-0"
+              >
+                <div className="mono text-xs uppercase tracking-wider text-ink-mute pt-1">
+                  {p.when}
+                </div>
+                <div>
+                  <h3 className="display text-[clamp(1.4rem,2.8vw,2rem)] leading-tight text-ink">
+                    {p.co}{" "}
+                    <span className="display-italic text-ink-mute">
+                      — {p.role}
+                    </span>
+                  </h3>
+                  <ul className="mt-4 space-y-2 max-w-[62ch]">
+                    {p.pts.map((pt) => (
+                      <li key={pt} className="text-ink-2 text-[0.95rem] leading-relaxed pl-5 relative">
+                        <span aria-hidden className="absolute left-0 top-[0.6em] w-2.5 h-px bg-ink-faint" />
+                        {pt}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            ))}
+          </div>
         </Reveal>
+      </section>
 
+      <section className="pt-24">
         <Reveal>
-          <section className="mt-16 grid gap-6 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)]">
-            <div>
-              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">Technical stack</div>
-              <h2 className="mt-4 max-w-[8ch] text-[clamp(2.4rem,5vw,4.8rem)] leading-[0.95]">The working set.</h2>
-            </div>
-            <div className="frame panel-grid p-6 sm:p-8">
-              <div className="space-y-4">
-                {stack.map(([label, value]) => (
-                  <DataRow key={label} label={label} value={value} />
-                ))}
+          <SectionLabel number="02" title="Stack" italic="" />
+        </Reveal>
+        <Reveal>
+          <div>
+            {stack.map(([label, value]) => (
+              <div
+                key={label}
+                className="grid grid-cols-1 sm:grid-cols-[10rem_1fr] gap-y-2 sm:gap-x-10 py-5 border-b border-rule-soft last:border-0"
+              >
+                <div className="mono text-xs uppercase tracking-wider text-ink-mute pt-1">
+                  {label}
+                </div>
+                <div className="text-ink-2">{value}</div>
               </div>
-            </div>
-          </section>
+            ))}
+          </div>
         </Reveal>
+      </section>
 
+      <section className="pt-24">
         <Reveal>
-          <section className="mt-16 frame panel-grid p-6 sm:p-8">
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-              <div>
-                <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">See also</div>
-                <h2 className="mt-4 max-w-[12ch] text-[clamp(2.4rem,5vw,4.8rem)] leading-[0.95]">
-                  Evidence behind the resume.
-                </h2>
-              </div>
-              <div className="flex flex-wrap gap-3 lg:justify-end">
-                <PixelButton href="/projects">Projects</PixelButton>
-                <PixelButton href="/experience" variant="ghost">Timeline</PixelButton>
-                <PixelButton href="https://github.com/aashirjaved" variant="ghost" external>GitHub</PixelButton>
-              </div>
-            </div>
-            <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.22em] text-dim">
-              Longer story: <CRTLink href="/about">About</CRTLink> / essays: <CRTLink href="/writing">Writing</CRTLink>
-            </p>
-          </section>
+          <SectionLabel
+            number="03"
+            title="Open"
+            italic="source"
+            description="Tools, side experiments, and contributions to libraries I rely on."
+          />
         </Reveal>
+        <Reveal>
+          <div className="flex flex-wrap gap-2 mb-6">
+            <Pill>open source</Pill>
+            <Pill>tooling</Pill>
+            <Pill>llm experiments</Pill>
+          </div>
+          <p className="prose-editorial">
+            Full listing at{" "}
+            <EditorialLink href="https://github.com/aashirjaved" external>
+              github.com/aashirjaved
+            </EditorialLink>
+            .
+          </p>
+        </Reveal>
+      </section>
 
-        <PageFooter />
-      </CRTScreen>
-    </>
+      <section className="pt-24">
+        <Reveal>
+          <SectionLabel number="04" title="See" italic="also" />
+        </Reveal>
+        <Reveal>
+          <ul className="space-y-3">
+            {[
+              { href: "/about", label: "About — the longer story" },
+              { href: "/projects", label: "Selected work" },
+              { href: "/experience", label: "Career timeline" },
+              { href: "/writing", label: "Writing — notes from production" },
+              { href: "/contact", label: "Contact — get in touch" },
+            ].map((l) => (
+              <li key={l.href}>
+                <EditorialLink href={l.href} variant="grow">
+                  {l.label}
+                </EditorialLink>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      </section>
+
+      <Footer />
+    </Container>
   );
 }

@@ -1,63 +1,72 @@
 import {
-  CRTScreen,
-  NavBar,
-  StatusBar,
-  Tag,
-  PageFooter,
-  CRTLink,
-  PixelButton,
+  Container,
+  Footer,
+  PageHero,
   Reveal,
-} from "@/components/crt";
+  ProjectCard,
+  type ProjectCardProps,
+  LinkButton,
+} from "@/components/editorial";
 
-type Project = {
-  title: string;
-  company: string;
-  period: string;
-  category: string;
-  status: "Production" | "Sunset" | "Beta";
-  description: string;
-  details: string[];
-  technologies: string[];
-  metrics: { label: string; value: string }[];
-  featured?: boolean;
-};
-
-const projects: Project[] = [
+const projects: Omit<ProjectCardProps, "number">[] = [
   {
-    title: "MoonPay Consumer App",
+    title: "Godzilla Typing Rampage",
+    company: "Built for my son",
+    period: "2026",
+    status: "Beta",
+    description:
+      "A Godzilla-themed typing game built to teach my son to type. Atomic-breath letters, building-smash combos, dramatic synth score. iPad-friendly.",
+    details: [
+      "Plain HTML/CSS/JS · zero dependencies, zero asset files",
+      "All sound generated live via Web Audio API (roars, beams, explosions, fanfare)",
+      "Six difficulty tiers: home-row letters → words → short sentences",
+      "iPad: hidden input pops native soft keyboard; touch-safe layout",
+      "Combo system, screen shake, lightning, collapsing buildings",
+    ],
+    technologies: ["html", "css", "javascript", "web audio", "svg"],
+    metrics: [
+      { label: "Levels", value: "6" },
+      { label: "Assets", value: "0" },
+      { label: "For", value: "1 son" },
+    ],
+    featured: true,
+    link: { href: "/godzilla/", label: "▶ Play the game" },
+  },
+  {
+    title: "MoonPay Consumer App — Product Engineering",
     company: "MoonPay",
     period: "Present",
-    category: "Product · Crypto",
     status: "Production",
     description:
-      "Consumer crypto product engineering across iOS, Android, and web: buy/sell, balances, payment rails, security, and transaction reliability.",
+      "Shipping consumer crypto products at scale across iOS, Android, and web. Buy/Sell, balances, payment rails, security.",
     details: [
-      "Polygon transaction path rebuilt to run 8.5× faster.",
-      "Balance experience rebuilt with ACH, SEPA, and Faster Payments rails.",
-      "Buy/sell screens refreshed with tighter device security and onboarding flows.",
+      "Polygon transaction path — 8.5× faster after rebuild",
+      "Balance experience rebuilt with ACH / SEPA / Faster Payments rails",
+      "Buy/Sell screens redesigned · Liquid Glass UI refresh",
+      "Tighter device security flows + onboarding rework",
     ],
-    technologies: ["React", "Next.js", "Go", "Python", "AWS", "TypeScript"],
+    technologies: ["react", "next.js", "go", "python", "aws", "typescript"],
     metrics: [
       { label: "Polygon", value: "8.5×" },
-      { label: "Rails", value: "ACH · SEPA · FPS" },
-      { label: "Surface", value: "iOS · Android · Web" },
+      { label: "Rails", value: "ACH·SEPA·FPS" },
+      { label: "Surface", value: "iOS·Android·Web" },
     ],
     featured: true,
   },
   {
-    title: "Whatify",
+    title: "Whatify — Financial Simulation",
     company: "Side build",
     period: "2026 — Present",
-    category: "Financial simulation",
     status: "Beta",
     description:
-      "Scenario simulation for major life decisions: homes, careers, family, and long-range financial tradeoffs stress-tested against messy reality.",
+      "Stop guessing, start deciding. Side-by-side scenario simulation for major life decisions — homes, careers, family — stress-tested against rate spikes and cost overruns.",
     details: [
-      "Five-year projections across best, expected, and worst-case paths.",
-      "Stress-testing against rate spikes, cost overruns, and delayed plans.",
-      "A 2-minute setup designed for decision clarity, not spreadsheet theatre.",
+      "Five-year net-worth projections: best / expected / worst case",
+      "Stress testing against rate spikes and overruns",
+      "Two-minute setup; data-driven decisions, not guesswork",
+      "3,847+ on the waitlist",
     ],
-    technologies: ["Next.js", "TypeScript", "AI", "Postgres"],
+    technologies: ["next.js", "typescript", "ai", "postgres"],
     metrics: [
       { label: "Waitlist", value: "3.8k+" },
       { label: "Setup", value: "2 min" },
@@ -66,36 +75,49 @@ const projects: Project[] = [
     featured: true,
   },
   {
-    title: "AI Hackathon Winner",
+    title: "AI Hackathon — 1st place",
     company: "w/ Omer Bresinski",
     period: "2026",
-    category: "AI · Prototype",
     status: "Beta",
     description:
-      "A weekend build taken from idea to hardware-backed AI demo under competition pressure.",
+      "Won an AI hackathon over a weekend. Two engineers, one idea, hardware → model → demo in under 48 hours.",
     details: [
-      "End-to-end build across device, backend, model, and interface.",
-      "Product spec, prototype, and live demo produced in under 48 hours.",
-      "Won first place against a field of AI product prototypes.",
+      "End-to-end build under tight time pressure",
+      "Cross-stack: device, backend, model, UI",
+      "Wrote spec, prototyped and demoed live",
     ],
-    technologies: ["Python", "AI", "Next.js"],
+    technologies: ["python", "ai", "next.js"],
     metrics: [{ label: "Place", value: "1st" }],
     featured: true,
   },
   {
-    title: "AI Customer Care Platform",
+    title: "Grok — Radio Product",
+    company: "Side prototype",
+    period: "2026",
+    status: "Beta",
+    description:
+      "Spec, prototype and product thinking for a Grok-powered radio interface. Voice as the new keyboard.",
+    details: [
+      "Voice-first product framing",
+      "Live AI radio host concept; latency budget under 500ms",
+      "Public thread on X (@aasjav)",
+    ],
+    technologies: ["ai", "audio", "next.js"],
+  },
+  {
+    title: "AI-Powered Customer Care",
     company: "Deliveroo",
     period: "2022 — 2024",
-    category: "AI + Platform",
     status: "Production",
     description:
-      "Fine-tuned LLM agents and operational tooling for high-volume customer-care automation.",
+      "Customer-care automation: React, Go APIs, fine-tuned LLM agents handling refunds and order resolution at scale.",
     details: [
-      "10,000+ cases/day handled by production AI agents at 95% accuracy.",
-      "2× CSAT and 50% lower handling time across automated journeys.",
-      "Multi-region Kubernetes and Terraform rollout for global operations.",
+      "AI agents — 10,000+ cases/day at 95% accuracy",
+      "Prompt-engineering frameworks for service-specific LLMs",
+      "Real-time React UI with seamless agent ↔ human handoff",
+      "Multi-region k8s + Terraform on PostgreSQL",
     ],
-    technologies: ["React", "Go", "Python", "LLMs", "Postgres", "Kubernetes"],
+    technologies: ["react", "go", "python", "llm fine-tune", "postgres", "k8s"],
     metrics: [
       { label: "CSAT", value: "2×" },
       { label: "Saved", value: "£2M" },
@@ -104,40 +126,39 @@ const projects: Project[] = [
     featured: true,
   },
   {
-    title: "Core Engineering Platform",
+    title: "Core Engineering Infrastructure",
     company: "Motorway",
     period: "2024 — 2026",
-    category: "Infra + AI",
     status: "Production",
     description:
-      "Mission-critical platform work: monitoring, AI-powered alerting, decoupled auth, and foundational services.",
+      "Mission-critical platform: monitoring, AI-powered alerting, decoupled auth. Foundation for every product team.",
     details: [
-      "AuthN/AuthZ migration improved checkout conversion by 7%.",
-      "AI incident management reduced MTTR by 40%.",
-      "Operational-excellence work reduced AWS spend by 15%.",
+      "Decoupled AuthN/AuthZ migration → +7% conversion",
+      "AI incident management with LLM categorisation → −40% MTTR",
+      "Real-time React/Next.js observability dashboards",
+      "Operational excellence working group → −15% AWS spend",
     ],
-    technologies: ["Go", "Python", "React", "AWS", "Terraform", "LLMs", "OAuth2"],
+    technologies: ["go", "python", "react", "next.js", "aws", "terraform", "llm"],
     metrics: [
+      { label: "Volume", value: "+15%" },
       { label: "Conv", value: "+7%" },
-      { label: "MTTR", value: "−40%" },
       { label: "AWS", value: "−15%" },
     ],
     featured: true,
   },
   {
-    title: "Warehouse Integration Gateway",
+    title: "Warehouse Gateway",
     company: "Zalando",
     period: "2021 — 2022",
-    category: "Backend systems",
     status: "Production",
     description:
-      "Enterprise gateway between warehouse operations and Zalando core systems with tight Java APIs and operational dashboards.",
+      "Enterprise gateway between warehouse ops and Zalando core. React dashboards plus tight Java APIs.",
     details: [
-      "Java APIs handling 1000+ requests per second.",
-      "Query and system optimisation reduced latency by 15%.",
-      "AI demand forecasting improved inventory accuracy by 25%.",
+      "Java APIs handling 1000+ RPS",
+      "AI demand forecasting · +25% inventory accuracy",
+      "Grafana + Prometheus monitoring stack",
     ],
-    technologies: ["Java", "React", "TypeScript", "Postgres", "Kubernetes", "Grafana"],
+    technologies: ["java", "react", "typescript", "postgres", "k8s", "grafana"],
     metrics: [
       { label: "RPS", value: "1k+" },
       { label: "Latency", value: "−15%" },
@@ -148,120 +169,75 @@ const projects: Project[] = [
     title: "Multi-Cloud Migration Platform",
     company: "Nordcloud / IBM",
     period: "2020 — 2021",
-    category: "Cloud transformation",
     status: "Production",
     description:
-      "Enterprise migration platform and runbooks for moving monoliths into cloud-native architectures across AWS, Azure, and GCP.",
+      "Enterprise platform converting monoliths into microservices across AWS, Azure and GCP. 30+ migrations.",
     details: [
-      "30+ enterprise migrations with zero-data-loss transformation pipelines.",
-      "Cross-cloud architectural patterns and security-gated CI/CD.",
-      "Deployment velocity improved by 40% with £5M+ savings delivered.",
+      "Cross-cloud architectural patterns and runbooks",
+      "Zero-data-loss transformation pipelines",
+      "CI/CD with security gates · +40% deploy velocity",
     ],
-    technologies: ["AWS", "Azure", "GCP", "Terraform", "Kubernetes", "Python", "Go"],
+    technologies: ["aws", "azure", "gcp", "terraform", "k8s", "python", "go"],
     metrics: [
       { label: "Migrations", value: "30+" },
       { label: "Speed", value: "+40%" },
       { label: "Saved", value: "£5M" },
     ],
   },
+  {
+    title: "Event-Driven E-Commerce Platform",
+    company: "Freelance",
+    period: "2019 — 2020",
+    status: "Sunset",
+    description:
+      "Scalable e-commerce: high-volume transactions, real-time inventory, personalised recommendations.",
+    details: [
+      "Event-driven architecture with message queues",
+      "Recommendation engine via collaborative filtering",
+      "Payment gateways with reconciliation",
+    ],
+    technologies: ["node.js", "react", "redis", "postgres", "kafka", "aws"],
+    metrics: [
+      { label: "Uptime", value: "99.9%" },
+      { label: "Conv", value: "3×" },
+      { label: "Orders/d", value: "25k+" },
+    ],
+  },
 ];
-
-function ProjectCard({ p, index }: { p: Project; index: number }) {
-  const num = String(index + 1).padStart(2, "0");
-  return (
-    <article className="group frame panel-grid p-5 transition-all duration-300 hover:-translate-y-1 hover:border-accent/70 sm:p-7">
-      <div className="grid gap-6 lg:grid-cols-[90px_minmax(0,1fr)_280px]">
-        <div className="font-mono text-[11px] uppercase tracking-[0.28em] text-dim">{num}</div>
-        <div>
-          <div className="mb-4 flex flex-wrap gap-2">
-            <Tag tone="accent">{p.category}</Tag>
-            <Tag tone={p.status === "Production" ? "ok" : "dim"}>{p.status}</Tag>
-            {p.featured && <Tag tone="accent">Featured</Tag>}
-          </div>
-          <h2 className="max-w-[13ch] text-[clamp(2rem,4vw,4.2rem)] leading-[0.96] transition-colors duration-300 group-hover:text-accent">
-            {p.title}
-          </h2>
-          <p className="mt-5 max-w-[70ch] text-base leading-8 text-fg/80">{p.description}</p>
-          <ul className="mt-5 space-y-2 text-sm leading-7 text-fg/82">
-            {p.details.map((d) => (
-              <li key={d} className="flex gap-3">
-                <span className="mt-2 h-1.5 w-1.5 shrink-0 bg-accent" aria-hidden />
-                <span>{d}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <aside className="space-y-5 lg:text-right">
-          <div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.26em] text-dim">Client</div>
-            <div className="mt-1 font-display text-2xl text-bright">{p.company}</div>
-          </div>
-          <div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.26em] text-dim">Period</div>
-            <div className="mt-1 text-sm text-fg/82">{p.period}</div>
-          </div>
-          <div className="flex flex-wrap gap-2 lg:justify-end">
-            {p.metrics.map((m) => (
-              <Tag key={m.label} tone="ok">{m.label} {m.value}</Tag>
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-2 lg:justify-end">
-            {p.technologies.map((t) => (
-              <Tag key={t} tone="dim">{t}</Tag>
-            ))}
-          </div>
-        </aside>
-      </div>
-    </article>
-  );
-}
 
 export default function Projects() {
   return (
-    <>
-      <NavBar />
-      <CRTScreen width="wide">
-        <StatusBar
-          items={[
-            { label: "page", value: "selected work" },
-            { label: "case studies", value: `${projects.length}`, tone: "accent" },
-            { label: "sort", value: "impact first" },
-          ]}
-        />
+    <Container>
+      <PageHero
+        eyebrow={`${projects.length} case files`}
+        number="W"
+        title="Selected"
+        italic="work."
+        lede="Shipped products, won hackathons, side builds. Metrics where they existed; honesty where they did not."
+      />
 
-        <section className="grid gap-8 py-12 lg:grid-cols-[minmax(0,1fr)_360px] lg:py-16">
-          <div>
-            <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">Projects</div>
-            <h1 className="mt-5 max-w-[10ch] text-[clamp(4rem,10vw,8rem)] leading-[0.9]">
-              Proof, not screenshots.
-            </h1>
-          </div>
-          <div className="self-end">
-            <p className="text-lg leading-8 text-fg/80">
-              A selection of product, platform, AI, and infrastructure work. The common thread is
-              measurable impact and systems that survived contact with production.
-            </p>
-            <p className="mt-5 font-mono text-[11px] uppercase tracking-[0.22em] text-dim">
-              Hiring? <CRTLink href="/contact">Start here</CRTLink>
-            </p>
-          </div>
-        </section>
-
-        <Reveal>
-          <div className="space-y-4">
-            {projects.map((p, i) => (
-              <ProjectCard key={p.title} p={p} index={i} />
-            ))}
-          </div>
-        </Reveal>
-
-        <div className="mt-12 flex flex-wrap gap-3">
-          <PixelButton href="/contact">Talk about a role</PixelButton>
-          <PixelButton href="/experience" variant="ghost">View timeline</PixelButton>
+      <Reveal>
+        <div>
+          {projects.map((p, i) => (
+            <ProjectCard
+              key={p.title}
+              {...p}
+              number={String(i + 1).padStart(2, "0")}
+            />
+          ))}
         </div>
+      </Reveal>
 
-        <PageFooter />
-      </CRTScreen>
-    </>
+      <Reveal>
+        <section className="pt-24 flex flex-wrap gap-3">
+          <LinkButton href="/contact">Talk about a role →</LinkButton>
+          <LinkButton href="/experience" variant="ghost">
+            Career timeline
+          </LinkButton>
+        </section>
+      </Reveal>
+
+      <Footer />
+    </Container>
   );
 }

@@ -1,179 +1,185 @@
+import Image from "next/image";
 import {
-  CRTScreen,
-  NavBar,
-  Tag,
-  PageFooter,
-  PixelButton,
-  CRTLink,
-  FigCaption,
-  CRTImage,
-  DataRow,
+  Container,
+  Footer,
+  PageHero,
+  SectionLabel,
   Reveal,
-} from "@/components/crt";
+  Pill,
+  LinkButton,
+  ArrowLink,
+} from "@/components/editorial";
 
-const skills = [
-  {
-    category: "Product systems",
-    items: ["React/Next.js", "TypeScript", "Go", "Python", "Java", "Node.js"],
-  },
-  {
-    category: "Cloud and reliability",
-    items: ["AWS", "Terraform", "Kubernetes", "Docker", "CI/CD", "Observability"],
-  },
-  {
-    category: "AI in production",
-    items: ["LLM agents", "RAG", "Fine-tuning", "Evals", "Vector DBs", "MLOps"],
-  },
-  {
-    category: "Leadership",
-    items: ["Technical strategy", "Mentoring", "Incident practice", "Stakeholders", "Hiring"],
-  },
+const stack = [
+  { group: "Languages", items: ["go", "python", "typescript", "javascript", "java"] },
+  { group: "Frontend", items: ["react", "next.js", "tailwind", "radix"] },
+  { group: "Backend", items: ["go", "node", "graphql", "grpc"] },
+  { group: "Cloud / Infra", items: ["aws", "gcp", "terraform", "kubernetes", "docker"] },
+  { group: "Data", items: ["postgres", "redis", "dynamodb", "mongo", "kafka"] },
+  { group: "AI / ML", items: ["llms", "agents", "rag", "fine-tune", "mlops"] },
 ];
 
-const achievements = [
+const principles = [
   {
-    value: "10k+",
-    title: "Daily AI support cases",
-    body: "Built production agents for customer-care workflows at Deliveroo with 95% accuracy.",
+    title: "Ship the thing.",
+    body:
+      "Beautiful code that never reaches users is just journaling. I optimise for what shows up in production.",
   },
   {
-    value: "£7M+",
-    title: "Operational savings",
-    body: "Delivered savings across AI automation, cloud migration, and infrastructure optimisation.",
+    title: "AI earns its keep.",
+    body:
+      "I use models where they reliably beat the rules they replace. Demos are easy; production agents are humbling.",
   },
   {
-    value: "100+",
-    title: "Engineers mentored",
-    body: "Led practices, gamedays, and technical standards across multi-team engineering orgs.",
+    title: "Numbers, not adjectives.",
+    body:
+      "Latency, conversion, MTTR, cost. If I can't tell you what I moved and by how much, I probably didn't.",
   },
   {
-    value: "8.5×",
-    title: "Faster transaction path",
-    body: "Rebuilt a critical Polygon transaction flow for MoonPay consumer products.",
+    title: "Boring infra, ambitious product.",
+    body:
+      "The unsexy plumbing is what keeps clever ideas from collapsing the moment real traffic arrives.",
   },
 ];
 
 export default function About() {
   return (
-    <>
-      <NavBar />
-      <CRTScreen width="wide">
-        <section className="grid gap-10 py-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(360px,0.55fr)] lg:gap-16 lg:py-16">
-          <Reveal>
-            <div>
-              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">About</div>
-              <h1 className="mt-5 max-w-[10ch] text-[clamp(4rem,10vw,8rem)] leading-[0.9]">
-                The longer version.
-              </h1>
-              <p className="mt-7 max-w-[64ch] text-lg leading-8 text-fg/80">
-                I’m a senior software engineer based in London. I’ve spent eight years turning
-                ambiguous product and infrastructure problems into systems that teams can run,
-                extend, and trust.
-              </p>
-              <p className="mt-5 max-w-[64ch] text-lg leading-8 text-fg/80">
-                The work spans consumer fintech at MoonPay, platform engineering at Motorway,
-                AI-powered customer care at Deliveroo, warehouse systems at Zalando, and enterprise
-                cloud transformation at IBM/Nordcloud.
-              </p>
+    <Container>
+      <PageHero
+        eyebrow="About"
+        number="01"
+        title="Eight years"
+        italic="of shipping."
+        lede="Senior engineer. Currently MoonPay. Backend, infra, full-stack, and lately a lot of LLMs in places they have to behave."
+      />
+
+      <Reveal>
+        <div className="grid grid-cols-1 sm:grid-cols-12 gap-y-8 gap-x-10 items-start mb-24">
+          <div className="sm:col-span-5">
+            <div className="relative aspect-[4/5] overflow-hidden border border-rule">
+              <Image
+                src="/me.png"
+                alt="Aashir Javed"
+                fill
+                priority
+                className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                sizes="(min-width: 640px) 40vw, 90vw"
+              />
             </div>
-          </Reveal>
+          </div>
+          <div className="sm:col-span-7 sm:pt-6">
+            <p className="prose-editorial">
+              I&rsquo;m Aashir. I write software for companies whose customers
+              expect things to actually work — MoonPay, Motorway, Deliveroo,
+              Zalando, IBM/Nordcloud before that.
+            </p>
+            <p className="prose-editorial mt-4">
+              I started out chasing elegant code and ended up chasing leverage.
+              Most of my recent years have been spent putting AI into customer
+              journeys at scale, leading platform teams, and trimming cloud
+              bills that grew faster than anyone admitted.
+            </p>
+            <p className="prose-editorial mt-4">
+              I&rsquo;m based in London, work mostly remote, and travel for the
+              right meeting.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <LinkButton href="/contact">Get in touch →</LinkButton>
+              <LinkButton href="/resume" variant="ghost">
+                Read résumé
+              </LinkButton>
+            </div>
+          </div>
+        </div>
+      </Reveal>
 
-          <Reveal>
-            <FigCaption index={1} title="Aashir Javed · London">
-              <CRTImage src="/me.png" alt="Aashir Javed" width={720} height={720} priority />
-            </FigCaption>
-          </Reveal>
-        </section>
-
+      <section className="pt-16">
         <Reveal>
-          <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {achievements.map((item) => (
-              <article key={item.title} className="frame panel-grid p-5 sm:p-6">
-                <div className="font-display text-5xl leading-none text-bright">{item.value}</div>
-                <h2 className="mt-4 font-mono text-[11px] uppercase tracking-[0.24em] text-accent">
-                  {item.title}
-                </h2>
-                <p className="mt-3 text-sm leading-7 text-fg/78">{item.body}</p>
-              </article>
+          <SectionLabel number="02" title="How I" italic="work" />
+        </Reveal>
+        <Reveal>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-12">
+            {principles.map((p, i) => (
+              <div key={p.title}>
+                <div className="mono text-xs text-ink-mute mb-3">
+                  {String(i + 1).padStart(2, "0")} / 04
+                </div>
+                <h3 className="display text-[clamp(1.5rem,3vw,2.25rem)] leading-[1.05] text-ink">
+                  {p.title}
+                </h3>
+                <p className="prose-editorial mt-4">{p.body}</p>
+              </div>
             ))}
-          </section>
+          </div>
         </Reveal>
+      </section>
 
+      <section className="pt-32">
         <Reveal>
-          <section className="mt-20 grid gap-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)]">
+          <SectionLabel
+            number="03"
+            title="The"
+            italic="stack"
+            description="What I reach for when nobody's watching. New things added often; old things only when they earn it."
+          />
+        </Reveal>
+        <Reveal>
+          <div className="space-y-8">
+            {stack.map((s) => (
+              <div
+                key={s.group}
+                className="grid grid-cols-1 sm:grid-cols-[10rem_1fr] gap-y-3 sm:gap-x-8 py-6 border-b border-rule-soft last:border-0"
+              >
+                <div className="mono text-xs uppercase tracking-wider text-ink-mute pt-2">
+                  {s.group}
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {s.items.map((it) => (
+                    <Pill key={it}>{it}</Pill>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      </section>
+
+      <section className="pt-32">
+        <Reveal>
+          <SectionLabel
+            number="04"
+            title="Right"
+            italic="now"
+            description="Production agents · LLM automation · platform leadership."
+          />
+        </Reveal>
+        <Reveal>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 items-start">
             <div>
-              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">Operating principles</div>
-              <h2 className="mt-4 max-w-[9ch] text-[clamp(2.6rem,5vw,4.8rem)] leading-[0.95]">
-                How I work when it matters.
-              </h2>
-            </div>
-            <div className="grid gap-3 md:grid-cols-3">
-              <article className="frame p-6">
-                <h3 className="font-display text-3xl leading-none">Own the outcome</h3>
-                <p className="mt-4 text-sm leading-7 text-fg/80">
-                  I care less about impressive architecture diagrams and more about measurable user,
-                  business, and operational outcomes.
-                </p>
-              </article>
-              <article className="frame p-6">
-                <h3 className="font-display text-3xl leading-none">Make it legible</h3>
-                <p className="mt-4 text-sm leading-7 text-fg/80">
-                  Good systems are understandable under pressure. Naming, boundaries, runbooks, and
-                  observability are product features for engineers.
-                </p>
-              </article>
-              <article className="frame p-6">
-                <h3 className="font-display text-3xl leading-none">Use AI carefully</h3>
-                <p className="mt-4 text-sm leading-7 text-fg/80">
-                  I use LLMs where they compound leverage, not where they create invisible failure
-                  modes or product theatre.
-                </p>
-              </article>
-            </div>
-          </section>
-        </Reveal>
-
-        <Reveal>
-          <section className="mt-20 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-            <div className="frame panel-grid p-6 sm:p-8">
-              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">Stack</div>
-              <div className="mt-6 space-y-6">
-                {skills.map((s) => (
-                  <div key={s.category}>
-                    <DataRow label={s.category} value={`${s.items.length} strengths`} />
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {s.items.map((it) => (
-                        <Tag key={it} tone="dim">{it}</Tag>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="frame panel-grid p-6 sm:p-8">
-              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">Current focus</div>
-              <h2 className="mt-4 text-[clamp(2.4rem,5vw,4.6rem)] leading-[0.96]">
-                Product engineering with operational teeth.
-              </h2>
-              <p className="mt-5 text-base leading-8 text-fg/80">
-                I’m most useful around high-leverage product surfaces: payment flows, AI workflows,
-                internal platforms, reliability problems, and engineering teams moving from scrappy
-                to serious.
+              <p className="display-italic text-[clamp(1.5rem,3.5vw,2.25rem)] leading-snug text-ink">
+                &ldquo;The unsexy plumbing that keeps clever demos from
+                collapsing in production.&rdquo;
               </p>
-              <div className="mt-7 flex flex-wrap gap-3">
-                <PixelButton href="/contact">Get in touch</PixelButton>
-                <PixelButton href="/projects" variant="ghost">View work</PixelButton>
+              <p className="mt-4 mono text-xs uppercase tracking-wider text-ink-mute">
+                — what I tell people I do
+              </p>
+            </div>
+            <div>
+              <p className="prose-editorial">
+                For the last three years that&rsquo;s mostly meant production
+                AI: agents that handle real customer journeys, evaluation
+                harnesses that catch drift before users do, infra that stays up
+                when a model goes weird.
+              </p>
+              <div className="mt-8">
+                <ArrowLink href="/projects">See the work →</ArrowLink>
               </div>
             </div>
-          </section>
+          </div>
         </Reveal>
+      </section>
 
-        <p className="mt-12 font-mono text-[11px] uppercase tracking-[0.22em] text-dim">
-          Prefer the evidence trail? <CRTLink href="/experience">Experience</CRTLink> / <CRTLink href="/projects">Projects</CRTLink>
-        </p>
-
-        <PageFooter />
-      </CRTScreen>
-    </>
+      <Footer />
+    </Container>
   );
 }

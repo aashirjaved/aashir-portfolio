@@ -1,21 +1,22 @@
-import { Bodoni_Moda, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Instrument_Serif, Inter, JetBrains_Mono } from "next/font/google";
 
-export const display = Bodoni_Moda({
+export const display = Instrument_Serif({
+  weight: "400",
+  style: ["normal", "italic"],
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   display: "swap",
   variable: "--font-display",
 });
 
-export const body = IBM_Plex_Sans({
+export const body = Inter({
+  weight: ["300", "400", "500", "600"],
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
   display: "swap",
   variable: "--font-body",
 });
 
-export const mono = IBM_Plex_Mono({
-  weight: ["400", "500", "600"],
+export const mono = JetBrains_Mono({
+  weight: ["400", "500"],
   subsets: ["latin"],
   display: "swap",
   variable: "--font-mono",

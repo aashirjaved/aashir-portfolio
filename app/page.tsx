@@ -1,389 +1,273 @@
 import {
-  CRTScreen,
-  NavBar,
-  StatusBar,
-  LogoStrip,
-  LcdStat,
-  PixelButton,
-  Tag,
-  CRTLink,
-  PageFooter,
-  Reveal,
+  Container,
+  Footer,
+  PageHero,
+  SectionLabel,
+  Stat,
+  WorkRow,
   NotableCard,
-} from "@/components/crt";
+  LogoMarquee,
+  Reveal,
+  ArrowLink,
+  LinkButton,
+  PostRow,
+  Eyebrow,
+} from "@/components/editorial";
 import { PersonSchema, WebsiteSchema } from "@/components/structured-data";
 import { blogPosts } from "@/data/blog-data";
 
 const recentWork = [
   {
-    co: "MoonPay",
-    role: "Senior Software Engineer",
-    year: "Now",
-    pts: [
-      "Rebuilt critical transaction paths for consumer crypto products across iOS, Android, and web.",
-      "Shipped an 8.5× faster Polygon flow with less friction and better reliability.",
-      "Led Balance experience improvements spanning ACH, SEPA, and Faster Payments.",
+    year: "2025 — now",
+    company: "MoonPay",
+    role: "Senior Engineer",
+    blurb:
+      "Shipping consumer crypto across iOS, Android and web. Rebuilt the Polygon transaction path 8.5× faster; reworked Balance with ACH, SEPA and Faster Payments rails.",
+    metrics: [
+      { label: "Polygon", value: "8.5×" },
+      { label: "Rails", value: "ACH·SEPA·FPS" },
     ],
-    stack: ["React", "Next.js", "Go", "Python", "AWS"],
+    stack: ["react", "next.js", "go", "python", "aws"],
   },
   {
-    co: "Motorway",
-    role: "Senior Backend Engineer · Core Engineering Lead",
     year: "2024",
-    pts: [
-      "Decoupled AuthN/AuthZ in a way that improved checkout conversion by 7%.",
-      "Built AI-assisted incident tooling that cut MTTR by 40%.",
-      "Reduced infrastructure spend by 15% without harming delivery speed.",
+    company: "Motorway",
+    role: "Core Engineering Lead",
+    blurb:
+      "Led the platform that every product team builds on. Decoupled auth pushed conversion +7%. LLM-assisted incidents cut MTTR by 40%. Trimmed 15% off the AWS bill.",
+    metrics: [
+      { label: "Conv", value: "+7%" },
+      { label: "MTTR", value: "−40%" },
+      { label: "AWS", value: "−15%" },
     ],
-    stack: ["Go", "Python", "AWS", "Platform", "LLMs"],
+    stack: ["go", "python", "react", "aws", "llm"],
   },
   {
-    co: "Deliveroo",
-    role: "Software Engineer II",
     year: "2022",
-    pts: [
-      "Put AI agents into production across 10k+ support cases per day at 95% accuracy.",
-      "Doubled CSAT while halving handling time.",
-      "Generated roughly £2M in annual savings.",
+    company: "Deliveroo",
+    role: "Engineer · Customer Care",
+    blurb:
+      "Production AI agents handling 10k+ cases a day at 95% accuracy. Doubled CSAT, halved handling time, banked £2M in annual savings.",
+    metrics: [
+      { label: "CSAT", value: "2×" },
+      { label: "Saved", value: "£2M" },
     ],
-    stack: ["Go", "React", "Kubernetes", "LLM fine-tuning"],
+    stack: ["go", "react", "llm", "k8s"],
   },
-];
-
-const principles = [
-  "Ship product outcomes, not engineering theatre.",
-  "Use AI where it compounds leverage, not where it adds noise.",
-  "Make systems readable enough to survive Monday morning.",
 ];
 
 export default function Home() {
-  const recentPosts = [...blogPosts].sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 3);
+  const recentPosts = [...blogPosts]
+    .sort((a, b) => (a.date < b.date ? 1 : -1))
+    .slice(0, 4);
+
+  const fmtDate = (iso: string) => {
+    const d = new Date(iso);
+    return d.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
 
   return (
     <>
       <PersonSchema />
       <WebsiteSchema />
-      <NavBar />
-      <CRTScreen width="wide">
-        <StatusBar
-          items={[
-            { label: "based", value: "London, UK" },
-            { label: "current", value: "MoonPay", tone: "accent" },
-            { label: "focus", value: "Staff · Founding Engineer" },
-            { label: "experience", value: "8 years", tone: "ok" },
-          ]}
-        />
-
-        <section className="grid gap-10 py-10 lg:grid-cols-[minmax(0,1.45fr)_380px] lg:gap-14 lg:py-16">
-          <Reveal>
-            <div>
-              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">
-                Engineering portfolio
-              </div>
-              <h1 className="mt-5 max-w-[12ch] text-[clamp(4rem,11vw,8.6rem)] leading-[0.88] text-bright">
-                Aashir Javed
-              </h1>
-              <p className="mt-6 max-w-[19ch] text-[clamp(1.4rem,3vw,2.2rem)] leading-[1.08] text-fg/92">
-                I build product systems that scale cleanly, move fast, and still feel intentional.
+      <Container size="wide">
+        {/* HERO */}
+        <section className="pt-4 sm:pt-8 pb-20 sm:pb-28">
+          <Eyebrow className="mb-10">
+            <span className="inline-flex items-center gap-2">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-ok" aria-hidden />
+              Available · London
+            </span>
+          </Eyebrow>
+          <h1 className="display text-[clamp(3.5rem,13vw,10rem)] leading-[0.88] text-ink">
+            Aashir
+            <br />
+            <span className="display-italic text-ink-mute">Javed.</span>
+          </h1>
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-12 gap-8">
+            <p className="lede md:col-span-7 text-ink">
+              I&rsquo;m a senior software engineer building consumer products at
+              scale — and putting AI into the loop where it earns its keep.
+            </p>
+            <div className="md:col-span-4 md:col-start-9 self-end">
+              <p className="text-sm text-ink-mute leading-relaxed">
+                Currently at <span className="text-ink">MoonPay</span>. Eight
+                years, four companies, a lot of shipped pixels. Open to staff
+                and founding-engineer roles.
               </p>
-              <p className="mt-6 max-w-[63ch] text-base leading-8 text-fg/78 sm:text-lg">
-                Senior software engineer with deep full-stack, platform, and AI-in-production
-                experience. I care about product judgment, operating leverage, and shipping work
-                that survives real users rather than slide decks.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <PixelButton href="/contact">Start a conversation</PixelButton>
-                <PixelButton href="/projects" variant="ghost">
-                  Selected work
-                </PixelButton>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <LinkButton href="/contact">Get in touch →</LinkButton>
+                <LinkButton href="/projects" variant="ghost">
+                  See selected work
+                </LinkButton>
               </div>
             </div>
-          </Reveal>
-
-          <Reveal>
-            <aside className="frame panel-grid h-fit p-6 sm:p-7">
-              <div className="font-mono text-[11px] uppercase tracking-[0.32em] text-dim">
-                Current operating mode
-              </div>
-              <div className="mt-5 border-t border-rule/80 pt-5">
-                <div className="font-display text-3xl leading-none text-bright">Building serious things.</div>
-                <p className="mt-4 text-sm leading-7 text-fg/80">
-                  Consumer fintech, infrastructure, AI agents, internal platforms, and the messy
-                  seam where product ambition meets operational reality.
-                </p>
-              </div>
-              <div className="mt-6 space-y-3 border-t border-rule/80 pt-5">
-                {principles.map((principle) => (
-                  <div key={principle} className="flex gap-3 text-sm leading-7 text-fg/84">
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 bg-accent" aria-hidden />
-                    <span>{principle}</span>
-                  </div>
-                ))}
-              </div>
-            </aside>
-          </Reveal>
-        </section>
-
-        <section className="grid gap-3 sm:grid-cols-3">
-          <LcdStat value="£7M+" label="Cost savings delivered" />
-          <LcdStat value="10k+" label="AI cases per day" />
-          <LcdStat value="100+" label="Engineers mentored" />
-        </section>
-
-        <section className="mt-12">
-          <LogoStrip />
+          </div>
         </section>
 
         <Reveal>
-          <section className="mt-20 grid gap-6 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)]">
-            <div>
-              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">
-                What I bring
-              </div>
-              <h2 className="mt-4 max-w-[10ch] text-[clamp(2.6rem,5vw,4.6rem)] leading-[0.95]">
-                Taste in systems.
-              </h2>
-            </div>
-            <div className="grid gap-3 md:grid-cols-3">
-              <article className="frame p-5 sm:p-6">
-                <div className="font-mono text-[11px] uppercase tracking-[0.24em] text-accent">
-                  Product engineering
-                </div>
-                <p className="mt-4 text-sm leading-7 text-fg/82">
-                  Full-stack execution with strong product instincts. Enough speed to prototype,
-                  enough discipline to harden what matters.
-                </p>
-              </article>
-              <article className="frame p-5 sm:p-6">
-                <div className="font-mono text-[11px] uppercase tracking-[0.24em] text-accent">
-                  Platform and reliability
-                </div>
-                <p className="mt-4 text-sm leading-7 text-fg/82">
-                  Clean service boundaries, practical cloud architecture, and systems that are
-                  debuggable under pressure.
-                </p>
-              </article>
-              <article className="frame p-5 sm:p-6">
-                <div className="font-mono text-[11px] uppercase tracking-[0.24em] text-accent">
-                  AI in production
-                </div>
-                <p className="mt-4 text-sm leading-7 text-fg/82">
-                  Agents, evals, retrieval, and workflow design where the economics and UX justify
-                  the complexity.
-                </p>
-              </article>
-            </div>
+          <div className="border-y border-rule-soft py-10">
+            <p className="eyebrow mb-6">Worked with</p>
+            <LogoMarquee />
+          </div>
+        </Reveal>
+
+        {/* STATS — editorial big numbers */}
+        <Reveal>
+          <section className="py-20 sm:py-28 grid grid-cols-1 sm:grid-cols-3 gap-y-12 gap-x-10 border-b border-rule-soft">
+            <Stat
+              value="£7M+"
+              label="Saved through AI &amp; cloud"
+              hint="Across Deliveroo, Motorway, Nordcloud"
+            />
+            <Stat
+              value="10k+"
+              label="AI cases handled daily"
+              hint="95% accuracy · production agents"
+            />
+            <Stat
+              value="100+"
+              label="Engineers mentored"
+              hint="Across four orgs · eight years"
+            />
           </section>
         </Reveal>
 
-        <Reveal>
-          <section className="mt-20 grid gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]">
-            <article className="frame panel-grid p-6 sm:p-8">
-              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">
-                Featured impact
-              </div>
-              <h2 className="mt-4 max-w-[12ch] text-[clamp(2.4rem,5vw,4.8rem)] leading-[0.94]">
-                Faster transactions. Better rails. Less friction.
-              </h2>
-              <p className="mt-5 max-w-[60ch] text-base leading-8 text-fg/80">
-                At MoonPay, I focus on the hard middle layer between product ambition and system
-                reality: transaction speed, payment rails, balance architecture, and customer trust.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-2">
-                {["Consumer fintech", "Payments", "Reliability", "Mobile + Web"].map((item) => (
-                  <Tag key={item} tone="dim">
-                    {item}
-                  </Tag>
-                ))}
-              </div>
-            </article>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-              <article className="frame p-5 sm:p-6">
-                <div className="font-display text-4xl text-bright">8.5×</div>
-                <p className="mt-3 text-sm leading-7 text-fg/80">
-                  Faster Polygon transaction path after a targeted rebuild.
-                </p>
-              </article>
-              <article className="frame p-5 sm:p-6">
-                <div className="font-display text-4xl text-bright">+7%</div>
-                <p className="mt-3 text-sm leading-7 text-fg/80">
-                  Conversion improvement after decoupling auth concerns at Motorway.
-                </p>
-              </article>
-              <article className="frame p-5 sm:p-6">
-                <div className="font-display text-4xl text-bright">−40%</div>
-                <p className="mt-3 text-sm leading-7 text-fg/80">
-                  Lower MTTR through AI-assisted incident management workflows.
-                </p>
-              </article>
-            </div>
-          </section>
-        </Reveal>
-
-        <Reveal>
-          <section className="mt-20">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">
-                  Selected experience
-                </div>
-                <h2 className="mt-4 text-[clamp(2.4rem,5vw,4.8rem)] leading-[0.95]">
-                  Impact over job titles.
-                </h2>
-              </div>
-              <CRTLink href="/projects" className="font-mono text-[11px] uppercase tracking-[0.22em]">
-                View all work
-              </CRTLink>
-            </div>
-            <div className="mt-8 space-y-4">
+        {/* SELECTED WORK */}
+        <section className="pt-24 sm:pt-32">
+          <Reveal>
+            <SectionLabel
+              number="01"
+              title="Selected"
+              italic="work"
+              description="Impact over job titles. A handful of recent stints where I shipped something that moved a number."
+              action={<ArrowLink href="/projects">All work</ArrowLink>}
+            />
+          </Reveal>
+          <Reveal>
+            <div>
               {recentWork.map((w) => (
-                <article key={w.co} className="frame p-5 sm:p-6 lg:p-7">
-                  <div className="grid gap-4 lg:grid-cols-[120px_minmax(0,1fr)_260px] lg:items-start">
-                    <div className="font-mono text-[11px] uppercase tracking-[0.28em] text-dim">{w.year}</div>
-                    <div>
-                      <h3 className="text-3xl leading-none text-bright">{w.co}</h3>
-                      <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
-                        {w.role}
-                      </div>
-                      <ul className="mt-5 space-y-2 text-sm leading-7 text-fg/84">
-                        {w.pts.map((p) => (
-                          <li key={p} className="flex gap-3">
-                            <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 bg-accent" />
-                            <span>{p}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="flex flex-wrap content-start gap-2 lg:justify-end">
-                      {w.stack.map((item) => (
-                        <Tag key={item} tone="dim">
-                          {item}
-                        </Tag>
-                      ))}
-                    </div>
-                  </div>
-                </article>
+                <WorkRow key={w.company} item={w} />
               ))}
             </div>
-          </section>
-        </Reveal>
+          </Reveal>
+        </section>
 
-        <Reveal>
-          <section className="mt-20 grid gap-6 lg:grid-cols-2">
-            <div>
-              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">
-                In the wild
-              </div>
-              <h2 className="mt-4 max-w-[9ch] text-[clamp(2.4rem,5vw,4.8rem)] leading-[0.95]">
-                Shipped things people can point at.
-              </h2>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
+        {/* NOTABLE */}
+        <section className="pt-24 sm:pt-32">
+          <Reveal>
+            <SectionLabel
+              number="02"
+              title="In the"
+              italic="wild"
+              description="Ships, wins, side builds and posts that travelled."
+            />
+          </Reveal>
+          <Reveal>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
               <NotableCard
-                kind="ship"
-                title="Moonlog Vol. 02"
+                kind="shipped"
+                title="MoonLog — Vol 02"
                 href="https://www.linkedin.com/pulse/moonlog-volume-02-moonpay-vo1ae/"
                 meta="MoonPay · 2026"
-                description="Latest consumer-app release spanning redesigned buy and sell flows, faster Polygon transactions, rebuilt balance rails, and a refreshed UI system."
+                description="Latest consumer release: redesigned Buy/Sell, 8.5× faster Polygon, rebuilt Balance with ACH/SEPA/FPS, refreshed Liquid Glass UI."
                 stats={[
                   { label: "Polygon", value: "8.5×" },
-                  { label: "Rails", value: "ACH · SEPA · FPS" },
+                  { label: "Rails", value: "3" },
                 ]}
               />
               <NotableCard
                 kind="win"
-                title="AI Hackathon, 1st Place"
+                title="AI Hackathon — 1st place"
                 href="https://www.linkedin.com/posts/adam-ferguson-7259b6121_two-months-ago-aashir-javed-omer-bresinski-share-7437869877543129088-3Z8q"
-                meta="2026"
-                description="A winning AI product built from idea to hardware-backed demo in under 48 hours."
-                stats={[{ label: "Team", value: "2 engineers" }]}
-              />
-              <NotableCard
-                kind="post"
-                title="Grok Radio Concept"
-                href="https://x.com/aasjav/status/2013716104271536622"
-                meta="X · @aasjav"
-                description="A product concept exploring voice-first interaction and a radio-like interface for AI." 
+                meta="2026 · w/ Omer Bresinski"
+                description="Two engineers, one idea. Hardware to model to demo in under 48 hours."
+                stats={[{ label: "Place", value: "1st" }]}
               />
               <NotableCard
                 kind="build"
-                title="Whatify"
+                title="Whatify — financial simulation"
                 href="https://whatify.ai"
-                meta="Side build"
-                description="Scenario simulation for major life decisions, stress-tested across rates, costs, and long-range tradeoffs."
+                meta="Side build · 2026"
+                description="Stop guessing, start deciding. Side-by-side scenarios for life decisions — homes, careers, family — stress-tested against rate spikes."
                 stats={[
-                  { label: "Waitlist", value: "3.8k+" },
-                  { label: "Forecast", value: "5 years" },
+                  { label: "Waitlist", value: "3.8k" },
+                  { label: "Setup", value: "2m" },
+                  { label: "Forecast", value: "5y" },
                 ]}
               />
+              <NotableCard
+                kind="post"
+                title="Grok — radio product"
+                href="https://x.com/aasjav/status/2013716104271536622"
+                meta="X · @aasjav"
+                description="Spec and prototype for a Grok-powered radio interface. Voice as the new keyboard."
+              />
             </div>
-          </section>
-        </Reveal>
+          </Reveal>
+        </section>
 
-        <Reveal>
-          <section className="mt-20 grid gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+        {/* WRITING */}
+        <section className="pt-24 sm:pt-32">
+          <Reveal>
+            <SectionLabel
+              number="03"
+              title="Notes from"
+              italic="production"
+              description="AI in production, infra rot, full-stack reality. A few longer reads."
+              action={<ArrowLink href="/writing">All writing</ArrowLink>}
+            />
+          </Reveal>
+          <Reveal>
             <div>
-              <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">
-                Writing
-              </div>
-              <h2 className="mt-4 max-w-[9ch] text-[clamp(2.4rem,5vw,4.8rem)] leading-[0.95]">
-                Notes from production.
-              </h2>
-            </div>
-            <div className="space-y-3">
-              {recentPosts.map((p, i) => (
-                <article key={p.slug} className="frame p-5 sm:p-6">
-                  <div className="grid gap-3 sm:grid-cols-[52px_minmax(0,1fr)_auto] sm:items-center">
-                    <div className="font-mono text-[11px] uppercase tracking-[0.26em] text-dim">
-                      {String(i + 1).padStart(2, "0")}
-                    </div>
-                    <CRTLink href={`/writing/${p.slug}`} className="font-display text-2xl leading-tight text-bright no-underline hover:text-accent">
-                      {p.title}
-                    </CRTLink>
-                    <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-dim">
-                      {p.readingTime.replace(" min read", "m")}
-                    </div>
-                  </div>
-                </article>
+              {recentPosts.map((p) => (
+                <PostRow
+                  key={p.slug}
+                  href={`/writing/${p.slug}`}
+                  title={p.title}
+                  date={fmtDate(p.date)}
+                  readingTime={p.readingTime.replace(" min read", " min")}
+                  description={p.description}
+                  tags={p.tags}
+                  featured={p.featured}
+                />
               ))}
-              <div className="pt-2">
-                <CRTLink href="/writing" className="font-mono text-[11px] uppercase tracking-[0.22em]">
-                  Browse archive
-                </CRTLink>
-              </div>
             </div>
-          </section>
-        </Reveal>
+          </Reveal>
+        </section>
 
+        {/* CLOSING */}
         <Reveal>
-          <section className="mt-20 frame panel-grid p-6 sm:p-8 lg:p-10">
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-              <div>
-                <div className="font-mono text-[11px] uppercase tracking-[0.34em] text-dim">
-                  If you’re hiring for leverage
-                </div>
-                <h2 className="mt-4 max-w-[12ch] text-[clamp(2.6rem,5vw,5rem)] leading-[0.94]">
-                  Bring me the difficult product and platform problems.
-                </h2>
-                <p className="mt-5 max-w-[62ch] text-base leading-8 text-fg/80">
-                  Staff engineer role, founding engineer seat, or a sharp problem that needs speed,
-                  product judgment, and technical depth.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-3 lg:justify-end">
-                <PixelButton href="mailto:me@aashir.net" external>
-                  Email Aashir
-                </PixelButton>
-                <PixelButton href="/resume" variant="ghost">
-                  Read resume
-                </PixelButton>
-              </div>
+          <section className="pt-32 sm:pt-40 pb-8">
+            <p className="eyebrow mb-8">Let&rsquo;s talk</p>
+            <p className="display text-[clamp(2.5rem,7vw,5rem)] leading-[0.95] text-ink max-w-[18ch]">
+              Hiring staff?
+              <br />
+              <span className="display-italic text-ink-mute">
+                Shipping AI in production?
+              </span>
+            </p>
+            <p className="mt-8 text-ink-2 max-w-[44ch]">
+              I reply within 24 — 48 hours. Bring a problem, a half-formed idea,
+              or just say hello.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-3">
+              <LinkButton href="mailto:me@aashir.net">
+                me@aashir.net →
+              </LinkButton>
+              <LinkButton href="/resume" variant="ghost">
+                Read résumé
+              </LinkButton>
             </div>
           </section>
         </Reveal>
 
-        <PageFooter />
-      </CRTScreen>
+        <Footer />
+      </Container>
     </>
   );
 }

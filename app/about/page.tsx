@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {
   Container,
   Footer,
@@ -33,15 +32,22 @@ export default function About() {
       <Reveal>
         <section className="grid gap-5 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
           <div className="visual-card rounded-[36px] p-4">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] bg-ink">
-              <Image
-                src="/me.png"
-                alt="Aashir Javed"
-                fill
-                priority
-                className="object-cover grayscale transition-all duration-700 hover:grayscale-0"
-                sizes="(min-width: 1024px) 38vw, 90vw"
-              />
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] bg-ink p-6 text-paper">
+              <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-accent blur-3xl" />
+              <div className="absolute bottom-10 left-8 h-24 w-24 rounded-full border border-paper/20" />
+              <div className="relative z-10 flex h-full flex-col justify-between">
+                <div>
+                  <div className="mono text-[10px] uppercase tracking-[0.24em] text-paper/55">Aashir Javed</div>
+                  <div className="mt-4 display text-[clamp(3rem,10vw,7rem)] leading-[0.82]">
+                    Product<br />Platform<br />AI
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="h-20 rounded-2xl bg-paper/10" />
+                  <div className="h-20 rounded-2xl bg-accent" />
+                  <div className="h-20 rounded-2xl bg-paper/20" />
+                </div>
+              </div>
             </div>
           </div>
 

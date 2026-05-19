@@ -11,6 +11,7 @@ import {
   LinkButton,
   PostRow,
   Eyebrow,
+  Pill,
 } from "@/components/editorial";
 import { PersonSchema, WebsiteSchema } from "@/components/structured-data";
 import { blogPosts } from "@/data/blog-data";
@@ -20,75 +21,89 @@ const recentWork = [
     year: "now",
     company: "MoonPay",
     role: "Senior Engineer",
-    blurb: "Consumer crypto, payment rails, mobile/web flows.",
-    metrics: [
-      { label: "Polygon", value: "8.5×" },
-      { label: "Rails", value: "3" },
-    ],
+    blurb: "Consumer crypto product engineering across payment rails, transaction speed and mobile/web flows.",
+    metrics: [{ label: "Polygon", value: "8.5×" }],
     stack: ["react", "next", "go", "python", "aws"],
   },
   {
     year: "2024",
     company: "Motorway",
     role: "Core Engineering Lead",
-    blurb: "Platform primitives, auth, incidents, cost discipline.",
-    metrics: [
-      { label: "Conv", value: "+7%" },
-      { label: "MTTR", value: "−40%" },
-    ],
+    blurb: "Platform primitives, auth migration, incident workflows and cloud cost discipline.",
+    metrics: [{ label: "Conversion", value: "+7%" }],
     stack: ["go", "python", "aws", "llm"],
   },
   {
     year: "2022",
     company: "Deliveroo",
-    role: "Engineer · Customer Care",
-    blurb: "Production AI agents for high-volume support journeys.",
-    metrics: [
-      { label: "Cases/day", value: "10k+" },
-      { label: "Saved", value: "£2M" },
-    ],
+    role: "Customer Care Platform",
+    blurb: "Production AI agents for high-volume support journeys with human handoff and operational tooling.",
+    metrics: [{ label: "Cases/day", value: "10k+" }],
     stack: ["go", "react", "llm", "k8s"],
   },
 ];
 
-function HeroVisual() {
+const services = [
+  {
+    title: "Ship the product surface",
+    result: "Fast, clear flows",
+    body: "React/Next frontends tied to real backend constraints — not Figma theatre.",
+    tags: ["React", "Next.js", "UX systems"],
+  },
+  {
+    title: "Stabilise the platform",
+    result: "Less fire-fighting",
+    body: "Service boundaries, auth, observability, infra cost, incident workflows.",
+    tags: ["Go", "AWS", "Terraform"],
+  },
+  {
+    title: "Put AI into production",
+    result: "Useful automation",
+    body: "Agents, evals, RAG and workflow design where the business case survives contact with users.",
+    tags: ["LLMs", "Agents", "Evals"],
+  },
+];
+
+function ImpactLedger() {
+  const rows = [
+    ["MoonPay", "Polygon transaction path", "8.5× faster"],
+    ["Motorway", "Auth migration", "+7% conversion"],
+    ["Motorway", "AI incident workflows", "−40% MTTR"],
+    ["Deliveroo", "Support automation", "10k+ cases/day"],
+    ["Deliveroo", "Customer-care AI", "£2M saved"],
+  ];
+
   return (
-    <div className="visual-card relative min-h-[440px] rounded-[36px] p-4 sm:p-5">
-      <div className="orb right-8 top-10 h-20 w-20 opacity-80" />
-      <div className="orb bottom-20 left-8 h-8 w-8 bg-ok opacity-80" />
-      <div className="relative z-10 grid h-full content-between gap-4">
-        <div className="phone-shell ml-auto w-[62%] rounded-[30px] p-3 sm:w-[54%]">
-          <div className="rounded-[22px] bg-ink p-4 text-paper">
-            <div className="mono text-[10px] uppercase tracking-[0.2em] text-paper/45">MoonPay</div>
-            <div className="mt-8 display text-6xl leading-[0.8]">8.5×</div>
-            <div className="mt-2 text-xs text-paper/55">faster Polygon path</div>
-          </div>
+    <aside className="rounded-[28px] border border-rule-soft bg-surface/75 p-4 shadow-[0_24px_80px_rgba(24,22,20,0.06)] sm:p-5">
+      <div className="flex items-center justify-between border-b border-rule-soft pb-4">
+        <div>
+          <div className="mono text-[10px] uppercase tracking-[0.22em] text-ink-mute">Impact ledger</div>
+          <div className="mt-1 text-sm text-ink-2">Recent shipped outcomes</div>
         </div>
-
-        <div className="grid grid-cols-2 gap-3">
-          <div className="metric-tile rounded-3xl p-4">
-            <div className="display text-4xl leading-none">£7M+</div>
-            <div className="mt-2 mono text-[10px] uppercase tracking-[0.2em] text-ink-mute">saved</div>
-          </div>
-          <div className="metric-tile rounded-3xl p-4 translate-y-6">
-            <div className="display text-4xl leading-none">10k+</div>
-            <div className="mt-2 mono text-[10px] uppercase tracking-[0.2em] text-ink-mute">AI cases</div>
-          </div>
-        </div>
-
-        <div className="phone-shell w-[76%] rounded-[28px] p-4">
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-ok" />
-            <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink-mute">production systems</span>
-          </div>
-          <div className="mt-4 grid grid-cols-3 gap-2">
-            <div className="h-16 rounded-2xl bg-accent-soft" />
-            <div className="h-16 rounded-2xl bg-paper-2" />
-            <div className="h-16 rounded-2xl bg-ink" />
-          </div>
+        <div className="rounded-full bg-ok/10 px-3 py-1 mono text-[10px] uppercase tracking-[0.18em] text-ok">
+          verified
         </div>
       </div>
-    </div>
+
+      <div className="divide-y divide-rule-soft">
+        {rows.map(([company, work, result]) => (
+          <div key={`${company}-${work}`} className="grid grid-cols-[1fr_auto] gap-4 py-4">
+            <div>
+              <div className="mono text-[10px] uppercase tracking-[0.18em] text-ink-mute">{company}</div>
+              <div className="mt-1 text-sm text-ink">{work}</div>
+            </div>
+            <div className="display text-2xl leading-none text-ink sm:text-3xl">{result}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-4 rounded-2xl bg-paper-2 p-4">
+        <div className="mono text-[10px] uppercase tracking-[0.2em] text-ink-mute">Best fit</div>
+        <p className="mt-2 text-sm leading-relaxed text-ink-2">
+          Staff/founding engineer roles where product judgment, systems depth and AI production experience matter.
+        </p>
+      </div>
+    </aside>
   );
 }
 
@@ -111,31 +126,27 @@ export default function Home() {
       <PersonSchema />
       <WebsiteSchema />
       <Container size="wide">
-        <section className="grid gap-8 pb-16 sm:pb-24 lg:grid-cols-[minmax(0,0.95fr)_minmax(360px,0.65fr)] lg:items-end">
+        <section className="grid gap-8 pb-14 sm:pb-20 lg:grid-cols-[minmax(0,1fr)_440px] lg:items-end">
           <div>
             <Eyebrow className="mb-8">
               <span className="inline-flex items-center gap-2">
                 <span className="inline-block h-1.5 w-1.5 rounded-full bg-ok" aria-hidden />
-                London · available
+                London · available for staff/founding engineer roles
               </span>
             </Eyebrow>
-            <h1 className="display text-[clamp(4rem,18vw,11rem)] leading-[0.82] text-ink">
-              Build.
-              <br />
-              <span className="display-italic text-ink-mute">Ship.</span>
-              <br />
-              Scale.
+            <h1 className="display max-w-[9ch] text-[clamp(4rem,15vw,10.5rem)] leading-[0.84] text-ink">
+              Product engineer for hard systems.
             </h1>
-            <p className="lede mt-8 max-w-[22ch] text-ink">
-              Senior engineer for product systems, platform leverage and AI that works.
+            <p className="lede mt-8 max-w-[28ch] text-ink">
+              I ship product surfaces, platform foundations and AI workflows that move real numbers.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <LinkButton href="/contact">Get in touch →</LinkButton>
-              <LinkButton href="/projects" variant="ghost">View work</LinkButton>
+              <LinkButton href="/contact">Talk about a role →</LinkButton>
+              <LinkButton href="/projects" variant="ghost">See proof</LinkButton>
             </div>
           </div>
           <Reveal>
-            <HeroVisual />
+            <ImpactLedger />
           </Reveal>
         </section>
 
@@ -146,19 +157,46 @@ export default function Home() {
         </Reveal>
 
         <Reveal>
-          <section className="grid grid-cols-3 gap-3 py-12 sm:gap-8 sm:py-20">
+          <section className="grid grid-cols-3 gap-3 py-10 sm:gap-8 sm:py-16">
             <Stat value="£7M+" label="Saved" />
             <Stat value="10k+" label="AI cases/day" />
             <Stat value="100+" label="Mentored" />
           </section>
         </Reveal>
 
-        <section className="pt-10 sm:pt-20">
+        <section className="pt-8 sm:pt-16">
           <Reveal>
             <SectionLabel
               number="01"
-              title="Selected"
-              italic="work"
+              title="What I"
+              italic="do"
+              description="Useful work, not decorative engineering."
+            />
+          </Reveal>
+          <Reveal>
+            <div className="grid gap-4 md:grid-cols-3">
+              {services.map((service) => (
+                <article key={service.title} className="rounded-[24px] border border-rule-soft bg-surface/75 p-5 sm:p-6">
+                  <div className="display text-4xl leading-none text-accent">{service.result}</div>
+                  <h3 className="mt-6 display text-3xl leading-[0.95] text-ink">{service.title}</h3>
+                  <p className="mt-4 text-sm leading-relaxed text-ink-2">{service.body}</p>
+                  <div className="mt-5 flex flex-wrap gap-1.5">
+                    {service.tags.map((tag) => (
+                      <Pill key={tag}>{tag}</Pill>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </Reveal>
+        </section>
+
+        <section className="pt-20 sm:pt-24">
+          <Reveal>
+            <SectionLabel
+              number="02"
+              title="Recent"
+              italic="evidence"
               description="A few shipped systems. Numbers first."
               action={<ArrowLink href="/projects">All work</ArrowLink>}
             />
@@ -172,9 +210,9 @@ export default function Home() {
           </Reveal>
         </section>
 
-        <section className="pt-20 sm:pt-28">
+        <section className="pt-20 sm:pt-24">
           <Reveal>
-            <SectionLabel number="02" title="Live" italic="signals" description="Ships, wins, builds." />
+            <SectionLabel number="03" title="Public" italic="proof" description="External links, not mockups." />
           </Reveal>
           <Reveal>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -183,8 +221,8 @@ export default function Home() {
                 title="MoonLog Vol 02"
                 href="https://www.linkedin.com/pulse/moonlog-volume-02-moonpay-vo1ae/"
                 meta="MoonPay"
-                description="Buy/Sell, Polygon speed, Balance rails."
-                stats={[{ label: "Polygon", value: "8.5×" }]}
+                description="Consumer release covering Buy/Sell, Polygon speed and Balance rails."
+                stats={[{ label: "Polygon", value: "8.5×" }, { label: "Rails", value: "3" }]}
               />
               <NotableCard
                 kind="win"
@@ -213,10 +251,10 @@ export default function Home() {
           </Reveal>
         </section>
 
-        <section className="pt-20 sm:pt-28">
+        <section className="pt-20 sm:pt-24">
           <Reveal>
             <SectionLabel
-              number="03"
+              number="04"
               title="Writing"
               italic="notes"
               description="Short reads from production."
@@ -241,12 +279,11 @@ export default function Home() {
         </section>
 
         <Reveal>
-          <section className="py-24 sm:py-32">
-            <div className="visual-card rounded-[36px] p-6 sm:p-10">
-              <p className="eyebrow mb-6">Let’s talk</p>
-              <p className="display max-w-[12ch] text-[clamp(3rem,10vw,6rem)] leading-[0.9] text-ink">
-                Hard problem?
-                <span className="display-italic text-ink-mute"> Send it.</span>
+          <section className="py-20 sm:py-28">
+            <div className="rounded-[28px] border border-ink bg-ink p-6 text-paper sm:p-10">
+              <p className="mono text-[11px] uppercase tracking-[0.22em] text-paper/55">Next step</p>
+              <p className="mt-5 display max-w-[13ch] text-[clamp(3rem,9vw,6rem)] leading-[0.9]">
+                Bring me the difficult bit.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <LinkButton href="mailto:me@aashir.net">Email →</LinkButton>

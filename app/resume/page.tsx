@@ -15,10 +15,10 @@ const positions = [
     role: "Senior Software Engineer · Consumer Product",
     when: "Present · London",
     pts: [
+      "Refactored auth layer for cleaner, safer consumer product flows.",
+      "Championed practical AI adoption across engineering workflows.",
       "Shipping consumer crypto products at scale across iOS, Android and web.",
-      "Polygon transaction path → 8.5× faster after rebuild.",
-      "Balance experience rebuilt with ACH / SEPA / Faster Payments rails.",
-      "Buy/Sell screens redesigned · Liquid Glass UI refresh · onboarding rework.",
+      "Worked across product, platform, design, and security constraints.",
     ],
   },
   {

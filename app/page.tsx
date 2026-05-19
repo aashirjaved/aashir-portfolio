@@ -21,8 +21,8 @@ const recentWork = [
     year: "now",
     company: "MoonPay",
     role: "Senior Engineer",
-    blurb: "Consumer crypto product engineering across payment rails, transaction speed and mobile/web flows.",
-    metrics: [{ label: "Polygon", value: "8.5×" }],
+    blurb: "Refactored auth layer, championed AI adoption, and shipped consumer crypto product improvements across mobile/web.",
+    metrics: [{ label: "Auth", value: "refactor" }],
     stack: ["react", "next", "go", "python", "aws"],
   },
   {
@@ -66,7 +66,7 @@ const services = [
 
 function ImpactLedger() {
   const rows = [
-    ["MoonPay", "Polygon transaction path", "8.5× faster"],
+    ["MoonPay", "Auth layer", "refactored"],
     ["Motorway", "Auth migration", "+7% conversion"],
     ["Motorway", "AI incident workflows", "−40% MTTR"],
     ["Deliveroo", "Support automation", "10k+ cases/day"],
@@ -98,9 +98,9 @@ function ImpactLedger() {
       </div>
 
       <div className="mt-4 rounded-2xl bg-paper-2 p-4">
-        <div className="mono text-[10px] uppercase tracking-[0.2em] text-ink-mute">Best fit</div>
+        <div className="mono text-[10px] uppercase tracking-[0.2em] text-ink-mute">Where I add leverage</div>
         <p className="mt-2 text-sm leading-relaxed text-ink-2">
-          Staff/founding engineer roles where product judgment, systems depth and AI production experience matter.
+          Product judgment, systems depth and practical AI experience for complex engineering problems.
         </p>
       </div>
     </aside>
@@ -131,7 +131,7 @@ export default function Home() {
             <Eyebrow className="mb-8">
               <span className="inline-flex items-center gap-2">
                 <span className="inline-block h-1.5 w-1.5 rounded-full bg-ok" aria-hidden />
-                London · available for staff/founding engineer roles
+                London · product systems · platform · AI
               </span>
             </Eyebrow>
             <h1 className="display max-w-[9ch] text-[clamp(4rem,15vw,10.5rem)] leading-[0.84] text-ink">
@@ -141,7 +141,7 @@ export default function Home() {
               I ship product surfaces, platform foundations and AI workflows that move real numbers.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <LinkButton href="/contact">Talk about a role →</LinkButton>
+              <LinkButton href="/contact">Start a conversation →</LinkButton>
               <LinkButton href="/projects" variant="ghost">See proof</LinkButton>
             </div>
           </div>
@@ -159,7 +159,7 @@ export default function Home() {
         <Reveal>
           <section className="grid grid-cols-3 gap-3 py-10 sm:gap-8 sm:py-16">
             <Stat value="£7M+" label="Saved" />
-            <Stat value="10k+" label="AI cases/day" />
+            <Stat value="AI" label="Championed" />
             <Stat value="100+" label="Mentored" />
           </section>
         </Reveal>
@@ -221,8 +221,8 @@ export default function Home() {
                 title="MoonLog Vol 02"
                 href="https://www.linkedin.com/pulse/moonlog-volume-02-moonpay-vo1ae/"
                 meta="MoonPay"
-                description="Consumer release covering Buy/Sell, Polygon speed and Balance rails."
-                stats={[{ label: "Polygon", value: "8.5×" }, { label: "Rails", value: "3" }]}
+                description="Consumer release work plus auth-layer refactor and internal AI championing."
+                stats={[{ label: "Auth", value: "refactor" }, { label: "AI", value: "championed" }]}
               />
               <NotableCard
                 kind="win"

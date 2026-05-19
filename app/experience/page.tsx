@@ -18,14 +18,14 @@ const experiences: TimelineItem[] = [
     team: "Consumer Product",
     location: "London · Remote",
     description: [
+      "Refactored the auth layer for cleaner, safer consumer product flows",
+      "Championed practical AI adoption across engineering workflows",
       "Shipping consumer crypto across iOS, Android and web",
-      "Polygon transaction path — 8.5× faster after rebuild (Moonlog Vol 02)",
-      "Balance experience rebuilt with ACH / SEPA / Faster Payments rails",
-      "Refreshed Buy/Sell + Liquid Glass UI; tighter device security flows",
+      "Worked across product, platform, design, and security constraints",
     ],
     metrics: [
-      { label: "Polygon", value: "8.5×" },
-      { label: "Rails", value: "ACH·SEPA·FPS" },
+      { label: "Auth", value: "Refactor" },
+      { label: "AI", value: "Champion" },
       { label: "Surface", value: "iOS·Android·Web" },
     ],
     technologies: ["react", "next.js", "go", "python", "aws", "typescript", "ai"],
@@ -125,7 +125,7 @@ export default function Experience() {
         lede="A visual career map: product, platform, cloud and AI."
         meta={
           <div className="flex gap-3 flex-wrap">
-            <LinkButton href="/contact">Talk about a role →</LinkButton>
+            <LinkButton href="/contact">Start a conversation →</LinkButton>
             <LinkButton href="/resume" variant="ghost">
               Read résumé
             </LinkButton>

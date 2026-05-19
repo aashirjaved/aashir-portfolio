@@ -73,7 +73,7 @@ export function Footer() {
         </div>
         <div className="mono flex items-center gap-2">
           <span aria-hidden className="inline-block w-1.5 h-1.5 rounded-full bg-ok" />
-          Available · responds within 24–48h
+          Product systems · platform · AI
         </div>
       </div>
     </footer>

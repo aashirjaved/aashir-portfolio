@@ -7,7 +7,6 @@ import {
   PageHero,
   SectionLabel,
   Reveal,
-  Pill,
   EditorialLink,
 } from "@/components/editorial";
 import Newsletter from "@/components/newsletter";
@@ -42,24 +41,18 @@ const channels = [
   },
 ];
 
-const availability = [
+const context = [
   {
-    type: "Full-time roles",
-    status: "Open",
-    body: "Staff / senior / founding engineer at companies that ship.",
-    tone: "ok" as const,
+    type: "Product systems",
+    body: "Consumer flows, auth, payments, onboarding and product surfaces that need engineering judgment.",
   },
   {
-    type: "Consulting",
-    status: "Limited",
-    body: "Strategic technical consulting, AI integration, infra optimisation.",
-    tone: "accent" as const,
+    type: "Platform leverage",
+    body: "Service boundaries, reliability, observability, infra cost and incident workflows.",
   },
   {
-    type: "Speaking & mentoring",
-    status: "Open",
-    body: "Conferences, mentoring, technical guidance to growing teams.",
-    tone: "ok" as const,
+    type: "AI in production",
+    body: "Agents, evals, RAG, automation and workflow design that survive real users.",
   },
 ];
 
@@ -132,35 +125,21 @@ export default function Contact() {
         <Reveal>
           <SectionLabel
             number="02"
-            title="What I'm open"
-            italic="to"
+            title="Useful"
+            italic="context"
           />
         </Reveal>
         <Reveal>
           <div className="space-y-0">
-            {availability.map((a) => (
+            {context.map((item) => (
               <div
-                key={a.type}
-                className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-y-3 sm:gap-x-8 py-6 border-b border-rule-soft last:border-0"
+                key={item.type}
+                className="py-6 border-b border-rule-soft last:border-0"
               >
-                <div>
-                  <div className="display text-[clamp(1.25rem,2.4vw,1.75rem)] leading-tight text-ink">
-                    {a.type}
-                  </div>
-                  <p className="mt-2 text-ink-2">{a.body}</p>
+                <div className="display text-[clamp(1.25rem,2.4vw,1.75rem)] leading-tight text-ink">
+                  {item.type}
                 </div>
-                <div className="self-start sm:self-center">
-                  <Pill tone={a.tone}>
-                    <span
-                      className="mr-2 inline-block w-1.5 h-1.5 rounded-full"
-                      aria-hidden
-                      style={{
-                        background: a.tone === "ok" ? "rgb(var(--ok))" : "rgb(var(--accent))",
-                      }}
-                    />
-                    {a.status}
-                  </Pill>
-                </div>
+                <p className="mt-2 text-ink-2">{item.body}</p>
               </div>
             ))}
           </div>
@@ -248,7 +227,7 @@ export default function Contact() {
             51.5074° N · 0.1278° W · GMT/BST
           </p>
           <p className="mt-2 text-ink-2">
-            Open to remote and occasional travel.
+            Remote-first. Travel when it helps the work.
           </p>
         </section>
       </Reveal>

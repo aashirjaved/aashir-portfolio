@@ -38,17 +38,17 @@ const projects: Omit<ProjectCardProps, "number">[] = [
     period: "Present",
     status: "Production",
     description:
-      "Shipping consumer crypto products at scale across iOS, Android, and web. Buy/Sell, balances, payment rails, security.",
+      "Consumer product engineering across auth, mobile/web surfaces, AI adoption, and secure user flows.",
     details: [
-      "Polygon transaction path — 8.5× faster after rebuild",
-      "Balance experience rebuilt with ACH / SEPA / Faster Payments rails",
-      "Buy/Sell screens redesigned · Liquid Glass UI refresh",
-      "Tighter device security flows + onboarding rework",
+      "Refactored the auth layer to improve maintainability and product velocity",
+      "Championed practical AI adoption across engineering workflows",
+      "Improved secure consumer flows across mobile and web surfaces",
+      "Worked cross-functionally across product, design, and platform constraints",
     ],
     technologies: ["react", "next.js", "go", "python", "aws", "typescript"],
     metrics: [
-      { label: "Polygon", value: "8.5×" },
-      { label: "Rails", value: "ACH·SEPA·FPS" },
+      { label: "Auth", value: "Refactor" },
+      { label: "AI", value: "Champion" },
       { label: "Surface", value: "iOS·Android·Web" },
     ],
     featured: true,
@@ -230,7 +230,7 @@ export default function Projects() {
 
       <Reveal>
         <section className="pt-24 flex flex-wrap gap-3">
-          <LinkButton href="/contact">Talk about a role →</LinkButton>
+          <LinkButton href="/contact">Start a conversation →</LinkButton>
           <LinkButton href="/experience" variant="ghost">
             Career timeline
           </LinkButton>

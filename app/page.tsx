@@ -1,7 +1,6 @@
 import {
   Container,
   Footer,
-  PageHero,
   SectionLabel,
   Stat,
   WorkRow,
@@ -18,48 +17,85 @@ import { blogPosts } from "@/data/blog-data";
 
 const recentWork = [
   {
-    year: "2025 — now",
+    year: "now",
     company: "MoonPay",
     role: "Senior Engineer",
-    blurb:
-      "Shipping consumer crypto across iOS, Android and web. Rebuilt the Polygon transaction path 8.5× faster; reworked Balance with ACH, SEPA and Faster Payments rails.",
+    blurb: "Consumer crypto, payment rails, mobile/web flows.",
     metrics: [
       { label: "Polygon", value: "8.5×" },
-      { label: "Rails", value: "ACH·SEPA·FPS" },
+      { label: "Rails", value: "3" },
     ],
-    stack: ["react", "next.js", "go", "python", "aws"],
+    stack: ["react", "next", "go", "python", "aws"],
   },
   {
     year: "2024",
     company: "Motorway",
     role: "Core Engineering Lead",
-    blurb:
-      "Led the platform that every product team builds on. Decoupled auth pushed conversion +7%. LLM-assisted incidents cut MTTR by 40%. Trimmed 15% off the AWS bill.",
+    blurb: "Platform primitives, auth, incidents, cost discipline.",
     metrics: [
       { label: "Conv", value: "+7%" },
       { label: "MTTR", value: "−40%" },
-      { label: "AWS", value: "−15%" },
     ],
-    stack: ["go", "python", "react", "aws", "llm"],
+    stack: ["go", "python", "aws", "llm"],
   },
   {
     year: "2022",
     company: "Deliveroo",
     role: "Engineer · Customer Care",
-    blurb:
-      "Production AI agents handling 10k+ cases a day at 95% accuracy. Doubled CSAT, halved handling time, banked £2M in annual savings.",
+    blurb: "Production AI agents for high-volume support journeys.",
     metrics: [
-      { label: "CSAT", value: "2×" },
+      { label: "Cases/day", value: "10k+" },
       { label: "Saved", value: "£2M" },
     ],
     stack: ["go", "react", "llm", "k8s"],
   },
 ];
 
+function HeroVisual() {
+  return (
+    <div className="visual-card relative min-h-[440px] rounded-[36px] p-4 sm:p-5">
+      <div className="orb right-8 top-10 h-20 w-20 opacity-80" />
+      <div className="orb bottom-20 left-8 h-8 w-8 bg-ok opacity-80" />
+      <div className="relative z-10 grid h-full content-between gap-4">
+        <div className="phone-shell ml-auto w-[62%] rounded-[30px] p-3 sm:w-[54%]">
+          <div className="rounded-[22px] bg-ink p-4 text-paper">
+            <div className="mono text-[10px] uppercase tracking-[0.2em] text-paper/45">MoonPay</div>
+            <div className="mt-8 display text-6xl leading-[0.8]">8.5×</div>
+            <div className="mt-2 text-xs text-paper/55">faster Polygon path</div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div className="metric-tile rounded-3xl p-4">
+            <div className="display text-4xl leading-none">£7M+</div>
+            <div className="mt-2 mono text-[10px] uppercase tracking-[0.2em] text-ink-mute">saved</div>
+          </div>
+          <div className="metric-tile rounded-3xl p-4 translate-y-6">
+            <div className="display text-4xl leading-none">10k+</div>
+            <div className="mt-2 mono text-[10px] uppercase tracking-[0.2em] text-ink-mute">AI cases</div>
+          </div>
+        </div>
+
+        <div className="phone-shell w-[76%] rounded-[28px] p-4">
+          <div className="flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-ok" />
+            <span className="mono text-[10px] uppercase tracking-[0.2em] text-ink-mute">production systems</span>
+          </div>
+          <div className="mt-4 grid grid-cols-3 gap-2">
+            <div className="h-16 rounded-2xl bg-accent-soft" />
+            <div className="h-16 rounded-2xl bg-paper-2" />
+            <div className="h-16 rounded-2xl bg-ink" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const recentPosts = [...blogPosts]
     .sort((a, b) => (a.date < b.date ? 1 : -1))
-    .slice(0, 4);
+    .slice(0, 3);
 
   const fmtDate = (iso: string) => {
     const d = new Date(iso);
@@ -75,81 +111,60 @@ export default function Home() {
       <PersonSchema />
       <WebsiteSchema />
       <Container size="wide">
-        {/* HERO */}
-        <section className="pt-4 sm:pt-8 pb-20 sm:pb-28">
-          <Eyebrow className="mb-10">
-            <span className="inline-flex items-center gap-2">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-ok" aria-hidden />
-              Available · London
-            </span>
-          </Eyebrow>
-          <h1 className="display text-[clamp(3.5rem,13vw,10rem)] leading-[0.88] text-ink">
-            Aashir
-            <br />
-            <span className="display-italic text-ink-mute">Javed.</span>
-          </h1>
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-12 gap-8">
-            <p className="lede md:col-span-7 text-ink">
-              I&rsquo;m a senior software engineer building consumer products at
-              scale — and putting AI into the loop where it earns its keep.
+        <section className="grid gap-8 pb-16 sm:pb-24 lg:grid-cols-[minmax(0,0.95fr)_minmax(360px,0.65fr)] lg:items-end">
+          <div>
+            <Eyebrow className="mb-8">
+              <span className="inline-flex items-center gap-2">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-ok" aria-hidden />
+                London · available
+              </span>
+            </Eyebrow>
+            <h1 className="display text-[clamp(4rem,18vw,11rem)] leading-[0.82] text-ink">
+              Build.
+              <br />
+              <span className="display-italic text-ink-mute">Ship.</span>
+              <br />
+              Scale.
+            </h1>
+            <p className="lede mt-8 max-w-[22ch] text-ink">
+              Senior engineer for product systems, platform leverage and AI that works.
             </p>
-            <div className="md:col-span-4 md:col-start-9 self-end">
-              <p className="text-sm text-ink-mute leading-relaxed">
-                Currently at <span className="text-ink">MoonPay</span>. Eight
-                years, four companies, a lot of shipped pixels. Open to staff
-                and founding-engineer roles.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <LinkButton href="/contact">Get in touch →</LinkButton>
-                <LinkButton href="/projects" variant="ghost">
-                  See selected work
-                </LinkButton>
-              </div>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <LinkButton href="/contact">Get in touch →</LinkButton>
+              <LinkButton href="/projects" variant="ghost">View work</LinkButton>
             </div>
           </div>
+          <Reveal>
+            <HeroVisual />
+          </Reveal>
         </section>
 
         <Reveal>
-          <div className="border-y border-rule-soft py-10">
-            <p className="eyebrow mb-6">Worked with</p>
+          <div className="border-y border-rule-soft py-7 sm:py-9">
             <LogoMarquee />
           </div>
         </Reveal>
 
-        {/* STATS — editorial big numbers */}
         <Reveal>
-          <section className="py-20 sm:py-28 grid grid-cols-1 sm:grid-cols-3 gap-y-12 gap-x-10 border-b border-rule-soft">
-            <Stat
-              value="£7M+"
-              label="Saved through AI &amp; cloud"
-              hint="Across Deliveroo, Motorway, Nordcloud"
-            />
-            <Stat
-              value="10k+"
-              label="AI cases handled daily"
-              hint="95% accuracy · production agents"
-            />
-            <Stat
-              value="100+"
-              label="Engineers mentored"
-              hint="Across four orgs · eight years"
-            />
+          <section className="grid grid-cols-3 gap-3 py-12 sm:gap-8 sm:py-20">
+            <Stat value="£7M+" label="Saved" />
+            <Stat value="10k+" label="AI cases/day" />
+            <Stat value="100+" label="Mentored" />
           </section>
         </Reveal>
 
-        {/* SELECTED WORK */}
-        <section className="pt-24 sm:pt-32">
+        <section className="pt-10 sm:pt-20">
           <Reveal>
             <SectionLabel
               number="01"
               title="Selected"
               italic="work"
-              description="Impact over job titles. A handful of recent stints where I shipped something that moved a number."
+              description="A few shipped systems. Numbers first."
               action={<ArrowLink href="/projects">All work</ArrowLink>}
             />
           </Reveal>
           <Reveal>
-            <div>
+            <div className="grid gap-4 lg:grid-cols-3">
               {recentWork.map((w) => (
                 <WorkRow key={w.company} item={w} />
               ))}
@@ -157,69 +172,55 @@ export default function Home() {
           </Reveal>
         </section>
 
-        {/* NOTABLE */}
-        <section className="pt-24 sm:pt-32">
+        <section className="pt-20 sm:pt-28">
           <Reveal>
-            <SectionLabel
-              number="02"
-              title="In the"
-              italic="wild"
-              description="Ships, wins, side builds and posts that travelled."
-            />
+            <SectionLabel number="02" title="Live" italic="signals" description="Ships, wins, builds." />
           </Reveal>
           <Reveal>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <NotableCard
                 kind="shipped"
-                title="MoonLog — Vol 02"
+                title="MoonLog Vol 02"
                 href="https://www.linkedin.com/pulse/moonlog-volume-02-moonpay-vo1ae/"
-                meta="MoonPay · 2026"
-                description="Latest consumer release: redesigned Buy/Sell, 8.5× faster Polygon, rebuilt Balance with ACH/SEPA/FPS, refreshed Liquid Glass UI."
-                stats={[
-                  { label: "Polygon", value: "8.5×" },
-                  { label: "Rails", value: "3" },
-                ]}
+                meta="MoonPay"
+                description="Buy/Sell, Polygon speed, Balance rails."
+                stats={[{ label: "Polygon", value: "8.5×" }]}
               />
               <NotableCard
                 kind="win"
-                title="AI Hackathon — 1st place"
+                title="AI Hackathon"
                 href="https://www.linkedin.com/posts/adam-ferguson-7259b6121_two-months-ago-aashir-javed-omer-bresinski-share-7437869877543129088-3Z8q"
-                meta="2026 · w/ Omer Bresinski"
-                description="Two engineers, one idea. Hardware to model to demo in under 48 hours."
+                meta="2026"
+                description="Hardware to model to demo in 48 hours."
                 stats={[{ label: "Place", value: "1st" }]}
               />
               <NotableCard
                 kind="build"
-                title="Whatify — financial simulation"
+                title="Whatify"
                 href="https://whatify.ai"
-                meta="Side build · 2026"
-                description="Stop guessing, start deciding. Side-by-side scenarios for life decisions — homes, careers, family — stress-tested against rate spikes."
-                stats={[
-                  { label: "Waitlist", value: "3.8k" },
-                  { label: "Setup", value: "2m" },
-                  { label: "Forecast", value: "5y" },
-                ]}
+                meta="Side build"
+                description="Financial scenarios for real life decisions."
+                stats={[{ label: "Waitlist", value: "3.8k" }]}
               />
               <NotableCard
                 kind="post"
-                title="Grok — radio product"
+                title="Grok Radio"
                 href="https://x.com/aasjav/status/2013716104271536622"
-                meta="X · @aasjav"
-                description="Spec and prototype for a Grok-powered radio interface. Voice as the new keyboard."
+                meta="Prototype"
+                description="Voice-first product sketch."
               />
             </div>
           </Reveal>
         </section>
 
-        {/* WRITING */}
-        <section className="pt-24 sm:pt-32">
+        <section className="pt-20 sm:pt-28">
           <Reveal>
             <SectionLabel
               number="03"
-              title="Notes from"
-              italic="production"
-              description="AI in production, infra rot, full-stack reality. A few longer reads."
-              action={<ArrowLink href="/writing">All writing</ArrowLink>}
+              title="Writing"
+              italic="notes"
+              description="Short reads from production."
+              action={<ArrowLink href="/writing">Archive</ArrowLink>}
             />
           </Reveal>
           <Reveal>
@@ -231,8 +232,7 @@ export default function Home() {
                   title={p.title}
                   date={fmtDate(p.date)}
                   readingTime={p.readingTime.replace(" min read", " min")}
-                  description={p.description}
-                  tags={p.tags}
+                  tags={p.tags.slice(0, 2)}
                   featured={p.featured}
                 />
               ))}
@@ -240,28 +240,18 @@ export default function Home() {
           </Reveal>
         </section>
 
-        {/* CLOSING */}
         <Reveal>
-          <section className="pt-32 sm:pt-40 pb-8">
-            <p className="eyebrow mb-8">Let&rsquo;s talk</p>
-            <p className="display text-[clamp(2.5rem,7vw,5rem)] leading-[0.95] text-ink max-w-[18ch]">
-              Hiring staff?
-              <br />
-              <span className="display-italic text-ink-mute">
-                Shipping AI in production?
-              </span>
-            </p>
-            <p className="mt-8 text-ink-2 max-w-[44ch]">
-              I reply within 24 — 48 hours. Bring a problem, a half-formed idea,
-              or just say hello.
-            </p>
-            <div className="mt-10 flex flex-wrap gap-3">
-              <LinkButton href="mailto:me@aashir.net">
-                me@aashir.net →
-              </LinkButton>
-              <LinkButton href="/resume" variant="ghost">
-                Read résumé
-              </LinkButton>
+          <section className="py-24 sm:py-32">
+            <div className="visual-card rounded-[36px] p-6 sm:p-10">
+              <p className="eyebrow mb-6">Let’s talk</p>
+              <p className="display max-w-[12ch] text-[clamp(3rem,10vw,6rem)] leading-[0.9] text-ink">
+                Hard problem?
+                <span className="display-italic text-ink-mute"> Send it.</span>
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <LinkButton href="mailto:me@aashir.net">Email →</LinkButton>
+                <LinkButton href="/resume" variant="ghost">Résumé</LinkButton>
+              </div>
             </div>
           </section>
         </Reveal>

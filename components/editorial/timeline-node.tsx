@@ -12,70 +12,41 @@ export type TimelineItem = {
   technologies: string[];
 };
 
-export function TimelineNode({
-  item,
-  last,
-}: {
-  item: TimelineItem;
-  last: boolean;
-}) {
+export function TimelineNode({ item }: { item: TimelineItem; last: boolean }) {
+  const leadMetric = item.metrics?.[0];
+
   return (
-    <div className="relative pl-8 sm:pl-10 pb-16 last:pb-0">
-      {!last && (
-        <div
-          aria-hidden
-          className="absolute left-[6px] sm:left-[8px] top-3 bottom-0 w-px bg-rule"
-        />
-      )}
-      <div
-        aria-hidden
-        className="absolute left-0 top-2 w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-paper border-2 border-ink"
-      />
-
-      <div className="mono text-xs uppercase tracking-wider text-ink-mute mb-3">
-        {item.year} · {item.period}
-      </div>
-      <h3 className="display text-[clamp(1.75rem,4vw,2.75rem)] leading-[1.0] text-ink">
-        {item.company}{" "}
-        <span className="display-italic text-ink-mute">— {item.role}</span>
-      </h3>
-      <div className="mt-2 text-sm text-ink-mute flex flex-wrap gap-x-3 gap-y-1">
-        <span>{item.location}</span>
-        {item.team && (
-          <>
-            <span aria-hidden>·</span>
-            <span>{item.team}</span>
-          </>
-        )}
-      </div>
-
-      {item.metrics && item.metrics.length > 0 && (
-        <div className="mt-6 flex flex-wrap gap-x-8 gap-y-4">
-          {item.metrics.map((m) => (
-            <div key={m.label} className="flex items-baseline gap-2">
-              <span className="display text-2xl text-ink">{m.value}</span>
-              <span className="mono text-[11px] uppercase tracking-wider text-ink-mute">
-                {m.label}
-              </span>
-            </div>
-          ))}
+    <article className="visual-card rounded-[28px] p-4 sm:p-5">
+      <div className="relative z-10 grid gap-5 sm:grid-cols-[150px_1fr]">
+        <div className="relative min-h-[150px] overflow-hidden rounded-[22px] bg-ink p-5 text-paper">
+          <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-accent blur-2xl" />
+          <div className="relative z-10 flex h-full flex-col justify-between">
+            <span className="mono text-[10px] uppercase tracking-[0.22em] text-paper/55">{item.year}</span>
+            {leadMetric ? (
+              <div>
+                <div className="display text-5xl leading-none">{leadMetric.value}</div>
+                <div className="mono text-[10px] uppercase tracking-[0.18em] text-paper/55">{leadMetric.label}</div>
+              </div>
+            ) : null}
+          </div>
         </div>
-      )}
 
-      <ul className="mt-6 space-y-2 max-w-[62ch]">
-        {item.description.map((d) => (
-          <li key={d} className="text-ink-2 text-[0.95rem] leading-relaxed pl-5 relative">
-            <span aria-hidden className="absolute left-0 top-[0.6em] w-2.5 h-px bg-ink-faint" />
-            {d}
-          </li>
-        ))}
-      </ul>
-
-      <div className="mt-6 flex flex-wrap gap-1.5">
-        {item.technologies.map((t) => (
-          <Pill key={t}>{t}</Pill>
-        ))}
+        <div className="p-1 sm:p-2">
+          <div className="mono text-[11px] uppercase tracking-[0.18em] text-ink-mute">
+            {item.period} · {item.location}
+          </div>
+          <h3 className="mt-3 display text-[clamp(2rem,6vw,3.8rem)] leading-[0.9] text-ink">
+            {item.company}
+          </h3>
+          <div className="mt-2 mono text-[11px] uppercase tracking-[0.2em] text-accent">{item.role}</div>
+          <p className="mt-4 max-w-[38ch] text-sm leading-relaxed text-ink-2">{item.description[0]}</p>
+          <div className="mt-5 flex flex-wrap gap-1.5">
+            {item.technologies.slice(0, 5).map((t) => (
+              <Pill key={t}>{t}</Pill>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </article>
   );
 }

@@ -17,45 +17,42 @@ export function NotableCard({
   stats?: { label: string; value: string }[];
   className?: string;
 }) {
+  const firstStat = stats?.[0];
+
   return (
     <a
       href={href}
       target="_blank"
       rel="noreferrer"
       className={cn(
-        "group block py-7 border-t border-rule transition-colors hover:border-ink",
+        "visual-card group block rounded-[28px] p-4 sm:p-5 transition-transform duration-300 hover:-translate-y-1",
         className,
       )}
     >
-      <div className="flex items-center justify-between mb-3 text-xs">
-        <span className="mono uppercase tracking-wider text-ink-mute">
-          {kind}
-        </span>
-        {meta && (
-          <span className="mono text-ink-mute">{meta}</span>
-        )}
-      </div>
-      <h3 className="display text-[clamp(1.5rem,3.2vw,2.2rem)] leading-[1.05] text-ink group-hover:text-accent transition-colors">
-        {title}
-        <span aria-hidden className="inline-block ml-2 text-ink-faint group-hover:text-accent group-hover:translate-x-1 transition-transform">
-          ↗
-        </span>
-      </h3>
-      <p className="mt-4 text-ink-2 leading-relaxed max-w-[58ch]">
-        {description}
-      </p>
-      {stats && stats.length > 0 && (
-        <div className="mt-5 flex flex-wrap gap-x-8 gap-y-2">
-          {stats.map((s) => (
-            <div key={s.label} className="flex items-baseline gap-2">
-              <span className="display text-xl text-ink">{s.value}</span>
-              <span className="mono text-[11px] uppercase tracking-wider text-ink-mute">
-                {s.label}
-              </span>
-            </div>
-          ))}
+      <div className="relative z-10">
+        <div className="relative mb-5 flex aspect-[1.55] items-end overflow-hidden rounded-[22px] bg-ink p-5 text-paper">
+          <div className="absolute -right-12 -top-12 h-44 w-44 rounded-full bg-accent blur-2xl transition-transform duration-500 group-hover:scale-125" />
+          <div className="absolute bottom-8 left-6 h-20 w-20 rounded-full border border-paper/20" />
+          <div className="relative z-10 flex w-full items-end justify-between gap-4">
+            <span className="mono text-[10px] uppercase tracking-[0.24em] text-paper/60">{kind}</span>
+            {firstStat && (
+              <div className="text-right">
+                <div className="display text-5xl leading-none">{firstStat.value}</div>
+                <div className="mono text-[10px] uppercase tracking-[0.18em] text-paper/55">{firstStat.label}</div>
+              </div>
+            )}
+          </div>
         </div>
-      )}
+
+        <div className="flex items-center justify-between gap-3">
+          <span className="mono text-[11px] uppercase tracking-[0.18em] text-ink-mute">{meta}</span>
+          <span aria-hidden className="text-ink-faint transition-transform group-hover:translate-x-1 group-hover:text-accent">↗</span>
+        </div>
+        <h3 className="mt-3 display text-[clamp(1.8rem,7vw,3rem)] leading-[0.95] text-ink transition-colors group-hover:text-accent">
+          {title}
+        </h3>
+        <p className="mt-4 text-sm leading-relaxed text-ink-2">{description}</p>
+      </div>
     </a>
   );
 }

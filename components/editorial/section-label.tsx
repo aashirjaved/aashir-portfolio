@@ -36,7 +36,7 @@ export function SectionLabel({
         {action}
       </div>
       {description && (
-        <p className="mt-4 text-ink-2 max-w-[52ch] leading-relaxed">
+        <p className="mt-4 text-ink-2 max-w-[34ch] leading-relaxed">
           {description}
         </p>
       )}

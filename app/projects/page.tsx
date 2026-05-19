@@ -207,17 +207,17 @@ const projects: Omit<ProjectCardProps, "number">[] = [
 
 export default function Projects() {
   return (
-    <Container>
+    <Container size="wide">
       <PageHero
-        eyebrow={`${projects.length} case files`}
+        eyebrow={`${projects.length} ships`}
         number="W"
-        title="Selected"
-        italic="work."
-        lede="Shipped products, won hackathons, side builds. Metrics where they existed; honesty where they did not."
+        title="Proof"
+        italic="wall."
+        lede="Visual snapshots of shipped product, platform and AI work."
       />
 
       <Reveal>
-        <div>
+        <div className="grid gap-5">
           {projects.map((p, i) => (
             <ProjectCard
               key={p.title}

@@ -116,13 +116,13 @@ const experiences: TimelineItem[] = [
 
 export default function Experience() {
   return (
-    <Container>
+    <Container size="wide">
       <PageHero
         eyebrow="Career"
         number="E"
-        title="Eight years"
-        italic="in the loop."
-        lede="Four employers, three countries. Backend, infra, full-stack and lately a lot of LLMs in places they have to behave."
+        title="Impact"
+        italic="timeline."
+        lede="A visual career map: product, platform, cloud and AI."
         meta={
           <div className="flex gap-3 flex-wrap">
             <LinkButton href="/contact">Talk about a role →</LinkButton>
@@ -134,7 +134,7 @@ export default function Experience() {
       />
 
       <Reveal>
-        <div className="pt-8">
+        <div className="grid gap-5 pt-8">
           {experiences.map((e, i) => (
             <TimelineNode
               key={e.company + e.year}
@@ -147,9 +147,7 @@ export default function Experience() {
 
       <Reveal>
         <section className="pt-16">
-          <p className="text-ink-2">
-            Want the printable version? <ArrowLink href="/resume">Résumé</ArrowLink>
-          </p>
+          <ArrowLink href="/resume">Printable résumé →</ArrowLink>
         </section>
       </Reveal>
 

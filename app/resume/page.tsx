@@ -16,7 +16,7 @@ const positions = [
     when: "Present · London",
     pts: [
       "Refactored auth layer for cleaner, safer consumer product flows.",
-      "Championed practical AI adoption across engineering workflows.",
+      "Drove AI adoption across engineering workflows.",
       "Shipping consumer crypto products at scale across iOS, Android and web.",
       "Worked across product, platform, design, and security constraints.",
     ],
@@ -24,7 +24,7 @@ const positions = [
   {
     co: "Motorway",
     role: "Senior Backend Engineer · Core Engineering Lead",
-    when: "Jun 2024 — 2025 · London",
+    when: "Jun 2024 to 2025 · London",
     pts: [
       "Led Core Engineering: foundational, mission-critical services and architecture for product teams.",
       "Delivered Motorway Pro trade proposition → +15% platform volume.",
@@ -35,7 +35,7 @@ const positions = [
   {
     co: "Deliveroo",
     role: "Software Engineer II · Platform / Customer Care",
-    when: "May 2022 — Jun 2024 · London",
+    when: "May 2022 to Jun 2024 · London",
     pts: [
       "Led automated customer-care journey with agents, fine-tuned GenAI models and highly available Go APIs.",
       "Delivered 2× CSAT and reduced request handling time to 0.5×.",
@@ -46,17 +46,17 @@ const positions = [
   {
     co: "Zalando",
     role: "Software Engineer · Customer Fulfillment",
-    when: "Jan 2021 — May 2022 · Helsinki",
+    when: "Jan 2021 to May 2022 · Helsinki",
     pts: [
       "Owned inbound distribution centre gateway integrating warehouses with Zalando services.",
       "Implemented REST APIs and optimised database queries for 1000+ RPS gateway → −15% latency.",
-      "Ran integration workshops with third-party operation teams.",
+      "Ran integration workshops with partner operation teams.",
     ],
   },
   {
     co: "Nordcloud (IBM)",
     role: "Cloud Developer · Managed Services",
-    when: "Jan 2020 — Jan 2021 · Helsinki",
+    when: "Jan 2020 to Jan 2021 · Helsinki",
     pts: [
       "Migrated a major transport client from a PHP monolith to a service-based modern stack.",
       "Ensured smooth operation of managed client applications across cloud environments.",
@@ -66,7 +66,7 @@ const positions = [
   {
     co: "CARE",
     role: "Design Engineer · Industry 4.0 Automation",
-    when: "Feb 2017 — 2019",
+    when: "Feb 2017 to 2019",
     pts: [
       "Built cyber-physical systems adopted across industrial clients.",
       "Developed secured MQTT infrastructure for real-time machine-to-machine IoT communication.",
@@ -129,7 +129,7 @@ export default function Resume() {
                   <h3 className="display text-[clamp(1.4rem,2.8vw,2rem)] leading-tight text-ink">
                     {p.co}{" "}
                     <span className="display-italic text-ink-mute">
-                      — {p.role}
+                      · {p.role}
                     </span>
                   </h3>
                   <ul className="mt-4 space-y-2 max-w-[62ch]">
@@ -219,11 +219,11 @@ export default function Resume() {
         <Reveal>
           <ul className="space-y-3">
             {[
-              { href: "/about", label: "About — the longer story" },
+              { href: "/about", label: "About · the longer story" },
               { href: "/projects", label: "Selected work" },
               { href: "/experience", label: "Career timeline" },
-              { href: "/writing", label: "Writing — notes from production" },
-              { href: "/contact", label: "Contact — get in touch" },
+              { href: "/writing", label: "Writing · notes from production" },
+              { href: "/contact", label: "Contact · get in touch" },
             ].map((l) => (
               <li key={l.href}>
                 <EditorialLink href={l.href} variant="grow">

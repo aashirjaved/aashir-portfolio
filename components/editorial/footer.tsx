@@ -22,7 +22,7 @@ export function Footer() {
           <p className="display text-[clamp(2rem,5vw,3rem)] leading-[0.95] text-ink">
             Got a problem
             <br />
-            <span className="display-italic text-ink-mute">worth solving?</span>
+            <span className="display-italic text-ink-mute">worth owning?</span>
           </p>
           <Link
             href="mailto:me@aashir.net"
@@ -69,7 +69,7 @@ export function Footer() {
 
       <div className="mt-16 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-ink-mute">
         <div className="mono">
-          © {new Date().getFullYear()} Aashir Javed — London
+          © {new Date().getFullYear()} Aashir Javed · London
         </div>
         <div className="mono flex items-center gap-2">
           <span aria-hidden className="inline-block w-1.5 h-1.5 rounded-full bg-ok" />

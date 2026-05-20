@@ -12,10 +12,10 @@ import {
 const stack = ["go", "python", "typescript", "react", "next.js", "aws", "terraform", "k8s", "llms", "genai", "postgres", "mqtt"]; 
 
 const principles = [
-  ["Ship", "Production beats theatre."],
+  ["Field", "Start with the real workflow."],
+  ["Build", "Prototype where the users are."],
+  ["Harden", "Own reliability before scale."],
   ["Measure", "Numbers over adjectives."],
-  ["Simplify", "Legible systems survive."],
-  ["Compound", "AI only where it earns leverage."],
 ];
 
 export default function About() {
@@ -24,9 +24,9 @@ export default function About() {
       <PageHero
         eyebrow="About"
         number="01"
-        title="Operator"
+        title="Field"
         italic="profile."
-        lede="London-based senior engineer. Product, platform, AI."
+        lede="London-based engineer for product, platform and AI systems."
       />
 
       <Reveal>
@@ -39,7 +39,7 @@ export default function About() {
                 <div>
                   <div className="mono text-[10px] uppercase tracking-[0.24em] text-paper/55">Aashir Javed</div>
                   <div className="mt-4 display text-[clamp(3rem,10vw,7rem)] leading-[0.82]">
-                    Product<br />Platform<br />AI
+                    Field<br />Product<br />AI
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
@@ -62,7 +62,7 @@ export default function About() {
             </div>
             <div className="visual-card rounded-[30px] p-6 sm:col-span-2">
               <p className="display text-[clamp(2.2rem,7vw,5.5rem)] leading-[0.92]">
-                Infrastructure-minded full-stack engineer for marketplaces, cloud and AI systems.
+                I work close to users, then build the product and platform pieces needed to solve the problem.
               </p>
               <div className="mt-7 flex flex-wrap gap-3">
                 <LinkButton href="/contact">Contact →</LinkButton>

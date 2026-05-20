@@ -11,7 +11,7 @@ export default function NotFound() {
           <span className="display-italic text-ink-mute">Not found.</span>
         </h1>
         <p className="lede mt-10 max-w-[36ch] text-ink-2 font-light">
-          The page you&rsquo;re looking for doesn&rsquo;t exist — or has been
+          The page you&rsquo;re looking for doesn&rsquo;t exist, or has been
           renamed since you last visited.
         </p>
         <div className="mt-12 flex flex-wrap gap-3">

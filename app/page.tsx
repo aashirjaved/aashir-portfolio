@@ -21,7 +21,7 @@ const recentWork = [
     year: "now",
     company: "MoonPay",
     role: "Senior Engineer",
-    blurb: "Refactored auth layer, championed AI adoption, and shipped consumer crypto product improvements across mobile/web.",
+    blurb: "Refactored auth layer, drove AI adoption, and shipped consumer crypto improvements across mobile and web.",
     metrics: [{ label: "Auth", value: "refactor" }],
     stack: ["react", "next", "go", "python", "aws"],
   },
@@ -45,22 +45,22 @@ const recentWork = [
 
 const services = [
   {
-    title: "Ship the product surface",
-    result: "Fast, clear flows",
-    body: "React/Next frontends tied to real backend constraints — not Figma theatre.",
-    tags: ["React", "Next.js", "UX systems"],
+    title: "Find the real workflow",
+    result: "Customer context",
+    body: "Work with users and operators to understand where the system actually breaks.",
+    tags: ["Discovery", "Support", "Ops"],
   },
   {
-    title: "Stabilise the platform",
-    result: "Less fire-fighting",
-    body: "Core services, AuthN/AuthZ separation, observability, infra cost, incident workflows.",
-    tags: ["Go", "AWS", "Terraform"],
+    title: "Build the working wedge",
+    result: "Prototype to prod",
+    body: "Turn the first useful version into a product surface, API or internal tool people can use.",
+    tags: ["React", "Go", "Python"],
   },
   {
-    title: "Put AI into production",
-    result: "Useful automation",
-    body: "Fine-tuned GenAI, agents, evals and workflow design where the business case survives users.",
-    tags: ["LLMs", "Agents", "Evals"],
+    title: "Make it reliable",
+    result: "Evals and infra",
+    body: "Add auth, observability, evaluation loops and operational ownership before scale.",
+    tags: ["Evals", "AWS", "Terraform"],
   },
 ];
 
@@ -136,10 +136,10 @@ export default function Home() {
               </span>
             </Eyebrow>
             <h1 className="display max-w-[9ch] text-[clamp(4rem,15vw,10.5rem)] leading-[0.84] text-ink">
-              Product engineer for hard systems.
+              Forward deployed engineer for AI products.
             </h1>
             <p className="lede mt-8 max-w-[28ch] text-ink">
-              Infrastructure/backend-focused full-stack engineer shipping marketplaces, cloud systems and AI workflows that move real numbers.
+              I work with teams close to the problem, turn ambiguity into working systems, and carry prototypes through production.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <LinkButton href="/contact">Start a conversation →</LinkButton>
@@ -157,7 +157,7 @@ export default function Home() {
               <p className="mono text-[11px] uppercase tracking-[0.22em] text-ink-mute">
                 Experience across
               </p>
-              <p className="hidden text-sm text-ink-mute sm:block">Fintech, marketplaces, logistics, fashion commerce, enterprise cloud.</p>
+              <p className="hidden text-sm text-ink-mute sm:block">Fintech, marketplaces, logistics, fashion commerce and enterprise cloud.</p>
             </div>
             <LogoMarquee />
           </div>
@@ -177,7 +177,7 @@ export default function Home() {
               number="01"
               title="What I"
               italic="do"
-              description="Useful work, not decorative engineering."
+              description="Field work from problem to production."
             />
           </Reveal>
           <Reveal>
@@ -204,7 +204,7 @@ export default function Home() {
               number="02"
               title="Recent"
               italic="evidence"
-              description="A few shipped systems. Numbers first."
+              description="Recent work with measurable outcomes."
               action={<ArrowLink href="/projects">All work</ArrowLink>}
             />
           </Reveal>
@@ -219,7 +219,7 @@ export default function Home() {
 
         <section className="pt-20 sm:pt-24">
           <Reveal>
-            <SectionLabel number="03" title="Public" italic="proof" description="External links, not mockups." />
+            <SectionLabel number="03" title="Public" italic="proof" description="Links, launches and public artifacts." />
           </Reveal>
           <Reveal>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -228,8 +228,8 @@ export default function Home() {
                 title="MoonLog Vol 02"
                 href="https://www.linkedin.com/pulse/moonlog-volume-02-moonpay-vo1ae/"
                 meta="MoonPay"
-                description="Consumer release work plus auth-layer refactor and internal AI championing."
-                stats={[{ label: "Auth", value: "refactor" }, { label: "AI", value: "championed" }]}
+                description="Consumer release work, auth-layer refactor and AI adoption."
+                stats={[{ label: "Auth", value: "refactor" }, { label: "AI", value: "adopted" }]}
               />
               <NotableCard
                 kind="win"

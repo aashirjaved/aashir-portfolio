@@ -16,7 +16,7 @@ const channels = [
     label: "Email",
     value: "me@aashir.net",
     href: "mailto:me@aashir.net",
-    note: "Best route. Reply in 24 — 48h.",
+    note: "Best route. Reply in 24 to 48h.",
   },
   {
     label: "LinkedIn",
@@ -37,14 +37,14 @@ const channels = [
     value: "@aasjav",
     href: "https://x.com/aasjav",
     external: true,
-    note: "Half-formed thoughts in real time.",
+    note: "Notes and product sketches.",
   },
 ];
 
 const context = [
   {
     type: "Product systems",
-    body: "Consumer flows, auth, payments, onboarding and product surfaces that need engineering judgment.",
+    body: "Consumer flows, auth, payments, onboarding and product surfaces with real constraints."
   },
   {
     type: "Platform leverage",
@@ -52,7 +52,7 @@ const context = [
   },
   {
     type: "AI in production",
-    body: "Agents, evals, RAG, automation and workflow design that survive real users.",
+    body: "Agents, evals, RAG, automation and workflow design tied to operational reality."
   },
 ];
 
@@ -66,7 +66,7 @@ export default function Contact() {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const body = encodeURIComponent(
-      `From: ${name} <${email}>\n\n${message}\n\n— sent via aashir.net`,
+      `From: ${name} <${email}>\n\n${message}\n\nSent via aashir.net`,
     );
     const subj = encodeURIComponent(subject || "Hello from aashir.net");
     window.location.href = `mailto:me@aashir.net?subject=${subj}&body=${body}`;
@@ -78,9 +78,9 @@ export default function Contact() {
       <PageHero
         eyebrow="Contact"
         number="C"
-        title="Let's"
-        italic="talk."
-        lede="Four reliable channels and a form. Pick whichever feels right — they all reach me."
+        title="Send"
+        italic="context."
+        lede="Send context, a problem statement, or a system worth improving."
       />
 
       <section className="pt-8">
@@ -150,9 +150,9 @@ export default function Contact() {
         <Reveal>
           <SectionLabel
             number="03"
-            title="Or send a"
+            title="Send a"
             italic="message"
-            description="Opens your mail client with a fully composed draft — no third-party in the middle."
+            description="Opens your mail client with the message included."
           />
         </Reveal>
         <Reveal>

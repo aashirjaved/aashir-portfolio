@@ -33,7 +33,7 @@ const projects: Omit<ProjectCardProps, "number">[] = [
     link: { href: "/godzilla/", label: "▶ Play the game" },
   },
   {
-    title: "MoonPay Consumer App — Product Engineering",
+    title: "MoonPay Consumer App · Product Engineering",
     company: "MoonPay",
     period: "Present",
     status: "Production",
@@ -41,7 +41,7 @@ const projects: Omit<ProjectCardProps, "number">[] = [
       "Consumer product engineering across auth, mobile/web surfaces, AI adoption, and secure user flows.",
     details: [
       "Refactored the auth layer to improve maintainability and product velocity",
-      "Championed practical AI adoption across engineering workflows",
+      "Drove AI adoption across engineering workflows",
       "Improved secure consumer flows across mobile and web surfaces",
       "Worked cross-functionally across product, design, and platform constraints",
     ],
@@ -54,12 +54,12 @@ const projects: Omit<ProjectCardProps, "number">[] = [
     featured: true,
   },
   {
-    title: "Whatify — Financial Simulation",
+    title: "Whatify · Financial Simulation",
     company: "Side build",
-    period: "2026 — Present",
+    period: "2026 to Present",
     status: "Beta",
     description:
-      "Stop guessing, start deciding. Side-by-side scenario simulation for major life decisions — homes, careers, family — stress-tested against rate spikes and cost overruns.",
+      "Side-by-side scenario simulation for major life decisions, stress tested against rate spikes and cost overruns.",
     details: [
       "Five-year net-worth projections: best / expected / worst case",
       "Stress testing against rate spikes and overruns",
@@ -75,15 +75,15 @@ const projects: Omit<ProjectCardProps, "number">[] = [
     featured: true,
   },
   {
-    title: "AI Hackathon — 1st place",
+    title: "AI Hackathon · 1st place",
     company: "w/ Omer Bresinski",
     period: "2026",
     status: "Beta",
     description:
-      "Won an AI hackathon over a weekend. Two engineers, one idea, hardware → model → demo in under 48 hours.",
+      "Won an AI hackathon over a weekend. Two engineers, one idea, hardware to model to demo in under 48 hours.",
     details: [
       "End-to-end build under tight time pressure",
-      "Cross-stack: device, backend, model, UI",
+      "Cross-stack device, backend, model and UI",
       "Wrote spec, prototyped and demoed live",
     ],
     technologies: ["python", "ai", "next.js"],
@@ -91,7 +91,7 @@ const projects: Omit<ProjectCardProps, "number">[] = [
     featured: true,
   },
   {
-    title: "Grok — Radio Product",
+    title: "Grok · Radio Product",
     company: "Side prototype",
     period: "2026",
     status: "Beta",
@@ -107,7 +107,7 @@ const projects: Omit<ProjectCardProps, "number">[] = [
   {
     title: "AI-Powered Customer Care",
     company: "Deliveroo",
-    period: "2022 — 2024",
+    period: "2022 to 2024",
     status: "Production",
     description:
       "Automated customer-care journey using agents, fine-tuned GenAI models and highly available Go APIs.",
@@ -128,7 +128,7 @@ const projects: Omit<ProjectCardProps, "number">[] = [
   {
     title: "Core Engineering Infrastructure",
     company: "Motorway",
-    period: "2024 — 2026",
+    period: "2024 to 2025",
     status: "Production",
     description:
       "Foundational Core Engineering services and architecture for product teams across Motorway.",
@@ -149,14 +149,14 @@ const projects: Omit<ProjectCardProps, "number">[] = [
   {
     title: "Warehouse Gateway",
     company: "Zalando",
-    period: "2021 — 2022",
+    period: "2021 to 2022",
     status: "Production",
     description:
       "Owned the inbound distribution centre gateway connecting warehouse operations with Zalando services and infrastructure.",
     details: [
       "Implemented REST APIs and optimised database queries for 1000+ RPS traffic",
       "Reduced gateway latency by 15%",
-      "Ran integration workshops with third-party operation teams",
+      "Ran integration workshops with partner operation teams",
       "Operated production monitoring with Grafana, Scalyr and alerting",
     ],
     technologies: ["java", "typescript", "react", "postgres", "docker", "k8s", "aws", "grafana"],
@@ -169,7 +169,7 @@ const projects: Omit<ProjectCardProps, "number">[] = [
   {
     title: "Transport Client Cloud Modernisation",
     company: "Nordcloud / IBM",
-    period: "2020 — 2021",
+    period: "2020 to 2021",
     status: "Production",
     description:
       "Cloud managed services work migrating a major transport client from a PHP monolith to a modern services-based stack.",
@@ -188,7 +188,7 @@ const projects: Omit<ProjectCardProps, "number">[] = [
   {
     title: "Industry 4.0 Cyber-Physical Systems",
     company: "CARE",
-    period: "2017 — 2019",
+    period: "2017 to 2019",
     status: "Production",
     description:
       "Automation and IoT systems for Industry 4.0 manufacturing environments, later recognised with Pakistan’s P@SHA ICT Award.",
@@ -207,7 +207,7 @@ const projects: Omit<ProjectCardProps, "number">[] = [
   {
     title: "Event-Driven E-Commerce Platform",
     company: "Freelance",
-    period: "2019 — 2020",
+    period: "2019 to 2020",
     status: "Sunset",
     description:
       "Scalable e-commerce: high-volume transactions, real-time inventory, personalised recommendations.",
@@ -229,11 +229,11 @@ export default function Projects() {
   return (
     <Container size="wide">
       <PageHero
-        eyebrow={`${projects.length} ships`}
+        eyebrow={`${projects.length} selected builds`}
         number="W"
-        title="Proof"
-        italic="wall."
-        lede="Visual snapshots of shipped product, platform and AI work."
+        title="Field"
+        italic="work."
+        lede="Product, platform, cloud and AI work with concrete outcomes."
       />
 
       <Reveal>

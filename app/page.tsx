@@ -82,9 +82,9 @@ function SignalPortrait() {
             fill
             priority
             sizes="(min-width: 1024px) 420px, 100vw"
-            className="object-cover object-[50%_20%] grayscale brightness-[0.72] contrast-[1.75] sm:object-center"
+            className="object-cover object-[50%_20%] contrast-[1.05] saturate-[1.08] sm:object-center"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,18,16,0.08)_0%,rgba(13,18,16,0.12)_38%,rgba(13,18,16,0.9)_100%),linear-gradient(90deg,rgba(231,73,40,0.38),transparent_42%,rgba(22,150,111,0.28))]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,18,16,0)_0%,rgba(13,18,16,0.04)_38%,rgba(13,18,16,0.58)_100%),linear-gradient(90deg,rgba(231,73,40,0.12),transparent_42%,rgba(22,150,111,0.1))]" />
           <div className="absolute left-4 top-4 mono text-[10px] uppercase tracking-[0.24em] text-paper/70">
             Aashir Javed / Field log
           </div>

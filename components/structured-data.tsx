@@ -34,6 +34,8 @@ export function PersonSchema() {
       type="Person"
       data={{
         name: "Aashir Javed",
+        givenName: "Aashir",
+        familyName: "Javed",
         url: "https://aashir.net",
         image: "/me.png",
         jobTitle: "Senior Software Engineer",
@@ -41,12 +43,52 @@ export function PersonSchema() {
           "@type": "Organization",
           name: "MoonPay",
         },
+        alumniOf: [
+          { "@type": "Organization", name: "MoonPay" },
+          { "@type": "Organization", name: "Motorway" },
+          { "@type": "Organization", name: "Deliveroo" },
+          { "@type": "Organization", name: "Zalando" },
+          { "@type": "Organization", name: "IBM" },
+          { "@type": "Organization", name: "Nordcloud" },
+        ],
         sameAs: [
           "https://github.com/aashirjaved",
           "https://www.linkedin.com/in/aashirjaved",
           "https://x.com/aasjav",
         ],
-        description: "Senior software engineer shipping products at scale and building solutions to complex problems. AI in the loop where it earns its keep.",
+        hasOccupation: {
+          "@type": "Occupation",
+          name: "Senior Software Engineer",
+          occupationLocation: { "@type": "City", name: "London" },
+          skills:
+            "Embedding inside customer engineering teams, shipping agentic AI into production codebases, prompt engineering on live customer traffic, building evals against real production data, Model Context Protocol servers, sub-agents and agent skills, retrieval-augmented generation, fine-tuning generative models, tool use and function calling, production hardening of LLM systems, latency and cost optimisation under real load, on-call ownership and incident response, OAuth2 and identity flows, distributed systems at scale, AWS, Terraform, Kubernetes, Go, Python, TypeScript, React, Next.js, observability and runbook authorship, hand-off of evals and operational knowledge to customer teams",
+          responsibilities:
+            "Embeds inside customer engineering organisations to ship agentic AI features in their production codebases. Runs eval-driven development against real customer traffic. Iterates on prompts, tools and orchestration on live data. Owns the work that turns a working demo into a system that survives production: latency budgets, cost per request, eval regressions, security review, on-call rotation. Transfers eval suites, runbooks and the operating knowledge of the system to the customer team at hand-off.",
+        },
+        knowsAbout: [
+          "Embedded engineering engagements inside customer codebases",
+          "Shipping agentic AI features into production",
+          "Prompt engineering and tool-calling iteration on live customer data",
+          "Eval-driven development against real production traffic",
+          "Model Context Protocol (MCP) servers and integration",
+          "Sub-agents, agent skills and agent orchestration patterns",
+          "Retrieval-augmented generation (RAG) on customer corpora",
+          "Fine-tuning generative models for vertical workflows",
+          "LLM observability, regression detection and drift monitoring",
+          "Production hardening of nondeterministic AI systems",
+          "Latency, cost and throughput optimisation of inference workloads",
+          "Security review remediation for AI features",
+          "OAuth2, SSO, AuthN/AuthZ in regulated environments",
+          "Distributed systems, queueing and event-driven architectures",
+          "AWS, Terraform, Kubernetes, infrastructure as code",
+          "Go, Python, TypeScript, React, Next.js, Node, Java",
+          "On-call rotation, incident response and SEV gamedays",
+          "Runbook authorship and operational hand-off to customer teams",
+          "Demo-to-production hardening of AI prototypes",
+          "Working alongside Anthropic Claude, OpenAI and Cursor in customer workflows",
+        ],
+        description:
+          "Senior engineer specialising in agentic AI shipped inside customer production environments. Eight years across MoonPay, Motorway, Deliveroo, Zalando and IBM/Nordcloud embedding with engineering teams, owning evals on real traffic, hardening prototypes past demo day, and transferring eval suites and runbooks back to the customer at hand-off. London-based, remote-friendly, ~25% travel.",
       }}
     />
   );
@@ -58,9 +100,12 @@ export function WebsiteSchema() {
     <JsonLd
       type="WebSite"
       data={{
-        name: "Aashir Javed | Software Engineer",
+        name: "Aashir Javed | Senior Software Engineer",
         url: "https://aashir.net",
-        description: "Senior software engineer specializing in full-stack development, AI/ML integration, and cloud infrastructure.",
+        description:
+          "Portfolio of Aashir Javed — senior engineer shipping agentic AI inside customer production environments. Evidence of embedded engagements, eval-driven development, MCP servers, sub-agents, and demo-to-production hand-offs.",
+        keywords:
+          "embedded engineering, agentic AI, LLM evals, MCP servers, sub-agents, retrieval-augmented generation, fine-tuning, production AI, customer infrastructure, prompt engineering on live data, demo-to-production, AI hand-off, AWS, Go, Python, TypeScript",
         author: {
           "@type": "Person",
           name: "Aashir Javed",

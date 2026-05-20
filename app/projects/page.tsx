@@ -33,17 +33,17 @@ const projects: Omit<ProjectCardProps, "number">[] = [
     link: { href: "/godzilla/", label: "▶ Play the game" },
   },
   {
-    title: "MoonPay Consumer App · Product Engineering",
+    title: "MoonPay Consumer App · Embedded Product Engineering",
     company: "MoonPay",
     period: "Present",
     status: "Production",
     description:
-      "Consumer product engineering across auth, mobile/web surfaces, AI adoption, and secure user flows.",
+      "Embedded with consumer product teams. Refactored auth, drove AI adoption inside the codebase, and shipped secure user flows across mobile and web — in the repo, on the on-call rotation.",
     details: [
-      "Refactored the auth layer to improve maintainability and product velocity",
-      "Drove AI adoption across engineering workflows",
-      "Improved secure consumer flows across mobile and web surfaces",
-      "Worked cross-functionally across product, design, and platform constraints",
+      "Refactored the auth layer in production code to lift maintainability and product velocity",
+      "Drove agentic AI adoption across engineering workflows — patterns, evals, internal tooling",
+      "Shipped secure consumer flows across mobile and web surfaces alongside product and platform teams",
+      "Operated as the bridge between product, design, security and platform constraints",
     ],
     technologies: ["react", "next.js", "go", "python", "aws", "typescript"],
     metrics: [
@@ -105,17 +105,17 @@ const projects: Omit<ProjectCardProps, "number">[] = [
     technologies: ["ai", "audio", "next.js"],
   },
   {
-    title: "AI-Powered Customer Care",
+    title: "Agentic Customer Care · Shipped in Production",
     company: "Deliveroo",
     period: "2022 to 2024",
     status: "Production",
     description:
-      "Automated customer-care journey using agents, fine-tuned GenAI models and highly available Go APIs.",
+      "Built and shipped an agentic customer-care system inside a three-sided marketplace. Agents, fine-tuned generative models, evals on real ticket traffic, and Go services that survived peak load — handed off to the platform team with runbooks.",
     details: [
-      "Led ideation and delivery from workflow design to production rollout",
-      "Delivered 2× CSAT and reduced request handling time to 0.5×",
-      "Maintained frontend/backend microservices for calls, chats, credits and refunds across a three-sided marketplace",
-      "Organised SEV simulation gamedays and trained 100+ engineers in on-call procedures",
+      "Ran the whole arc — workflow design, prototype, production hardening, hand-off",
+      "Iterated prompts, tools and orchestration against real ticket data — 2× CSAT, request handling cut in half",
+      "Maintained frontend and backend services for calls, chats, credits and refunds across the marketplace",
+      "Ran SEV simulation gamedays and trained 100+ engineers on the on-call paths the system lived behind",
     ],
     technologies: ["react", "go", "python", "llm fine-tune", "postgres", "k8s"],
     metrics: [
@@ -126,12 +126,12 @@ const projects: Omit<ProjectCardProps, "number">[] = [
     featured: true,
   },
   {
-    title: "Core Engineering Infrastructure",
+    title: "Core Engineering · Embedded with Product Teams",
     company: "Motorway",
     period: "2024 to 2025",
     status: "Production",
     description:
-      "Foundational Core Engineering services and architecture for product teams across Motorway.",
+      "Embedded across product teams as the engineering lead for foundational services. Shipped the Motorway Pro trade proposition, untangled identity, attacked AWS cost — proposal to production, hardening to hand-off.",
     details: [
       "Led delivery of Motorway Pro trade proposition → +15% platform volume",
       "Identified critical auth issues and led migration to decoupled AuthN/AuthZ services → +7% top-of-funnel conversion",
@@ -233,7 +233,7 @@ export default function Projects() {
         number="W"
         title="Field"
         italic="work."
-        lede="Product, platform, cloud and AI work with concrete outcomes."
+        lede="Builds shipped inside customer codebases. Each one ran in production, against real users, with the eval suite and runbooks left behind."
       />
 
       <Reveal>

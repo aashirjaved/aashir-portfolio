@@ -1,0 +1,48 @@
+# Aashir Javed
+
+> Senior software engineer who embeds with customer engineering teams and ships agentic AI inside their production codebases. Eight years across MoonPay, Motorway, Deliveroo, Zalando and IBM/Nordcloud. Specialism: turning ambiguous workflows into agents that survive past demo day — running prompt engineering and tool-calling iteration on real customer traffic, building evals against live production data, hardening LLM systems for latency, cost and on-call, and handing the eval suite and runbooks back to the customer team.
+
+Based in London, UK. Remote-friendly. ~25% travel for embedded engagements.
+
+## Working profile
+
+- **Embedded delivery model.** Drops into customer engineering orgs. Writes production code inside customer repos, on customer infra, behind customer SSO. Not slide decks. Not sandboxes.
+- **Agentic AI in production.** Ships agents, sub-agents, Model Context Protocol servers, agent skills, retrieval-augmented generation, fine-tuned models — into systems with real users.
+- **Eval-driven development on real data.** Builds evaluation suites against live customer traffic. Iterates prompts, tools and orchestration against that signal, not vibes.
+- **Demo-to-production hardening.** Owns the part most vendor engineers skip: latency budgets, cost per request, eval regressions, security review remediation, on-call rotation.
+- **Hand-off as the deliverable.** Leaves behind eval suites, runbooks and operational knowledge so the customer team keeps shipping after the engagement ends.
+
+## Stack
+
+Go, Python, TypeScript, React, Next.js, Node, Java. AWS, Terraform, Kubernetes. PostgreSQL, Redis, Kafka. LLM tooling across Anthropic Claude, OpenAI, Cursor. MCP, sub-agents, agent skills, RAG, fine-tuning, function calling, evals, observability.
+
+## Selected outcomes
+
+- **MoonPay** — embedded with consumer product teams; auth refactor; AI adoption across engineering; mobile/web consumer flows.
+- **Motorway** — Core Engineering lead embedded across product teams; Motorway Pro trade proposition (+15% platform volume); identity split (+7% top-of-funnel); AWS cost work (−15% annual).
+- **Deliveroo** — agentic customer-care system shipped in production across a three-sided marketplace; 2× CSAT, request handling cut in half; runbooks handed off to platform team; trained 100+ engineers on on-call.
+- **Zalando** — inbound distribution centre gateway at 1000+ RPS; latency cut 15%.
+- **IBM / Nordcloud** — migrated transport client from PHP monolith to services across AWS, Azure and GCP.
+- **AI Hackathon 2026, 1st place** — hardware → model → demo in 48h.
+- **Whatify** — financial-scenario product, 3.8k+ waitlist.
+
+## Open to
+
+Embedded engineering engagements at frontier AI labs (Anthropic, OpenAI, Cursor) and AI-first companies (Sierra, Decagon, Harvey, Glean, Hippocratic, Cresta) shipping agents in customer production environments. Also independent consultancy work in the same shape.
+
+## Pages
+
+- Home — https://aashir.net/
+- About — https://aashir.net/about
+- Experience — https://aashir.net/experience
+- Projects — https://aashir.net/projects
+- Writing — https://aashir.net/writing
+- Résumé — https://aashir.net/resume
+- Contact — https://aashir.net/contact
+
+## Links
+
+- GitHub — https://github.com/aashirjaved
+- LinkedIn — https://www.linkedin.com/in/aashirjaved
+- X — https://x.com/aasjav
+- Email — me@aashir.net

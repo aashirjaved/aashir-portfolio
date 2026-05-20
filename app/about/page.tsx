@@ -12,10 +12,10 @@ import {
 const stack = ["go", "python", "typescript", "react", "next.js", "aws", "terraform", "k8s", "llms", "genai", "postgres", "mqtt"]; 
 
 const principles = [
-  ["Field", "Start with the real workflow."],
-  ["Build", "Prototype where the users are."],
-  ["Harden", "Own reliability before scale."],
-  ["Measure", "Numbers over adjectives."],
+  ["Embed", "Inside the codebase the work lives in."],
+  ["Ship", "Agents in production, not slides."],
+  ["Harden", "Past the demo, into real traffic."],
+  ["Hand off", "Evals and runbooks with your team."],
 ];
 
 export default function About() {
@@ -26,7 +26,7 @@ export default function About() {
         number="01"
         title="Field"
         italic="profile."
-        lede="London-based engineer for product, platform and AI systems."
+        lede="London-based engineer who embeds with customer teams to ship agentic AI inside their production codebases."
       />
 
       <Reveal>
@@ -62,7 +62,7 @@ export default function About() {
             </div>
             <div className="visual-card rounded-[30px] p-6 sm:col-span-2">
               <p className="display text-[clamp(2.2rem,7vw,5.5rem)] leading-[0.92]">
-                I work close to users, then build the product and platform pieces needed to solve the problem.
+                I sit with the team, learn the workflow, then ship the agent into their production codebase and leave the evals behind.
               </p>
               <div className="mt-7 flex flex-wrap gap-3">
                 <LinkButton href="/contact">Contact →</LinkButton>

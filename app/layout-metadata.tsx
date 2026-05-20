@@ -3,38 +3,46 @@ import { Metadata } from 'next';
 // This function provides dynamic metadata generation for different pages
 export function generateMetadata({ params, pathname }: { params: any; pathname: string }): Metadata {
   // Base title and description
-  const baseTitle = "Aashir Javed | Software Engineer";
-  const baseDescription = "Senior software engineer specializing in full-stack development, AI/ML integration, and cloud infrastructure.";
-  
+  const baseTitle = "Aashir Javed | Senior Software Engineer";
+  const baseDescription =
+    "Senior engineer who embeds with customer teams and ships agentic AI into their production codebases. Eight years across fintech, marketplaces and cloud — evals on real traffic, demo-to-production hardening, and hand-off back to the customer.";
+
   // Page-specific metadata
   const pageMetadata: Record<string, { title: string; description: string }> = {
     "/": {
-      title: baseTitle + " | Home",
-      description: baseDescription + " Experienced in Go, Python, React, and AWS.",
+      title: baseTitle,
+      description:
+        "Senior engineer embedded inside customer codebases shipping agentic AI features into production. Runs eval-driven development on live traffic, hardens prototypes past demo day, and transfers runbooks and eval suites back to the customer team. Go, Python, TypeScript, AWS, LLMs.",
     },
     "/about": {
-      title: baseTitle + " | About Me",
-      description: "Learn about my journey, expertise in AI/ML, full-stack development, and what drives me as an engineer.",
+      title: baseTitle + " | About",
+      description:
+        "London-based engineer specialising in embedded delivery of agentic AI inside customer production environments. Operating principles: field first, build where the users are, harden before scale, measure with numbers.",
     },
     "/experience": {
       title: baseTitle + " | Experience",
-      description: "8+ years across MoonPay, Motorway, Deliveroo, Zalando, and IBM/Nordcloud: backend, infra, full-stack, AI.",
+      description:
+        "Eight years embedding with engineering teams at MoonPay, Motorway, Deliveroo, Zalando and IBM/Nordcloud. Shipping AI features in customer codebases, owning auth, scale, reliability and the work that turns a demo into production.",
     },
     "/projects": {
       title: baseTitle + " | Projects",
-      description: "Featured projects including AI-powered customer care, infrastructure platforms, and high-performance systems.",
+      description:
+        "Selected builds: agentic customer care in production, embedded AI delivery, MCP-style integrations, identity and core engineering platforms, gateway services at 1000+ RPS. Each one shipped, hardened and handed off.",
     },
     "/writing": {
       title: baseTitle + " | Writing",
-      description: "Technical articles on AI, full-stack development, infrastructure, and engineering leadership.",
+      description:
+        "Notes on shipping agentic AI inside customer codebases, eval-driven development, LLM orchestration, production hardening and the gap between demo and production.",
     },
     "/resume": {
-      title: baseTitle + " | Resume & Open Source",
-      description: "My professional resume and open source contributions in software engineering and AI development.",
+      title: baseTitle + " | Résumé",
+      description:
+        "Résumé and open-source work — embedded engineering, production agentic AI, evals on real traffic, demo-to-production hand-offs, distributed systems on AWS.",
     },
     "/contact": {
       title: baseTitle + " | Contact",
-      description: "Get in touch to discuss opportunities, collaborations, or just to have a conversation about technology.",
+      description:
+        "Open to embedded AI delivery engagements with frontier labs and AI-first companies shipping agents in customer production environments. London-based, remote-friendly, ~25% travel.",
     },
   };
 
@@ -48,6 +56,31 @@ export function generateMetadata({ params, pathname }: { params: any; pathname: 
   return {
     title: metadata.title,
     description: metadata.description,
+    keywords: [
+      "embedded engineering",
+      "agentic AI in production",
+      "LLM evals on real traffic",
+      "MCP servers",
+      "sub-agents",
+      "retrieval-augmented generation",
+      "fine-tuning",
+      "prompt engineering on live data",
+      "demo-to-production hardening",
+      "AI hand-off",
+      "customer infrastructure delivery",
+      "AWS",
+      "Go",
+      "Python",
+      "TypeScript",
+      "Next.js",
+      "Kubernetes",
+      "Terraform",
+      "OAuth2",
+      "distributed systems",
+      "London engineer",
+    ],
+    authors: [{ name: "Aashir Javed", url: "https://aashir.net" }],
+    creator: "Aashir Javed",
     // Set the metadataBase to resolve relative URLs for OG and Twitter images
     metadataBase: new URL('https://aashir.net'),
     // Open Graph metadata for social media sharing

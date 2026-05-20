@@ -21,7 +21,7 @@ const recentWork = [
     year: "now",
     company: "MoonPay",
     role: "Senior Engineer",
-    blurb: "Refactored auth layer, drove AI adoption, and shipped consumer crypto improvements across mobile and web.",
+    blurb: "Embedded with product teams to refactor the auth layer, drive AI adoption across engineering workflows, and ship consumer crypto features across mobile and web.",
     metrics: [{ label: "Auth", value: "refactor" }],
     stack: ["react", "next", "go", "python", "aws"],
   },
@@ -29,7 +29,7 @@ const recentWork = [
     year: "2024",
     company: "Motorway",
     role: "Core Engineering Lead",
-    blurb: "Led Core Engineering foundations, Motorway Pro trade proposition, auth split and AWS cost reduction.",
+    blurb: "Owned core engineering foundations, the Motorway Pro trade proposition, an identity service split and AWS cost work — proposal to production, on-call to hand-off.",
     metrics: [{ label: "Platform volume", value: "+15%" }],
     stack: ["go", "python", "aws", "llm"],
   },
@@ -37,7 +37,7 @@ const recentWork = [
     year: "2022",
     company: "Deliveroo",
     role: "Customer Care Platform",
-    blurb: "Automated customer-care journeys with Go APIs and fine-tuned GenAI models.",
+    blurb: "Shipped automated customer-care journeys in production — Go APIs, fine-tuned generative models, evals against real ticket traffic, runbooks handed back to the platform team.",
     metrics: [{ label: "CSAT", value: "2×" }],
     stack: ["go", "react", "llm", "k8s"],
   },
@@ -45,35 +45,35 @@ const recentWork = [
 
 const services = [
   {
-    title: "Lead the architecture",
-    result: "Systems direction",
-    body: "Set service boundaries, data flows, auth models and operating patterns for teams building at speed.",
-    tags: ["Architecture", "Auth", "Scale"],
+    title: "Embed in the codebase",
+    result: "Shipped in your repo",
+    body: "Drop into your engineering org, learn the system, and ship inside your codebase — not a slide deck or a fork.",
+    tags: ["Embedded", "Customer infra", "Day one PR"],
   },
   {
     title: "Build the AI product",
-    result: "AI shipped",
-    body: "Turn ambiguous workflows into usable AI features, agents and automation that survive production.",
-    tags: ["LLMs", "Agents", "Evals"],
+    result: "Agent in production",
+    body: "Turn an ambiguous workflow into an agent, MCP server or LLM feature that survives real traffic, real users and real edge cases.",
+    tags: ["Agents", "Evals", "MCP"],
   },
   {
-    title: "Operate at scale",
-    result: "Reliable delivery",
-    body: "Own reliability, cloud cost, incident paths and observability for systems with real users.",
-    tags: ["AWS", "Terraform", "On-call"],
+    title: "Own the hand-off",
+    result: "Your team owns it",
+    body: "Production hardening, eval suite, runbooks, on-call notes — left behind so your engineers can keep shipping without me in the room.",
+    tags: ["Hardening", "Evals", "Runbooks"],
   },
 ];
 
 function ArchitectureBrief() {
   const rows = [
-    ["Fintech / crypto", "Auth, consumer flows, AI adoption"],
-    ["Marketplaces", "Core services, conversion, support automation"],
-    ["Cloud / infra", "Migration, reliability, cost, observability"],
+    ["Fintech / crypto", "Embedded with product teams, auth and AI adoption"],
+    ["Marketplaces", "Shipped agents in production, evals on real tickets"],
+    ["Cloud / infra", "Demo-to-prod hardening, on-call, cost work"],
   ];
 
   return (
     <aside className="border-l border-rule-soft pl-5 sm:pl-8">
-      <div className="mono text-[11px] uppercase tracking-[0.22em] text-ink-mute">Architecture brief</div>
+      <div className="mono text-[11px] uppercase tracking-[0.22em] text-ink-mute">Field brief</div>
       <div className="mt-6 space-y-6">
         {rows.map(([label, value]) => (
           <div key={label}>
@@ -110,14 +110,14 @@ export default function Home() {
             <Eyebrow className="mb-8">
               <span className="inline-flex items-center gap-2">
                 <span className="inline-block h-1.5 w-1.5 rounded-full bg-ok" aria-hidden />
-                Lead architect · AI builder · scale engineer
+                Embed · ship · hand off
               </span>
             </Eyebrow>
             <h1 className="display max-w-[10ch] text-[clamp(4rem,13vw,9.5rem)] leading-[0.86] tracking-[-0.04em] text-ink">
-              Architecting AI systems at scale.
+              I ship the difficult bit, inside your repo.
             </h1>
             <p className="lede mt-8 max-w-[34ch] text-ink">
-              I design and ship reliable software across fintech, crypto, marketplaces and cloud infrastructure.
+              I embed with your engineers, ship the agent into production on your infra, and leave the evals and runbooks behind.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <LinkButton href="/projects">See proof →</LinkButton>
@@ -268,7 +268,7 @@ export default function Home() {
             <div className="rounded-[28px] border border-ink bg-ink p-6 text-paper sm:p-10">
               <p className="mono text-[11px] uppercase tracking-[0.22em] text-paper/55">Next step</p>
               <p className="mt-5 display max-w-[13ch] text-[clamp(3rem,9vw,6rem)] leading-[0.9]">
-                Bring me the difficult bit.
+                Bring me the demo-to-prod cliff.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <LinkButton href="mailto:me@aashir.net">Email →</LinkButton>

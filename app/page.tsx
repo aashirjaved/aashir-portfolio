@@ -64,45 +64,50 @@ const services = [
   },
 ];
 
-function ImpactLedger() {
+function FieldBrief() {
   const rows = [
-    ["MoonPay", "Auth layer", "refactored"],
-    ["Motorway", "Trade proposition", "+15% volume"],
-    ["Motorway", "AuthN/AuthZ split", "+7% conversion"],
-    ["Motorway", "Operational excellence", "−15% AWS"],
-    ["Deliveroo", "GenAI care journey", "2× CSAT"],
-    ["Zalando", "Warehouse gateway", "−15% latency"],
+    ["Field", "Customer workflows, support ops, auth, payments"],
+    ["Build", "React surfaces, Go APIs, Python automation"],
+    ["Harden", "Evals, observability, cloud cost, on-call paths"],
   ];
 
   return (
-    <aside className="rounded-[28px] border border-rule-soft bg-surface/75 p-4 shadow-[0_24px_80px_rgba(24,22,20,0.06)] sm:p-5">
-      <div className="flex items-center justify-between border-b border-rule-soft pb-4">
-        <div>
-          <div className="mono text-[10px] uppercase tracking-[0.22em] text-ink-mute">Impact ledger</div>
-          <div className="mt-1 text-sm text-ink-2">Recent shipped outcomes</div>
-        </div>
-        <div className="rounded-full bg-ok/10 px-3 py-1 mono text-[10px] uppercase tracking-[0.18em] text-ok">
-          verified
-        </div>
-      </div>
-
-      <div className="divide-y divide-rule-soft">
-        {rows.map(([company, work, result]) => (
-          <div key={`${company}-${work}`} className="grid grid-cols-[1fr_auto] gap-4 py-4">
-            <div>
-              <div className="mono text-[10px] uppercase tracking-[0.18em] text-ink-mute">{company}</div>
-              <div className="mt-1 text-sm text-ink">{work}</div>
-            </div>
-            <div className="display text-2xl leading-none text-ink sm:text-3xl">{result}</div>
+    <aside className="relative overflow-hidden rounded-[32px] border border-paper/15 bg-paper/[0.06] p-4 text-paper shadow-2xl backdrop-blur sm:p-5">
+      <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-accent/40 blur-3xl" />
+      <div className="relative z-10">
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <div>
+            <div className="mono text-[10px] uppercase tracking-[0.24em] text-paper/45">Field brief</div>
+            <div className="mt-1 text-sm text-paper/70">How I work</div>
           </div>
-        ))}
-      </div>
+          <div className="rounded-full border border-paper/15 px-3 py-1 mono text-[10px] uppercase tracking-[0.18em] text-paper/60">
+            prod ready
+          </div>
+        </div>
 
-      <div className="mt-4 rounded-2xl bg-paper-2 p-4">
-        <div className="mono text-[10px] uppercase tracking-[0.2em] text-ink-mute">Where I add leverage</div>
-        <p className="mt-2 text-sm leading-relaxed text-ink-2">
-          Marketplace, cloud and infrastructure experience across auth, AI, gateways, migrations and operational excellence.
-        </p>
+        <div className="space-y-3">
+          {rows.map(([label, value]) => (
+            <div key={label} className="rounded-2xl border border-paper/10 bg-paper/[0.045] p-4">
+              <div className="mono text-[10px] uppercase tracking-[0.22em] text-paper/40">{label}</div>
+              <div className="mt-2 text-base leading-snug text-paper">{value}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-4 grid grid-cols-3 gap-2">
+          <div className="rounded-2xl bg-paper p-3 text-ink">
+            <div className="display text-3xl leading-none">+15%</div>
+            <div className="mt-1 mono text-[9px] uppercase tracking-[0.16em] text-ink-mute">volume</div>
+          </div>
+          <div className="rounded-2xl bg-paper p-3 text-ink">
+            <div className="display text-3xl leading-none">2×</div>
+            <div className="mt-1 mono text-[9px] uppercase tracking-[0.16em] text-ink-mute">CSAT</div>
+          </div>
+          <div className="rounded-2xl bg-accent p-3 text-paper">
+            <div className="display text-3xl leading-none">AI</div>
+            <div className="mt-1 mono text-[9px] uppercase tracking-[0.16em] text-paper/70">deployed</div>
+          </div>
+        </div>
       </div>
     </aside>
   );
@@ -127,28 +132,36 @@ export default function Home() {
       <PersonSchema />
       <WebsiteSchema />
       <Container size="wide">
-        <section className="grid gap-8 pb-14 sm:pb-20 lg:grid-cols-[minmax(0,1fr)_440px] lg:items-end">
-          <div>
-            <Eyebrow className="mb-8">
-              <span className="inline-flex items-center gap-2">
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-ok" aria-hidden />
-                London · product systems · platform · AI
-              </span>
-            </Eyebrow>
-            <h1 className="display max-w-[8ch] text-[clamp(4.5rem,16vw,11rem)] leading-[0.82] text-ink">
-              AI systems, deployed.
-            </h1>
-            <p className="lede mt-8 max-w-[30ch] text-ink">
-              I work close to users, turn ambiguity into software, and take prototypes into production.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <LinkButton href="/contact">Start a conversation →</LinkButton>
-              <LinkButton href="/projects" variant="ghost">See proof</LinkButton>
+        <section className="relative mb-10 overflow-hidden rounded-[40px] bg-ink p-5 text-paper shadow-[0_40px_120px_rgba(24,22,20,0.18)] sm:p-8 lg:p-10">
+          <div className="absolute -left-24 top-20 h-72 w-72 rounded-full bg-accent/30 blur-3xl" />
+          <div className="absolute -right-24 -top-24 h-96 w-96 rounded-full bg-ok/20 blur-3xl" />
+          <div className="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-end">
+            <div>
+              <Eyebrow className="mb-8 text-paper/55">
+                <span className="inline-flex items-center gap-2">
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-ok" aria-hidden />
+                  Forward deployed · product · platform · AI
+                </span>
+              </Eyebrow>
+              <h1 className="display max-w-[7ch] text-[clamp(4.7rem,17vw,11.5rem)] leading-[0.78] tracking-[-0.055em] text-paper">
+                AI, shipped.
+              </h1>
+              <p className="mt-7 max-w-[34ch] text-xl leading-snug text-paper/72 sm:text-2xl">
+                I turn messy customer workflows into production software.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <LinkButton href="/projects" className="border-paper bg-paper text-ink hover:border-accent hover:bg-accent hover:text-paper">
+                  See proof →
+                </LinkButton>
+                <LinkButton href="/contact" variant="ghost" className="border-paper/25 bg-paper/5 text-paper hover:bg-paper/10 hover:text-paper">
+                  Send context
+                </LinkButton>
+              </div>
             </div>
+            <Reveal>
+              <FieldBrief />
+            </Reveal>
           </div>
-          <Reveal>
-            <ImpactLedger />
-          </Reveal>
         </section>
 
         <Reveal>

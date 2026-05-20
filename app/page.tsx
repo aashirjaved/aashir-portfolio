@@ -45,69 +45,42 @@ const recentWork = [
 
 const services = [
   {
-    title: "Find the real workflow",
-    result: "Customer context",
-    body: "Work with users and operators to understand where the system actually breaks.",
-    tags: ["Discovery", "Support", "Ops"],
+    title: "Lead the architecture",
+    result: "Systems direction",
+    body: "Set service boundaries, data flows, auth models and operating patterns for teams building at speed.",
+    tags: ["Architecture", "Auth", "Scale"],
   },
   {
-    title: "Build the working wedge",
-    result: "Prototype to prod",
-    body: "Turn the first useful version into a product surface, API or internal tool people can use.",
-    tags: ["React", "Go", "Python"],
+    title: "Build the AI product",
+    result: "AI shipped",
+    body: "Turn ambiguous workflows into usable AI features, agents and automation that survive production.",
+    tags: ["LLMs", "Agents", "Evals"],
   },
   {
-    title: "Make it reliable",
-    result: "Evals and infra",
-    body: "Add auth, observability, evaluation loops and operational ownership before scale.",
-    tags: ["Evals", "AWS", "Terraform"],
+    title: "Operate at scale",
+    result: "Reliable delivery",
+    body: "Own reliability, cloud cost, incident paths and observability for systems with real users.",
+    tags: ["AWS", "Terraform", "On-call"],
   },
 ];
 
-function FieldBrief() {
+function ArchitectureBrief() {
   const rows = [
-    ["Field", "Customer workflows, support ops, auth, payments"],
-    ["Build", "React surfaces, Go APIs, Python automation"],
-    ["Harden", "Evals, observability, cloud cost, on-call paths"],
+    ["Fintech / crypto", "Auth, consumer flows, AI adoption"],
+    ["Marketplaces", "Core services, conversion, support automation"],
+    ["Cloud / infra", "Migration, reliability, cost, observability"],
   ];
 
   return (
-    <aside className="relative overflow-hidden rounded-[32px] border border-paper/15 bg-paper/[0.06] p-4 text-paper shadow-2xl backdrop-blur sm:p-5">
-      <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-accent/40 blur-3xl" />
-      <div className="relative z-10">
-        <div className="mb-6 flex items-center justify-between gap-4">
-          <div>
-            <div className="mono text-[10px] uppercase tracking-[0.24em] text-paper/45">Field brief</div>
-            <div className="mt-1 text-sm text-paper/70">How I work</div>
+    <aside className="border-l border-rule-soft pl-5 sm:pl-8">
+      <div className="mono text-[11px] uppercase tracking-[0.22em] text-ink-mute">Architecture brief</div>
+      <div className="mt-6 space-y-6">
+        {rows.map(([label, value]) => (
+          <div key={label}>
+            <div className="display text-2xl leading-none text-ink">{label}</div>
+            <div className="mt-2 text-sm leading-relaxed text-ink-2">{value}</div>
           </div>
-          <div className="rounded-full border border-paper/15 px-3 py-1 mono text-[10px] uppercase tracking-[0.18em] text-paper/60">
-            prod ready
-          </div>
-        </div>
-
-        <div className="space-y-3">
-          {rows.map(([label, value]) => (
-            <div key={label} className="rounded-2xl border border-paper/10 bg-paper/[0.045] p-4">
-              <div className="mono text-[10px] uppercase tracking-[0.22em] text-paper/40">{label}</div>
-              <div className="mt-2 text-base leading-snug text-paper">{value}</div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-4 grid grid-cols-3 gap-2">
-          <div className="rounded-2xl bg-paper p-3 text-ink">
-            <div className="display text-3xl leading-none">+15%</div>
-            <div className="mt-1 mono text-[9px] uppercase tracking-[0.16em] text-ink-mute">volume</div>
-          </div>
-          <div className="rounded-2xl bg-paper p-3 text-ink">
-            <div className="display text-3xl leading-none">2×</div>
-            <div className="mt-1 mono text-[9px] uppercase tracking-[0.16em] text-ink-mute">CSAT</div>
-          </div>
-          <div className="rounded-2xl bg-accent p-3 text-paper">
-            <div className="display text-3xl leading-none">AI</div>
-            <div className="mt-1 mono text-[9px] uppercase tracking-[0.16em] text-paper/70">deployed</div>
-          </div>
-        </div>
+        ))}
       </div>
     </aside>
   );
@@ -132,36 +105,28 @@ export default function Home() {
       <PersonSchema />
       <WebsiteSchema />
       <Container size="wide">
-        <section className="relative mb-10 overflow-hidden rounded-[40px] bg-ink p-5 text-paper shadow-[0_40px_120px_rgba(24,22,20,0.18)] sm:p-8 lg:p-10">
-          <div className="absolute -left-24 top-20 h-72 w-72 rounded-full bg-accent/30 blur-3xl" />
-          <div className="absolute -right-24 -top-24 h-96 w-96 rounded-full bg-ok/20 blur-3xl" />
-          <div className="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-end">
-            <div>
-              <Eyebrow className="mb-8 text-paper/55">
-                <span className="inline-flex items-center gap-2">
-                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-ok" aria-hidden />
-                  Forward deployed · product · platform · AI
-                </span>
-              </Eyebrow>
-              <h1 className="display max-w-[7ch] text-[clamp(4.7rem,17vw,11.5rem)] leading-[0.78] tracking-[-0.055em] text-paper">
-                AI, shipped.
-              </h1>
-              <p className="mt-7 max-w-[34ch] text-xl leading-snug text-paper/72 sm:text-2xl">
-                I turn messy customer workflows into production software.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <LinkButton href="/projects" className="border-paper bg-paper text-ink hover:border-accent hover:bg-accent hover:text-paper">
-                  See proof →
-                </LinkButton>
-                <LinkButton href="/contact" variant="ghost" className="border-paper/25 bg-paper/5 text-paper hover:bg-paper/10 hover:text-paper">
-                  Send context
-                </LinkButton>
-              </div>
+        <section className="grid gap-10 border-b border-rule-soft pb-16 sm:pb-20 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
+          <div>
+            <Eyebrow className="mb-8">
+              <span className="inline-flex items-center gap-2">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-ok" aria-hidden />
+                Lead architect · AI builder · scale engineer
+              </span>
+            </Eyebrow>
+            <h1 className="display max-w-[10ch] text-[clamp(4rem,13vw,9.5rem)] leading-[0.86] tracking-[-0.04em] text-ink">
+              Architecting AI systems at scale.
+            </h1>
+            <p className="lede mt-8 max-w-[34ch] text-ink">
+              I design and ship reliable software across fintech, crypto, marketplaces and cloud infrastructure.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <LinkButton href="/projects">See proof →</LinkButton>
+              <LinkButton href="/contact" variant="ghost">Send context</LinkButton>
             </div>
-            <Reveal>
-              <FieldBrief />
-            </Reveal>
           </div>
+          <Reveal>
+            <ArchitectureBrief />
+          </Reveal>
         </section>
 
         <Reveal>
@@ -190,7 +155,7 @@ export default function Home() {
               number="01"
               title="What I"
               italic="do"
-              description="Field work from problem to production."
+              description="Architecture, AI building and production ownership."
             />
           </Reveal>
           <Reveal>

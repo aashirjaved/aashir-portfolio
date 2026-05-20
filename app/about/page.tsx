@@ -9,7 +9,7 @@ import {
   ArrowLink,
 } from "@/components/editorial";
 
-const stack = ["go", "python", "typescript", "react", "next.js", "aws", "terraform", "k8s", "llms", "rag", "postgres"];
+const stack = ["go", "python", "typescript", "react", "next.js", "aws", "terraform", "k8s", "llms", "genai", "postgres", "mqtt"]; 
 
 const principles = [
   ["Ship", "Production beats theatre."],
@@ -57,12 +57,12 @@ export default function About() {
               <div className="mt-3 mono text-[11px] uppercase tracking-[0.22em] text-ink-mute">years shipping</div>
             </div>
             <div className="visual-card rounded-[30px] p-6">
-              <div className="display text-6xl leading-none">4</div>
-              <div className="mt-3 mono text-[11px] uppercase tracking-[0.22em] text-ink-mute">major orgs</div>
+              <div className="display text-6xl leading-none">6</div>
+              <div className="mt-3 mono text-[11px] uppercase tracking-[0.22em] text-ink-mute">technical chapters</div>
             </div>
             <div className="visual-card rounded-[30px] p-6 sm:col-span-2">
               <p className="display text-[clamp(2.2rem,7vw,5.5rem)] leading-[0.92]">
-                I turn messy ambition into systems that behave.
+                Infrastructure-minded full-stack engineer for marketplaces, cloud and AI systems.
               </p>
               <div className="mt-7 flex flex-wrap gap-3">
                 <LinkButton href="/contact">Contact →</LinkButton>
@@ -111,6 +111,11 @@ export default function About() {
             <p className="display-italic max-w-[14ch] text-[clamp(2.6rem,8vw,5.5rem)] leading-[0.92] text-ink">
               “Boring infra. Ambitious product.”
             </p>
+            <div className="mt-8 grid gap-3 sm:grid-cols-3">
+              <Pill>P@SHA ICT Award</Pill>
+              <Pill>AWS Certified Developer</Pill>
+              <Pill>ADPList Mentor</Pill>
+            </div>
             <div className="mt-8">
               <ArrowLink href="/projects">See the work →</ArrowLink>
             </div>

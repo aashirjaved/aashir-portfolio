@@ -24,12 +24,12 @@ const positions = [
   {
     co: "Motorway",
     role: "Senior Backend Engineer · Core Engineering Lead",
-    when: "Jun 2024 — 2026 · London",
+    when: "Jun 2024 — 2025 · London",
     pts: [
-      "Led Core Engineering: foundational services and platform primitives.",
-      "Decoupled AuthN/AuthZ migration → +7% conversion.",
-      "Operational excellence working group → −15% AWS spend.",
-      "AI incident management with LLM categorisation → −40% MTTR.",
+      "Led Core Engineering: foundational, mission-critical services and architecture for product teams.",
+      "Delivered Motorway Pro trade proposition → +15% platform volume.",
+      "Led migration to decoupled AuthN/AuthZ services → +7% top-of-funnel conversion.",
+      "Established operational-excellence working group → −15% annual AWS cost.",
     ],
   },
   {
@@ -37,9 +37,10 @@ const positions = [
     role: "Software Engineer II · Platform / Customer Care",
     when: "May 2022 — Jun 2024 · London",
     pts: [
-      "AI agents shipping 10,000+ daily cases at 95% accuracy.",
-      "2× CSAT · 50% reduction in handling time · £2M annual savings.",
-      "Multi-region k8s + Terraform; engineering gamedays for 100+ engineers.",
+      "Led automated customer-care journey with agents, fine-tuned GenAI models and highly available Go APIs.",
+      "Delivered 2× CSAT and reduced request handling time to 0.5×.",
+      "Built microservices for calls, chats, credits and refunds across a three-sided marketplace.",
+      "Organised SEV gamedays and trained 100+ engineers in on-call procedures.",
     ],
   },
   {
@@ -47,32 +48,42 @@ const positions = [
     role: "Software Engineer · Customer Fulfillment",
     when: "Jan 2021 — May 2022 · Helsinki",
     pts: [
-      "Warehouse integration gateway · 1000+ RPS · −15% latency.",
-      "AI demand forecasting → +25% inventory optimisation.",
-      "Grafana + Prometheus monitoring with custom alerting.",
+      "Owned inbound distribution centre gateway integrating warehouses with Zalando services.",
+      "Implemented REST APIs and optimised database queries for 1000+ RPS gateway → −15% latency.",
+      "Ran integration workshops with third-party operation teams.",
     ],
   },
   {
     co: "Nordcloud (IBM)",
-    role: "Lead Cloud Engineer · Cloud Transformation",
-    when: "Aug 2019 — Jan 2021 · Helsinki",
+    role: "Cloud Developer · Managed Services",
+    when: "Jan 2020 — Jan 2021 · Helsinki",
     pts: [
-      "Multi-cloud migration platform across AWS / Azure / GCP.",
-      "30+ enterprise migrations · £5M+ operational savings.",
-      "Zero-data-loss pipelines · +40% deployment velocity.",
+      "Migrated a major transport client from a PHP monolith to a service-based modern stack.",
+      "Ensured smooth operation of managed client applications across cloud environments.",
+      "Collaborated with product owners to deploy fixes and new features.",
+    ],
+  },
+  {
+    co: "CARE",
+    role: "Design Engineer · Industry 4.0 Automation",
+    when: "Feb 2017 — 2019",
+    pts: [
+      "Built cyber-physical systems adopted across industrial clients.",
+      "Developed secured MQTT infrastructure for real-time machine-to-machine IoT communication.",
+      "Built OTA firmware update solutions for automotive under MISRA C and ISO 27001/27002 standards.",
     ],
   },
 ];
 
 const stack = [
-  ["Languages", "go · python · typescript · javascript · java"],
-  ["Frontend", "react · next.js · tailwind · radix"],
-  ["Backend", "go · python · node · graphql · grpc"],
-  ["Cloud", "aws · gcp · azure"],
-  ["Infra", "terraform · kubernetes · docker · ci/cd"],
-  ["Data", "postgres · redis · dynamodb · mongo · kafka"],
-  ["AI / ML", "llms · agents · rag · fine-tune · vector dbs · mlops"],
-  ["Monitoring", "grafana · prometheus · datadog · sentry"],
+  ["Languages", "go · python · typescript · javascript · java · c++ · rust"],
+  ["Frontend", "react · next.js · design systems · jest · cypress"],
+  ["Backend", "go · node · spring · restful apis · graphql · grpc"],
+  ["Cloud", "aws · gcp · azure · serverless"],
+  ["Infra", "terraform · kubernetes · docker · kafka · resilience engineering"],
+  ["Data", "postgres · dynamodb · vector dbs"],
+  ["AI / ML", "llms · agents · fine-tuned genai · rag · mlops"],
+  ["Systems", "microservices · scaling · fault tolerance · networking protocols"],
 ];
 
 export default function Resume() {
@@ -167,24 +178,43 @@ export default function Resume() {
           />
         </Reveal>
         <Reveal>
-          <div className="flex flex-wrap gap-2 mb-6">
-            <Pill>open source</Pill>
-            <Pill>tooling</Pill>
-            <Pill>llm experiments</Pill>
+          <div className="space-y-5">
+            <article className="border-b border-rule-soft pb-5">
+              <h3 className="display text-2xl leading-tight text-ink">AWS Cognito Passwordless Auth</h3>
+              <p className="mt-2 text-ink-2">Contributed improved error reporting to save developer debugging time.</p>
+            </article>
+            <article className="border-b border-rule-soft pb-5">
+              <h3 className="display text-2xl leading-tight text-ink">Technical writing</h3>
+              <p className="mt-2 text-ink-2">
+                Essays and notes at <EditorialLink href="https://dev.to/aashirjaved" external>dev.to/aashirjaved</EditorialLink> and <EditorialLink href="/writing">aashir.net/writing</EditorialLink>.
+              </p>
+            </article>
+            <article>
+              <h3 className="display text-2xl leading-tight text-ink">Mentoring</h3>
+              <p className="mt-2 text-ink-2">Registered ADPList mentor.</p>
+            </article>
           </div>
-          <p className="prose-editorial">
-            Full listing at{" "}
-            <EditorialLink href="https://github.com/aashirjaved" external>
-              github.com/aashirjaved
-            </EditorialLink>
-            .
-          </p>
         </Reveal>
       </section>
 
       <section className="pt-24">
         <Reveal>
-          <SectionLabel number="04" title="See" italic="also" />
+          <SectionLabel number="04" title="Awards" italic="certifications" />
+        </Reveal>
+        <Reveal>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {["AWS Certified Developer Associate", "EIT Digital Scholarship", "P@SHA ICT Award", "NUST High Achiever Award"].map((item) => (
+              <div key={item} className="rounded-2xl border border-rule-soft bg-surface/70 p-4">
+                <Pill>{item}</Pill>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      </section>
+
+      <section className="pt-24">
+        <Reveal>
+          <SectionLabel number="05" title="See" italic="also" />
         </Reveal>
         <Reveal>
           <ul className="space-y-3">

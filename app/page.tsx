@@ -29,16 +29,16 @@ const recentWork = [
     year: "2024",
     company: "Motorway",
     role: "Core Engineering Lead",
-    blurb: "Platform primitives, auth migration, incident workflows and cloud cost discipline.",
-    metrics: [{ label: "Conversion", value: "+7%" }],
+    blurb: "Led Core Engineering foundations, Motorway Pro trade proposition, auth split and AWS cost reduction.",
+    metrics: [{ label: "Platform volume", value: "+15%" }],
     stack: ["go", "python", "aws", "llm"],
   },
   {
     year: "2022",
     company: "Deliveroo",
     role: "Customer Care Platform",
-    blurb: "Production AI agents for high-volume support journeys with human handoff and operational tooling.",
-    metrics: [{ label: "Cases/day", value: "10k+" }],
+    blurb: "Automated customer-care journeys with Go APIs and fine-tuned GenAI models.",
+    metrics: [{ label: "CSAT", value: "2×" }],
     stack: ["go", "react", "llm", "k8s"],
   },
 ];
@@ -53,13 +53,13 @@ const services = [
   {
     title: "Stabilise the platform",
     result: "Less fire-fighting",
-    body: "Service boundaries, auth, observability, infra cost, incident workflows.",
+    body: "Core services, AuthN/AuthZ separation, observability, infra cost, incident workflows.",
     tags: ["Go", "AWS", "Terraform"],
   },
   {
     title: "Put AI into production",
     result: "Useful automation",
-    body: "Agents, evals, RAG and workflow design where the business case survives contact with users.",
+    body: "Fine-tuned GenAI, agents, evals and workflow design where the business case survives users.",
     tags: ["LLMs", "Agents", "Evals"],
   },
 ];
@@ -67,10 +67,11 @@ const services = [
 function ImpactLedger() {
   const rows = [
     ["MoonPay", "Auth layer", "refactored"],
-    ["Motorway", "Auth migration", "+7% conversion"],
-    ["Motorway", "AI incident workflows", "−40% MTTR"],
-    ["Deliveroo", "Support automation", "10k+ cases/day"],
-    ["Deliveroo", "Customer-care AI", "£2M saved"],
+    ["Motorway", "Trade proposition", "+15% volume"],
+    ["Motorway", "AuthN/AuthZ split", "+7% conversion"],
+    ["Motorway", "Operational excellence", "−15% AWS"],
+    ["Deliveroo", "GenAI care journey", "2× CSAT"],
+    ["Zalando", "Warehouse gateway", "−15% latency"],
   ];
 
   return (
@@ -100,7 +101,7 @@ function ImpactLedger() {
       <div className="mt-4 rounded-2xl bg-paper-2 p-4">
         <div className="mono text-[10px] uppercase tracking-[0.2em] text-ink-mute">Where I add leverage</div>
         <p className="mt-2 text-sm leading-relaxed text-ink-2">
-          Product judgment, systems depth and practical AI experience for complex engineering problems.
+          Marketplace, cloud and infrastructure experience across auth, AI, gateways, migrations and operational excellence.
         </p>
       </div>
     </aside>
@@ -138,7 +139,7 @@ export default function Home() {
               Product engineer for hard systems.
             </h1>
             <p className="lede mt-8 max-w-[28ch] text-ink">
-              I ship product surfaces, platform foundations and AI workflows that move real numbers.
+              Infrastructure/backend-focused full-stack engineer shipping marketplaces, cloud systems and AI workflows that move real numbers.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <LinkButton href="/contact">Start a conversation →</LinkButton>
@@ -164,9 +165,9 @@ export default function Home() {
 
         <Reveal>
           <section className="grid grid-cols-3 gap-3 py-10 sm:gap-8 sm:py-16">
-            <Stat value="£7M+" label="Saved" />
-            <Stat value="AI" label="Championed" />
-            <Stat value="100+" label="Mentored" />
+            <Stat value="+15%" label="Platform volume" />
+            <Stat value="2×" label="CSAT uplift" />
+            <Stat value="1000+" label="RPS gateway" />
           </section>
         </Reveal>
 

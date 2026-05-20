@@ -15,6 +15,7 @@ import {
 } from "@/components/editorial";
 import { PersonSchema, WebsiteSchema } from "@/components/structured-data";
 import { blogPosts } from "@/data/blog-data";
+import Image from "next/image";
 
 const recentWork = [
   {
@@ -45,38 +46,80 @@ const recentWork = [
 
 const services = [
   {
-    title: "Embed in the codebase",
-    result: "Shipped in your repo",
-    body: "Drop into your engineering org, learn the system, and ship inside your codebase — not a slide deck or a fork.",
+    title: "Enter the system",
+    result: "01",
+    body: "I learn the product, the code, the rituals, and the weird edges fast.",
     tags: ["Embedded", "Customer infra", "Day one PR"],
   },
   {
-    title: "Build the AI product",
-    result: "Agent in production",
-    body: "Turn an ambiguous workflow into an agent, MCP server or LLM feature that survives real traffic, real users and real edge cases.",
+    title: "Make the agent real",
+    result: "02",
+    body: "Ambiguous workflow to production feature, with evals and failure paths in the loop.",
     tags: ["Agents", "Evals", "MCP"],
   },
   {
-    title: "Own the hand-off",
-    result: "Your team owns it",
-    body: "Production hardening, eval suite, runbooks, on-call notes — left behind so your engineers can keep shipping without me in the room.",
+    title: "Leave it operable",
+    result: "03",
+    body: "Runbooks, tests, on-call notes, and enough context for the team to own it.",
     tags: ["Hardening", "Evals", "Runbooks"],
   },
 ];
 
-function ArchitectureBrief() {
+const storyBeats = [
+  ["London", "Senior engineer embedded where product and infra meet."],
+  ["Mode", "Prototype quickly. Harden deliberately. Hand off cleanly."],
+  ["Signal", "AI products, auth, marketplaces, cloud, and systems that stay up."],
+];
+
+function SignalPortrait() {
+  return (
+    <aside className="signal-frame h-[320px] max-w-full p-3 sm:h-[430px] sm:p-4 lg:h-[460px] lg:self-center xl:h-[500px]">
+      <div className="relative z-10 grid h-full grid-rows-1 gap-3 sm:grid-rows-[1fr_auto]">
+        <div className="relative min-h-0 overflow-hidden border border-ink bg-ink">
+          <Image
+            src="/profile-cyberpunk.png"
+            alt="Aashir Javed"
+            fill
+            priority
+            sizes="(min-width: 1024px) 420px, 100vw"
+            className="object-cover object-[50%_20%] grayscale brightness-[0.72] contrast-[1.75] sm:object-center"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,18,16,0.08)_0%,rgba(13,18,16,0.12)_38%,rgba(13,18,16,0.9)_100%),linear-gradient(90deg,rgba(231,73,40,0.38),transparent_42%,rgba(22,150,111,0.28))]" />
+          <div className="absolute left-4 top-4 mono text-[10px] uppercase tracking-[0.24em] text-paper/70">
+            Aashir Javed / Field log
+          </div>
+          <div className="absolute bottom-4 left-4 right-4">
+            <div className="display max-w-[8ch] text-[clamp(2.35rem,6vw,4.2rem)] leading-[0.82] text-paper">
+              ship the hard part
+            </div>
+          </div>
+        </div>
+        <div className="hidden border border-ink bg-paper sm:grid sm:grid-cols-3">
+          {storyBeats.map(([label, value]) => (
+            <div key={label} className="border-b border-ink p-3 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0">
+              <div className="mono text-[10px] uppercase tracking-[0.2em] text-accent">{label}</div>
+              <div className="mt-2 text-[12px] leading-snug text-ink-2">{value}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+function ArchitectureBrief({ className = "" }: { className?: string }) {
   const rows = [
-    ["Fintech / crypto", "Embedded with product teams, auth and AI adoption"],
-    ["Marketplaces", "Shipped agents in production, evals on real tickets"],
-    ["Cloud / infra", "Demo-to-prod hardening, on-call, cost work"],
+    ["AI that ships", "Agents, evals, MCP, production traffic"],
+    ["Systems that bend", "Auth, platform foundations, cloud cost, on-call"],
+    ["Teams that inherit", "Runbooks, operating context, clean hand-off"],
   ];
 
   return (
-    <aside className="border-l border-rule-soft pl-5 sm:pl-8">
-      <div className="mono text-[11px] uppercase tracking-[0.22em] text-ink-mute">Field brief</div>
-      <div className="mt-6 space-y-6">
+    <aside className={`border-t border-ink pt-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0 ${className}`}>
+      <div className="mono text-[11px] uppercase tracking-[0.22em] text-accent">Field brief</div>
+      <div className="mt-6 space-y-5">
         {rows.map(([label, value]) => (
-          <div key={label}>
+          <div key={label} className="border-b border-rule-soft pb-5 last:border-b-0 last:pb-0">
             <div className="display text-2xl leading-none text-ink">{label}</div>
             <div className="mt-2 text-sm leading-relaxed text-ink-2">{value}</div>
           </div>
@@ -105,32 +148,39 @@ export default function Home() {
       <PersonSchema />
       <WebsiteSchema />
       <Container size="wide">
-        <section className="grid gap-10 border-b border-rule-soft pb-16 sm:pb-20 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
-          <div>
-            <Eyebrow className="mb-8">
-              <span className="inline-flex items-center gap-2">
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-ok" aria-hidden />
-                Embed · ship · hand off
+        <section className="grid gap-8 pb-12 sm:pb-16 lg:min-h-[calc(100svh-10rem)] lg:grid-cols-[minmax(0,1fr)_340px] lg:items-center xl:grid-cols-[minmax(0,1fr)_380px]">
+          <div className="flex flex-col justify-between border-y border-ink py-8 sm:py-10">
+            <div>
+              <Eyebrow className="mb-8">
+              <span className="inline-flex items-center gap-2 leading-relaxed">
+                <span className="inline-block h-2 w-2 bg-ok" aria-hidden />
+                London · embedded product engineering · AI systems
               </span>
-            </Eyebrow>
-            <h1 className="display max-w-[10ch] text-[clamp(4rem,13vw,9.5rem)] leading-[0.86] tracking-[-0.04em] text-ink">
-              I ship the difficult bit, inside your repo.
-            </h1>
-            <p className="lede mt-8 max-w-[34ch] text-ink">
-              I embed with your engineers, ship the agent into production on your infra, and leave the evals and runbooks behind.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <LinkButton href="/projects">See proof →</LinkButton>
-              <LinkButton href="/contact" variant="ghost">Send context</LinkButton>
+              </Eyebrow>
+              <h1 className="display max-w-[12ch] text-[clamp(2.75rem,12.5vw,6.1rem)] leading-[0.88] tracking-[-0.035em] text-ink sm:text-[clamp(3.3rem,7.2vw,6.1rem)] sm:leading-[0.84]">
+                I ship the messy middle between idea and production.
+              </h1>
+            </div>
+            <div className="mt-8 grid gap-8 sm:mt-10 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-end">
+              <div>
+                <p className="lede max-w-[30ch] text-[1.08rem] leading-snug text-ink sm:text-[clamp(1.15rem,2.4vw,1.75rem)] sm:leading-[1.28]">
+                  Senior engineer for AI products, auth layers, marketplaces and cloud platforms that need to survive real users.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
+                  <LinkButton href="/projects">See proof</LinkButton>
+                  <LinkButton href="/contact" variant="ghost">Send context</LinkButton>
+                </div>
+              </div>
+              <ArchitectureBrief className="hidden lg:block" />
             </div>
           </div>
           <Reveal>
-            <ArchitectureBrief />
+            <SignalPortrait />
           </Reveal>
         </section>
 
         <Reveal>
-          <div className="border-y border-rule-soft py-7 sm:py-9">
+          <div className="border-y border-ink py-7 sm:py-9">
             <div className="mb-5 flex items-center justify-between gap-4">
               <p className="mono text-[11px] uppercase tracking-[0.22em] text-ink-mute">
                 Experience across
@@ -142,10 +192,10 @@ export default function Home() {
         </Reveal>
 
         <Reveal>
-          <section className="grid grid-cols-3 gap-3 py-10 sm:gap-8 sm:py-16">
-            <Stat value="+15%" label="Platform volume" />
-            <Stat value="2×" label="CSAT uplift" />
-            <Stat value="1000+" label="RPS gateway" />
+          <section className="grid border-y border-ink py-0 sm:grid-cols-3">
+            <Stat value="+15%" label="Platform volume" className="border-b border-ink p-4 sm:border-b-0 sm:border-r sm:p-6" />
+            <Stat value="2×" label="CSAT uplift" className="border-b border-ink p-4 sm:border-b-0 sm:border-r sm:p-6" />
+            <Stat value="1000+" label="RPS gateway" className="p-4 sm:p-6" />
           </section>
         </Reveal>
 
@@ -153,17 +203,20 @@ export default function Home() {
           <Reveal>
             <SectionLabel
               number="01"
-              title="What I"
-              italic="do"
-              description="Architecture, AI building and production ownership."
+              title="Operating"
+              italic="sequence"
+              description="A compact way to describe how I move through ambiguity."
             />
           </Reveal>
           <Reveal>
             <div className="grid gap-4 md:grid-cols-3">
               {services.map((service) => (
-                <article key={service.title} className="rounded-[24px] border border-rule-soft bg-surface/75 p-5 sm:p-6">
-                  <div className="display text-4xl leading-none text-accent">{service.result}</div>
-                  <h3 className="mt-6 display text-3xl leading-[0.95] text-ink">{service.title}</h3>
+                <article key={service.title} className="group border border-ink bg-surface/80 p-5 transition-transform duration-300 hover:-translate-y-1 sm:p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="display text-6xl leading-none text-accent">{service.result}</div>
+                    <span className="h-8 w-8 border border-ink bg-paper transition-colors group-hover:bg-ok" aria-hidden />
+                  </div>
+                  <h3 className="mt-8 display text-4xl leading-[0.88] text-ink">{service.title}</h3>
                   <p className="mt-4 text-sm leading-relaxed text-ink-2">{service.body}</p>
                   <div className="mt-5 flex flex-wrap gap-1.5">
                     {service.tags.map((tag) => (
@@ -265,7 +318,7 @@ export default function Home() {
 
         <Reveal>
           <section className="py-20 sm:py-28">
-            <div className="rounded-[28px] border border-ink bg-ink p-6 text-paper sm:p-10">
+            <div className="signal-frame bg-ink p-6 text-paper sm:p-10">
               <p className="mono text-[11px] uppercase tracking-[0.22em] text-paper/55">Next step</p>
               <p className="mt-5 display max-w-[13ch] text-[clamp(3rem,9vw,6rem)] leading-[0.9]">
                 Bring me the demo-to-prod cliff.

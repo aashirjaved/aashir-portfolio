@@ -23,7 +23,7 @@ export function NotableCard({
       target="_blank"
       rel="noreferrer"
       className={cn(
-        "group block rounded-[24px] border border-rule-soft bg-surface/70 p-5 transition-colors hover:border-accent sm:p-6",
+        "group block border border-ink bg-surface/70 p-5 transition-transform duration-300 hover:-translate-y-1 hover:bg-surface sm:p-6",
         className,
       )}
     >
@@ -42,7 +42,7 @@ export function NotableCard({
       {stats && stats.length > 0 && (
         <div className="mt-5 grid grid-cols-2 gap-3">
           {stats.slice(0, 2).map((s) => (
-            <div key={s.label} className="rounded-2xl border border-rule-soft bg-paper/60 p-3">
+            <div key={s.label} className="border border-rule-soft bg-paper/60 p-3">
               <div className="display text-3xl leading-none text-ink">{s.value}</div>
               <div className="mt-1 mono text-[10px] uppercase tracking-[0.18em] text-ink-mute">{s.label}</div>
             </div>

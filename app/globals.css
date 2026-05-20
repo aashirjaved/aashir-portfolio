@@ -4,18 +4,19 @@
 
 @layer base {
   :root {
-    --paper: 250 248 244;
-    --paper-2: 244 240 232;
-    --surface: 255 253 250;
-    --ink: 24 22 20;
-    --ink-2: 60 54 48;
-    --ink-mute: 122 112 102;
-    --ink-faint: 178 168 156;
-    --rule: 226 220 209;
-    --rule-soft: 235 230 220;
-    --accent: 194 74 44;
-    --accent-soft: 240 226 218;
-    --ok: 56 122 78;
+    --paper: 246 247 241;
+    --paper-2: 232 237 228;
+    --surface: 255 255 250;
+    --ink: 13 18 16;
+    --ink-2: 46 58 53;
+    --ink-mute: 97 111 104;
+    --ink-faint: 164 174 167;
+    --rule: 203 211 203;
+    --rule-soft: 222 228 220;
+    --accent: 231 73 40;
+    --accent-soft: 255 219 204;
+    --ok: 22 150 111;
+    --font-body: "Avenir Next", "Gill Sans", "Helvetica Neue";
 
     --background: var(--paper);
     --foreground: var(--ink);
@@ -68,15 +69,31 @@
 
   body {
     background:
-      radial-gradient(circle at 12% 8%, rgba(194, 74, 44, 0.10), transparent 26rem),
-      radial-gradient(circle at 88% 18%, rgba(56, 122, 78, 0.08), transparent 22rem),
+      linear-gradient(115deg, rgba(22, 150, 111, 0.13), transparent 32rem),
+      linear-gradient(245deg, rgba(231, 73, 40, 0.11), transparent 30rem),
+      linear-gradient(rgba(var(--ink),0.026) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(var(--ink),0.022) 1px, transparent 1px),
       linear-gradient(180deg, rgb(var(--paper)) 0%, rgb(var(--paper-2)) 100%);
+    background-size: auto, auto, 56px 56px, 56px 56px, auto;
     color: rgb(var(--ink));
     font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
     font-size: 16px;
     line-height: 1.5;
     min-height: 100vh;
     overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.42;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(var(--ink),0.04) 0 1px, transparent 1px 3px),
+      linear-gradient(90deg, rgba(var(--paper),0.92), transparent 18%, transparent 82%, rgba(var(--paper),0.92));
+    mix-blend-mode: multiply;
   }
 
   ::selection {
@@ -236,14 +253,16 @@
     border: 1px solid rgb(var(--ink));
     background: rgb(var(--ink));
     color: rgb(var(--paper));
-    border-radius: 999px;
-    transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+    border-radius: 8px;
+    box-shadow: 0 12px 30px rgba(13, 18, 16, 0.12);
+    transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
     line-height: 1;
   }
   .btn:hover {
     background: rgb(var(--accent));
     border-color: rgb(var(--accent));
-    transform: translateY(-1px);
+    box-shadow: 0 16px 34px rgba(231, 73, 40, 0.22);
+    transform: translateY(-2px);
   }
   .btn-ghost {
     background: rgba(var(--surface), 0.45);
@@ -261,8 +280,8 @@
     border: 1px solid rgb(var(--rule-soft));
     background:
       linear-gradient(135deg, rgba(255,255,255,0.74), rgba(255,255,255,0.22)),
-      radial-gradient(circle at 20% 20%, rgba(var(--accent),0.18), transparent 18rem),
-      radial-gradient(circle at 85% 30%, rgba(var(--ok),0.14), transparent 16rem),
+      linear-gradient(125deg, rgba(var(--accent),0.14), transparent 42%),
+      linear-gradient(305deg, rgba(var(--ok),0.12), transparent 48%),
       rgb(var(--surface));
     box-shadow: 0 24px 80px rgba(24, 22, 20, 0.07);
   }
@@ -279,13 +298,6 @@
     mask-image: linear-gradient(180deg, black, transparent 78%);
   }
 
-  .orb {
-    position: absolute;
-    border-radius: 999px;
-    background: rgb(var(--accent));
-    filter: blur(0.2px);
-  }
-
   .phone-shell {
     border: 1px solid rgba(var(--ink),0.15);
     background: rgba(var(--paper),0.72);
@@ -297,6 +309,41 @@
     border: 1px solid rgb(var(--rule-soft));
     background: rgba(var(--surface), 0.62);
     backdrop-filter: blur(12px);
+  }
+
+  .signal-frame {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgb(var(--ink));
+    background:
+      linear-gradient(135deg, rgba(var(--surface), 0.95), rgba(var(--paper-2), 0.72)),
+      linear-gradient(90deg, rgba(var(--ink), 0.045) 1px, transparent 1px),
+      linear-gradient(rgba(var(--ink), 0.04) 1px, transparent 1px);
+    background-size: auto, 18px 18px, 18px 18px;
+    box-shadow: 6px 6px 0 rgb(var(--ink));
+  }
+
+  .signal-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(110deg, transparent 0 42%, rgba(var(--accent),0.16) 42% 53%, transparent 53%),
+      linear-gradient(180deg, transparent, rgba(var(--ink),0.08));
+    mix-blend-mode: multiply;
+  }
+
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 24s linear infinite;
+  }
+}
+
+@media (min-width: 640px) {
+  .signal-frame {
+    box-shadow: 12px 12px 0 rgb(var(--ink));
   }
 }
 

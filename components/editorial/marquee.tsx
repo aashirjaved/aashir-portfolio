@@ -7,7 +7,7 @@ const companies = [
   { label: "Motorway", src: "/logos/motorway.svg", type: "wordmark" },
   { label: "Deliveroo", src: "/logos/deliveroo.svg", type: "mark" },
   { label: "Zalando", src: "/logos/zalando.svg", type: "mark" },
-  { label: "IBM", src: "/logos/ibm.svg", type: "mark" },
+  { label: "IBM", src: "/logos/ibm.svg", type: "wordmark" },
   { label: "Nordcloud", src: "/logos/nordcloud.svg", type: "wordmark" },
 ];
 

@@ -11,7 +11,7 @@ export type WorkRowItem = {
 
 export function WorkRow({ item }: { item: WorkRowItem }) {
   return (
-    <article className="rounded-[24px] border border-rule-soft bg-surface/70 p-5 transition-colors hover:border-rule sm:p-6">
+    <article className="border border-ink bg-surface/70 p-5 transition-transform duration-300 hover:-translate-y-1 hover:bg-surface sm:p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="mono text-[11px] uppercase tracking-[0.2em] text-ink-mute">{item.year}</div>

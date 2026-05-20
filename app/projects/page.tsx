@@ -10,6 +10,29 @@ import {
 
 const projects: Omit<ProjectCardProps, "number">[] = [
   {
+    title: "Kaiju Logic Lab",
+    company: "Built for my son",
+    period: "2026",
+    status: "Beta",
+    description:
+      "Brain-training sister game to the typing rampage. Four kaiju-themed mini-games teach memory, sequencing, pattern recognition and size-ordering.",
+    details: [
+      "MATCH PAIRS — flip cards, find matching kaiju (working memory)",
+      "REPEAT THE ROAR — Simon-Says sequencing with rising rounds",
+      "WHAT COMES NEXT? — pattern recognition (AB, AAB, ABC, AABB)",
+      "SIZE ORDER — tap kaiju smallest to biggest (relative reasoning)",
+      "Voice + canvas-confetti + GSAP overshoot tweens",
+    ],
+    technologies: ["html", "css", "javascript", "web audio", "canvas-confetti", "gsap"],
+    metrics: [
+      { label: "Games", value: "4" },
+      { label: "Kaiju", value: "8" },
+      { label: "Goal", value: "logic" },
+    ],
+    featured: true,
+    link: { href: "/kaijulab/", label: "▶ Play the game" },
+  },
+  {
     title: "Godzilla Typing Rampage",
     company: "Built for my son",
     period: "2026",

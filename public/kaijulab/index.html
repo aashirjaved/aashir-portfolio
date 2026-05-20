@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#0a0a18" />
+<title>KAIJU LOGIC LAB</title>
+<script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<style>
+  :root {
+    --sky-1:#0a0a18;
+    --sky-2:#1a0824;
+    --sky-3:#2a0846;
+    --accent:#ffeb6a;
+    --glow:#ff44dd;
+    --ok:#5fffaa;
+    --bad:#ff4444;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{
+    width:100%;height:100%;overflow:hidden;
+    font-family:"Impact","Arial Black",system-ui,sans-serif;
+    color:#fff;
+    background:#000;
+    user-select:none;-webkit-user-select:none;
+    touch-action:manipulation;
+    overscroll-behavior:none;
+  }
+  #app{
+    position:fixed;inset:0;
+    background:
+      radial-gradient(ellipse at 50% 0%, var(--sky-3) 0%, var(--sky-2) 40%, var(--sky-1) 100%),
+      linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 100%);
+    overflow:hidden;
+  }
+  /* Star field background */
+  .star{
+    position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;
+    opacity:.6;animation:twinkle 3s ease-in-out infinite;
+    pointer-events:none;z-index:0;
+  }
+  @keyframes twinkle{0%,100%{opacity:.2}50%{opacity:.9}}
+
+  /* =========== CONSTANT MOTION BACKGROUND =========== */
+  /* Lava-lamp blobs that float across the screen, hue-shifting */
+  .blob{
+    position:absolute;border-radius:50%;
+    filter:blur(40px);
+    opacity:.55;pointer-events:none;z-index:0;
+    mix-blend-mode:screen;
+  }
+  .blob-a{ width:340px;height:340px;background:#ff44dd; animation:float-a 22s ease-in-out infinite; }
+  .blob-b{ width:280px;height:280px;background:#5fffaa; animation:float-b 28s ease-in-out infinite; }
+  .blob-c{ width:300px;height:300px;background:#ffeb6a; animation:float-c 26s ease-in-out infinite; }
+  .blob-d{ width:260px;height:260px;background:#88ccff; animation:float-d 24s ease-in-out infinite; }
+  @keyframes float-a{
+    0%,100%{transform:translate(-20vw,-10vh) scale(1);}
+    33%   {transform:translate(60vw,30vh) scale(1.2);}
+    66%   {transform:translate(20vw,70vh) scale(.9);}
+  }
+  @keyframes float-b{
+    0%,100%{transform:translate(80vw,20vh) scale(.9);}
+    33%   {transform:translate(10vw,50vh) scale(1.1);}
+    66%   {transform:translate(70vw,80vh) scale(1.3);}
+  }
+  @keyframes float-c{
+    0%,100%{transform:translate(50vw,90vh) scale(1);}
+    33%   {transform:translate(80vw,10vh) scale(1.2);}
+    66%   {transform:translate(10vw,30vh) scale(.95);}
+  }
+  @keyframes float-d{
+    0%,100%{transform:translate(0vw,60vh) scale(1.1);}
+    33%   {transform:translate(70vw,5vh) scale(.9);}
+    66%   {transform:translate(40vw,40vh) scale(1.2);}
+  }
+  /* Floating tiny sparks rising upward across the screen */
+  .spark{
+    position:absolute;width:4px;height:14px;border-radius:2px;
+    background:linear-gradient(180deg,#ffeb6a,transparent);
+    opacity:.9; z-index:0; pointer-events:none;
+    animation:spark-rise linear infinite;
+  }
+  @keyframes spark-rise{
+    0%   { transform:translate(0, 0) scale(1); opacity:0; }
+    10%  { opacity:.9; }
+    100% { transform:translate(40px, -100vh) scale(0.4); opacity:0; }
+  }
+
+  /* =========== MASCOT in corner that reacts =========== */
+  #mascot{
+    position:absolute;bottom:12px;right:12px;
+    font-size:54px; z-index:6; pointer-events:none;
+    filter:drop-shadow(0 0 14px #ffeb6a);
+    animation:mascot-idle 2.4s ease-in-out infinite;
+  }
+  @keyframes mascot-idle{
+    0%,100%{transform:translateY(0) rotate(-2deg);}
+    50%    {transform:translateY(-8px) rotate(2deg);}
+  }
+  #mascot.cheer{animation:mascot-cheer .8s ease-out;}
+  @keyframes mascot-cheer{
+    0%  {transform:translateY(0) rotate(0) scale(1);}
+    40% {transform:translateY(-40px) rotate(-15deg) scale(1.3);}
+    70% {transform:translateY(0) rotate(15deg) scale(1.1);}
+    100%{transform:translateY(0) rotate(0) scale(1);}
+  }
+  #mascot.sad{animation:mascot-sad .7s ease-out;}
+  @keyframes mascot-sad{
+    0%,100%{transform:translateY(0);}
+    50%    {transform:translateY(10px) scale(0.85);}
+  }
+
+  /* =========== STREAK meter, top-center =========== */
+  #streak{
+    position:absolute;top:14px;left:50%;transform:translateX(-50%);
+    z-index:8;
+    background:rgba(0,0,0,.65);
+    border:2px solid var(--accent);
+    border-radius:24px;
+    padding:6px 18px;
+    color:var(--accent);
+    font-size:14px;letter-spacing:3px;
+    text-shadow:0 0 8px var(--glow);
+    opacity:0;
+    transition:opacity .3s ease;
+    pointer-events:none;
+  }
+  #streak.show{ opacity:1; }
+  #streak.fire{
+    animation:streak-pulse .6s ease-in-out infinite alternate;
+    color:#ff5500; border-color:#ff5500;
+    text-shadow:0 0 14px #ff5500,0 0 28px #ff8800;
+  }
+  @keyframes streak-pulse{
+    from{transform:translateX(-50%) scale(1);}
+    to  {transform:translateX(-50%) scale(1.12);}
+  }
+
+  /* Tap ripple */
+  .ripple{
+    position:absolute;border-radius:50%;
+    pointer-events:none;z-index:30;
+    width:40px;height:40px;
+    transform:translate(-50%,-50%) scale(0);
+    border:3px solid var(--accent);
+    opacity:.85;
+    animation:ripple .55s ease-out forwards;
+  }
+  @keyframes ripple{
+    0%{transform:translate(-50%,-50%) scale(0);opacity:.85;}
+    100%{transform:translate(-50%,-50%) scale(6);opacity:0;}
+  }
+
+  /* SCREENS */
+  .screen{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:flex-start;
+    padding:18px 14px 80px;
+    overflow-y:auto;-webkit-overflow-scrolling:touch;
+    z-index:1;
+  }
+  .screen.hidden{display:none}
+
+  h1.title{
+    font-size:clamp(36px,8vw,84px);
+    letter-spacing:4px;
+    color:var(--accent);
+    text-shadow:0 0 18px var(--glow),0 0 36px var(--glow),4px 4px 0 #000;
+    text-align:center;
+    margin:14px 0 2px;
+    line-height:1;
+    animation:title-bob 3s ease-in-out infinite;
+  }
+  @keyframes title-bob{0%,100%{transform:rotate(-1deg) translateY(0)}50%{transform:rotate(1deg) translateY(-4px)}}
+
+  .subtitle{
+    text-align:center;color:#aaa;font-size:clamp(14px,2.4vw,18px);
+    letter-spacing:3px;margin-bottom:18px;
+  }
+
+  /* HUB game cards */
+  .hub-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:14px;
+    width:100%;max-width:780px;
+    margin-top:12px;
+  }
+  .hub-card{
+    background:linear-gradient(160deg,rgba(255,235,106,.08) 0%,rgba(255,68,221,.06) 100%);
+    border:3px solid var(--accent);
+    border-radius:14px;
+    padding:18px 14px;
+    text-align:center;
+    color:#fff;
+    font-family:inherit;
+    cursor:pointer;
+    transition:transform .15s ease,box-shadow .15s ease,background .15s ease;
+    box-shadow:0 0 16px rgba(255,68,221,.25);
+    position:relative;
+    overflow:hidden;
+  }
+  .hub-card:hover,.hub-card:focus-visible{
+    transform:translateY(-4px) scale(1.04);
+    background:linear-gradient(160deg,rgba(255,235,106,.18) 0%,rgba(255,68,221,.15) 100%);
+    box-shadow:0 0 30px var(--accent),0 0 60px rgba(255,68,221,.5);
+    outline:none;
+  }
+  .hub-card:active{transform:translateY(2px) scale(.97)}
+  .hub-card .icon{font-size:clamp(48px,9vw,76px);line-height:1;margin-bottom:6px;filter:drop-shadow(0 0 14px currentColor)}
+  .hub-card .name{font-size:clamp(16px,2.8vw,22px);letter-spacing:2px;color:var(--accent);text-shadow:1px 1px 0 #000;margin-bottom:4px}
+  .hub-card .desc{font-size:clamp(11px,1.8vw,13px);color:#ddd;letter-spacing:1px;line-height:1.4}
+  .hub-card .play-tag{
+    margin-top:8px;font-size:11px;letter-spacing:3px;color:#000;
+    background:var(--accent);padding:4px 10px;border-radius:4px;display:inline-block;
+    font-weight:900;
+  }
+
+  /* BACK button */
+  .back-btn{
+    position:absolute;top:14px;left:14px;z-index:10;
+    background:rgba(0,0,0,.7);color:#fff;
+    border:2px solid var(--accent);border-radius:8px;
+    padding:8px 14px;font-family:inherit;font-size:14px;letter-spacing:2px;
+    cursor:pointer;
+  }
+  .back-btn:hover{background:var(--accent);color:#000}
+
+  /* SOUND/VOICE toggles */
+  .toggle-btn{
+    position:absolute;top:14px;z-index:10;
+    background:rgba(0,0,0,.7);color:#fff;
+    border:2px solid var(--accent);border-radius:8px;
+    padding:8px 12px;font-family:inherit;font-size:13px;letter-spacing:2px;
+    cursor:pointer;
+  }
+  #soundToggle{right:14px}
+  #voiceToggle{right:110px}
+
+  /* HUD strip used inside mini-games */
+  .game-hud{
+    display:flex;justify-content:center;gap:10px;flex-wrap:wrap;
+    margin:50px auto 10px;max-width:780px;
+  }
+  .hud-chip{
+    background:rgba(0,0,0,.6);border:2px solid var(--accent);
+    border-radius:8px;padding:6px 14px;
+  }
+  .hud-chip .lbl{font-size:10px;letter-spacing:2px;color:var(--accent);opacity:.8}
+  .hud-chip .val{font-size:22px;color:#fff;letter-spacing:2px;line-height:1.1}
+
+  /* Big bottom hint / instruction strip */
+  .instr{
+    width:100%;max-width:720px;text-align:center;margin:6px auto 10px;
+    color:var(--accent);font-size:clamp(15px,2.5vw,20px);letter-spacing:2px;
+    text-shadow:0 0 10px var(--glow),2px 2px 0 #000;
+  }
+
+  /* =================== MATCH PAIRS =================== */
+  .match-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    width:100%;max-width:560px;
+    margin:0 auto;
+  }
+  .card{
+    aspect-ratio:1/1.15;
+    perspective:600px;
+    cursor:pointer;
+    animation:card-idle 3.6s ease-in-out infinite;
+  }
+  .card:nth-child(2n){animation-delay:.4s}
+  .card:nth-child(3n){animation-delay:.8s}
+  .card:nth-child(5n){animation-delay:1.2s}
+  @keyframes card-idle{
+    0%,100%{transform:translateY(0) rotate(-1deg);}
+    50%    {transform:translateY(-6px) rotate(1deg);}
+  }
+  .card:hover .card-inner,.card:focus-visible .card-inner{filter:brightness(1.3) drop-shadow(0 0 18px currentColor);}
+  .card:hover{transform:scale(1.05);}
+  .card-inner{
+    position:relative;width:100%;height:100%;
+    transition:transform .5s;transform-style:preserve-3d;
+  }
+  .card.flipped .card-inner,.card.matched .card-inner{transform:rotateY(180deg)}
+  .card-face{
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:12px;
+    backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    font-size:clamp(36px,7vw,64px);
+    border:3px solid;
+  }
+  .card-front{
+    background:linear-gradient(160deg,#2a0846,#0a0a18);
+    border-color:var(--glow);
+    color:var(--accent);
+    box-shadow:inset 0 0 12px rgba(255,68,221,.4);
+  }
+  .card-front::before{content:"?";font-size:clamp(48px,9vw,80px);font-weight:900;text-shadow:0 0 12px var(--glow)}
+  .card-back{
+    transform:rotateY(180deg);
+    background:rgba(0,0,0,.5);
+  }
+  .card.matched .card-back{
+    border-color:var(--ok) !important;
+    box-shadow:0 0 16px var(--ok), 0 0 32px rgba(95,255,170,.4);
+    animation:matched-pop .4s ease-out;
+  }
+  @keyframes matched-pop{0%{transform:rotateY(180deg) scale(1)}50%{transform:rotateY(180deg) scale(1.15)}100%{transform:rotateY(180deg) scale(1)}}
+
+  /* =================== SIMON / ROAR =================== */
+  .simon-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    width:100%;max-width:480px;
+    margin:0 auto;
+  }
+  .simon-pad{
+    aspect-ratio:1/1;
+    border-radius:18px;
+    border:4px solid;
+    background:rgba(0,0,0,.5);
+    display:flex;align-items:center;justify-content:center;
+    font-size:clamp(60px,12vw,110px);
+    cursor:pointer;
+    transition:transform .08s ease,box-shadow .12s ease,background .12s ease;
+    user-select:none;
+    position:relative;
+    animation:simon-idle 2.8s ease-in-out infinite;
+  }
+  .simon-pad:nth-child(2){animation-delay:.3s}
+  .simon-pad:nth-child(3){animation-delay:.6s}
+  .simon-pad:nth-child(4){animation-delay:.9s}
+  @keyframes simon-idle{
+    0%,100%{transform:translateY(0) rotate(-2deg);box-shadow:0 0 16px currentColor;}
+    50%    {transform:translateY(-12px) rotate(2deg);box-shadow:0 0 36px currentColor,0 0 60px currentColor;}
+  }
+  .simon-pad:hover,.simon-pad:focus-visible{filter:brightness(1.4);box-shadow:0 0 40px currentColor,inset 0 0 18px currentColor;}
+  .simon-pad:active{transform:scale(.94);}
+  .simon-pad .pad-name{
+    position:absolute;bottom:10px;left:0;right:0;
+    font-size:clamp(11px,2vw,15px);letter-spacing:2px;color:currentColor;
+    text-shadow:1px 1px 0 #000;text-align:center;
+  }
+  .simon-pad.glow{
+    background:rgba(255,255,255,.25);
+    box-shadow:0 0 40px currentColor,0 0 80px currentColor,inset 0 0 30px currentColor;
+    transform:scale(1.04);
+  }
+
+  /* =================== WHAT COMES NEXT =================== */
+  .pattern-row{
+    display:flex;gap:10px;align-items:center;justify-content:center;
+    flex-wrap:wrap;margin:14px auto;max-width:640px;
+  }
+  .pat-tile{
+    width:clamp(56px,10vw,84px);
+    height:clamp(56px,10vw,84px);
+    border-radius:14px;
+    border:3px solid;
+    display:flex;align-items:center;justify-content:center;
+    font-size:clamp(36px,7vw,56px);
+    background:rgba(0,0,0,.45);
+    box-shadow:0 0 12px currentColor;
+    animation:pat-idle 3s ease-in-out infinite;
+  }
+  .pat-tile:nth-child(2){animation-delay:.18s}
+  .pat-tile:nth-child(3){animation-delay:.36s}
+  .pat-tile:nth-child(4){animation-delay:.54s}
+  .pat-tile:nth-child(5){animation-delay:.72s}
+  .pat-tile:nth-child(6){animation-delay:.9s}
+  @keyframes pat-idle{
+    0%,100%{transform:translateY(0);}
+    50%    {transform:translateY(-6px);}
+  }
+  .pat-tile.appear{animation:pat-appear .55s cubic-bezier(.2,.7,.2,1) backwards;}
+  @keyframes pat-appear{
+    0%  {transform:translateY(-40px) scale(.4);opacity:0;}
+    60% {transform:translateY(4px) scale(1.12);opacity:1;}
+    100%{transform:translateY(0) scale(1);opacity:1;}
+  }
+  .pat-tile.question{
+    color:var(--accent);
+    border-color:var(--accent);
+    animation:question-pulse .7s ease-in-out infinite alternate;
+  }
+  .pat-tile.question::after{content:"?";font-size:clamp(40px,8vw,64px);color:var(--accent);font-weight:900;text-shadow:0 0 8px var(--glow)}
+  @keyframes question-pulse{from{transform:scale(1)}to{transform:scale(1.1)}}
+  .pat-choices{
+    display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:18px;
+  }
+  .pat-choice{
+    width:clamp(70px,12vw,100px);
+    height:clamp(70px,12vw,100px);
+    border-radius:14px;border:3px solid;
+    background:rgba(0,0,0,.5);
+    display:flex;align-items:center;justify-content:center;
+    font-size:clamp(40px,7vw,64px);
+    cursor:pointer;
+    transition:transform .12s ease,box-shadow .15s ease;
+  }
+  .pat-choice:hover,.pat-choice:focus-visible{transform:translateY(-4px) scale(1.05);box-shadow:0 0 26px currentColor;outline:none}
+  .pat-choice.right{animation:right-flash .6s ease-out;border-color:var(--ok)}
+  .pat-choice.wrong{animation:wrong-shake .5s ease-out;border-color:var(--bad)}
+  @keyframes right-flash{0%{box-shadow:0 0 0 currentColor}50%{box-shadow:0 0 40px var(--ok),0 0 80px var(--ok)}100%{box-shadow:0 0 0 currentColor}}
+  @keyframes wrong-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+
+  /* =================== SIZE ORDER =================== */
+  .size-row{
+    display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+    margin:18px auto;max-width:720px;
+  }
+  .size-tile{
+    border-radius:14px;border:3px solid;
+    background:rgba(0,0,0,.5);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    cursor:pointer;
+    transition:transform .15s ease,box-shadow .15s ease,opacity .2s ease;
+    padding:8px;
+    animation:size-idle 2.6s ease-in-out infinite;
+  }
+  .size-tile:nth-child(2){animation-delay:.25s}
+  .size-tile:nth-child(3){animation-delay:.5s}
+  .size-tile:nth-child(4){animation-delay:.75s}
+  @keyframes size-idle{
+    0%,100%{transform:translateY(0);box-shadow:0 0 14px currentColor;}
+    50%    {transform:translateY(-10px);box-shadow:0 0 30px currentColor,0 0 50px currentColor;}
+  }
+  .size-tile .emoji{font-size:clamp(40px,8vw,64px);filter:drop-shadow(0 0 10px currentColor)}
+  .size-tile .nm{font-size:clamp(10px,1.7vw,12px);letter-spacing:1px;color:currentColor;text-shadow:1px 1px 0 #000;margin-top:4px}
+  .size-tile:hover,.size-tile:focus-visible{transform:translateY(-4px) scale(1.05);box-shadow:0 0 28px currentColor;outline:none}
+  .size-tile.picked{opacity:.3;pointer-events:none;border-color:var(--ok)}
+  .size-tile.bad{animation:wrong-shake .5s ease-out;border-color:var(--bad) !important}
+  .size-staging{
+    display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+    min-height:90px;
+    padding:10px;
+    background:rgba(255,235,106,.08);
+    border:2px dashed var(--accent);
+    border-radius:12px;
+    margin:10px auto;max-width:720px;
+  }
+  .size-staging .ss-empty{
+    color:#888;align-self:center;font-size:13px;letter-spacing:2px;
+  }
+  .size-staging .size-tile{cursor:default}
+  .step-arrow{
+    color:var(--accent);font-size:20px;align-self:center;letter-spacing:2px;
+  }
+
+  /* =================== END SCREEN =================== */
+  .end-card{
+    width:100%;max-width:480px;margin:30px auto;
+    background:rgba(0,0,0,.7);
+    border:3px solid var(--accent);
+    border-radius:14px;padding:24px;
+    text-align:center;
+  }
+  .end-card h2{font-size:clamp(28px,5vw,42px);color:var(--ok);text-shadow:0 0 16px var(--ok);margin-bottom:10px;letter-spacing:3px}
+  .end-card .stars{font-size:clamp(40px,7vw,56px);margin:10px 0;letter-spacing:6px}
+  .end-card p{margin:6px 0;color:#ddd;letter-spacing:1px;font-size:14px}
+  .end-card .btn{
+    margin-top:18px;padding:14px 28px;font-size:18px;letter-spacing:3px;
+    background:linear-gradient(180deg,var(--accent),#aa7a08);
+    color:#1a0808;border:3px solid #fff;
+    border-radius:10px;cursor:pointer;font-family:inherit;font-weight:900;
+  }
+  .end-card .btn:hover{transform:scale(1.05)}
+
+  /* Toast notification */
+  .toast{
+    position:absolute;left:50%;top:30%;transform:translate(-50%,-50%);
+    background:rgba(0,0,0,.85);color:var(--accent);
+    border:3px solid currentColor;border-radius:12px;
+    padding:14px 26px;font-size:clamp(20px,4vw,32px);letter-spacing:3px;
+    z-index:20;pointer-events:none;opacity:0;
+    text-shadow:0 0 10px currentColor,2px 2px 0 #000;
+  }
+  .toast.show{animation:toast-pop 1.4s ease-out forwards}
+  @keyframes toast-pop{
+    0%{transform:translate(-50%,-50%) scale(0);opacity:0}
+    20%{transform:translate(-50%,-50%) scale(1.2);opacity:1}
+    60%{transform:translate(-50%,-50%) scale(1);opacity:1}
+    100%{transform:translate(-50%,-50%) scale(1.4);opacity:0}
+  }
+
+  /* version line */
+  .version{
+    position:absolute;bottom:6px;left:0;right:0;text-align:center;
+    font-size:10px;letter-spacing:2px;color:#555;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- Background motion elements -->
+  <div class="blob blob-a"></div>
+  <div class="blob blob-b"></div>
+  <div class="blob blob-c"></div>
+  <div class="blob blob-d"></div>
+
+  <!-- Streak meter (shown during games) -->
+  <div id="streak">STREAK x0</div>
+
+  <!-- Mascot in corner reacting -->
+  <div id="mascot">🦖</div>
+
+  <!-- HUB -->
+  <div id="hub" class="screen">
+    <h1 class="title">KAIJU<br/>LOGIC<br/>LAB</h1>
+    <div class="subtitle">PICK A BRAIN GAME!</div>
+    <div class="hub-grid">
+      <button class="hub-card" data-game="match" type="button" style="color:#5fffaa">
+        <div class="icon">🧠</div>
+        <div class="name">MATCH PAIRS</div>
+        <div class="desc">Flip cards. Find matching kaiju. Train your memory!</div>
+        <div class="play-tag">▶ PLAY</div>
+      </button>
+      <button class="hub-card" data-game="simon" type="button" style="color:#ff8800">
+        <div class="icon">🔊</div>
+        <div class="name">REPEAT THE ROAR</div>
+        <div class="desc">Watch the kaiju roar in order. Tap them back in the same order!</div>
+        <div class="play-tag">▶ PLAY</div>
+      </button>
+      <button class="hub-card" data-game="pattern" type="button" style="color:#88ccff">
+        <div class="icon">🔮</div>
+        <div class="name">WHAT'S NEXT?</div>
+        <div class="desc">See a pattern. Pick what comes next!</div>
+        <div class="play-tag">▶ PLAY</div>
+      </button>
+      <button class="hub-card" data-game="size" type="button" style="color:#ff44dd">
+        <div class="icon">📏</div>
+        <div class="name">SIZE ORDER</div>
+        <div class="desc">Tap the kaiju from smallest to biggest!</div>
+        <div class="play-tag">▶ PLAY</div>
+      </button>
+    </div>
+    <p style="text-align:center;color:#888;margin-top:24px;font-size:12px;letter-spacing:2px;max-width:600px;">
+      Practice memory, logic, patterns and ordering — with KAIJU. 🦖🦍🐉
+    </p>
+  </div>
+
+  <!-- MATCH PAIRS -->
+  <div id="game-match" class="screen hidden">
+    <button class="back-btn" data-back>◀ HUB</button>
+    <div class="game-hud">
+      <div class="hud-chip"><div class="lbl">FLIPS</div><div class="val" id="match-flips">0</div></div>
+      <div class="hud-chip"><div class="lbl">PAIRS</div><div class="val" id="match-pairs">0/6</div></div>
+      <div class="hud-chip"><div class="lbl">TIME</div><div class="val" id="match-time">0s</div></div>
+    </div>
+    <div class="instr">Find matching kaiju! Flip 2 cards at a time.</div>
+    <div class="match-grid" id="match-grid"></div>
+  </div>
+
+  <!-- SIMON / REPEAT THE ROAR -->
+  <div id="game-simon" class="screen hidden">
+    <button class="back-btn" data-back>◀ HUB</button>
+    <div class="game-hud">
+      <div class="hud-chip"><div class="lbl">ROUND</div><div class="val" id="simon-round">1</div></div>
+      <div class="hud-chip"><div class="lbl">BEST</div><div class="val" id="simon-best">0</div></div>
+    </div>
+    <div class="instr" id="simon-instr">Watch the kaiju roar! Then tap them back.</div>
+    <div class="simon-grid" id="simon-grid"></div>
+    <div style="text-align:center;margin-top:20px;">
+      <button class="hub-card" id="simon-start" style="color:#ff8800;display:inline-block;width:auto;padding:14px 30px;cursor:pointer">
+        <div class="name">▶ START SEQUENCE</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- WHAT COMES NEXT? -->
+  <div id="game-pattern" class="screen hidden">
+    <button class="back-btn" data-back>◀ HUB</button>
+    <div class="game-hud">
+      <div class="hud-chip"><div class="lbl">ROUND</div><div class="val" id="pat-round">1/8</div></div>
+      <div class="hud-chip"><div class="lbl">SCORE</div><div class="val" id="pat-score">0</div></div>
+    </div>
+    <div class="instr">What comes NEXT? Pick the answer!</div>
+    <div class="pattern-row" id="pat-row"></div>
+    <div class="pat-choices" id="pat-choices"></div>
+  </div>
+
+  <!-- SIZE ORDER -->
+  <div id="game-size" class="screen hidden">
+    <button class="back-btn" data-back>◀ HUB</button>
+    <div class="game-hud">
+      <div class="hud-chip"><div class="lbl">ROUND</div><div class="val" id="size-round">1/5</div></div>
+      <div class="hud-chip"><div class="lbl">SCORE</div><div class="val" id="size-score">0</div></div>
+    </div>
+    <div class="instr">Tap the kaiju from SMALLEST to BIGGEST!</div>
+    <div class="size-staging" id="size-staging">
+      <span class="ss-empty">Your order ➜</span>
+    </div>
+    <div class="size-row" id="size-row"></div>
+  </div>
+
+  <!-- END SCREEN (shared) -->
+  <div id="endscreen" class="screen hidden">
+    <button class="back-btn" data-back>◀ HUB</button>
+    <div class="end-card">
+      <h2 id="end-title">GREAT JOB!</h2>
+      <div class="stars" id="end-stars">⭐⭐⭐</div>
+      <p id="end-summary"></p>
+      <button class="btn" id="end-again" type="button">▶ PLAY AGAIN</button>
+      <button class="btn" id="end-hub" type="button" style="background:linear-gradient(180deg,#5fffaa,#0a5a2a);color:#001a0a;margin-left:10px;">🏠 HUB</button>
+    </div>
+  </div>
+
+  <!-- Floating Sound + Voice -->
+  <button class="toggle-btn" id="soundToggle" type="button">🔊 SOUND</button>
+  <button class="toggle-btn" id="voiceToggle" type="button">🗣 VOICE</button>
+
+  <div id="toast" class="toast"></div>
+  <div class="version">KAIJU LOGIC LAB · v1.1 · DOPAMINE BOOST</div>
+</div>
+
+<script>
+/* =====================================================================
+ * KAIJU LOGIC LAB — 4 brain mini-games for kids using Dinos / Godzilla / Kong
+ * ===================================================================== */
+
+// ---------- Kaiju cast ----------
+const KAIJU = {
+  gojira:   { name:"GOJIRA",   emoji:"🦖", color:"#5fffaa", say:"Gojira",     size:80 },
+  kong:     { name:"KONG",     emoji:"🦍", color:"#c8946a", say:"King Kong",  size:55 },
+  ghidorah: { name:"GHIDORAH", emoji:"🐉", color:"#ffeb6a", say:"Ghidorah",   size:95 },
+  bronto:   { name:"BRONTO",   emoji:"🦕", color:"#aa88ff", say:"Bronto",     size:70 },
+  raptor:   { name:"RAPTOR",   emoji:"🦎", color:"#88ccff", say:"Raptor",     size:25 },
+  dragon:   { name:"DRAGON",   emoji:"🐲", color:"#ff8800", say:"Dragon",     size:60 },
+  rex:      { name:"T-REX",    emoji:"🦖", color:"#ff5500", say:"T Rex",      size:75 },
+  croc:     { name:"REPTILICUS", emoji:"🐊", color:"#5fcf6a", say:"Croco",    size:40 },
+};
+const ALL_KAIJU_KEYS = Object.keys(KAIJU);
+
+// ---------- Audio engine (Web Audio API generated) ----------
+const Audio = (() => {
+  let ctx=null, enabled=true;
+  function ensure(){
+    if(!ctx) ctx = new (window.AudioContext||window.webkitAudioContext)();
+    if(ctx.state==="suspended") ctx.resume();
+    return ctx;
+  }
+  function env(g,a,d,s,r,peak=1){
+    const t=ctx.currentTime;
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(peak,t+a);
+    g.gain.linearRampToValueAtTime(peak*s,t+a+d);
+    g.gain.linearRampToValueAtTime(0,t+a+d+r);
+  }
+  function chime(freq=880){
+    if(!enabled) return;
+    ensure();
+    const t=ctx.currentTime;
+    [freq,freq*1.25,freq*1.5].forEach((f,i)=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.type="triangle"; o.frequency.setValueAtTime(f,t+i*0.04);
+      g.gain.setValueAtTime(0,t+i*0.04);
+      g.gain.linearRampToValueAtTime(.18,t+i*0.04+.01);
+      g.gain.linearRampToValueAtTime(0,t+i*0.04+.14);
+      o.connect(g);g.connect(ctx.destination);
+      o.start(t+i*0.04);o.stop(t+i*0.04+.16);
+    });
+  }
+  function buzz(){
+    if(!enabled) return;
+    ensure();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.type="square";o.frequency.setValueAtTime(140,ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(70,ctx.currentTime+.22);
+    env(g,.005,.05,.4,.2,.22);
+    o.connect(g);g.connect(ctx.destination);
+    o.start();o.stop(ctx.currentTime+.3);
+  }
+  function roar(){
+    if(!enabled) return;
+    ensure();
+    const dur=.9;
+    const o1=ctx.createOscillator(),o2=ctx.createOscillator();
+    const f=ctx.createBiquadFilter(),g=ctx.createGain();
+    o1.type="sawtooth";o2.type="square";
+    o1.frequency.setValueAtTime(110,ctx.currentTime);
+    o1.frequency.exponentialRampToValueAtTime(55,ctx.currentTime+dur);
+    o2.frequency.setValueAtTime(90,ctx.currentTime);
+    o2.frequency.exponentialRampToValueAtTime(50,ctx.currentTime+dur);
+    f.type="lowpass";f.frequency.value=700;f.Q.value=8;
+    env(g,.05,.15,.7,dur-.25,.45);
+    o1.connect(f);o2.connect(f);f.connect(g);g.connect(ctx.destination);
+    o1.start();o2.start();
+    o1.stop(ctx.currentTime+dur);o2.stop(ctx.currentTime+dur);
+  }
+  function tone(freq, durSec=.4){
+    if(!enabled) return;
+    ensure();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.type="sawtooth";o.frequency.setValueAtTime(freq,ctx.currentTime);
+    env(g,.01,.05,.6,durSec-.06,.3);
+    const f=ctx.createBiquadFilter();
+    f.type="lowpass";f.frequency.value=1200;
+    o.connect(f);f.connect(g);g.connect(ctx.destination);
+    o.start();o.stop(ctx.currentTime+durSec+.05);
+  }
+  function explode(){
+    if(!enabled) return;
+    ensure();
+    const dur=.6;
+    const buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate);
+    const data=buf.getChannelData(0);
+    for(let i=0;i<data.length;i++){const d=1-i/data.length;data[i]=(Math.random()*2-1)*d*d;}
+    const src=ctx.createBufferSource();src.buffer=buf;
+    const f=ctx.createBiquadFilter();f.type="lowpass";
+    f.frequency.setValueAtTime(2500,ctx.currentTime);
+    f.frequency.exponentialRampToValueAtTime(100,ctx.currentTime+dur);
+    const g=ctx.createGain();env(g,.005,.05,.6,dur-.05,.7);
+    src.connect(f);f.connect(g);g.connect(ctx.destination);
+    src.start();
+  }
+  function fanfare(){
+    if(!enabled) return;
+    ensure();
+    const t=ctx.currentTime;
+    [523,659,784,1047].forEach((f,i)=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.type="sawtooth";o.frequency.setValueAtTime(f,t+i*.12);
+      g.gain.setValueAtTime(0,t+i*.12);
+      g.gain.linearRampToValueAtTime(.2,t+i*.12+.02);
+      g.gain.linearRampToValueAtTime(0,t+i*.12+.35);
+      o.connect(g);g.connect(ctx.destination);
+      o.start(t+i*.12);o.stop(t+i*.12+.36);
+    });
+  }
+  function setEnabled(v){enabled=v}
+  function isEnabled(){return enabled}
+  // Ambient music loop — energetic pulsing bass + arpeggio
+  let musicOn=false, musicTimer=null, beatTimer=null, musicGain=null, musicNodes=[];
+  function startMusic(){
+    if(!enabled||musicOn) return;
+    ensure();
+    musicOn=true;
+    musicGain=ctx.createGain();
+    musicGain.gain.value=0.10;
+    musicGain.connect(ctx.destination);
+    // detuned bass drone
+    const a=ctx.createOscillator(),b=ctx.createOscillator();
+    a.type="sawtooth"; b.type="sawtooth";
+    a.frequency.value=65; b.frequency.value=65.5;
+    const f=ctx.createBiquadFilter();
+    f.type="lowpass"; f.frequency.value=260; f.Q.value=4;
+    const g=ctx.createGain(); g.gain.value=0.5;
+    a.connect(f); b.connect(f); f.connect(g); g.connect(musicGain);
+    a.start(); b.start();
+    musicNodes.push(a,b);
+    const lfo=ctx.createOscillator(),lg=ctx.createGain();
+    lfo.frequency.value=0.18; lg.gain.value=80;
+    lfo.connect(lg); lg.connect(f.frequency); lfo.start();
+    musicNodes.push(lfo);
+    // arpeggio
+    const notes=[220,261,330,392,330,261];
+    let i=0;
+    (function tick(){
+      if(!musicOn) return;
+      const t=ctx.currentTime;
+      const o=ctx.createOscillator(),og=ctx.createGain(),of=ctx.createBiquadFilter();
+      o.type="square"; o.frequency.value=notes[i%notes.length];
+      of.type="lowpass"; of.frequency.value=1200; of.Q.value=5;
+      og.gain.setValueAtTime(0,t);
+      og.gain.linearRampToValueAtTime(0.13,t+0.04);
+      og.gain.linearRampToValueAtTime(0,t+0.45);
+      o.connect(of); of.connect(og); og.connect(musicGain);
+      o.start(t); o.stop(t+0.5);
+      i++;
+      musicTimer=setTimeout(tick,420);
+    })();
+    (function beat(){
+      if(!musicOn) return;
+      const t=ctx.currentTime;
+      const o=ctx.createOscillator(),og=ctx.createGain();
+      o.type="sine";
+      o.frequency.setValueAtTime(80,t);
+      o.frequency.exponentialRampToValueAtTime(35,t+0.14);
+      og.gain.setValueAtTime(0,t);
+      og.gain.linearRampToValueAtTime(0.4,t+0.005);
+      og.gain.linearRampToValueAtTime(0,t+0.17);
+      o.connect(og); og.connect(musicGain);
+      o.start(t); o.stop(t+0.18);
+      beatTimer=setTimeout(beat,840);
+    })();
+  }
+  function stopMusic(){
+    musicOn=false;
+    if(musicTimer){clearTimeout(musicTimer);musicTimer=null;}
+    if(beatTimer){clearTimeout(beatTimer);beatTimer=null;}
+    musicNodes.forEach(n=>{try{n.stop();}catch(e){}});
+    musicNodes=[];
+    if(musicGain){try{musicGain.gain.linearRampToValueAtTime(0,ctx.currentTime+0.4);}catch(e){}}
+  }
+  function kick(){
+    if(!enabled) return;
+    ensure();
+    const t=ctx.currentTime;
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.type="sine";
+    o.frequency.setValueAtTime(160,t);
+    o.frequency.exponentialRampToValueAtTime(50,t+0.16);
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(0.5,t+0.005);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.2);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t); o.stop(t+0.22);
+  }
+  function whoosh(){
+    if(!enabled) return;
+    ensure();
+    const dur=0.4;
+    const buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate);
+    const data=buf.getChannelData(0);
+    for(let i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*(1-i/data.length);
+    const src=ctx.createBufferSource(); src.buffer=buf;
+    const f=ctx.createBiquadFilter(); f.type="bandpass";
+    f.frequency.setValueAtTime(1500,ctx.currentTime);
+    f.frequency.exponentialRampToValueAtTime(500,ctx.currentTime+dur);
+    const g=ctx.createGain();
+    g.gain.setValueAtTime(0.3,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
+    src.connect(f); f.connect(g); g.connect(ctx.destination);
+    src.start();
+  }
+  return {ensure,chime,buzz,roar,tone,explode,fanfare,setEnabled,isEnabled,startMusic,stopMusic,kick,whoosh};
+})();
+
+// ---------- Voice ----------
+const Voice = (() => {
+  let enabled=true, last=0;
+  function speak(text, opts={}){
+    if(!enabled||!window.speechSynthesis) return;
+    const now=Date.now();
+    if(!opts.priority && now-last<700) return;
+    if(!opts.priority){try{ if(window.speechSynthesis.speaking) return; }catch(e){}}
+    last=now;
+    try{
+      window.speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(text);
+      u.rate=opts.rate||1.0; u.pitch=opts.pitch||1.0; u.volume=opts.volume||1.0;
+      window.speechSynthesis.speak(u);
+    }catch(e){}
+  }
+  return {speak, setEnabled:(v)=>{enabled=v; if(!v&&window.speechSynthesis) window.speechSynthesis.cancel();}, isEnabled:()=>enabled};
+})();
+
+// ---------- Helpers ----------
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function showToast(text,color){
+  const t=document.getElementById("toast");
+  t.textContent=text;
+  t.style.color=color||"var(--accent)";
+  t.classList.remove("show");
+  void t.offsetWidth;
+  t.classList.add("show");
+}
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+}
+function fireConfetti(opts={}){
+  if(window.confetti){
+    window.confetti(Object.assign({
+      particleCount:80, spread:80, startVelocity:50, ticks:200,
+      colors:["#ffeb6a","#5fffaa","#ff44dd","#88ccff","#ff8800","#ffffff"],
+      origin:{x:.5,y:.5}, shapes:["square","circle","star"]
+    },opts));
+  }
+}
+function tween(el, props, opts={}){
+  if(window.gsap){ gsap.to(el, Object.assign({duration:.3}, props, opts)); }
+  else { Object.assign(el.style, props); }
+}
+
+// ---------- HUB navigation ----------
+function navHome(){
+  showScreen("hub");
+  if (typeof Streak !== "undefined") Streak.reset();
+}
+document.addEventListener("click",(e)=>{
+  const card=e.target.closest("[data-game]");
+  if(card){ Audio.ensure(); launchGame(card.dataset.game); }
+  if(e.target.matches("[data-back]")){ stopAllGames(); navHome(); }
+});
+
+let activeGame=null;
+function stopAllGames(){
+  if(activeGame && activeGame.stop) activeGame.stop();
+  activeGame=null;
+  // Stars background reset
+}
+function launchGame(name){
+  stopAllGames();
+  if(name==="match") activeGame = startMatch();
+  else if(name==="simon") activeGame = startSimon();
+  else if(name==="pattern") activeGame = startPattern();
+  else if(name==="size") activeGame = startSize();
+}
+
+// =====================================================================
+// MATCH PAIRS
+// =====================================================================
+function startMatch(){
+  showScreen("game-match");
+  const grid = document.getElementById("match-grid");
+  const flipsEl=document.getElementById("match-flips");
+  const pairsEl=document.getElementById("match-pairs");
+  const timeEl=document.getElementById("match-time");
+  grid.innerHTML="";
+  // Pick 6 kaiju, duplicate to 12 cards
+  const picked = shuffle(ALL_KAIJU_KEYS).slice(0,6);
+  const deck = shuffle([...picked, ...picked]);
+  let flips=0, matched=0, lock=false, first=null;
+  let startTime = Date.now();
+  let timer = setInterval(()=>{ timeEl.textContent = Math.floor((Date.now()-startTime)/1000)+"s"; }, 250);
+
+  pairsEl.textContent = "0/6";
+  flipsEl.textContent = "0";
+
+  deck.forEach((key,i)=>{
+    const k = KAIJU[key];
+    const card = document.createElement("div");
+    card.className = "card";
+    card.dataset.key = key;
+    card.innerHTML = `
+      <div class="card-inner">
+        <div class="card-face card-front"></div>
+        <div class="card-face card-back" style="border-color:${k.color};color:${k.color}">${k.emoji}</div>
+      </div>`;
+    card.addEventListener("click", ()=>onFlip(card));
+    grid.appendChild(card);
+  });
+
+  function onFlip(card){
+    if(lock || card.classList.contains("flipped") || card.classList.contains("matched")) return;
+    card.classList.add("flipped");
+    Audio.chime(700 + Math.random()*200);
+    if(!first){
+      first = card;
+      flips++; flipsEl.textContent = flips;
+      return;
+    }
+    flips++; flipsEl.textContent = flips;
+    if(first.dataset.key === card.dataset.key){
+      // Match!
+      first.classList.add("matched");
+      card.classList.add("matched");
+      matched++;
+      pairsEl.textContent = matched + "/6";
+      Audio.fanfare();
+      Audio.kick();
+      Voice.speak("Match! "+KAIJU[card.dataset.key].say+"!", {priority:true});
+      Streak.bump();
+      Mascot.cheer();
+      fireConfetti({origin:{x:.5,y:.4}, particleCount:90, spread:100, startVelocity:55, shapes:["star","square","circle"]});
+      first=null;
+      if(matched===6){
+        clearInterval(timer);
+        const elapsed = Math.floor((Date.now()-startTime)/1000);
+        finishMatch(flips, elapsed);
+      }
+    } else {
+      // Mismatch
+      lock=true;
+      Audio.buzz();
+      Audio.whoosh();
+      Streak.reset();
+      Mascot.sad();
+      const a=first, b=card;
+      setTimeout(()=>{
+        a.classList.remove("flipped");
+        b.classList.remove("flipped");
+        first=null; lock=false;
+      }, 950);
+    }
+  }
+  return {
+    stop(){ clearInterval(timer); }
+  };
+}
+function finishMatch(flips, sec){
+  // 3 stars: <=14 flips & <=30s, 2 stars <=20 flips, else 1 star
+  let stars=1;
+  if(flips<=20) stars=2;
+  if(flips<=14 && sec<=45) stars=3;
+  showEnd("MEMORY MASTER!", stars,
+    `${flips} flips · ${sec} seconds · 6 pairs`,
+    "match");
+}
+
+// =====================================================================
+// SIMON / REPEAT THE ROAR
+// =====================================================================
+function startSimon(){
+  showScreen("game-simon");
+  const grid = document.getElementById("simon-grid");
+  const roundEl=document.getElementById("simon-round");
+  const bestEl=document.getElementById("simon-best");
+  const instr=document.getElementById("simon-instr");
+  const startBtn=document.getElementById("simon-start");
+  grid.innerHTML="";
+
+  // 4 kaiju pads + per-pad tone frequency
+  const pads = [
+    {key:"gojira",   freq:330},
+    {key:"kong",     freq:440},
+    {key:"ghidorah", freq:550},
+    {key:"dragon",   freq:660},
+  ];
+  pads.forEach(p=>{
+    const k = KAIJU[p.key];
+    const pad = document.createElement("button");
+    pad.type="button";
+    pad.className="simon-pad";
+    pad.style.color = k.color;
+    pad.style.borderColor = k.color;
+    pad.dataset.key = p.key;
+    pad.innerHTML = `${k.emoji}<div class="pad-name">${k.name}</div>`;
+    pad.addEventListener("click",()=>onPad(p.key));
+    grid.appendChild(pad);
+  });
+
+  let sequence = [];
+  let playerIdx = 0;
+  let acceptingInput = false;
+  let round = 0;
+  const best = parseInt(localStorage.getItem("kl.simon.best")||"0",10);
+  bestEl.textContent = best;
+
+  function flashPad(key, dur=520){
+    const pad = grid.querySelector(`.simon-pad[data-key="${key}"]`);
+    if(!pad) return;
+    pad.classList.add("glow");
+    const p = pads.find(x=>x.key===key);
+    Audio.tone(p.freq, dur/1000);
+    setTimeout(()=>pad.classList.remove("glow"), dur);
+  }
+  function playSequence(){
+    acceptingInput=false;
+    instr.textContent="WATCH...";
+    let i=0;
+    const step=()=>{
+      if(i>=sequence.length){
+        acceptingInput=true; playerIdx=0;
+        instr.textContent="YOUR TURN! Tap them in order.";
+        Voice.speak("Your turn", {priority:true});
+        return;
+      }
+      flashPad(sequence[i], 520);
+      i++;
+      setTimeout(step, 680);
+    };
+    setTimeout(step, 500);
+  }
+  function nextRound(){
+    round++;
+    roundEl.textContent = round;
+    sequence.push(pads[Math.floor(Math.random()*pads.length)].key);
+    playSequence();
+  }
+  function onPad(key){
+    if(!acceptingInput) return;
+    flashPad(key, 280);
+    Voice.speak(KAIJU[key].say);
+    if(sequence[playerIdx] === key){
+      playerIdx++;
+      if(playerIdx===sequence.length){
+        // Round complete
+        acceptingInput=false;
+        Audio.chime(900);
+        Audio.kick();
+        Streak.bump();
+        Mascot.cheer();
+        showToast("GREAT!", "#5fffaa");
+        fireConfetti({origin:{x:.5,y:.5}, particleCount:70, spread:90, shapes:["star","circle"]});
+        const localBest = parseInt(localStorage.getItem("kl.simon.best")||"0",10);
+        if(round>localBest){
+          localStorage.setItem("kl.simon.best", String(round));
+          bestEl.textContent = round;
+        }
+        setTimeout(nextRound, 1100);
+      }
+    } else {
+      acceptingInput=false;
+      Audio.buzz();
+      Audio.whoosh();
+      Streak.reset();
+      Mascot.sad();
+      showToast("OOPS!", "#ff4444");
+      Voice.speak("Try again!", {priority:true});
+      setTimeout(()=>{
+        const stars = round>=8 ? 3 : round>=4 ? 2 : 1;
+        showEnd("ROARING GOOD!", stars,
+          `Reached round ${round}. Best: ${Math.max(round, parseInt(localStorage.getItem("kl.simon.best")||"0",10))}`,
+          "simon");
+      }, 800);
+    }
+  }
+
+  startBtn.onclick = ()=>{
+    sequence = []; round=0;
+    startBtn.style.display="none";
+    Audio.ensure();
+    nextRound();
+  };
+  // Reset start button visibility
+  startBtn.style.display="inline-block";
+  startBtn.querySelector(".name").textContent = "▶ START SEQUENCE";
+
+  return {
+    stop(){ acceptingInput=false; }
+  };
+}
+
+// =====================================================================
+// WHAT COMES NEXT? — pattern recognition
+// =====================================================================
+function startPattern(){
+  showScreen("game-pattern");
+  const row = document.getElementById("pat-row");
+  const choicesEl = document.getElementById("pat-choices");
+  const roundEl = document.getElementById("pat-round");
+  const scoreEl = document.getElementById("pat-score");
+
+  const TOTAL_ROUNDS = 8;
+  let round = 0;
+  let score = 0;
+  let answerKey = null;
+  let lockInput = false;
+
+  function genPattern(roundNum){
+    // Pick 2 or 3 kaiju and a pattern type
+    const pool = shuffle(ALL_KAIJU_KEYS);
+    const A = pool[0], B = pool[1], C = pool[2];
+    let type;
+    if(roundNum<=2) type = "AB";       // ABAB?
+    else if(roundNum<=4) type = "AAB"; // AABAAB?
+    else if(roundNum<=6) type = "ABC"; // ABCABC?
+    else type = "AABB";                 // AABBAABB?
+
+    let seq, ans;
+    if(type==="AB"){
+      seq = [A,B,A,B,A]; ans = B;
+    } else if(type==="AAB"){
+      seq = [A,A,B,A,A]; ans = B;
+    } else if(type==="ABC"){
+      seq = [A,B,C,A,B]; ans = C;
+    } else { // AABB
+      seq = [A,A,B,B,A]; ans = A;
+    }
+    return { seq, ans, type };
+  }
+
+  function nextRound(){
+    if(round >= TOTAL_ROUNDS){
+      // Done
+      const stars = score>=Math.floor(TOTAL_ROUNDS*100*.85) ? 3 : score>=Math.floor(TOTAL_ROUNDS*100*.55) ? 2 : 1;
+      showEnd("PATTERN PRO!", stars,
+        `Score: ${score} / ${TOTAL_ROUNDS*100}`,
+        "pattern");
+      return;
+    }
+    round++;
+    roundEl.textContent = round + "/" + TOTAL_ROUNDS;
+    const { seq, ans } = genPattern(round);
+    answerKey = ans;
+    row.innerHTML = "";
+    seq.forEach(k=>{
+      const t = document.createElement("div");
+      t.className="pat-tile";
+      t.style.color = KAIJU[k].color;
+      t.style.borderColor = KAIJU[k].color;
+      t.textContent = KAIJU[k].emoji;
+      row.appendChild(t);
+    });
+    // Question mark
+    const q = document.createElement("div");
+    q.className="pat-tile question";
+    row.appendChild(q);
+
+    // Build 4 choices: ans + 3 distractors
+    const distractors = shuffle(ALL_KAIJU_KEYS.filter(k=>k!==ans)).slice(0,3);
+    const choices = shuffle([ans, ...distractors]);
+    choicesEl.innerHTML = "";
+    choices.forEach(k=>{
+      const c = document.createElement("button");
+      c.type="button";
+      c.className="pat-choice";
+      c.style.color = KAIJU[k].color;
+      c.style.borderColor = KAIJU[k].color;
+      c.textContent = KAIJU[k].emoji;
+      c.addEventListener("click",()=>pick(c,k));
+      choicesEl.appendChild(c);
+    });
+    lockInput=false;
+    Voice.speak("What comes next?", {priority:true});
+  }
+  function pick(el, key){
+    if(lockInput) return;
+    lockInput=true;
+    if(key === answerKey){
+      el.classList.add("right");
+      Audio.chime(900);
+      Audio.kick();
+      Voice.speak("Yes! "+KAIJU[key].say+"!", {priority:true});
+      showToast("YES!", "#5fffaa");
+      score += 100;
+      scoreEl.textContent = score;
+      Streak.bump();
+      Mascot.cheer();
+      fireConfetti({origin:{x:.5,y:.6}, particleCount:80, spread:90, shapes:["star","circle","square"]});
+      setTimeout(nextRound, 1100);
+    } else {
+      el.classList.add("wrong");
+      Audio.buzz();
+      Audio.whoosh();
+      Streak.reset();
+      Mascot.sad();
+      Voice.speak("Try again!", {priority:true});
+      showToast("OOPS!", "#ff4444");
+      setTimeout(()=>{ el.classList.remove("wrong"); lockInput=false; }, 600);
+    }
+  }
+
+  score=0; round=0;
+  scoreEl.textContent="0";
+  nextRound();
+  return { stop(){ lockInput=true; } };
+}
+
+// =====================================================================
+// SIZE ORDER
+// =====================================================================
+function startSize(){
+  showScreen("game-size");
+  const row = document.getElementById("size-row");
+  const stage = document.getElementById("size-staging");
+  const roundEl = document.getElementById("size-round");
+  const scoreEl = document.getElementById("size-score");
+  const TOTAL = 5;
+  let round=0, score=0, picked=[], correct=[];
+
+  function newRound(){
+    if(round >= TOTAL){
+      const stars = score>=Math.floor(TOTAL*100*.85) ? 3 : score>=Math.floor(TOTAL*100*.55) ? 2 : 1;
+      showEnd("SIZE GENIUS!", stars,
+        `Score: ${score} / ${TOTAL*100}`,
+        "size");
+      return;
+    }
+    round++;
+    roundEl.textContent = round+"/"+TOTAL;
+    // Pick 4 random kaiju with distinct sizes
+    const chosen = shuffle(ALL_KAIJU_KEYS).slice(0,4);
+    correct = chosen.slice().sort((a,b)=>KAIJU[a].size - KAIJU[b].size);
+    picked = [];
+    stage.innerHTML = '<span class="ss-empty">Smallest ➜ Biggest</span>';
+    row.innerHTML = "";
+    chosen.forEach(key=>{
+      const t = document.createElement("button");
+      t.type="button";
+      t.className="size-tile";
+      t.style.color = KAIJU[key].color;
+      t.style.borderColor = KAIJU[key].color;
+      t.dataset.key = key;
+      t.innerHTML = `<div class="emoji">${KAIJU[key].emoji}</div><div class="nm">${KAIJU[key].name}</div>`;
+      // Size hint (slightly larger emoji for bigger kaiju)
+      t.style.transform = `scale(${0.85 + KAIJU[key].size/200})`;
+      t.addEventListener("click",()=>pick(t,key));
+      row.appendChild(t);
+    });
+    Voice.speak("Tap from smallest to biggest!", {priority:true});
+  }
+  function pick(el, key){
+    const expected = correct[picked.length];
+    if(key === expected){
+      Audio.chime(700 + picked.length*100);
+      Audio.kick();
+      el.classList.add("picked");
+      // Move to stage
+      const ghost = el.cloneNode(true);
+      ghost.classList.remove("picked");
+      ghost.style.pointerEvents="none";
+      ghost.style.opacity="1";
+      if(picked.length === 0) stage.innerHTML = "";
+      if(picked.length > 0){
+        const arrow = document.createElement("div");
+        arrow.className="step-arrow";
+        arrow.textContent = "➜";
+        stage.appendChild(arrow);
+      }
+      stage.appendChild(ghost);
+      // Animate ghost in with GSAP overshoot
+      if(window.gsap){ gsap.fromTo(ghost,{scale:0,rotate:-15},{scale:1,rotate:0,duration:.4,ease:"back.out(2.4)"}); }
+      // Mini confetti for every correct pick
+      fireConfetti({origin:{x:.5,y:.55}, particleCount:30, spread:50, startVelocity:35});
+      picked.push(key);
+      score += 25;
+      scoreEl.textContent = score;
+      Voice.speak(KAIJU[key].say);
+      Streak.bump();
+      Mascot.cheer();
+      if(picked.length === correct.length){
+        Audio.fanfare();
+        fireConfetti({origin:{x:.5,y:.5}, particleCount:120, spread:120, shapes:["star","circle","square"]});
+        showToast("PERFECT!", "#5fffaa");
+        setTimeout(newRound, 1400);
+      }
+    } else {
+      Audio.buzz();
+      Audio.whoosh();
+      Streak.reset();
+      Mascot.sad();
+      el.classList.add("bad");
+      setTimeout(()=>el.classList.remove("bad"), 500);
+      showToast("Not yet!", "#ff4444");
+      Voice.speak("Try a smaller one!", {priority:true});
+    }
+  }
+  newRound();
+  return { stop(){} };
+}
+
+// =====================================================================
+// END SCREEN (shared)
+// =====================================================================
+function showEnd(title, stars, summary, fromGame){
+  showScreen("endscreen");
+  document.getElementById("end-title").textContent = title;
+  document.getElementById("end-stars").textContent =
+    "⭐".repeat(Math.max(1,stars)) + "☆".repeat(Math.max(0,3-stars));
+  document.getElementById("end-summary").textContent = summary;
+  Audio.fanfare();
+  Voice.speak(title, {priority:true});
+  fireConfetti({origin:{x:.5,y:.4}, particleCount:140, spread:130, ticks:300});
+
+  const again = document.getElementById("end-again");
+  again.onclick = ()=>{
+    Audio.ensure();
+    launchGame(fromGame);
+  };
+  document.getElementById("end-hub").onclick = ()=>navHome();
+}
+
+// =====================================================================
+// Sound + Voice toggles, star field, boot
+// =====================================================================
+document.getElementById("soundToggle").addEventListener("click",()=>{
+  const v = !Audio.isEnabled();
+  Audio.setEnabled(v);
+  document.getElementById("soundToggle").textContent = v?"🔊 SOUND":"🔇 MUTED";
+});
+document.getElementById("voiceToggle").addEventListener("click",()=>{
+  const v = !Voice.isEnabled();
+  Voice.setEnabled(v);
+  document.getElementById("voiceToggle").textContent = v?"🗣 VOICE":"🤐 QUIET";
+  if(v) Voice.speak("Voice on");
+});
+
+(function buildStars(){
+  for(let i=0;i<60;i++){
+    const s=document.createElement("div");
+    s.className="star";
+    s.style.left = Math.random()*100+"%";
+    s.style.top = Math.random()*100+"%";
+    s.style.animationDelay = Math.random()*3+"s";
+    document.getElementById("app").appendChild(s);
+  }
+})();
+
+// ---------- Ambient floating sparks (constant motion in background) ----------
+(function ambientSparks(){
+  setInterval(()=>{
+    const s=document.createElement("div");
+    s.className="spark";
+    s.style.left = Math.random()*100+"vw";
+    s.style.bottom = "-20px";
+    s.style.animationDuration = (4+Math.random()*4)+"s";
+    const colors = ["#ffeb6a","#5fffaa","#ff44dd","#88ccff","#ff8800"];
+    s.style.background = `linear-gradient(180deg, ${colors[Math.floor(Math.random()*colors.length)]}, transparent)`;
+    document.getElementById("app").appendChild(s);
+    setTimeout(()=>s.remove(), 9000);
+  }, 320);
+})();
+
+// ---------- Mascot reactions + STREAK system ----------
+const Mascot = (()=>{
+  const $m = document.getElementById("mascot");
+  const happyEmojis = ["🦖","🦍","🐉","🦕","🦎","🐲"];
+  function cheer(){
+    $m.classList.remove("sad","cheer");
+    void $m.offsetWidth;
+    $m.classList.add("cheer");
+    // swap mascot occasionally for variety
+    if(Math.random()<0.45){
+      $m.textContent = happyEmojis[Math.floor(Math.random()*happyEmojis.length)];
+    }
+  }
+  function sad(){
+    $m.classList.remove("sad","cheer");
+    void $m.offsetWidth;
+    $m.classList.add("sad");
+  }
+  return {cheer, sad};
+})();
+
+const Streak = (()=>{
+  const $s = document.getElementById("streak");
+  let n=0;
+  function bump(){
+    n++;
+    $s.textContent = "STREAK x" + n + (n>=5?" 🔥":"");
+    $s.classList.add("show");
+    if(n>=5) $s.classList.add("fire"); else $s.classList.remove("fire");
+    if(window.gsap){
+      gsap.killTweensOf($s);
+      gsap.fromTo($s,{scale:1},{scale:1.4,duration:.12,ease:"back.out(3)",yoyo:true,repeat:1});
+    }
+    if(n===3 || n===5 || n===10){
+      showToast("STREAK x"+n+"!", "#ffeb6a");
+      fireConfetti({origin:{x:.5,y:.4}, particleCount:60, spread:80});
+      Audio.fanfare();
+    }
+  }
+  function reset(){
+    n=0;
+    $s.classList.remove("fire");
+    $s.classList.remove("show");
+  }
+  function count(){ return n; }
+  return {bump, reset, count};
+})();
+
+// ---------- Tap ripples on every click anywhere in app ----------
+document.getElementById("app").addEventListener("pointerdown",(e)=>{
+  const r=document.createElement("div");
+  r.className="ripple";
+  r.style.left = e.clientX+"px";
+  r.style.top = e.clientY+"px";
+  // color by what was tapped (if has color style)
+  const styled = e.target.closest("[style*='color']");
+  r.style.borderColor = styled ? getComputedStyle(styled).color : "var(--accent)";
+  document.body.appendChild(r);
+  setTimeout(()=>r.remove(), 600);
+});
+
+// Tap anywhere on first interaction → warm up audio + voices + START MUSIC
+document.addEventListener("pointerdown", ()=>{
+  Audio.ensure();
+  Audio.startMusic();
+  if(window.speechSynthesis) window.speechSynthesis.getVoices();
+}, {once:true});
+
+// Prevent iOS pinch zoom
+document.addEventListener("touchmove", (e)=>{
+  if(e.touches.length>1) e.preventDefault();
+}, {passive:false});
+document.addEventListener("gesturestart", (e)=>e.preventDefault());
+
+// Boot at hub
+navHome();
+</script>
+</body>
+</html>

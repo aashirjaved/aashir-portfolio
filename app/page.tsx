@@ -82,7 +82,7 @@ function SignalPortrait() {
             fill
             priority
             sizes="(min-width: 1024px) 420px, 100vw"
-            className="object-cover object-[50%_20%] contrast-[1.05] saturate-[1.08] sm:object-center"
+            className="object-cover object-[50%_35%] contrast-[1.05] saturate-[1.08] sm:object-center"
           />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,18,16,0)_0%,rgba(13,18,16,0.04)_38%,rgba(13,18,16,0.58)_100%),linear-gradient(90deg,rgba(231,73,40,0.12),transparent_42%,rgba(22,150,111,0.1))]" />
           <div className="absolute left-4 top-4 mono text-[10px] uppercase tracking-[0.24em] text-paper/70">
@@ -157,8 +157,8 @@ export default function Home() {
                 London · embedded product engineering · AI systems
               </span>
               </Eyebrow>
-              <h1 className="display max-w-[12ch] text-[clamp(2.75rem,12.5vw,6.1rem)] leading-[0.88] tracking-[-0.035em] text-ink sm:text-[clamp(3.3rem,7.2vw,6.1rem)] sm:leading-[0.84]">
-                I ship the messy middle between idea and production.
+              <h1 className="display max-w-[11ch] text-[clamp(2.65rem,10.5vw,4.7rem)] leading-[0.88] tracking-[-0.035em] text-ink sm:text-[clamp(3.3rem,7.2vw,6.1rem)] sm:leading-[0.84]">
+                I ship the messy middle from idea to production.
               </h1>
             </div>
             <div className="mt-8 grid gap-8 sm:mt-10 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-end">

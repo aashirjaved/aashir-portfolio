@@ -154,9 +154,9 @@ export default function Home() {
           <div className="border-y border-rule-soft py-7 sm:py-9">
             <div className="mb-5 flex items-center justify-between gap-4">
               <p className="mono text-[11px] uppercase tracking-[0.22em] text-ink-mute">
-                Authority signal · teams I’ve worked with
+                Experience across
               </p>
-              <p className="hidden text-sm text-ink-mute sm:block">Fintech, marketplaces, logistics, enterprise cloud.</p>
+              <p className="hidden text-sm text-ink-mute sm:block">Fintech, marketplaces, logistics, fashion commerce, enterprise cloud.</p>
             </div>
             <LogoMarquee />
           </div>

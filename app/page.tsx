@@ -135,11 +135,11 @@ export default function Home() {
                 London · product systems · platform · AI
               </span>
             </Eyebrow>
-            <h1 className="display max-w-[9ch] text-[clamp(4rem,15vw,10.5rem)] leading-[0.84] text-ink">
-              Forward deployed engineer for AI products.
+            <h1 className="display max-w-[8ch] text-[clamp(4.5rem,16vw,11rem)] leading-[0.82] text-ink">
+              AI systems, deployed.
             </h1>
-            <p className="lede mt-8 max-w-[28ch] text-ink">
-              I work with teams close to the problem, turn ambiguity into working systems, and carry prototypes through production.
+            <p className="lede mt-8 max-w-[30ch] text-ink">
+              I work close to users, turn ambiguity into software, and take prototypes into production.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <LinkButton href="/contact">Start a conversation →</LinkButton>

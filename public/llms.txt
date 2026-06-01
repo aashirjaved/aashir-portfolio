@@ -1,48 +1,45 @@
 # Aashir Javed
 
-> Senior software engineer who embeds with customer engineering teams and ships agentic AI inside their production codebases. Eight years across MoonPay, Motorway, Deliveroo, Zalando and IBM/Nordcloud. Specialism: turning ambiguous workflows into agents that survive past demo day — running prompt engineering and tool-calling iteration on real customer traffic, building evals against live production data, hardening LLM systems for latency, cost and on-call, and handing the eval suite and runbooks back to the customer team.
+Senior software engineer in London building backend, infrastructure, crypto payment and AI-agent systems.
 
-Based in London, UK. Remote-friendly. ~25% travel for embedded engagements.
+## Current Signal
 
-## Working profile
+- MoonPay: senior software engineer working across crypto payments, AI agents, agent skills and consumer product launches.
+- Recent MoonPay proof: personal AI agent demo that automated daily tasks and executed a crypto transaction at the London AI x Crypto meetup.
+- Product-launch signal: contributed to Moonlog Volume 02 work across Buy/Sell, MoonPay Balance and 8.5x faster Polygon buys.
+- Open-source signal: contributor to `moonpay/skills`, public AI-agent skills for on-ramps, swaps, wallets, deposits and payments.
+- Side-product signal: Whatify, a public-data financial-class diagnosis tool with 300+ weekly unique users.
+- Open-source project: `alchemy-infra`, an agent infrastructure skill for Alchemy, Cloudflare, AWS and strict secret hygiene.
 
-- **Embedded delivery model.** Drops into customer engineering orgs. Writes production code inside customer repos, on customer infra, behind customer SSO. Not slide decks. Not sandboxes.
-- **Agentic AI in production.** Ships agents, sub-agents, Model Context Protocol servers, agent skills, retrieval-augmented generation, fine-tuned models — into systems with real users.
-- **Eval-driven development on real data.** Builds evaluation suites against live customer traffic. Iterates prompts, tools and orchestration against that signal, not vibes.
-- **Demo-to-production hardening.** Owns the part most vendor engineers skip: latency budgets, cost per request, eval regressions, security review remediation, on-call rotation.
-- **Hand-off as the deliverable.** Leaves behind eval suites, runbooks and operational knowledge so the customer team keeps shipping after the engagement ends.
+## Experience
+
+- MoonPay: crypto payments, AI agents, public agent skills, consumer launches.
+- Motorway: core engineering lead, Motorway Pro trade proposition, decoupled AuthN/AuthZ, operational excellence. Outcomes: +15% platform volume, +7% conversion, -15% annual AWS cost.
+- Deliveroo: customer-care automation with agents, fine-tuned GenAI models and highly available Go APIs. Outcomes: 2x CSAT, request handling reduced to 0.5x, 100+ engineers trained on incident response.
+- Zalando: warehouse integration gateway for inbound distribution centers. Outcomes: 1000+ RPS gateway, 15% latency reduction.
+- Nordcloud: cloud migration and managed services across AWS, Azure and GCP.
+- CARE: Industry 4.0 cyber-physical systems, MQTT infrastructure, OTA firmware systems, P@SHA ICT Award.
 
 ## Stack
 
-Go, Python, TypeScript, React, Next.js, Node, Java. AWS, Terraform, Kubernetes. PostgreSQL, Redis, Kafka. LLM tooling across Anthropic Claude, OpenAI, Cursor. MCP, sub-agents, agent skills, RAG, fine-tuning, function calling, evals, observability.
-
-## Selected outcomes
-
-- **MoonPay** — embedded with consumer product teams; auth refactor; AI adoption across engineering; mobile/web consumer flows.
-- **Motorway** — Core Engineering lead embedded across product teams; Motorway Pro trade proposition (+15% platform volume); identity split (+7% top-of-funnel); AWS cost work (−15% annual).
-- **Deliveroo** — agentic customer-care system shipped in production across a three-sided marketplace; 2× CSAT, request handling cut in half; runbooks handed off to platform team; trained 100+ engineers on on-call.
-- **Zalando** — inbound distribution centre gateway at 1000+ RPS; latency cut 15%.
-- **IBM / Nordcloud** — migrated transport client from PHP monolith to services across AWS, Azure and GCP.
-- **AI Hackathon 2026, 1st place** — hardware → model → demo in 48h.
-- **Whatify** — financial-scenario product, 3.8k+ waitlist.
-
-## Open to
-
-Embedded engineering engagements at frontier AI labs (Anthropic, OpenAI, Cursor) and AI-first companies (Sierra, Decagon, Harvey, Glean, Hippocratic, Cresta) shipping agents in customer production environments. Also independent consultancy work in the same shape.
+Go, Python, TypeScript, React, Next.js, Node.js, Java, C++, Rust. AWS, Terraform, Kubernetes, serverless, PostgreSQL, DynamoDB, Kafka, vector databases. LLM agents, RAG, MLOps, automation, crypto payments, distributed systems, reliability and platform engineering.
 
 ## Pages
 
-- Home — https://aashir.net/
-- About — https://aashir.net/about
-- Experience — https://aashir.net/experience
-- Projects — https://aashir.net/projects
-- Writing — https://aashir.net/writing
-- Résumé — https://aashir.net/resume
-- Contact — https://aashir.net/contact
+- Home: https://aashir.net/
+- About: https://aashir.net/about
+- Experience: https://aashir.net/experience
+- Projects: https://aashir.net/projects
+- Writing: https://aashir.net/writing
+- Resume: https://aashir.net/resume
+- Contact: https://aashir.net/contact
 
 ## Links
 
-- GitHub — https://github.com/aashirjaved
-- LinkedIn — https://www.linkedin.com/in/aashirjaved
-- X — https://x.com/aasjav
-- Email — me@aashir.net
+- GitHub: https://github.com/aashirjaved
+- LinkedIn: https://www.linkedin.com/in/aashirjaved
+- Alchemy Infra: https://github.com/aashirjaved/alchemy-infra
+- MoonPay Skills: https://github.com/moonpay/skills
+- Whatify: https://whatify.ai/
+- Writing: https://dev.to/aashirjaved
+- Email: me@aashir.net

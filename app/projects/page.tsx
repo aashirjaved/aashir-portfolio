@@ -10,99 +10,69 @@ import {
 
 const projects: Omit<ProjectCardProps, "number">[] = [
   {
-    title: "Godzilla Typing Rampage",
-    company: "Built for my son",
-    period: "2026",
-    status: "Beta",
-    description:
-      "A Godzilla-themed typing game built to teach my son to type. Atomic-breath letters, building-smash combos, dramatic synth score. iPad-friendly.",
-    details: [
-      "Plain HTML/CSS/JS · zero dependencies, zero asset files",
-      "All sound generated live via Web Audio API (roars, beams, explosions, fanfare)",
-      "Six difficulty tiers: home-row letters → words → short sentences",
-      "iPad: hidden input pops native soft keyboard; touch-safe layout",
-      "Combo system, screen shake, lightning, collapsing buildings",
-    ],
-    technologies: ["html", "css", "javascript", "web audio", "svg"],
-    metrics: [
-      { label: "Levels", value: "6" },
-      { label: "Assets", value: "0" },
-      { label: "For", value: "1 son" },
-    ],
-    featured: true,
-    link: { href: "/godzilla/", label: "▶ Play the game" },
-  },
-  {
-    title: "MoonPay Consumer App · Embedded Product Engineering",
+    title: "MoonPay · AI Agents and Crypto Payments",
     company: "MoonPay",
     period: "Present",
     status: "Production",
     description:
-      "Embedded with consumer product teams. Refactored auth, drove AI adoption inside the codebase, and shipped secure user flows across mobile and web — in the repo, on the on-call rotation.",
+      "Recent MoonPay work across AI-agent demos, public agent skills, consumer launches and crypto purchase performance.",
     details: [
-      "Refactored the auth layer in production code to lift maintainability and product velocity",
-      "Drove agentic AI adoption across engineering workflows — patterns, evals, internal tooling",
-      "Shipped secure consumer flows across mobile and web surfaces alongside product and platform teams",
-      "Operated as the bridge between product, design, security and platform constraints",
+      "Built and demoed a personal AI agent that automated daily tasks and executed a crypto transaction",
+      "Contributed to moonpay/skills, public AI-agent skills for on-ramps, swaps, wallets and payments",
+      "Contributed to Moonlog Volume 02 launches across Buy/Sell, MoonPay Balance and Polygon buys",
+      "Won popular vote at MoonPay's AI Agentic Engineering Hackathon",
     ],
-    technologies: ["react", "next.js", "go", "python", "aws", "typescript"],
+    technologies: ["agents", "crypto", "react", "go", "python", "aws", "typescript"],
     metrics: [
-      { label: "Auth", value: "Refactor" },
-      { label: "AI", value: "Champion" },
-      { label: "Surface", value: "iOS·Android·Web" },
+      { label: "Polygon", value: "8.5×" },
+      { label: "Skills repo", value: "109★" },
+      { label: "Followers", value: "1.1k" },
     ],
     featured: true,
   },
   {
-    title: "Whatify · Financial Simulation",
+    title: "Whatify · Financial Class Diagnosis",
     company: "Side build",
     period: "2026 to Present",
     status: "Beta",
     description:
-      "Side-by-side scenario simulation for major life decisions, stress tested against rate spikes and cost overruns.",
+      "A public-data financial diagnosis tool that compares income, wealth, place and household size.",
     details: [
-      "Five-year net-worth projections: best / expected / worst case",
-      "Stress testing against rate spikes and overruns",
-      "Two-minute setup; data-driven decisions, not guesswork",
-      "3,847+ on the waitlist",
+      "Uses public sources including Pew, Fed SCF, BEA and Census",
+      "Frames class, wealth gaps and climb levers in about 60 seconds",
+      "No signup flow; starts with household income and refines with place, household and net worth",
+      "Currently getting 300+ unique users weekly",
     ],
-    technologies: ["next.js", "typescript", "ai", "postgres"],
+    technologies: ["next.js", "typescript", "public data", "product"],
     metrics: [
-      { label: "Waitlist", value: "3.8k+" },
-      { label: "Setup", value: "2 min" },
-      { label: "Forecast", value: "5 yr" },
+      { label: "Users/wk", value: "300+" },
+      { label: "Setup", value: "60s" },
+      { label: "Signup", value: "0" },
     ],
     featured: true,
+    link: { href: "https://whatify.ai/", label: "Open Whatify" },
   },
   {
-    title: "AI Hackathon · 1st place",
-    company: "w/ Omer Bresinski",
+    title: "alchemy-infra · Agent Infrastructure Skill",
+    company: "Open source",
     period: "2026",
-    status: "Beta",
+    status: "OSS",
     description:
-      "Won an AI hackathon over a weekend. Two engineers, one idea, hardware to model to demo in under 48 hours.",
+      "An agent skill that scaffolds Alchemy Infrastructure-as-TypeScript into codebases with strict secret hygiene.",
     details: [
-      "End-to-end build under tight time pressure",
-      "Cross-stack device, backend, model and UI",
-      "Wrote spec, prototyped and demoed live",
+      "Helps agents provision Cloudflare Workers, KV, R2, D1, Queues, Durable Objects, AWS Lambda and DynamoDB",
+      "Supports SKILL.md, skills.sh and npx-compatible installation paths",
+      "Encodes secret hygiene through generated passwords, gitignore updates and pre-commit checks",
+      "README benchmark reports 32/32 checks with the skill versus 27/32 baseline",
     ],
-    technologies: ["python", "ai", "next.js"],
-    metrics: [{ label: "Place", value: "1st" }],
+    technologies: ["alchemy", "typescript", "cloudflare", "aws", "iac", "agents"],
+    metrics: [
+      { label: "Benchmark", value: "+15.5pp" },
+      { label: "License", value: "MIT" },
+      { label: "Stars", value: "2" },
+    ],
     featured: true,
-  },
-  {
-    title: "Grok · Radio Product",
-    company: "Side prototype",
-    period: "2026",
-    status: "Beta",
-    description:
-      "Spec, prototype and product thinking for a Grok-powered radio interface. Voice as the new keyboard.",
-    details: [
-      "Voice-first product framing",
-      "Live AI radio host concept; latency budget under 500ms",
-      "Public thread on X (@aasjav)",
-    ],
-    technologies: ["ai", "audio", "next.js"],
+    link: { href: "https://github.com/aashirjaved/alchemy-infra", label: "View repo" },
   },
   {
     title: "Agentic Customer Care · Shipped in Production",
@@ -110,10 +80,10 @@ const projects: Omit<ProjectCardProps, "number">[] = [
     period: "2022 to 2024",
     status: "Production",
     description:
-      "Built and shipped an agentic customer-care system inside a three-sided marketplace. Agents, fine-tuned generative models, evals on real ticket traffic, and Go services that survived peak load — handed off to the platform team with runbooks.",
+      "Customer-care automation inside a three-sided marketplace, powered by agents, fine-tuned GenAI models and Go services built for peak load.",
     details: [
-      "Ran the whole arc — workflow design, prototype, production hardening, hand-off",
-      "Iterated prompts, tools and orchestration against real ticket data — 2× CSAT, request handling cut in half",
+      "Ran the arc from workflow design to production hardening and team handoff",
+      "Iterated prompts, tools and orchestration against real ticket data: 2× CSAT, request handling cut in half",
       "Maintained frontend and backend services for calls, chats, credits and refunds across the marketplace",
       "Ran SEV simulation gamedays and trained 100+ engineers on the on-call paths the system lived behind",
     ],
@@ -126,16 +96,37 @@ const projects: Omit<ProjectCardProps, "number">[] = [
     featured: true,
   },
   {
+    title: "Godzilla Typing Rampage",
+    company: "Built for my son",
+    period: "2026",
+    status: "Beta",
+    description:
+      "A Godzilla-themed typing game built to teach my son to type with generated sound and touch-safe play.",
+    details: [
+      "Plain HTML/CSS/JS with zero dependencies and zero asset files",
+      "Sound generated live via Web Audio API",
+      "Six difficulty tiers from home-row letters to short sentences",
+      "iPad layout with native soft keyboard support",
+    ],
+    technologies: ["html", "css", "javascript", "web audio", "svg"],
+    metrics: [
+      { label: "Levels", value: "6" },
+      { label: "Assets", value: "0" },
+      { label: "For", value: "1 son" },
+    ],
+    link: { href: "/godzilla/", label: "Play the game" },
+  },
+  {
     title: "Core Engineering · Embedded with Product Teams",
     company: "Motorway",
     period: "2024 to 2025",
     status: "Production",
     description:
-      "Embedded across product teams as the engineering lead for foundational services. Shipped the Motorway Pro trade proposition, untangled identity, attacked AWS cost — proposal to production, hardening to hand-off.",
+      "Core engineering work across foundational services, Motorway Pro, identity boundaries and AWS cost.",
     details: [
-      "Led delivery of Motorway Pro trade proposition → +15% platform volume",
-      "Identified critical auth issues and led migration to decoupled AuthN/AuthZ services → +7% top-of-funnel conversion",
-      "Established operational-excellence working group to attack technical debt → −15% annual AWS cost",
+      "Led delivery of Motorway Pro trade proposition: +15% platform volume",
+      "Identified critical auth issues and led migration to decoupled AuthN/AuthZ services: +7% top-of-funnel conversion",
+      "Established operational-excellence working group to attack technical debt: -15% annual AWS cost",
       "Built mission-critical services across distributed systems, OAuth2, SSO, AWS and Terraform",
     ],
     technologies: ["go", "python", "next.js", "node", "typescript", "aws", "terraform", "oauth2"],
@@ -204,25 +195,6 @@ const projects: Omit<ProjectCardProps, "number">[] = [
       { label: "Domain", value: "IoT" },
     ],
   },
-  {
-    title: "Event-Driven E-Commerce Platform",
-    company: "Freelance",
-    period: "2019 to 2020",
-    status: "Sunset",
-    description:
-      "Scalable e-commerce: high-volume transactions, real-time inventory, personalised recommendations.",
-    details: [
-      "Event-driven architecture with message queues",
-      "Recommendation engine via collaborative filtering",
-      "Payment gateways with reconciliation",
-    ],
-    technologies: ["node.js", "react", "redis", "postgres", "kafka", "aws"],
-    metrics: [
-      { label: "Uptime", value: "99.9%" },
-      { label: "Conv", value: "3×" },
-      { label: "Orders/d", value: "25k+" },
-    ],
-  },
 ];
 
 export default function Projects() {
@@ -233,7 +205,7 @@ export default function Projects() {
         number="W"
         title="Field"
         italic="work."
-        lede="Builds shipped inside customer codebases. Each one ran in production, against real users, with the eval suite and runbooks left behind."
+        lede="Selected product, platform, AI and side-project work with the clearest impact signals."
       />
 
       <Reveal>

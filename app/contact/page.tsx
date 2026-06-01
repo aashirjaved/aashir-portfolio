@@ -44,7 +44,7 @@ const channels = [
 const context = [
   {
     type: "Product systems",
-    body: "Consumer flows, auth, payments, onboarding and product surfaces with real constraints."
+    body: "Crypto payments, consumer flows, auth, onboarding and product surfaces with real constraints."
   },
   {
     type: "Platform leverage",
@@ -52,7 +52,7 @@ const context = [
   },
   {
     type: "AI in production",
-    body: "Agents, evals, RAG, automation and workflow design tied to operational reality."
+    body: "Agent workflows, automation, RAG and tool use tied to product metrics and operational reality."
   },
 ];
 

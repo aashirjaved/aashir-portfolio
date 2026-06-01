@@ -15,16 +15,15 @@ import {
 } from "@/components/editorial";
 import { PersonSchema, WebsiteSchema } from "@/components/structured-data";
 import { blogPosts } from "@/data/blog-data";
-import Image from "next/image";
 
 const recentWork = [
   {
     year: "now",
     company: "MoonPay",
     role: "Senior Engineer",
-    blurb: "Embedded with product teams to refactor the auth layer, drive AI adoption across engineering workflows, and ship consumer crypto features across mobile and web.",
-    metrics: [{ label: "Auth", value: "refactor" }],
-    stack: ["react", "next", "go", "python", "aws"],
+    blurb: "Building crypto payment and agent workflows: public MoonPay skills, AI x crypto demos, consumer launches and faster Polygon buys.",
+    metrics: [{ label: "Polygon buys", value: "8.5×" }],
+    stack: ["agents", "crypto", "react", "go", "aws"],
   },
   {
     year: "2024",
@@ -38,7 +37,7 @@ const recentWork = [
     year: "2022",
     company: "Deliveroo",
     role: "Customer Care Platform",
-    blurb: "Shipped automated customer-care journeys in production — Go APIs, fine-tuned generative models, evals against real ticket traffic, runbooks handed back to the platform team.",
+    blurb: "Shipped automated customer-care journeys in production with agents, fine-tuned GenAI models and highly available Go APIs.",
     metrics: [{ label: "CSAT", value: "2×" }],
     stack: ["go", "react", "llm", "k8s"],
   },
@@ -46,51 +45,60 @@ const recentWork = [
 
 const services = [
   {
-    title: "Enter the system",
+    title: "Find leverage",
     result: "01",
-    body: "I learn the product, the code, the rituals, and the weird edges fast.",
-    tags: ["Embedded", "Customer infra", "Day one PR"],
+    body: "Start where product pain meets infrastructure drag: auth, cost, latency, reliability, or agent workflows.",
+    tags: ["Product", "Infra", "Signal"],
   },
   {
-    title: "Make the agent real",
+    title: "Ship the proof",
     result: "02",
-    body: "Ambiguous workflow to production feature, with evals and failure paths in the loop.",
-    tags: ["Agents", "Evals", "MCP"],
+    body: "Turn demos into working systems with real users, measurable impact, and boring operational paths.",
+    tags: ["Agents", "APIs", "Launches"],
   },
   {
-    title: "Leave it operable",
+    title: "Make it last",
     result: "03",
-    body: "Runbooks, tests, on-call notes, and enough context for the team to own it.",
-    tags: ["Hardening", "Evals", "Runbooks"],
+    body: "Leave the team with cleaner services, runbooks, cost wins, and enough context to keep moving.",
+    tags: ["Hardening", "On-call", "Handoff"],
   },
 ];
 
 const storyBeats = [
-  ["London", "Senior engineer embedded where product and infra meet."],
-  ["Mode", "Prototype quickly. Harden deliberately. Hand off cleanly."],
-  ["Signal", "AI products, auth, marketplaces, cloud, and systems that stay up."],
+  ["London", "Senior engineer where product, infra and AI agents meet."],
+  ["Mode", "Find leverage. Ship proof. Make it last."],
+  ["Signal", "Crypto payments, marketplaces, cloud platforms and systems that stay up."],
 ];
 
 function SignalPortrait() {
+  const signals = [
+    ["8.5x", "faster Polygon buys"],
+    ["109", "MoonPay skills stars"],
+    ["300+", "Whatify weekly users"],
+    ["2x", "CSAT at Deliveroo"],
+  ];
+
   return (
     <aside className="signal-frame h-[320px] max-w-full p-3 sm:h-[430px] sm:p-4 lg:h-[460px] lg:self-center xl:h-[500px]">
       <div className="relative z-10 grid h-full grid-rows-1 gap-3 sm:grid-rows-[1fr_auto]">
-        <div className="relative min-h-0 overflow-hidden border border-ink bg-ink">
-          <Image
-            src="/profile-cyberpunk.png"
-            alt="Aashir Javed"
-            fill
-            priority
-            sizes="(min-width: 1024px) 420px, 100vw"
-            className="object-cover object-[50%_35%] contrast-[1.05] saturate-[1.08] sm:object-center"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,18,16,0)_0%,rgba(13,18,16,0.04)_38%,rgba(13,18,16,0.58)_100%),linear-gradient(90deg,rgba(231,73,40,0.12),transparent_42%,rgba(22,150,111,0.1))]" />
+        <div className="relative min-h-0 overflow-hidden border border-ink bg-ink text-paper">
+          <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:32px_32px]" />
+          <div className="absolute -right-20 -top-20 h-52 w-52 bg-accent/70 blur-3xl" />
+          <div className="absolute -bottom-20 left-8 h-60 w-60 bg-ok/45 blur-3xl" />
           <div className="absolute left-4 top-4 mono text-[10px] uppercase tracking-[0.24em] text-paper/70">
-            Aashir Javed / Field log
+            Aashir Javed / impact log
           </div>
-          <div className="absolute bottom-4 left-4 right-4">
-            <div className="display max-w-[8ch] text-[clamp(2.35rem,6vw,4.2rem)] leading-[0.82] text-paper">
-              ship the hard part
+          <div className="relative z-10 flex h-full flex-col justify-end p-4 sm:p-5">
+            <div className="grid grid-cols-2 gap-2">
+              {signals.map(([value, label]) => (
+                <div key={label} className="border border-paper/20 bg-paper/5 p-3 backdrop-blur-sm">
+                  <div className="display text-[clamp(2rem,6vw,3.8rem)] leading-none text-paper">{value}</div>
+                  <div className="mt-2 mono text-[9px] uppercase tracking-[0.18em] text-paper/60">{label}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 display max-w-[9ch] text-[clamp(2.2rem,6vw,4rem)] leading-[0.86] text-paper">
+              signal over portrait
             </div>
           </div>
         </div>
@@ -109,9 +117,9 @@ function SignalPortrait() {
 
 function ArchitectureBrief({ className = "" }: { className?: string }) {
   const rows = [
-    ["AI that ships", "Agents, evals, MCP, production traffic"],
-    ["Systems that bend", "Auth, platform foundations, cloud cost, on-call"],
-    ["Teams that inherit", "Runbooks, operating context, clean hand-off"],
+    ["AI that moves money", "Agent skills, crypto workflows, production demos"],
+    ["Systems that pay back", "Auth, platform foundations, cloud cost, latency"],
+    ["Products with signal", "Whatify, public launches, measurable usage"],
   ];
 
   return (
@@ -154,17 +162,17 @@ export default function Home() {
               <Eyebrow className="mb-8">
               <span className="inline-flex items-center gap-2 leading-relaxed">
                 <span className="inline-block h-2 w-2 bg-ok" aria-hidden />
-                London · embedded product engineering · AI systems
+                London · MoonPay · crypto payments · AI agents
               </span>
               </Eyebrow>
               <h1 className="display max-w-[11ch] text-[clamp(2.65rem,10.5vw,4.7rem)] leading-[0.88] tracking-[-0.035em] text-ink sm:text-[clamp(3.3rem,7.2vw,6.1rem)] sm:leading-[0.84]">
-                I ship the messy middle from idea to production.
+                Backend and AI systems that move real product metrics.
               </h1>
             </div>
             <div className="mt-8 grid gap-8 sm:mt-10 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-end">
               <div>
                 <p className="lede max-w-[30ch] text-[1.08rem] leading-snug text-ink sm:text-[clamp(1.15rem,2.4vw,1.75rem)] sm:leading-[1.28]">
-                  Senior engineer for AI products, auth layers, marketplaces and cloud platforms that need to survive real users.
+                  Senior engineer building crypto payment rails, agent workflows and platform systems across MoonPay, Motorway, Deliveroo and Zalando.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
                   <LinkButton href="/projects">See proof</LinkButton>
@@ -193,9 +201,9 @@ export default function Home() {
 
         <Reveal>
           <section className="grid border-y border-ink py-0 sm:grid-cols-3">
+            <Stat value="8.5×" label="Faster Polygon buys" className="border-b border-ink p-4 sm:border-b-0 sm:border-r sm:p-6" />
             <Stat value="+15%" label="Platform volume" className="border-b border-ink p-4 sm:border-b-0 sm:border-r sm:p-6" />
-            <Stat value="2×" label="CSAT uplift" className="border-b border-ink p-4 sm:border-b-0 sm:border-r sm:p-6" />
-            <Stat value="1000+" label="RPS gateway" className="p-4 sm:p-6" />
+            <Stat value="300+" label="Weekly Whatify users" className="p-4 sm:p-6" />
           </section>
         </Reveal>
 
@@ -204,8 +212,8 @@ export default function Home() {
             <SectionLabel
               number="01"
               title="Operating"
-              italic="sequence"
-              description="A compact way to describe how I move through ambiguity."
+              italic="mode"
+              description="How I turn vague technical surface area into shipped work."
             />
           </Reveal>
           <Reveal>
@@ -235,7 +243,7 @@ export default function Home() {
               number="02"
               title="Recent"
               italic="evidence"
-              description="Recent work with measurable outcomes."
+              description="Recent work with numbers attached."
               action={<ArrowLink href="/projects">All work</ArrowLink>}
             />
           </Reveal>
@@ -256,34 +264,35 @@ export default function Home() {
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <NotableCard
                 kind="shipped"
-                title="MoonLog Vol 02"
+                title="Moonlog Volume 02"
                 href="https://www.linkedin.com/pulse/moonlog-volume-02-moonpay-vo1ae/"
                 meta="MoonPay"
-                description="Consumer release work, auth-layer refactor and AI adoption."
-                stats={[{ label: "Auth", value: "refactor" }, { label: "AI", value: "adopted" }]}
+                description="Product and engineering launches across Buy/Sell, MoonPay Balance and Polygon purchase performance."
+                stats={[{ label: "Polygon", value: "8.5×" }, { label: "Markets", value: "US·UK·EU" }]}
               />
               <NotableCard
-                kind="win"
-                title="AI Hackathon"
-                href="https://www.linkedin.com/posts/adam-ferguson-7259b6121_two-months-ago-aashir-javed-omer-bresinski-share-7437869877543129088-3Z8q"
-                meta="2026"
-                description="Hardware to model to demo in 48 hours."
-                stats={[{ label: "Place", value: "1st" }]}
+                kind="build"
+                title="alchemy-infra"
+                href="https://github.com/aashirjaved/alchemy-infra"
+                meta="Open source"
+                description="Infrastructure-as-TypeScript skill for agents with strict secret hygiene."
+                stats={[{ label: "Benchmark", value: "+15.5pp" }, { label: "Stars", value: "2" }]}
               />
               <NotableCard
                 kind="build"
                 title="Whatify"
                 href="https://whatify.ai"
-                meta="Side build"
-                description="Financial scenarios for real life decisions."
-                stats={[{ label: "Waitlist", value: "3.8k" }]}
+                meta="Side product"
+                description="Public-data financial-class diagnosis for income, wealth, place and household context."
+                stats={[{ label: "Weekly users", value: "300+" }]}
               />
               <NotableCard
-                kind="post"
-                title="Grok Radio"
-                href="https://x.com/aasjav/status/2013716104271536622"
-                meta="Prototype"
-                description="Voice-first product sketch."
+                kind="win"
+                title="AI Agentic Hackathon"
+                href="https://www.linkedin.com/posts/adam-ferguson-7259b6121_two-months-ago-aashir-javed-omer-bresinski-share-7437869877543129088-3Z8q"
+                meta="MoonPay"
+                description="Won popular vote by pairing working automation with a crisp product story."
+                stats={[{ label: "Result", value: "Win" }]}
               />
             </div>
           </Reveal>
@@ -321,7 +330,7 @@ export default function Home() {
             <div className="signal-frame bg-ink p-6 text-paper sm:p-10">
               <p className="mono text-[11px] uppercase tracking-[0.22em] text-paper/55">Next step</p>
               <p className="mt-5 display max-w-[13ch] text-[clamp(3rem,9vw,6rem)] leading-[0.9]">
-                Bring me the demo-to-prod cliff.
+                Bring me the product metric hiding inside the hard system.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <LinkButton href="mailto:me@aashir.net">Email →</LinkButton>

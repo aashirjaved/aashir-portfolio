@@ -9,13 +9,13 @@ import {
   ArrowLink,
 } from "@/components/editorial";
 
-const stack = ["go", "python", "typescript", "react", "next.js", "aws", "terraform", "k8s", "llms", "genai", "postgres", "mqtt"]; 
+const stack = ["go", "python", "typescript", "react", "next.js", "aws", "terraform", "k8s", "llm agents", "crypto", "postgres", "mqtt"];
 
 const principles = [
-  ["Embed", "Inside the codebase the work lives in."],
-  ["Ship", "Agents in production, not slides."],
-  ["Harden", "Past the demo, into real traffic."],
-  ["Hand off", "Evals and runbooks with your team."],
+  ["Leverage", "Find the constraint that moves product, cost, reliability or conversion."],
+  ["Proof", "Ship small, real systems before the story gets expensive."],
+  ["Scale", "Keep latency, on-call, security and ownership in frame."],
+  ["Transfer", "Leave the team with cleaner services and clearer operating context."],
 ];
 
 export default function About() {
@@ -26,7 +26,7 @@ export default function About() {
         number="01"
         title="Field"
         italic="profile."
-        lede="London-based engineer who embeds with customer teams to ship agentic AI inside their production codebases."
+        lede="London-based senior engineer building crypto payment rails, AI agent workflows, marketplace systems and cloud platforms."
       />
 
       <Reveal>
@@ -39,7 +39,7 @@ export default function About() {
                 <div>
                   <div className="mono text-[10px] uppercase tracking-[0.24em] text-paper/55">Aashir Javed</div>
                   <div className="mt-4 display text-[clamp(3rem,10vw,7rem)] leading-[0.82]">
-                    Field<br />Product<br />AI
+                    Product<br />Infra<br />AI
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
@@ -57,12 +57,12 @@ export default function About() {
               <div className="mt-3 mono text-[11px] uppercase tracking-[0.22em] text-ink-mute">years shipping</div>
             </div>
             <div className="visual-card rounded-[30px] p-6">
-              <div className="display text-6xl leading-none">6</div>
-              <div className="mt-3 mono text-[11px] uppercase tracking-[0.22em] text-ink-mute">technical chapters</div>
+              <div className="display text-6xl leading-none">300+</div>
+              <div className="mt-3 mono text-[11px] uppercase tracking-[0.22em] text-ink-mute">weekly users</div>
             </div>
             <div className="visual-card rounded-[30px] p-6 sm:col-span-2">
               <p className="display text-[clamp(2.2rem,7vw,5.5rem)] leading-[0.92]">
-                I sit with the team, learn the workflow, then ship the agent into their production codebase and leave the evals behind.
+                I like work where a product metric is trapped inside a hard system: auth, payments, reliability, cost, latency or agent automation.
               </p>
               <div className="mt-7 flex flex-wrap gap-3">
                 <LinkButton href="/contact">Contact →</LinkButton>
@@ -108,8 +108,8 @@ export default function About() {
       <section className="pt-20 sm:pt-28">
         <Reveal>
           <div className="visual-card rounded-[36px] p-6 sm:p-10">
-            <p className="display-italic max-w-[14ch] text-[clamp(2.6rem,8vw,5.5rem)] leading-[0.92] text-ink">
-              “Boring infra. Ambitious product.”
+            <p className="display-italic max-w-[15ch] text-[clamp(2.6rem,8vw,5.5rem)] leading-[0.92] text-ink">
+              “Ambitious product. Boring failure modes.”
             </p>
             <div className="mt-8 grid gap-3 sm:grid-cols-3">
               <Pill>P@SHA ICT Award</Pill>

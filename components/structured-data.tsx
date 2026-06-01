@@ -9,7 +9,6 @@ interface JsonLdProps {
 
 export default function JsonLd({ type, data }: JsonLdProps) {
   useEffect(() => {
-    // Only insert JSON-LD on client-side to avoid hydration issues
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.textContent = JSON.stringify({
@@ -27,7 +26,6 @@ export default function JsonLd({ type, data }: JsonLdProps) {
   return null;
 }
 
-// Person schema for your portfolio
 export function PersonSchema() {
   return (
     <JsonLd
@@ -55,46 +53,41 @@ export function PersonSchema() {
           "https://github.com/aashirjaved",
           "https://www.linkedin.com/in/aashirjaved",
           "https://x.com/aasjav",
+          "https://whatify.ai/",
         ],
         hasOccupation: {
           "@type": "Occupation",
           name: "Senior Software Engineer",
           occupationLocation: { "@type": "City", name: "London" },
           skills:
-            "Embedding inside customer engineering teams, shipping agentic AI into production codebases, prompt engineering on live customer traffic, building evals against real production data, Model Context Protocol servers, sub-agents and agent skills, retrieval-augmented generation, fine-tuning generative models, tool use and function calling, production hardening of LLM systems, latency and cost optimisation under real load, on-call ownership and incident response, OAuth2 and identity flows, distributed systems at scale, AWS, Terraform, Kubernetes, Go, Python, TypeScript, React, Next.js, observability and runbook authorship, hand-off of evals and operational knowledge to customer teams",
+            "Backend engineering, infrastructure, crypto payments, AI agents, agent skills, retrieval-augmented generation, fine-tuning generative models, tool use and function calling, production hardening, latency and cost optimisation, on-call ownership, incident response, OAuth2 and identity flows, distributed systems at scale, AWS, Terraform, Kubernetes, Go, Python, TypeScript, React, Next.js, observability and runbooks",
           responsibilities:
-            "Embeds inside customer engineering organisations to ship agentic AI features in their production codebases. Runs eval-driven development against real customer traffic. Iterates on prompts, tools and orchestration on live data. Owns the work that turns a working demo into a system that survives production: latency budgets, cost per request, eval regressions, security review, on-call rotation. Transfers eval suites, runbooks and the operating knowledge of the system to the customer team at hand-off.",
+            "Builds backend, infrastructure, crypto payment and AI-agent systems. Ships production product work, public agent skills, customer-care automation, core platform services, gateway systems and cloud migrations with measurable outcomes across conversion, cost, latency, CSAT and reliability.",
         },
         knowsAbout: [
-          "Embedded engineering engagements inside customer codebases",
-          "Shipping agentic AI features into production",
-          "Prompt engineering and tool-calling iteration on live customer data",
-          "Eval-driven development against real production traffic",
-          "Model Context Protocol (MCP) servers and integration",
-          "Sub-agents, agent skills and agent orchestration patterns",
+          "Crypto payments and MoonPay product infrastructure",
+          "AI agents, agent skills and agent orchestration patterns",
           "Retrieval-augmented generation (RAG) on customer corpora",
           "Fine-tuning generative models for vertical workflows",
-          "LLM observability, regression detection and drift monitoring",
-          "Production hardening of nondeterministic AI systems",
-          "Latency, cost and throughput optimisation of inference workloads",
-          "Security review remediation for AI features",
+          "Public agent skills for on-ramps, swaps, wallets and payments",
+          "Infrastructure-as-TypeScript for AI agents",
+          "Latency, cost and throughput optimisation",
           "OAuth2, SSO, AuthN/AuthZ in regulated environments",
           "Distributed systems, queueing and event-driven architectures",
           "AWS, Terraform, Kubernetes, infrastructure as code",
           "Go, Python, TypeScript, React, Next.js, Node, Java",
           "On-call rotation, incident response and SEV gamedays",
-          "Runbook authorship and operational hand-off to customer teams",
-          "Demo-to-production hardening of AI prototypes",
-          "Working alongside Anthropic Claude, OpenAI and Cursor in customer workflows",
+          "Marketplace platforms and customer-care automation",
+          "Warehouse integration gateways and fulfillment systems",
+          "Public-data consumer products such as Whatify",
         ],
         description:
-          "Senior engineer specialising in agentic AI shipped inside customer production environments. Eight years across MoonPay, Motorway, Deliveroo, Zalando and IBM/Nordcloud embedding with engineering teams, owning evals on real traffic, hardening prototypes past demo day, and transferring eval suites and runbooks back to the customer at hand-off. London-based, remote-friendly, ~25% travel.",
+          "Senior software engineer in London building backend, infrastructure, crypto payment and AI-agent systems. Eight years across MoonPay, Motorway, Deliveroo, Zalando and Nordcloud, with quantified impact across 8.5x faster Polygon buys, +15% platform volume, +7% conversion, -15% AWS cost, 2x CSAT and 1000+ RPS gateway work.",
       }}
     />
   );
 }
 
-// Website schema for your portfolio
 export function WebsiteSchema() {
   return (
     <JsonLd
@@ -103,9 +96,9 @@ export function WebsiteSchema() {
         name: "Aashir Javed | Senior Software Engineer",
         url: "https://aashir.net",
         description:
-          "Portfolio of Aashir Javed — senior engineer shipping agentic AI inside customer production environments. Evidence of embedded engagements, eval-driven development, MCP servers, sub-agents, and demo-to-production hand-offs.",
+          "Portfolio of Aashir Javed, senior engineer building backend, infrastructure, crypto payment and AI-agent systems across MoonPay, Motorway, Deliveroo, Zalando and Nordcloud.",
         keywords:
-          "embedded engineering, agentic AI, LLM evals, MCP servers, sub-agents, retrieval-augmented generation, fine-tuning, production AI, customer infrastructure, prompt engineering on live data, demo-to-production, AI hand-off, AWS, Go, Python, TypeScript",
+          "backend engineering, infrastructure, crypto payments, AI agents, agent skills, MoonPay, Whatify, alchemy-infra, AWS, Go, Python, TypeScript, React, Next.js, distributed systems",
         author: {
           "@type": "Person",
           name: "Aashir Javed",

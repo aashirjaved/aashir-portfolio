@@ -12,13 +12,13 @@ import {
 const positions = [
   {
     co: "MoonPay",
-    role: "Senior Software Engineer · Consumer Product",
-    when: "Present · London",
+    role: "Senior Software Engineer · Crypto Payments / AI Agents",
+    when: "Sep 2025 to now · London",
     pts: [
-      "Refactored auth layer for cleaner, safer consumer product flows.",
-      "Drove AI adoption across engineering workflows.",
-      "Shipping consumer crypto products at scale across iOS, Android and web.",
-      "Worked across product, platform, design, and security constraints.",
+      "Built and demoed an AI agent executing crypto transactions at MoonPay's London AI x Crypto meetup.",
+      "Contributed to MoonPay product launches across Buy/Sell, Balance and 8.5x faster Polygon buys.",
+      "Contributed to moonpay/skills, public agent skills for on-ramps, swaps, wallets and payments.",
+      "Won popular vote at MoonPay's AI Agentic Engineering Hackathon.",
     ],
   },
   {
@@ -26,10 +26,10 @@ const positions = [
     role: "Senior Backend Engineer · Core Engineering Lead",
     when: "Jun 2024 to 2025 · London",
     pts: [
-      "Led Core Engineering: foundational, mission-critical services and architecture for product teams.",
-      "Delivered Motorway Pro trade proposition → +15% platform volume.",
-      "Led migration to decoupled AuthN/AuthZ services → +7% top-of-funnel conversion.",
-      "Established operational-excellence working group → −15% annual AWS cost.",
+      "Led foundational, mission-critical services and architecture for product teams.",
+      "Delivered Motorway Pro trade proposition: +15% platform volume.",
+      "Led decoupled AuthN/AuthZ migration: +7% top-of-funnel conversion.",
+      "Started operational-excellence working group: -15% annual AWS cost.",
     ],
   },
   {
@@ -40,7 +40,7 @@ const positions = [
       "Led automated customer-care journey with agents, fine-tuned GenAI models and highly available Go APIs.",
       "Delivered 2× CSAT and reduced request handling time to 0.5×.",
       "Built microservices for calls, chats, credits and refunds across a three-sided marketplace.",
-      "Organised SEV gamedays and trained 100+ engineers in on-call procedures.",
+      "Organised SEV game days and trained 100+ engineers in on-call procedures.",
     ],
   },
   {
@@ -94,7 +94,7 @@ export default function Resume() {
         number="R"
         title="Aashir"
         italic="Javed."
-        lede="Senior software engineer · eight years · full-stack, cloud, AI/ML. London."
+        lede="Senior software engineer · backend, infrastructure, crypto payments and AI agents. London."
         meta={
           <div className="flex gap-3 flex-wrap no-print">
             <LinkButton href="/Aashir-Javed-Resume.pdf" external>
@@ -179,6 +179,24 @@ export default function Resume() {
         </Reveal>
         <Reveal>
           <div className="space-y-5">
+            <article className="border-b border-rule-soft pb-5">
+              <h3 className="display text-2xl leading-tight text-ink">alchemy-infra</h3>
+              <p className="mt-2 text-ink-2">
+                <EditorialLink href="https://github.com/aashirjaved/alchemy-infra" external>Agent infrastructure skill</EditorialLink> for Alchemy, Cloudflare, AWS and strict secret hygiene.
+              </p>
+            </article>
+            <article className="border-b border-rule-soft pb-5">
+              <h3 className="display text-2xl leading-tight text-ink">moonpay/skills</h3>
+              <p className="mt-2 text-ink-2">
+                Contributor to <EditorialLink href="https://github.com/moonpay/skills" external>open agent skills</EditorialLink> for crypto money movement.
+              </p>
+            </article>
+            <article className="border-b border-rule-soft pb-5">
+              <h3 className="display text-2xl leading-tight text-ink">Whatify</h3>
+              <p className="mt-2 text-ink-2">
+                <EditorialLink href="https://whatify.ai/" external>Financial-class diagnosis tool</EditorialLink> with 300+ weekly unique users.
+              </p>
+            </article>
             <article className="border-b border-rule-soft pb-5">
               <h3 className="display text-2xl leading-tight text-ink">AWS Cognito Passwordless Auth</h3>
               <p className="mt-2 text-ink-2">Contributed improved error reporting to save developer debugging time.</p>

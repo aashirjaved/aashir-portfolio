@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "loop11y": {
+      "source": "tayyabataimur/loop11y-skill",
+      "sourceType": "github",
+      "skillPath": "skills/loop11y/SKILL.md",
+      "computedHash": "e9457d9d8e690979ab1048461801c958e987b97db934cc7cac3d41fe3d167846"
+    }
+  }
+}

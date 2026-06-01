@@ -1,52 +1,48 @@
 import { Metadata } from 'next';
 
-// This function provides dynamic metadata generation for different pages
 export function generateMetadata({ params, pathname }: { params: any; pathname: string }): Metadata {
-  // Base title and description
   const baseTitle = "Aashir Javed | Senior Software Engineer";
   const baseDescription =
-    "Senior engineer who embeds with customer teams and ships agentic AI into their production codebases. Eight years across fintech, marketplaces and cloud — evals on real traffic, demo-to-production hardening, and hand-off back to the customer.";
+    "Senior engineer building backend, infrastructure, crypto payment and AI-agent systems. Eight years across MoonPay, Motorway, Deliveroo, Zalando and Nordcloud, with quantified work across conversion, cost, latency, CSAT and product launches.";
 
-  // Page-specific metadata
   const pageMetadata: Record<string, { title: string; description: string }> = {
     "/": {
       title: baseTitle,
       description:
-        "Senior engineer embedded inside customer codebases shipping agentic AI features into production. Runs eval-driven development on live traffic, hardens prototypes past demo day, and transfers runbooks and eval suites back to the customer team. Go, Python, TypeScript, AWS, LLMs.",
+        "Senior engineer building crypto payment rails, AI-agent workflows and platform systems. Current MoonPay work spans public agent skills, AI x crypto demos, product launches and 8.5x faster Polygon buys.",
     },
     "/about": {
       title: baseTitle + " | About",
       description:
-        "London-based engineer specialising in embedded delivery of agentic AI inside customer production environments. Operating principles: field first, build where the users are, harden before scale, measure with numbers.",
+        "London-based senior engineer across product, infrastructure and AI: crypto payments at MoonPay, marketplace platforms at Motorway and Deliveroo, fulfillment systems at Zalando, and cloud migration at Nordcloud.",
     },
     "/experience": {
       title: baseTitle + " | Experience",
       description:
-        "Eight years embedding with engineering teams at MoonPay, Motorway, Deliveroo, Zalando and IBM/Nordcloud. Shipping AI features in customer codebases, owning auth, scale, reliability and the work that turns a demo into production.",
+        "Impact timeline across MoonPay, Motorway, Deliveroo, Zalando, Nordcloud and CARE: 8.5x faster Polygon buys, +15% platform volume, +7% conversion, -15% AWS cost, 2x CSAT and 1000+ RPS gateways.",
     },
     "/projects": {
       title: baseTitle + " | Projects",
       description:
-        "Selected builds: agentic customer care in production, embedded AI delivery, MCP-style integrations, identity and core engineering platforms, gateway services at 1000+ RPS. Each one shipped, hardened and handed off.",
+        "Selected builds: MoonPay AI agents and crypto payments, Whatify with 300+ weekly users, alchemy-infra, Deliveroo customer-care automation, Motorway core engineering and Zalando gateway systems.",
     },
     "/writing": {
       title: baseTitle + " | Writing",
       description:
-        "Notes on shipping agentic AI inside customer codebases, eval-driven development, LLM orchestration, production hardening and the gap between demo and production.",
+        "Notes on backend engineering, AI agents, crypto payments, infrastructure, product systems and production tradeoffs.",
     },
     "/resume": {
       title: baseTitle + " | Résumé",
       description:
-        "Résumé and open-source work — embedded engineering, production agentic AI, evals on real traffic, demo-to-production hand-offs, distributed systems on AWS.",
+        "Résumé for Aashir Javed: senior software engineer focused on backend, infrastructure, crypto payments, AI agents, cloud platforms and high-impact product engineering.",
     },
     "/contact": {
       title: baseTitle + " | Contact",
       description:
-        "Open to embedded AI delivery engagements with frontier labs and AI-first companies shipping agents in customer production environments. London-based, remote-friendly, ~25% travel.",
+        "Contact Aashir Javed for senior backend, infrastructure, AI-agent, crypto payments and platform engineering work. London-based.",
     },
   };
 
-  // Get current page metadata or use defaults
   const currentPath = pathname || "/";
   const metadata = pageMetadata[currentPath] || { 
     title: baseTitle, 
@@ -57,17 +53,15 @@ export function generateMetadata({ params, pathname }: { params: any; pathname: 
     title: metadata.title,
     description: metadata.description,
     keywords: [
-      "embedded engineering",
-      "agentic AI in production",
-      "LLM evals on real traffic",
-      "MCP servers",
-      "sub-agents",
+      "backend engineering",
+      "AI agents",
+      "crypto payments",
+      "MoonPay",
+      "agent skills",
+      "infrastructure as code",
+      "Whatify",
       "retrieval-augmented generation",
       "fine-tuning",
-      "prompt engineering on live data",
-      "demo-to-production hardening",
-      "AI hand-off",
-      "customer infrastructure delivery",
       "AWS",
       "Go",
       "Python",
@@ -81,9 +75,7 @@ export function generateMetadata({ params, pathname }: { params: any; pathname: 
     ],
     authors: [{ name: "Aashir Javed", url: "https://aashir.net" }],
     creator: "Aashir Javed",
-    // Set the metadataBase to resolve relative URLs for OG and Twitter images
     metadataBase: new URL('https://aashir.net'),
-    // Open Graph metadata for social media sharing
     openGraph: {
       title: metadata.title,
       description: metadata.description,
@@ -100,7 +92,6 @@ export function generateMetadata({ params, pathname }: { params: any; pathname: 
       locale: "en_US",
       type: "website",
     },
-    // Twitter metadata
     twitter: {
       card: "summary_large_image",
       title: metadata.title,

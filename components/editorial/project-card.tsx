@@ -5,7 +5,7 @@ export type ProjectCardProps = {
   title: string;
   company: string;
   period: string;
-  status: "Production" | "Beta" | "Sunset";
+  status: "Production" | "Beta" | "OSS" | "Sunset";
   description: string;
   details?: string[];
   technologies: string[];
@@ -16,7 +16,7 @@ export type ProjectCardProps = {
 
 export function ProjectCard(p: ProjectCardProps) {
   const statusTone =
-    p.status === "Production" ? "ok" : p.status === "Beta" ? "accent" : "default";
+    p.status === "Production" ? "ok" : p.status === "Beta" || p.status === "OSS" ? "accent" : "default";
   const heroMetric = p.metrics?.[0];
 
   return (

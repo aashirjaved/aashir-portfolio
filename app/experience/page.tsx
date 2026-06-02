@@ -19,6 +19,7 @@ const experiences: TimelineItem[] = [
     location: "London",
     description: [
       "Built and demoed a personal AI agent executing crypto transactions at MoonPay's London AI x Crypto meetup",
+      "Prototyped and evaluated agent workflows with local models, Ollama/LM Studio-style tooling, context management and memory design",
       "Contributed to MoonPay product launches across Buy/Sell, Balance and Polygon purchase performance",
       "Contributed to moonpay/skills, public AI-agent skills for on-ramps, swaps, wallets and payments",
       "Won popular vote at MoonPay's AI Agentic Engineering Hackathon",
@@ -28,7 +29,7 @@ const experiences: TimelineItem[] = [
       { label: "Skills", value: "109★" },
       { label: "Followers", value: "1.1k" },
     ],
-    technologies: ["agents", "crypto", "react", "go", "python", "aws", "typescript"],
+    technologies: ["agents", "evals", "ollama", "memory", "crypto", "go", "python"],
   },
   {
     year: "2024 to 2025",
@@ -59,6 +60,7 @@ const experiences: TimelineItem[] = [
     location: "London",
     description: [
       "Led ideation and delivery of automated customer-care journey using agents, fine-tuned GenAI models and highly available Go APIs",
+      "Worked through context, retrieval and evaluation loops for production care workflows",
       "Delivered 2× CSAT and 0.5× request handling time",
       "Built and maintained frontend/backend microservices for calls, chats, credits and refunds across a three-sided marketplace",
       "Organised SEV simulation gamedays and trained 100+ engineers in on-call procedures",
@@ -68,7 +70,7 @@ const experiences: TimelineItem[] = [
       { label: "Handling", value: "0.5×" },
       { label: "Trained", value: "100+" },
     ],
-    technologies: ["react", "go", "python", "llm", "k8s", "terraform", "postgres"],
+    technologies: ["react", "go", "python", "llm", "evals", "k8s", "postgres"],
   },
   {
     year: "2021 to 2022",

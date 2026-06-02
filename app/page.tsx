@@ -21,9 +21,9 @@ const recentWork = [
     year: "now",
     company: "MoonPay",
     role: "Senior Engineer",
-    blurb: "Building crypto payment and agent workflows: public MoonPay skills, AI x crypto demos, consumer launches and faster Polygon buys.",
+    blurb: "Building crypto payment and agent workflows: local-model prototyping, evals, memory/context design, public MoonPay skills and faster Polygon buys.",
     metrics: [{ label: "Polygon buys", value: "8.5×" }],
-    stack: ["agents", "crypto", "react", "go", "aws"],
+    stack: ["agents", "evals", "ollama", "go", "aws"],
   },
   {
     year: "2024",
@@ -48,19 +48,19 @@ const services = [
     title: "Find leverage",
     result: "01",
     body: "Start where product pain meets infrastructure drag: auth, cost, latency, reliability, or agent workflows.",
-    tags: ["Product", "Infra", "Signal"],
+    tags: ["Product", "Infra", "Context"],
   },
   {
     title: "Ship the proof",
     result: "02",
     body: "Turn demos into working systems with real users, measurable impact, and boring operational paths.",
-    tags: ["Agents", "APIs", "Launches"],
+    tags: ["Agents", "Evals", "Launches"],
   },
   {
     title: "Make it last",
     result: "03",
     body: "Leave the team with cleaner services, runbooks, cost wins, and enough context to keep moving.",
-    tags: ["Hardening", "On-call", "Handoff"],
+    tags: ["Memory", "On-call", "Handoff"],
   },
 ];
 
@@ -117,7 +117,7 @@ function SignalPortrait() {
 
 function ArchitectureBrief({ className = "" }: { className?: string }) {
   const rows = [
-    ["AI that moves money", "Agent skills, crypto workflows, production demos"],
+    ["AI that moves money", "Agent skills, local models, eval loops"],
     ["Systems that pay back", "Auth, platform foundations, cloud cost, latency"],
     ["Products with signal", "Whatify, public launches, measurable usage"],
   ];
@@ -172,7 +172,7 @@ export default function Home() {
             <div className="mt-8 grid gap-8 sm:mt-10 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-end">
               <div>
                 <p className="lede max-w-[30ch] text-[1.08rem] leading-snug text-ink sm:text-[clamp(1.15rem,2.4vw,1.75rem)] sm:leading-[1.28]">
-                  Senior engineer building crypto payment rails, agent workflows and platform systems across MoonPay, Motorway, Deliveroo and Zalando.
+                  Senior engineer building crypto payment rails, LLM agent workflows, eval systems and platform services across MoonPay, Motorway, Deliveroo and Zalando.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
                   <LinkButton href="/projects">See proof</LinkButton>
@@ -228,7 +228,7 @@ export default function Home() {
                   <p className="mt-4 text-sm leading-relaxed text-ink-2">{service.body}</p>
                   <div className="mt-5 flex flex-wrap gap-1.5">
                     {service.tags.map((tag) => (
-                      <Pill key={tag}>{tag}</Pill>
+                  <Pill key={tag}>{tag}</Pill>
                     ))}
                   </div>
                 </article>
@@ -275,7 +275,7 @@ export default function Home() {
                 title="alchemy-infra"
                 href="https://github.com/aashirjaved/alchemy-infra"
                 meta="Open source"
-                description="Infrastructure-as-TypeScript skill for agents with strict secret hygiene."
+                description="Infrastructure-as-TypeScript skill for agents with strict secret hygiene and repeatable setup."
                 stats={[{ label: "Benchmark", value: "+15.5pp" }, { label: "Stars", value: "2" }]}
               />
               <NotableCard

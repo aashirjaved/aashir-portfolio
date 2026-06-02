@@ -60,13 +60,16 @@ export function PersonSchema() {
           name: "Senior Software Engineer",
           occupationLocation: { "@type": "City", name: "London" },
           skills:
-            "Backend engineering, infrastructure, crypto payments, AI agents, agent skills, retrieval-augmented generation, fine-tuning generative models, tool use and function calling, production hardening, latency and cost optimisation, on-call ownership, incident response, OAuth2 and identity flows, distributed systems at scale, AWS, Terraform, Kubernetes, Go, Python, TypeScript, React, Next.js, observability and runbooks",
+            "Backend engineering, infrastructure, crypto payments, AI agents, local LLM workflows, Ollama, LM Studio, local models, context management, memory management, LLM evals, agent skills, retrieval-augmented generation, fine-tuning generative models, tool use and function calling, production hardening, latency and cost optimisation, on-call ownership, incident response, OAuth2 and identity flows, distributed systems at scale, AWS, Terraform, Kubernetes, Go, Python, TypeScript, React, Next.js, observability and runbooks",
           responsibilities:
             "Builds backend, infrastructure, crypto payment and AI-agent systems. Ships production product work, public agent skills, customer-care automation, core platform services, gateway systems and cloud migrations with measurable outcomes across conversion, cost, latency, CSAT and reliability.",
         },
         knowsAbout: [
           "Crypto payments and MoonPay product infrastructure",
           "AI agents, agent skills and agent orchestration patterns",
+          "Ollama, LM Studio and local model workflows",
+          "Context-window design and agent memory management",
+          "LLM evaluation loops and regression checks",
           "Retrieval-augmented generation (RAG) on customer corpora",
           "Fine-tuning generative models for vertical workflows",
           "Public agent skills for on-ramps, swaps, wallets and payments",
@@ -82,7 +85,7 @@ export function PersonSchema() {
           "Public-data consumer products such as Whatify",
         ],
         description:
-          "Senior software engineer in London building backend, infrastructure, crypto payment and AI-agent systems. Eight years across MoonPay, Motorway, Deliveroo, Zalando and Nordcloud, with quantified impact across 8.5x faster Polygon buys, +15% platform volume, +7% conversion, -15% AWS cost, 2x CSAT and 1000+ RPS gateway work.",
+          "Senior software engineer in London building backend, infrastructure, crypto payment and AI-agent systems. Experienced with local LLM tooling such as Ollama and LM Studio, local models, context and memory management, eval loops, RAG and production hardening.",
       }}
     />
   );
@@ -96,9 +99,9 @@ export function WebsiteSchema() {
         name: "Aashir Javed | Senior Software Engineer",
         url: "https://aashir.net",
         description:
-          "Portfolio of Aashir Javed, senior engineer building backend, infrastructure, crypto payment and AI-agent systems across MoonPay, Motorway, Deliveroo, Zalando and Nordcloud.",
+          "Portfolio of Aashir Javed, senior engineer building backend, infrastructure, crypto payment and AI-agent systems with local LLM workflows, Ollama, LM Studio, context management, memory management and evals.",
         keywords:
-          "backend engineering, infrastructure, crypto payments, AI agents, agent skills, MoonPay, Whatify, alchemy-infra, AWS, Go, Python, TypeScript, React, Next.js, distributed systems",
+          "backend engineering, infrastructure, crypto payments, AI agents, local LLMs, Ollama, LM Studio, context management, memory management, LLM evals, agent skills, MoonPay, Whatify, alchemy-infra, AWS, Go, Python, TypeScript, React, Next.js, distributed systems",
         author: {
           "@type": "Person",
           name: "Aashir Javed",

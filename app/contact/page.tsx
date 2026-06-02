@@ -52,7 +52,7 @@ const context = [
   },
   {
     type: "AI in production",
-    body: "Agent workflows, automation, RAG and tool use tied to product metrics and operational reality."
+    body: "Agent workflows, local models, Ollama/LM Studio tooling, context and memory management, evals, RAG and tool use tied to product metrics."
   },
 ];
 

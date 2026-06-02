@@ -86,6 +86,7 @@ Source checked from the logged-in LinkedIn profile on June 1, 2026.
 - Total tenure shown: 10 months
 - Skills shown: Product Development, Software Development, and more
 - Current emphasis: crypto payments infrastructure, AI agents, agent skills, Web3 workflows, and full-stack product engineering.
+- Practical LLM tooling: LM Studio/LLM Studio, Ollama, local model workflows, context-window design, memory/state management, prompt/tool orchestration, and evaluation loops.
 
 ### Motorway
 
@@ -166,7 +167,7 @@ Source checked from the logged-in LinkedIn profile on June 1, 2026.
 - Languages: C++, Java, Python, Go, JavaScript/ES6+, TypeScript, Rust
 - Web development: React, Node.js, Spring, Next.js, REST APIs, GraphQL, Jest, Cypress, Webpack, design systems
 - Cloud and infrastructure: AWS, Azure, GCP, Terraform, Kubernetes, gRPC, Kafka, PostgreSQL, DynamoDB, vector databases, serverless
-- AI and data: LLMs, GenAI agents, MLOps, RAG-style workflows, vector search, automation
+- AI and data: LLMs, GenAI agents, LM Studio/LLM Studio, Ollama, local models, context and memory management, evals, MLOps, RAG-style workflows, vector search, automation
 - Software design and testing: OOP, functional programming, test-driven development, behavior-driven development
 - Distributed systems: microservices, scaling, resilience engineering, fault tolerance, networking protocols
 - Team: pair programming, stakeholder management, technical design documents, mentorship, hiring, incident training
@@ -252,6 +253,7 @@ Source checked from the logged-in LinkedIn profile on June 1, 2026.
 ## Portfolio Positioning Notes
 
 - Lead with full-stack product engineering across fintech, Web3, cloud, and AI agent systems.
+- AI systems positioning: proficient with local and hosted LLM workflows, LM Studio/LLM Studio, Ollama, local model setup, context-window design, memory management, tool orchestration, RAG, and eval-driven iteration.
 - Recent proof points are strongest around MoonPay: AI x crypto meetup speaker/demo, agentic engineering hackathon win, and product launch contribution.
 - Open-source proof points: `alchemy-infra` for agent infrastructure scaffolding and contribution to MoonPay's public AI-agent skills repo.
 - Side-project proof point: Whatify, a live consumer-facing product with 300+ weekly unique users.
@@ -261,3 +263,5 @@ Source checked from the logged-in LinkedIn profile on June 1, 2026.
 - Useful phrasing: "Created agent infrastructure tooling that turns cloud provisioning into TypeScript workflows with strict secret hygiene."
 - Useful phrasing: "Built Whatify, a public-data financial diagnosis tool used by 300+ unique users weekly."
 - Useful phrasing: "Led backend and platform initiatives that improved conversion, latency, cloud cost, operational readiness, and customer-care outcomes."
+- Useful phrasing: "Prototype and evaluate LLM workflows locally with Ollama and LM Studio before hardening them for production."
+- Useful phrasing: "Design agent context and memory layers so workflows preserve relevant state without blowing up latency, cost, or correctness."

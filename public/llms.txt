@@ -1,11 +1,13 @@
 # Aashir Javed
 
-Senior software engineer in London building backend, infrastructure, crypto payment and AI-agent systems.
+Senior software engineer in London building backend, infrastructure, crypto payment and AI-agent systems. Experienced with local LLM workflows, Ollama, LM Studio/LLM Studio, local models, context and memory management, evals, RAG and production hardening.
 
 ## Current Signal
 
 - MoonPay: senior software engineer working across crypto payments, AI agents, agent skills and consumer product launches.
 - Recent MoonPay proof: personal AI agent demo that automated daily tasks and executed a crypto transaction at the London AI x Crypto meetup.
+- LLM operations: prototypes and evaluates workflows with local models, Ollama and LM Studio/LLM Studio before hardening them for production.
+- Agent design: works on context-window design, memory/state management, tool orchestration and eval loops for agent behavior.
 - Product-launch signal: contributed to Moonlog Volume 02 work across Buy/Sell, MoonPay Balance and 8.5x faster Polygon buys.
 - Open-source signal: contributor to `moonpay/skills`, public AI-agent skills for on-ramps, swaps, wallets, deposits and payments.
 - Side-product signal: Whatify, a public-data financial-class diagnosis tool with 300+ weekly unique users.
@@ -22,7 +24,7 @@ Senior software engineer in London building backend, infrastructure, crypto paym
 
 ## Stack
 
-Go, Python, TypeScript, React, Next.js, Node.js, Java, C++, Rust. AWS, Terraform, Kubernetes, serverless, PostgreSQL, DynamoDB, Kafka, vector databases. LLM agents, RAG, MLOps, automation, crypto payments, distributed systems, reliability and platform engineering.
+Go, Python, TypeScript, React, Next.js, Node.js, Java, C++, Rust. AWS, Terraform, Kubernetes, serverless, PostgreSQL, DynamoDB, Kafka, vector databases. LLM agents, Ollama, LM Studio/LLM Studio, local models, evals, context management, memory management, RAG, MLOps, automation, crypto payments, distributed systems, reliability and platform engineering.
 
 ## Pages
 

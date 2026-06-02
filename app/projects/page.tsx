@@ -18,11 +18,11 @@ const projects: Omit<ProjectCardProps, "number">[] = [
       "Recent MoonPay work across AI-agent demos, public agent skills, consumer launches and crypto purchase performance.",
     details: [
       "Built and demoed a personal AI agent that automated daily tasks and executed a crypto transaction",
+      "Prototyped local-model workflows with Ollama/LM Studio-style tooling before hardening agent behavior",
+      "Designed context and memory handling for agent workflows, with eval loops around tool use and task completion",
       "Contributed to moonpay/skills, public AI-agent skills for on-ramps, swaps, wallets and payments",
-      "Contributed to Moonlog Volume 02 launches across Buy/Sell, MoonPay Balance and Polygon buys",
-      "Won popular vote at MoonPay's AI Agentic Engineering Hackathon",
     ],
-    technologies: ["agents", "crypto", "react", "go", "python", "aws", "typescript"],
+    technologies: ["agents", "evals", "ollama", "lm studio", "memory", "crypto", "go"],
     metrics: [
       { label: "Polygon", value: "8.5×" },
       { label: "Skills repo", value: "109★" },
@@ -62,10 +62,11 @@ const projects: Omit<ProjectCardProps, "number">[] = [
     details: [
       "Helps agents provision Cloudflare Workers, KV, R2, D1, Queues, Durable Objects, AWS Lambda and DynamoDB",
       "Supports SKILL.md, skills.sh and npx-compatible installation paths",
+      "Captures repeatable context for agents so infrastructure setup survives across sessions and toolchains",
       "Encodes secret hygiene through generated passwords, gitignore updates and pre-commit checks",
       "README benchmark reports 32/32 checks with the skill versus 27/32 baseline",
     ],
-    technologies: ["alchemy", "typescript", "cloudflare", "aws", "iac", "agents"],
+    technologies: ["alchemy", "typescript", "cloudflare", "aws", "context", "agents"],
     metrics: [
       { label: "Benchmark", value: "+15.5pp" },
       { label: "License", value: "MIT" },
@@ -83,7 +84,7 @@ const projects: Omit<ProjectCardProps, "number">[] = [
       "Customer-care automation inside a three-sided marketplace, powered by agents, fine-tuned GenAI models and Go services built for peak load.",
     details: [
       "Ran the arc from workflow design to production hardening and team handoff",
-      "Iterated prompts, tools and orchestration against real ticket data: 2× CSAT, request handling cut in half",
+      "Iterated prompts, tools, context and evals against real ticket data: 2× CSAT, request handling cut in half",
       "Maintained frontend and backend services for calls, chats, credits and refunds across the marketplace",
       "Ran SEV simulation gamedays and trained 100+ engineers on the on-call paths the system lived behind",
     ],

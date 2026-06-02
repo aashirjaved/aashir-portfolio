@@ -3,13 +3,13 @@ import { Metadata } from 'next';
 export function generateMetadata({ params, pathname }: { params: any; pathname: string }): Metadata {
   const baseTitle = "Aashir Javed | Senior Software Engineer";
   const baseDescription =
-    "Senior engineer building backend, infrastructure, crypto payment and AI-agent systems. Eight years across MoonPay, Motorway, Deliveroo, Zalando and Nordcloud, with quantified work across conversion, cost, latency, CSAT and product launches.";
+    "Senior engineer building backend, infrastructure, crypto payment and AI-agent systems. Experienced with local LLM workflows, Ollama, LM Studio, context and memory management, evals, RAG and production hardening.";
 
   const pageMetadata: Record<string, { title: string; description: string }> = {
     "/": {
       title: baseTitle,
       description:
-        "Senior engineer building crypto payment rails, AI-agent workflows and platform systems. Current MoonPay work spans public agent skills, AI x crypto demos, product launches and 8.5x faster Polygon buys.",
+        "Senior engineer building crypto payment rails, AI-agent workflows and platform systems. Experienced with local models, Ollama, LM Studio, context and memory management, evals, public agent skills and 8.5x faster Polygon buys.",
     },
     "/about": {
       title: baseTitle + " | About",
@@ -29,7 +29,7 @@ export function generateMetadata({ params, pathname }: { params: any; pathname: 
     "/writing": {
       title: baseTitle + " | Writing",
       description:
-        "Notes on backend engineering, AI agents, crypto payments, infrastructure, product systems and production tradeoffs.",
+        "Notes on backend engineering, AI agents, local LLM workflows, evals, crypto payments, infrastructure, product systems and production tradeoffs.",
     },
     "/resume": {
       title: baseTitle + " | Résumé",
@@ -58,6 +58,13 @@ export function generateMetadata({ params, pathname }: { params: any; pathname: 
       "crypto payments",
       "MoonPay",
       "agent skills",
+      "Ollama",
+      "LM Studio",
+      "local LLMs",
+      "local models",
+      "context management",
+      "memory management",
+      "LLM evals",
       "infrastructure as code",
       "Whatify",
       "retrieval-augmented generation",

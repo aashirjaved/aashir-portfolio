@@ -16,9 +16,9 @@ const positions = [
     when: "Sep 2025 to now · London",
     pts: [
       "Built and demoed an AI agent executing crypto transactions at MoonPay's London AI x Crypto meetup.",
+      "Prototyped agent workflows with local models, Ollama/LM Studio-style tooling, context and memory design, and eval loops.",
       "Contributed to MoonPay product launches across Buy/Sell, Balance and 8.5x faster Polygon buys.",
       "Contributed to moonpay/skills, public agent skills for on-ramps, swaps, wallets and payments.",
-      "Won popular vote at MoonPay's AI Agentic Engineering Hackathon.",
     ],
   },
   {
@@ -38,9 +38,9 @@ const positions = [
     when: "May 2022 to Jun 2024 · London",
     pts: [
       "Led automated customer-care journey with agents, fine-tuned GenAI models and highly available Go APIs.",
+      "Worked through context, retrieval and evaluation loops for production care workflows.",
       "Delivered 2× CSAT and reduced request handling time to 0.5×.",
-      "Built microservices for calls, chats, credits and refunds across a three-sided marketplace.",
-      "Organised SEV game days and trained 100+ engineers in on-call procedures.",
+      "Built microservices for calls, chats, credits and refunds; trained 100+ engineers in SEV game days.",
     ],
   },
   {
@@ -82,7 +82,7 @@ const stack = [
   ["Cloud", "aws · gcp · azure · serverless"],
   ["Infra", "terraform · kubernetes · docker · kafka · resilience engineering"],
   ["Data", "postgres · dynamodb · vector dbs"],
-  ["AI / ML", "llms · agents · fine-tuned genai · rag · mlops"],
+  ["AI / ML", "llms · agents · evals · ollama · lm studio · local models · memory · rag · mlops"],
   ["Systems", "microservices · scaling · fault tolerance · networking protocols"],
 ];
 
@@ -94,7 +94,7 @@ export default function Resume() {
         number="R"
         title="Aashir"
         italic="Javed."
-        lede="Senior software engineer · backend, infrastructure, crypto payments and AI agents. London."
+        lede="Senior software engineer · backend, infrastructure, crypto payments, local LLMs and AI agents. London."
         meta={
           <div className="flex gap-3 flex-wrap no-print">
             <LinkButton href="/Aashir-Javed-Resume.pdf" external>

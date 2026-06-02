@@ -9,7 +9,7 @@ import {
   ArrowLink,
 } from "@/components/editorial";
 
-const stack = ["go", "python", "typescript", "react", "next.js", "aws", "terraform", "k8s", "llm agents", "crypto", "postgres", "mqtt"];
+const stack = ["go", "python", "typescript", "react", "next.js", "aws", "terraform", "k8s", "llm agents", "ollama", "lm studio", "evals", "memory", "crypto", "postgres", "mqtt"];
 
 const principles = [
   ["Leverage", "Find the constraint that moves product, cost, reliability or conversion."],
@@ -26,7 +26,7 @@ export default function About() {
         number="01"
         title="Field"
         italic="profile."
-        lede="London-based senior engineer building crypto payment rails, AI agent workflows, marketplace systems and cloud platforms."
+        lede="London-based senior engineer building crypto payment rails, AI agent workflows, local-model prototypes, marketplace systems and cloud platforms."
       />
 
       <Reveal>
@@ -62,7 +62,7 @@ export default function About() {
             </div>
             <div className="visual-card rounded-[30px] p-6 sm:col-span-2">
               <p className="display text-[clamp(2.2rem,7vw,5.5rem)] leading-[0.92]">
-                I like work where a product metric is trapped inside a hard system: auth, payments, reliability, cost, latency or agent automation.
+                I like work where a product metric is trapped inside a hard system: auth, payments, reliability, local models, context management, evals, cost or latency.
               </p>
               <div className="mt-7 flex flex-wrap gap-3">
                 <LinkButton href="/contact">Contact →</LinkButton>

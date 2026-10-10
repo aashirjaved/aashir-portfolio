@@ -817,7 +817,8 @@ Estimates assume one focused engineer. Each phase ends with a deployable preview
 - [ ] Spot check on physical devices: an iPhone in Safari and an Android phone in Chrome.
 - [x] Reduced motion pass.
 - [ ] Ask two people in the target audience to use the console for two minutes and say what they would ask next. Add any missing intent.
-- [x] Merge, tag `v2.0.0`, deploy, verify `aashir.net` (verified live by the live check workflow).
+- [x] Merge, deploy, verify `aashir.net` (verified live by the live check workflow).
+- [ ] Tag `v2.0.0` on main. Tag pushes were blocked from the session that built this, so run `git tag v2.0.0 && git push origin v2.0.0` once.
 
 ### Phase 7, later. Real model behind the console.
 

@@ -92,7 +92,15 @@ const fail = (m) => { failures++; log("FAIL", m); };
 
   // 2b. A prospect's journey: ask, follow evidence to a case note, reach the booking link.
   {
-    const j = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+    const j = await browser.newContext({
+      viewport: { width: 390, height: 844 },
+      isMobile: true,
+      hasTouch: true,
+      userAgent: "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Mobile Safari/537.36",
+    });
+    // Vercel analytics skips browsers that report navigator.webdriver. Clear it here so the
+    // journey exercises the same event path a real visitor does. This sends a few test events.
+    await j.addInitScript(() => Object.defineProperty(Navigator.prototype, "webdriver", { get: () => false }));
     const jp = await j.newPage();
     const beacons = [];
     jp.on("request", (r) => { if (/\/_vercel\/insights\/(event|view)/.test(r.url())) beacons.push(r.url().split("/").pop() + ":" + (r.postData() || "").slice(0, 120)); });

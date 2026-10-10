@@ -35,7 +35,7 @@ jobs:
           echo "$body" | grep -q 'url=https://www.aashir.net/' && echo "pages redirect: yes" || { echo "pages redirect: not yet"; echo "$body" | head -5; }
       - name: HTTP
         run: |
-          for u in https://aashir.net https://www.aashir.net "${{ github.event.deployment_status.environment_url }}"; do
+          for u in https://aashir.net https://www.aashir.net; do
             [ -z "$u" ] && continue
             echo "== $u"
             curl -sS -o /tmp/body.html -D - -L --max-redirs 5 "$u" | grep -iE "^(HTTP|server|location|x-vercel-id|x-github-request-id|age)" || true

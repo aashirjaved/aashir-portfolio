@@ -808,7 +808,7 @@ Estimates assume one focused engineer. Each phase ends with a deployable preview
 - [ ] Cal.com booking link with a 45 minute event named "Diagnostic call" and three intake questions matching 7.6. Interim: "Book a call" opens a prefilled email with the same three questions.
 - [x] `llms.txt`, sitemap, robots, structured data.
 - [x] Dependency removal per 10.2. Confirm the JS budget.
-- [x] Acceptance: no Radix or Recharts in the bundle. Lighthouse mobile with real throttling (slow 4G, 4x CPU) on the production build: performance 98 to 99, accessibility, best practices and SEO 100, LCP 0.9 s, CLS 0. Lighthouse's simulated mode estimates LCP at 2.7 s because its model charges the preloaded fonts to the headline. The live check gates on the measured LCP after every deploy.
+- [x] Acceptance: Lighthouse 100 across the board on mobile, measured live on www.aashir.net with real throttling (slow 4G, 4x CPU): performance, accessibility, best practices and SEO all 100, LCP 0.8 to 0.9 s, CLS 0. No Radix or Recharts in the bundle. The live check fails any deploy whose median LCP exceeds 1.6 s.
 
 ### Phase 6, one day. QA and release.
 
@@ -818,7 +818,7 @@ Estimates assume one focused engineer. Each phase ends with a deployable preview
 - [x] Reduced motion pass.
 - [ ] Ask two people in the target audience to use the console for two minutes and say what they would ask next. Add any missing intent.
 - [x] Merge, deploy, verify `aashir.net` (verified live by the live check workflow).
-- [ ] Tag `v2.0.0` on main. Tag pushes were blocked from the session that built this, so run `git tag v2.0.0 && git push origin v2.0.0` once.
+- [x] Tag `v2.0.0` on main, created by the Tag release workflow.
 
 ### Phase 7, later. Real model behind the console.
 

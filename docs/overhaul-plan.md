@@ -6,6 +6,24 @@ Copy in this document is final draft v1 and follows the copy rules in section 9.
 
 ---
 
+## Implementation status (10 October 2026)
+
+Phases 1 to 6 are built in this branch. Decisions taken while building, where the plan left a choice or turned out to be wrong:
+
+- **Magzi is private, not verified.** The `magzi-agent` repository is private, so Magzi carries the `private` tier and has its own case note at `/work/magzi`. `alchemy-infra` joins the ledger as a second `verified` row.
+- **Kleido's customer is not named.** The site says "a UK lettings agency". Change it in `data/content.ts` if you want Lips MK named.
+- **Booking goes by email for now.** "Book a call" opens a prefilled email with the three intake questions. Replace `site.booking` in `data/site.ts` with a Cal.com link when you have one.
+- **Prices stay off the page.** The availability answer says numbers are given on the call.
+- **Godzilla game** stays reachable at `/godzilla/`, unlinked and disallowed in robots.
+- **Fonts are self hosted** from Fontsource through `next/font/local`, so builds do not depend on Google Fonts.
+- **Analytics** uses Vercel Web Analytics custom events (`console_ask`, `evidence_click`, `book_call_click`, `email_click`). Turn on Web Analytics in the Vercel project for events to record. Google Analytics is removed.
+- **JS budget.** The home page adds 8 kB to the Next.js and React baseline of 102 kB, 113 kB first load in total. The 70 kB target in 10.4 is below what the framework itself ships, so it is not reachable without leaving Next.js.
+- **Matcher tolerates one typo per word** and passes 50 of 50 test phrasings, including ten misspellings and five nonsense inputs that correctly fall back. Run `pnpm test`.
+- **Copy lint** runs in `pnpm lint` over `data/`, `app/`, `components/` and `public/llms.txt`.
+- **Not done from here:** the DNS check and the GitHub Pages retirement in Phase 0, the LinkedIn headline in section 12. Both need your accounts.
+
+---
+
 ## 0. Decisions in one screen
 
 | Question | Decision |
@@ -76,7 +94,7 @@ This is the inventory the new site draws on. Tier is how the site will label the
 | Kleido (`kliedo`, Oct 2026, ~81k lines TS and Go) | Sanctions and AML review platform for UK lettings agencies. Cases, people, papers, runs, checks, concerns, decisions, watches. UK Sanctions List, PEP, Companies House ownership and adverse media screening through yente/OpenSanctions. Nightly re-screening. OCR document reading. Immutable audit records. OFSI packs and period reports. RBAC with five roles. Hono on Cloudflare Workers, Effect RPC, D1 and R2, PostgreSQL on an on-prem appliance, Go compliance agent. Live for Lips MK at `lipsmk.kleido.uk`. | This is a working compliance product with a live customer. It is the single most convincing artefact for a private credit buyer. | Verified, private repo, demo on request |
 | ID Document Reader (`agentic-biometrics`, Sep 2026) | On-prem document intelligence service. Passports and ID cards with ICAO 9303 check digits and MRZ to printed name cross validation across transliteration tables. Driving licences (AAMVA PDF417). Bank statements with running balance chain and IBAN mod-97. Sale deeds. eMRTD chip passive authentication against CSCA anchors. Five verification tiers per field. Runs with `--network none`. | KYC document handling that a regulator or a privacy officer will accept. Shows you understand what "verified" has to mean. | Verified, private repo, demo on request |
 | MoonPay, Identity Platform team | KYC, compliance, risk, authentication and authorisation, geolocation based rules engine at crypto payment scale. Public: moonpay/skills contributor, AI Agentic Engineering Hackathon popular vote, AI x Crypto meetup demo, Moonlog Volume 02 launches. | Day job is exactly the perimeter this buyer needs. Public items prove the AI side. | Employer, scope only. No vendors, volumes or internals. |
-| Magzi (`magzi-agent`, Rust, Oct 2026, 70+ PRs) | Self hosted 24/7 agent on WhatsApp and Telegram. Plugin architecture, retrieval first with LLM fallback, code that is proven by its own test before it is kept, a supervision sidecar that turns production errors into repair packets, voice, browser automation. | Depth in agent engineering, and an opinion about verification that matches compliance thinking. | Verified, public repo |
+| Magzi (`magzi-agent`, private repo, Rust, Oct 2026, 70+ PRs) | Self hosted 24/7 agent on WhatsApp and Telegram. Plugin architecture, retrieval first with LLM fallback, code that is proven by its own test before it is kept, a supervision sidecar that turns production errors into repair packets, voice, browser automation. | Depth in agent engineering, and an opinion about verification that matches compliance thinking. | Private repo, demo on request |
 | Skairo (`skairo-platform`, Oct 2026) | Trust and booking network for UK self fly aircraft hire. Reusable verified credential file, rules engine against owner minima, expiry watch, deposits held in the middle, human approval on every booking. Business plan, competitive landscape, three journey wireframes. | Shows product thinking about verification, eligibility rules and a two sided market with money in escrow. Pre product, so it is a secondary mention. | Pre product, documents only |
 | Motorway | Led the split into decoupled AuthN and AuthZ services, +7% top of funnel conversion. Motorway Pro, +15% platform volume. Operational excellence group, 15% lower annual AWS cost. | Auth boundaries and cost discipline. | Self reported, CV |
 | Deliveroo | Customer care automation with agents and fine tuned models on Go APIs. 2x CSAT, handling time halved. Ran SEV game days for 100+ engineers. | Agents in production inside a marketplace, and incident discipline. | Self reported, CV |
@@ -222,8 +240,8 @@ Borrowed from the ID Document Reader's field tiers, simplified to four labels. T
 
 | Label | Meaning | Used for |
 |---|---|---|
-| `verified` | Public repository, live URL or public post you can open | Magzi, moonpay/skills, Whatify, hackathon post, meetup post |
-| `private` | Real code or product that cannot be opened publicly. Demo on request. | Kleido, ID Document Reader |
+| `verified` | Public repository, live URL or public post you can open | moonpay/skills, alchemy-infra, Whatify |
+| `private` | Real code or product that cannot be opened publicly. Demo on request. | Kleido, ID Document Reader, Magzi |
 | `employer` | Work done inside a company. Scope described, details withheld. | MoonPay identity platform |
 | `reported` | Outcome stated by you, from your CV | Motorway, Deliveroo, Zalando figures |
 

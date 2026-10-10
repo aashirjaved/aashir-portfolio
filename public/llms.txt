@@ -1,47 +1,40 @@
 # Aashir Javed
 
-Senior software engineer in London building backend, infrastructure, crypto payment and AI-agent systems. Experienced with local LLM workflows, Ollama, LM Studio/LLM Studio, local models, context and memory management, evals, RAG and production hardening.
+Compliance and risk infrastructure for crypto and private credit. Senior Engineer on the Identity Platform team at MoonPay, London. Available for advisory and build work with private credit, DeFi and fintech teams.
 
-## Current Signal
+## What I do
 
-- MoonPay: senior software engineer working across crypto payments, AI agents, agent skills and consumer product launches.
-- Recent MoonPay proof: personal AI agent demo that automated daily tasks and executed a crypto transaction at the London AI x Crypto meetup.
-- LLM operations: prototypes and evaluates workflows with local models, Ollama and LM Studio/LLM Studio before hardening them for production.
-- Agent design: works on context-window design, memory/state management, tool orchestration and eval loops for agent behavior.
-- Product-launch signal: contributed to Moonlog Volume 02 work across Buy/Sell, MoonPay Balance and 8.5x faster Polygon buys.
-- Open-source signal: contributor to `moonpay/skills`, public AI-agent skills for on-ramps, swaps, wallets, deposits and payments.
-- Side-product signal: Whatify, a public-data financial-class diagnosis tool with 300+ weekly unique users.
-- Open-source project: `alchemy-infra`, an agent infrastructure skill for Alchemy, Cloudflare, AWS and strict secret hygiene.
+- Onboarding and compliance controls: KYC and KYB with beneficial owner mapping, accredited investor and qualified purchaser gating, document verification, sanctions and PEP screening, wallet allowlisting, ongoing monitoring, auditable case files.
+- Risk, rules and authorisation: eligibility and limit engines, jurisdiction tiering, authentication and authorisation boundaries, transfer restrictions and identity registries for restricted tokens.
+- AI in operations: document ingestion, underwriting preparation, covenant and portfolio monitoring agents, evaluation suites, private models when data cannot leave. The system prepares the file. A person makes the call.
 
-## Experience
+## Evidence
 
-- MoonPay: crypto payments, AI agents, public agent skills, consumer launches.
-- Motorway: core engineering lead, Motorway Pro trade proposition, decoupled AuthN/AuthZ, operational excellence. Outcomes: +15% platform volume, +7% conversion, -15% annual AWS cost.
-- Deliveroo: customer-care automation with agents, fine-tuned GenAI models and highly available Go APIs. Outcomes: 2x CSAT, request handling reduced to 0.5x, 100+ engineers trained on incident response.
-- Zalando: warehouse integration gateway for inbound distribution centers. Outcomes: 1000+ RPS gateway, 15% latency reduction.
-- Nordcloud: cloud migration and managed services across AWS, Azure and GCP.
-- CARE: Industry 4.0 cyber-physical systems, MQTT infrastructure, OTA firmware systems, P@SHA ICT Award.
+Tiers: verified means public, private means real and shown on a call, employer means scope only, reported means a figure from my CV.
 
-## Stack
+- Kleido (private): sanctions and AML review for UK lettings agencies, live for one agency on its own hardware. https://aashir.net/work/kleido
+- ID Document Reader (private): on-prem document intelligence for passports, licences, bank statements and chip reads, with per-field verification tiers. https://aashir.net/work/id-reader
+- MoonPay Identity Platform (employer): authentication, KYC tiers, risk scoring, sanctions screening, jurisdiction rules. https://aashir.net/work/moonpay
+- Magzi (private): self hosted agent in Rust with retrieval first answers and test-gated self written code. https://aashir.net/work/magzi
+- moonpay/skills (verified): https://github.com/moonpay/skills
+- alchemy-infra (verified): https://github.com/aashirjaved/alchemy-infra
+- Whatify (verified): https://whatify.ai
+- Motorway auth split, +7% top of funnel conversion (reported).
+- Deliveroo care automation, CSAT doubled and handling time halved (reported).
 
-Go, Python, TypeScript, React, Next.js, Node.js, Java, C++, Rust. AWS, Terraform, Kubernetes, serverless, PostgreSQL, DynamoDB, Kafka, vector databases. LLM agents, Ollama, LM Studio/LLM Studio, local models, evals, context management, memory management, RAG, MLOps, automation, crypto payments, distributed systems, reliability and platform engineering.
+## Engagement
 
-## Pages
+- Diagnostic call: 45 minutes, no charge.
+- Diligence sprint: two weeks, fixed fee, written go or no go view and build plan.
+- Fractional lead: one to three days a week, monthly.
 
-- Home: https://aashir.net/
-- About: https://aashir.net/about
-- Experience: https://aashir.net/experience
-- Projects: https://aashir.net/projects
-- Writing: https://aashir.net/writing
-- Resume: https://aashir.net/resume
-- Contact: https://aashir.net/contact
+## Background
 
-## Links
+MoonPay (2025 to now), Motorway (2024 to 2025), Deliveroo (2022 to 2024), Zalando (2021 to 2022), Nordcloud (2020 to 2021), CARE (2017 to 2019). B.E. Computer Engineering, NUST. AWS Certified Developer.
 
-- GitHub: https://github.com/aashirjaved
-- LinkedIn: https://www.linkedin.com/in/aashirjaved
-- Alchemy Infra: https://github.com/aashirjaved/alchemy-infra
-- MoonPay Skills: https://github.com/moonpay/skills
-- Whatify: https://whatify.ai/
-- Writing: https://dev.to/aashirjaved
+## Contact
+
 - Email: me@aashir.net
+- LinkedIn: https://www.linkedin.com/in/aashirjaved/
+- GitHub: https://github.com/aashirjaved
+- CV: https://aashir.net/cv

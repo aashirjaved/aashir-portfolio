@@ -1,52 +1,64 @@
-import type { Metadata, Viewport } from 'next'
-import Analytics from '@/components/analytics'
-import { generateMetadata as getMetadata } from './layout-metadata'
-import { display, body, mono } from './fonts'
-import './globals.css'
-import { Suspense } from 'react'
-import { Nav } from '@/components/editorial/nav'
+import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
+import { serif, mono } from "./fonts";
+import { site } from "@/data/site";
+import { Nav } from "@/components/nav";
+import "./globals.css";
+
+const title = `${site.name}. ${site.positioning}`;
+
+export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
+  title: { default: title, template: `%s · ${site.name}` },
+  description: site.description,
+  authors: [{ name: site.name, url: site.url }],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: site.url,
+    siteName: site.name,
+    title,
+    description: site.description,
+    locale: "en_GB",
+  },
+  twitter: { card: "summary_large_image", title, description: site.description, creator: "@aasjav" },
+};
 
 export const viewport: Viewport = {
-  themeColor: '#f6f7f1',
-  colorScheme: 'light',
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F5F3EC" },
+    { media: "(prefers-color-scheme: dark)", color: "#0E0E0C" },
+  ],
 };
 
-export const generateMetadata = (): Metadata => {
-  return getMetadata({ params: undefined, pathname: '/' });
+const person = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  url: site.url,
+  email: `mailto:${site.email}`,
+  jobTitle: "Senior Software Engineer",
+  worksFor: { "@type": "Organization", name: "MoonPay" },
+  address: { "@type": "PostalAddress", addressLocality: "London", addressCountry: "GB" },
+  knowsAbout: ["KYC", "AML", "Sanctions screening", "Risk rules", "Authorisation", "Tokenised private credit", "AI agents"],
+  sameAs: [site.links.linkedin, site.links.github],
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="theme-color" content="#f6f7f1" />
-        <link rel="icon" href="/me.png" />
-        <link rel="apple-touch-icon" href="/me.png" />
-        <link rel="manifest" href="/site.webmanifest" />
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `:root{--paper:246 247 241;--paper-2:232 237 228;--surface:255 255 250;--ink:13 18 16;--ink-2:46 58 53;--ink-mute:97 111 104;--ink-faint:164 174 167;--rule:203 211 203;--rule-soft:222 228 220;--accent:231 73 40;--accent-soft:255 219 204;--ok:22 150 111;--font-body:"Avenir Next","Gill Sans","Helvetica Neue"}html,body{background:rgb(246,247,241);color:rgb(13,18,16)}body{font-family:var(--font-body),ui-sans-serif,system-ui,-apple-system,sans-serif;font-size:17px;line-height:1.55;margin:0;-webkit-font-smoothing:antialiased}`,
-          }}
-        />
-      </head>
-      <body className="font-body bg-paper text-ink antialiased">
+    <html lang="en-GB" className={`${serif.variable} ${mono.variable}`}>
+      <body className="min-h-screen bg-paper text-ink">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[200] focus:px-3 focus:py-2 focus:bg-ink focus:text-paper focus:text-sm focus:rounded-full"
+          className="mono sr-only z-50 bg-ink px-3 py-2 text-paper focus:not-sr-only focus:fixed focus:left-3 focus:top-3"
         >
           Skip to content
         </a>
         <Nav />
-        <Suspense fallback={null}>
-          <Analytics />
-        </Suspense>
         {children}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(person) }} />
+        {process.env.VERCEL_ENV ? <Analytics /> : null}
       </body>
     </html>
-  )
+  );
 }

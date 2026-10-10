@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { serif, mono } from "./fonts";
+import { serif, serifItalic, mono } from "./fonts";
 import { site } from "@/data/site";
 import { Nav } from "@/components/nav";
 import "./globals.css";
@@ -46,7 +46,7 @@ const person = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-GB" className={`${serif.variable} ${mono.variable}`}>
+    <html lang="en-GB" className={`${serif.variable} ${serifItalic.variable} ${mono.variable}`}>
       <body className="min-h-screen bg-paper text-ink">
         <a
           href="#main"

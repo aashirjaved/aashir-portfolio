@@ -17,7 +17,7 @@ Phases 1 to 6 are built in this branch. Decisions taken while building, where th
 - **Godzilla game** stays reachable at `/godzilla/`, unlinked and disallowed in robots.
 - **Fonts are self hosted** from Fontsource through `next/font/local`, so builds do not depend on Google Fonts.
 - **Analytics** uses Vercel Web Analytics custom events (`console_ask`, `evidence_click`, `book_call_click`, `email_click`). Web Analytics is enabled on the project, and the live check confirms page views and events arrive from a real visit. Google Analytics is removed.
-- **Fonts trimmed.** Newsreader ships as the weight-only variable files (58 kB and 64 kB) instead of the optical-size files (132 kB and 147 kB). Lighthouse mobile performance went from 83 to 96 to 97.
+- **Fonts and CSS.** Newsreader ships as the weight-only variable files instead of the optical-size files, the italic face is not preloaded, and CSS is inlined into the HTML. Measured LCP on throttled mobile went from 3.5 s to 0.9 s.
 - **JS budget.** The home page adds 8 kB to the Next.js and React baseline of 102 kB, 113 kB first load in total. The 70 kB target in 10.4 is below what the framework itself ships, so it is not reachable without leaving Next.js.
 - **Matcher tolerates one typo per word** and passes 50 of 50 test phrasings, including ten misspellings and five nonsense inputs that correctly fall back. Run `pnpm test`.
 - **Copy lint** runs in `pnpm lint` over `data/`, `app/`, `components/` and `public/llms.txt`.
@@ -808,7 +808,7 @@ Estimates assume one focused engineer. Each phase ends with a deployable preview
 - [ ] Cal.com booking link with a 45 minute event named "Diagnostic call" and three intake questions matching 7.6. Interim: "Book a call" opens a prefilled email with the same three questions.
 - [x] `llms.txt`, sitemap, robots, structured data.
 - [x] Dependency removal per 10.2. Confirm the JS budget.
-- [x] Acceptance: no Radix or Recharts in the bundle. Lighthouse mobile on the production build: accessibility, best practices and SEO 100, performance 96 to 97 (LCP 2.6 s under simulated slow 4G, TBT 80 to 120 ms, CLS 0). Performance 100 is not reached; the remaining cost is the Next.js and React baseline.
+- [x] Acceptance: no Radix or Recharts in the bundle. Lighthouse mobile with real throttling (slow 4G, 4x CPU) on the production build: performance 98 to 99, accessibility, best practices and SEO 100, LCP 0.9 s, CLS 0. Lighthouse's simulated mode estimates LCP at 2.7 s because its model charges the preloaded fonts to the headline. The live check gates on the measured LCP after every deploy.
 
 ### Phase 6, one day. QA and release.
 

@@ -2,6 +2,7 @@
 const nextConfig = {
   images: { unoptimized: true },
   poweredByHeader: false,
+  experimental: { inlineCss: true },
   async redirects() {
     return [
       { source: "/resume", destination: "/cv", permanent: true },

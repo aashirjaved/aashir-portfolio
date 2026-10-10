@@ -52,6 +52,27 @@ jobs:
           code=$(curl -s -o /dev/null -w "%{http_code}" https://www.aashir.net/_vercel/insights/script.js); echo "analytics script: $code"
           [ "$code" = "200" ] && export EXPECT_ANALYTICS=1
           NODE_PATH=/tmp/pw/node_modules node "$GITHUB_WORKSPACE/scripts/live-dogfood.cjs" "$SITE" /tmp/shots
+      - name: Lighthouse on the live site
+        run: |
+          cd /tmp/pw && npm i --no-audit --no-fund lighthouse@12 >/dev/null
+          CHROME=$(node -e "console.log(require('playwright').chromium.executablePath())")
+          for i in 1 2 3; do
+            CHROME_PATH="$CHROME" npx lighthouse https://www.aashir.net/ --quiet --throttling-method=devtools \
+              --chrome-flags="--headless=new --no-sandbox" --output=json --output-path=/tmp/lh-$i.json \
+              --only-categories=performance,accessibility,best-practices,seo >/dev/null 2>&1
+          done
+          node -e '
+            const runs = [1,2,3].map(i => require(`/tmp/lh-${i}.json`));
+            for (const d of runs) {
+              const s = Object.fromEntries(Object.entries(d.categories).map(([k, v]) => [k, Math.round(v.score * 100)]));
+              console.log(JSON.stringify(s), "LCP", d.audits["largest-contentful-paint"].displayValue, "CLS", d.audits["cumulative-layout-shift"].displayValue);
+            }
+            const lcp = runs.map(d => d.audits["largest-contentful-paint"].numericValue).sort((a, b) => a - b)[1];
+            const a11y = Math.min(...runs.map(d => d.categories.accessibility.score));
+            console.log("median LCP ms", Math.round(lcp));
+            if (lcp > 1600) { console.log("LCP over the 1.6 s budget"); process.exit(1); }
+            if (a11y < 1) { console.log("accessibility below 100"); process.exit(1); }
+          '
       - if: always()
         uses: actions/upload-artifact@v4
         with:

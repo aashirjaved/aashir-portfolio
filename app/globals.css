@@ -66,6 +66,12 @@
   a {
     color: inherit;
   }
+
+  .italic,
+  em,
+  i {
+    font-family: var(--font-serif-italic), var(--font-serif), Georgia, serif;
+  }
 }
 
 @layer components {

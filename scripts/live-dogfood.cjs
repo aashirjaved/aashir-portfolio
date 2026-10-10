@@ -1,4 +1,17 @@
-const { chromium } = require("playwright");
+const pw = require("playwright");
+// BROWSER=chromium (default), webkit or firefox. Firefox has no mobile emulation, so those options are dropped there.
+const engine = process.env.BROWSER || "chromium";
+const chromium = {
+  launch: async (...a) => {
+    const b = await pw[engine].launch(...a);
+    const newContext = b.newContext.bind(b);
+    b.newContext = (opts = {}) => {
+      if (engine === "firefox") { const { isMobile, hasTouch, ...rest } = opts; return newContext(rest); }
+      return newContext(opts);
+    };
+    return b;
+  },
+};
 // Visitor smoke test. Usage: node scripts/live-dogfood.cjs <base-url> <screenshot-dir>
 let BASE = (process.argv[2] || "http://localhost:3000").replace(/\/$/, "");
 const OUT = process.argv[3] || ".";
@@ -15,7 +28,7 @@ const fail = (m) => { failures++; log("FAIL", m); };
   const landed = new URL(probe.url()).origin;
   if (landed !== BASE) log("host redirect", BASE, "->", landed);
   BASE = landed;
-  log("BASE", BASE);
+  log("BASE", BASE, "engine", engine);
   // 1. layout at widths and schemes
   for (const scheme of ["light", "dark"]) {
     for (const w of [390, 768, 1280, 1600]) {

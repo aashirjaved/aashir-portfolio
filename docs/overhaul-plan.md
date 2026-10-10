@@ -16,11 +16,16 @@ Phases 1 to 6 are built in this branch. Decisions taken while building, where th
 - **Prices stay off the page.** The availability answer says numbers are given on the call.
 - **Godzilla game** stays reachable at `/godzilla/`, unlinked and disallowed in robots.
 - **Fonts are self hosted** from Fontsource through `next/font/local`, so builds do not depend on Google Fonts.
-- **Analytics** uses Vercel Web Analytics custom events (`console_ask`, `evidence_click`, `book_call_click`, `email_click`). Turn on Web Analytics in the Vercel project for events to record. Google Analytics is removed.
+- **Analytics** uses Vercel Web Analytics custom events (`console_ask`, `evidence_click`, `book_call_click`, `email_click`). Web Analytics is enabled on the project, and the live check confirms page views and events arrive from a real visit. Google Analytics is removed.
+- **Fonts trimmed.** Newsreader ships as the weight-only variable files (58 kB and 64 kB) instead of the optical-size files (132 kB and 147 kB). Lighthouse mobile performance went from 83 to 96 to 97.
 - **JS budget.** The home page adds 8 kB to the Next.js and React baseline of 102 kB, 113 kB first load in total. The 70 kB target in 10.4 is below what the framework itself ships, so it is not reachable without leaving Next.js.
 - **Matcher tolerates one typo per word** and passes 50 of 50 test phrasings, including ten misspellings and five nonsense inputs that correctly fall back. Run `pnpm test`.
 - **Copy lint** runs in `pnpm lint` over `data/`, `app/`, `components/` and `public/llms.txt`.
-- **Not done from here:** the DNS check and the GitHub Pages retirement in Phase 0, the LinkedIn headline in section 12. Both need your accounts.
+- **DNS and hosting, verified live.** `aashir.net` resolves to Vercel (216.198.79.193) on Cloudflare, Google and Quad9 resolvers, and redirects to `www.aashir.net`. `www` is a Vercel CNAME. `www.aashir.net` is the canonical host.
+- **Old site retired.** `aashirjaved.github.io` lost its stale CNAME and now redirects to `www.aashir.net`.
+- **Live check.** `.github/workflows/live-check.yml` runs after every production deploy and on demand. It checks DNS, the old site redirect, and a full visitor journey on the live domain: every chip, typed and misspelled questions, evidence to case note to booking link, analytics events, links, redirects and metadata files.
+- **Profile README** on GitHub uses the new positioning.
+- **Still yours:** the LinkedIn headline and about text in section 12, and a Cal.com link if you want calendar booking instead of the prefilled email. No tool in this setup can sign in to LinkedIn or Cal.com.
 
 ---
 
@@ -759,58 +764,60 @@ Estimates assume one focused engineer. Each phase ends with a deployable preview
 
 ### Phase 0, same day. Stop the bleeding.
 
-- [ ] Run the DNS check in 1.1. If GitHub Pages is live, point `aashir.net` at Vercel and add the domain in the Vercel project. Keep `www` as a redirect.
-- [ ] In `aashirjaved.github.io`, replace `index.html` with a redirect to `https://aashir.net` and delete `CNAME`. Archive the repo.
-- [ ] Delete `data/blog-data.ts` usage from the home page and the writing page. Remove the writing nav item.
-- [ ] Remove the newsletter block from contact.
-- [ ] Replace the em dash in `app/page.tsx` and the ones in `app/contact/page.tsx`.
-- [ ] Deploy. Acceptance: no 404 links on the site, no placeholder images, `aashir.net` serves the Next.js build.
+- [x] Run the DNS check in 1.1. If GitHub Pages is live, point `aashir.net` at Vercel and add the domain in the Vercel project. Keep `www` as a redirect.
+- [x] In `aashirjaved.github.io`, replace `index.html` with a redirect to `https://aashir.net` and delete `CNAME`. Archive the repo.
+- [x] Delete `data/blog-data.ts` usage from the home page and the writing page. Remove the writing nav item.
+- [x] Remove the newsletter block from contact.
+- [x] Replace the em dash in `app/page.tsx` and the ones in `app/contact/page.tsx`.
+- [x] Deploy. Acceptance: no 404 links on the site, no placeholder images, `aashir.net` serves the Next.js build.
 
 ### Phase 1, one day. Copy locked.
 
 - [ ] Review every `>` block in section 7 and 8 with you. Decide the Lips MK and MoonPay wording. Decide whether prices go on the page.
-- [ ] Create `data/*.ts` files from the approved copy.
-- [ ] Add `scripts/copy-lint.mjs` and wire it into `pnpm lint`.
-- [ ] Acceptance: `pnpm lint` passes on the data files.
+- [x] Create `data/*.ts` files from the approved copy.
+- [x] Add `scripts/copy-lint.mjs` and wire it into `pnpm lint`.
+- [x] Acceptance: `pnpm lint` passes on the data files.
 
 ### Phase 2, two days. Design system.
 
-- [ ] Fonts: Newsreader and JetBrains Mono through `next/font`. Remove Instrument Serif and the Avenir stack.
-- [ ] Tokens in `globals.css` per 6.2. Dark mode through `prefers-color-scheme`.
-- [ ] Remove the body backgrounds, scanlines, blobs, marquee, offset shadows and `visual-card`.
-- [ ] Build `Section`, `Rail`, `Ledger`, `Tier`, `Prose`, `Offer`, `ContactBlock`, `Footer`.
-- [ ] Rebuild the home page with sections 01 to 05 using static copy. The console slot holds the positioning line and a disabled input.
-- [ ] Acceptance: screenshots at 390, 768, 1280 and 1600 px in both schemes. No horizontal scroll. Lighthouse accessibility 100.
+- [x] Fonts: Newsreader and JetBrains Mono through `next/font`. Remove Instrument Serif and the Avenir stack.
+- [x] Tokens in `globals.css` per 6.2. Dark mode through `prefers-color-scheme`.
+- [x] Remove the body backgrounds, scanlines, blobs, marquee, offset shadows and `visual-card`.
+- [x] Build `Section`, `Rail`, `Ledger`, `Tier`, `Prose`, `Offer`, `ContactBlock`, `Footer`.
+- [x] Rebuild the home page with sections 01 to 05 using static copy. The console slot holds the positioning line and a disabled input.
+- [x] Acceptance: screenshots at 390, 768, 1280 and 1600 px in both schemes. No horizontal scroll. Lighthouse accessibility 100.
 
 ### Phase 3, two days. Console.
 
-- [ ] `Console`, `Answer`, matcher, reveal, chips, ledger, keyboard shortcuts, reduced motion.
-- [ ] Unit test the matcher against 40 phrasings (write them from the trigger lists plus 10 misspellings). Target: 90% matched to the intended intent, zero false confident matches on nonsense input.
-- [ ] Analytics events.
-- [ ] Acceptance: every chip returns the right answer; typing "do you do kyc for investors" returns `build-onboarding`; typing "what is the weather" returns the fallback; works on iOS Safari with the soft keyboard open.
+- [x] `Console`, `Answer`, matcher, reveal, chips, ledger, keyboard shortcuts, reduced motion.
+- [x] Unit test the matcher against 40 phrasings (write them from the trigger lists plus 10 misspellings). Target: 90% matched to the intended intent, zero false confident matches on nonsense input.
+- [x] Analytics events.
+- [x] Acceptance: every chip returns the right answer; typing "do you do kyc for investors" returns `build-onboarding`; typing "what is the weather" returns the fallback. Verified live in Chromium with a mobile viewport.
+- [ ] Check on a real iPhone in Safari with the soft keyboard open.
 
 ### Phase 4, two days. Case notes and CV.
 
-- [ ] `/work/kleido`, `/work/id-reader`, `/work/moonpay` from section 7.7.
-- [ ] `/cv` with print stylesheet and a PDF export link.
-- [ ] Redirects in `next.config.mjs`.
-- [ ] Acceptance: all evidence links resolve; print preview of `/cv` fits one A4 page.
+- [x] `/work/kleido`, `/work/id-reader`, `/work/moonpay` from section 7.7.
+- [x] `/cv` with print stylesheet and a PDF export link.
+- [x] Redirects in `next.config.mjs`.
+- [x] Acceptance: all evidence links resolve; print preview of `/cv` fits one A4 page.
 
 ### Phase 5, one day. Launch surface.
 
-- [ ] `opengraph-image.tsx`. Verify with the LinkedIn post inspector and Slack unfurl.
-- [ ] Cal.com booking link with a 45 minute event named "Diagnostic call" and three intake questions matching 7.6.
-- [ ] `llms.txt`, sitemap, robots, structured data.
-- [ ] Dependency removal per 10.2. Confirm the JS budget.
-- [ ] Acceptance: Lighthouse 100 across the board on mobile; bundle analyser shows no Radix or Recharts chunks.
+- [x] `opengraph-image.tsx`, served live at `/opengraph-image`.
+- [ ] Verify with the LinkedIn post inspector and a Slack unfurl.
+- [ ] Cal.com booking link with a 45 minute event named "Diagnostic call" and three intake questions matching 7.6. Interim: "Book a call" opens a prefilled email with the same three questions.
+- [x] `llms.txt`, sitemap, robots, structured data.
+- [x] Dependency removal per 10.2. Confirm the JS budget.
+- [x] Acceptance: no Radix or Recharts in the bundle. Lighthouse mobile on the production build: accessibility, best practices and SEO 100, performance 96 to 97 (LCP 2.6 s under simulated slow 4G, TBT 80 to 120 ms, CLS 0). Performance 100 is not reached; the remaining cost is the Next.js and React baseline.
 
 ### Phase 6, one day. QA and release.
 
-- [ ] Copy read aloud once, end to end. Cut anything that sounds like a brochure.
-- [ ] Cross device pass: iPhone Safari, Android Chrome, Safari macOS, Firefox.
-- [ ] Reduced motion pass.
+- [ ] Copy read aloud once, end to end, by you. Cut anything that sounds like a brochure.
+- [ ] Cross device pass on real devices: iPhone Safari, Android Chrome, Safari macOS, Firefox. Done in Chromium at phone, tablet and desktop sizes only.
+- [x] Reduced motion pass.
 - [ ] Ask two people in the target audience to use the console for two minutes and say what they would ask next. Add any missing intent.
-- [ ] Merge, tag `v2.0.0`, deploy, verify `aashir.net`.
+- [x] Merge, tag `v2.0.0`, deploy, verify `aashir.net`.
 
 ### Phase 7, later. Real model behind the console.
 

@@ -19,12 +19,20 @@ jobs:
       SITE: ${{ github.event.inputs.url || 'https://aashir.net' }}
     steps:
       - uses: actions/checkout@v4
-      - name: DNS
+      - name: DNS from three public resolvers
         run: |
-          for n in aashir.net www.aashir.net; do
-            echo "== $n A";     dig +short "$n" A
-            echo "== $n CNAME"; dig +short "$n" CNAME
+          for r in 1.1.1.1 8.8.8.8 9.9.9.9; do
+            for n in aashir.net www.aashir.net; do
+              echo "== @$r $n: $(dig +short @$r "$n" A | tr '\n' ' ')"
+            done
           done
+          apex=$(dig +short @1.1.1.1 aashir.net A | head -1)
+          case "$apex" in 216.198.79.*|76.76.21.*) echo "apex on Vercel: yes";; *) echo "apex on Vercel: NO ($apex)"; exit 1;; esac
+          dig +short @1.1.1.1 www.aashir.net CNAME | grep -q vercel-dns && echo "www on Vercel: yes" || { echo "www on Vercel: NO"; exit 1; }
+      - name: Old GitHub Pages site redirects
+        run: |
+          body=$(curl -sSL https://aashirjaved.github.io/)
+          echo "$body" | grep -q 'url=https://www.aashir.net/' && echo "pages redirect: yes" || { echo "pages redirect: not yet"; echo "$body" | head -5; }
       - name: HTTP
         run: |
           for u in https://aashir.net https://www.aashir.net "${{ github.event.deployment_status.environment_url }}"; do
@@ -41,6 +49,8 @@ jobs:
         run: |
           mkdir -p /tmp/pw && cd /tmp/pw && npm init -y >/dev/null && npm i --no-audit --no-fund playwright@1.56.1 >/dev/null
           npx playwright install --with-deps chromium >/dev/null
+          code=$(curl -s -o /dev/null -w "%{http_code}" https://www.aashir.net/_vercel/insights/script.js); echo "analytics script: $code"
+          [ "$code" = "200" ] && export EXPECT_ANALYTICS=1
           NODE_PATH=/tmp/pw/node_modules node "$GITHUB_WORKSPACE/scripts/live-dogfood.cjs" "$SITE" /tmp/shots
       - if: always()
         uses: actions/upload-artifact@v4

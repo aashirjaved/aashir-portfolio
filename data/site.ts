@@ -6,7 +6,7 @@ export const site = {
   role: "Senior Engineer, Identity Platform, MoonPay",
   positioning: "Compliance and risk infrastructure for crypto and private credit.",
   support:
-    "KYC, sanctions screening, risk rules and authorisation at payment scale. Production AI agents where they earn their place. Available for advisory and build work.",
+    "KYC, sanctions, risk rules and AI agents, built at MoonPay scale. Ask me anything below.",
   description:
     "Senior engineer on MoonPay's identity platform. KYC, sanctions screening, risk rules and authorisation. Advisory and build work for private credit, DeFi and fintech teams. London.",
   links: {

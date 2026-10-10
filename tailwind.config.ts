@@ -8,21 +8,21 @@ const config: Config = {
     extend: {
       colors: {
         paper: token("paper"),
-        "paper-2": token("paper-2"),
+        surface: token("surface"),
+        "surface-2": token("surface-2"),
         ink: token("ink"),
         "ink-2": token("ink-2"),
         mute: token("mute"),
         rule: token("rule"),
         clear: token("clear"),
+        "clear-soft": token("clear-soft"),
       },
       fontFamily: {
-        serif: ["var(--font-serif)", "Georgia", "serif"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
-      maxWidth: {
-        prose: "680px",
-        wide: "1080px",
-      },
+      maxWidth: { wide: "1120px" },
+      borderRadius: { card: "20px" },
     },
   },
   plugins: [],

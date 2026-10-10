@@ -2,11 +2,13 @@ import { site } from "@/data/site";
 
 export function Footer() {
   return (
-    <footer className="no-print mt-24 border-t border-rule pb-24 pt-6 md:pb-10">
-      <div className="mono flex flex-col gap-2 text-mute sm:flex-row sm:justify-between">
-        <span>{site.name} · {site.location} · {new Date().getFullYear()}</span>
-        <span>Set in Newsreader and JetBrains Mono. Built with Next.js.</span>
-      </div>
+    <footer className="no-print mx-auto mt-24 flex max-w-wide flex-col gap-2 border-t border-rule px-4 py-8 text-[13px] text-mute sm:flex-row sm:justify-between sm:px-8">
+      <span>© {new Date().getFullYear()} {site.name} · {site.location}</span>
+      <span className="flex gap-5">
+        <a href={site.links.linkedin} target="_blank" rel="noreferrer" className="hover:text-ink">LinkedIn</a>
+        <a href={site.links.github} target="_blank" rel="noreferrer" className="hover:text-ink">GitHub</a>
+        <a href="/cv" className="hover:text-ink">CV</a>
+      </span>
     </footer>
   );
 }

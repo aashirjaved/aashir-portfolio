@@ -1,0 +1,280 @@
+"use client";
+
+import { track } from "@vercel/analytics";
+import { useCallback, useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
+import { chips, fallback, intents, type Evidence, type Intent } from "@/data/console";
+import { match } from "@/lib/match";
+import { Tier } from "./tier";
+
+const WORD_MS = 28;
+const VISIBLE = 4;
+
+interface Turn {
+  key: number;
+  question: string;
+  intent: Intent;
+  matched: boolean;
+  time: string;
+}
+
+function clock(d = new Date()) {
+  return d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+}
+
+function send(event: string, data: Record<string, string | boolean>) {
+  try {
+    track(event, data);
+  } catch {
+    // analytics is optional
+  }
+}
+
+export function ask(question: string): { intent: Intent; matched: boolean } {
+  const hit = match(question, intents);
+  return hit ? { intent: hit, matched: true } : { intent: fallback, matched: false };
+}
+
+function useReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduced(mq.matches);
+    const on = () => setReduced(mq.matches);
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, []);
+  return reduced;
+}
+
+function Reveal({ text, instant, onDone }: { text: string; instant: boolean; onDone: () => void }) {
+  const words = text.split(" ");
+  const [count, setCount] = useState(instant ? words.length : 0);
+  const done = count >= words.length;
+
+  useEffect(() => {
+    if (instant) {
+      setCount(words.length);
+      return;
+    }
+    let raf = 0;
+    const start = performance.now();
+    const step = (now: number) => {
+      const n = Math.min(words.length, Math.floor((now - start) / WORD_MS) + 1);
+      setCount(n);
+      if (n < words.length) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [text, instant, words.length]);
+
+  useEffect(() => {
+    if (done) onDone();
+  }, [done, onDone]);
+
+  return (
+    <p aria-hidden className="max-w-[62ch] text-[18px] leading-[1.55] text-ink md:text-[19px]">
+      {words.slice(0, count).join(" ")}
+      {!done ? <span className="caret" /> : null}
+    </p>
+  );
+}
+
+function EvidenceRow({ items }: { items: Evidence[] }) {
+  return (
+    <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+      {items.map((e) => {
+        const external = e.href.startsWith("http");
+        return (
+          <li key={e.label} className="flex items-center gap-2">
+            <a
+              href={e.href}
+              target={external ? "_blank" : undefined}
+              rel={external ? "noreferrer" : undefined}
+              onClick={() => send("evidence_click", { href: e.href, tier: e.tier ?? "none" })}
+              className="mono link text-ink"
+            >
+              {e.label}
+              {external ? <span aria-hidden> ↗</span> : null}
+            </a>
+            {e.tier ? <Tier tier={e.tier} /> : null}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+function TurnView({ turn, instant, latest }: { turn: Turn; instant: boolean; latest: boolean }) {
+  const [done, setDone] = useState(instant || !latest);
+  const finish = useCallback(() => setDone(true), []);
+  return (
+    <li className="rise border-t border-rule py-6 first:border-t-0 first:pt-2">
+      <p className="mono mb-3 text-mute">
+        <span aria-hidden className="text-clear">&gt; </span>
+        {turn.question}
+      </p>
+      <Reveal text={turn.intent.answer} instant={instant || !latest} onDone={finish} />
+      <p className="sr-only">{turn.intent.answer}</p>
+      <div className={`transition-opacity duration-200 ${done ? "opacity-100" : "opacity-0"}`}>
+        <EvidenceRow items={turn.intent.evidence} />
+      </div>
+    </li>
+  );
+}
+
+export function Console() {
+  const [value, setValue] = useState("");
+  const [turns, setTurns] = useState<Turn[]>([]);
+  const [expanded, setExpanded] = useState(false);
+  const [announce, setAnnounce] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  const threadRef = useRef<HTMLOListElement>(null);
+  const keyRef = useRef(0);
+  const reduced = useReducedMotion();
+
+  const submit = useCallback((raw: string, source: "chip" | "typed") => {
+    const question = raw.trim();
+    if (!question) return;
+    const { intent, matched } = ask(question);
+    keyRef.current += 1;
+    const turn: Turn = {
+      key: keyRef.current,
+      question,
+      intent,
+      matched,
+      time: clock(),
+    };
+    setTurns((prev) => [...prev, turn]);
+    setValue("");
+    setAnnounce(intent.answer);
+    send("console_ask", { intent: intent.id, matched, source });
+    // Bring the start of the new answer into view so it is read from the first word.
+    requestAnimationFrame(() => {
+      const items = threadRef.current?.querySelectorAll<HTMLElement>(":scope > li");
+      const last = items?.[items.length - 1];
+      if (!last) return;
+      const top = last.getBoundingClientRect().top;
+      if (top > window.innerHeight * 0.55 || top < 72) {
+        window.scrollTo({ top: window.scrollY + top - 80, behavior: "smooth" });
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    const onKey = (e: globalThis.KeyboardEvent) => {
+      if (e.key !== "/" || e.metaKey || e.ctrlKey || e.altKey) return;
+      const el = document.activeElement as HTMLElement | null;
+      if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable)) return;
+      e.preventDefault();
+      inputRef.current?.focus();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    submit(value, "typed");
+  };
+
+  const onInputKey = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape") {
+      setValue("");
+    } else if (e.key === "ArrowUp" && !value && turns.length) {
+      e.preventDefault();
+      setValue(turns[turns.length - 1].question);
+    }
+  };
+
+  const hidden = expanded ? 0 : Math.max(0, turns.length - VISIBLE);
+  const shown = turns.slice(hidden);
+
+  return (
+    <div className="mt-10 md:mt-12">
+      <form onSubmit={onSubmit} role="search" aria-label="Ask about Aashir">
+        <label htmlFor="ask" className="sr-only">
+          What do you want to know about me?
+        </label>
+        <div className="flex items-center gap-2 rounded-[6px] border border-ink/70 bg-paper-2 py-1.5 pl-3 pr-1.5 sm:pl-4 transition-colors focus-within:border-ink">
+          <span aria-hidden className="mono text-clear">
+            &gt;
+          </span>
+          <input
+            ref={inputRef}
+            id="ask"
+            type="text"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={onInputKey}
+            placeholder="What do you want to know about me?"
+            autoComplete="off"
+            spellCheck={false}
+            enterKeyHint="send"
+            maxLength={200}
+            className="min-w-0 flex-1 bg-transparent py-2 text-[16px] text-ink outline-none placeholder:text-mute sm:text-[17px] md:text-[19px]"
+          />
+          <button
+            type="submit"
+            disabled={!value.trim()}
+            className="mono shrink-0 rounded-[4px] bg-ink px-3 py-2 text-paper transition-opacity disabled:opacity-30"
+          >
+            Ask
+          </button>
+        </div>
+      </form>
+
+      <ul
+        aria-label="Suggested questions"
+        className="-mx-4 mt-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden"
+      >
+        {chips.map((c) => (
+          <li key={c.id} className="shrink-0">
+            <button
+              type="button"
+              onClick={() => submit(c.chip as string, "chip")}
+              className="mono whitespace-nowrap rounded-full border border-rule px-3 py-1.5 text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink"
+            >
+              {c.chip}
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <p className="mono mt-4 text-mute">
+        Answers are written by me and cite their evidence.
+        <span className="hidden md:inline"> Press / to ask.</span>
+      </p>
+
+      <div aria-live="polite" className="sr-only">
+        {announce}
+      </div>
+
+      {turns.length ? (
+        <div className="mt-8">
+          {hidden > 0 ? (
+            <button type="button" onClick={() => setExpanded(true)} className="mono link mb-2 text-mute">
+              Show {hidden} earlier {hidden === 1 ? "answer" : "answers"}
+            </button>
+          ) : null}
+          <ol ref={threadRef}>
+            {shown.map((t, i) => (
+              <TurnView key={t.key} turn={t} instant={reduced} latest={i === shown.length - 1} />
+            ))}
+          </ol>
+          <div className="mono mt-2 border-t border-dashed border-rule pt-3 text-mute">
+            <p className="label mb-1.5">Session record</p>
+            <ol>
+              {turns.map((t) => (
+                <li key={t.key} className="flex gap-4">
+                  <span>{t.time}</span>
+                  <span>asked</span>
+                  <span className={t.matched ? "text-ink-2" : ""}>{t.intent.id}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}

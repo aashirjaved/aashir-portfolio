@@ -1,347 +1,208 @@
-import {
-  Container,
-  Footer,
-  SectionLabel,
-  Stat,
-  WorkRow,
-  NotableCard,
-  LogoMarquee,
-  Reveal,
-  ArrowLink,
-  LinkButton,
-  PostRow,
-  Eyebrow,
-  Pill,
-} from "@/components/editorial";
-import { PersonSchema, WebsiteSchema } from "@/components/structured-data";
-import { blogPosts } from "@/data/blog-data";
-
-const recentWork = [
-  {
-    year: "now",
-    company: "MoonPay",
-    role: "Senior Engineer",
-    blurb: "Building crypto payment and agent workflows: local-model prototyping, evals, memory/context design, public MoonPay skills and faster Polygon buys.",
-    metrics: [{ label: "Polygon buys", value: "8.5×" }],
-    stack: ["agents", "evals", "ollama", "go", "aws"],
-  },
-  {
-    year: "2024",
-    company: "Motorway",
-    role: "Core Engineering Lead",
-    blurb: "Owned core engineering foundations, the Motorway Pro trade proposition, an identity service split and AWS cost work — proposal to production, on-call to hand-off.",
-    metrics: [{ label: "Platform volume", value: "+15%" }],
-    stack: ["go", "python", "aws", "llm"],
-  },
-  {
-    year: "2022",
-    company: "Deliveroo",
-    role: "Customer Care Platform",
-    blurb: "Shipped automated customer-care journeys in production with agents, fine-tuned GenAI models and highly available Go APIs.",
-    metrics: [{ label: "CSAT", value: "2×" }],
-    stack: ["go", "react", "llm", "k8s"],
-  },
-];
-
-const services = [
-  {
-    title: "Find leverage",
-    result: "01",
-    body: "Start where product pain meets infrastructure drag: auth, cost, latency, reliability, or agent workflows.",
-    tags: ["Product", "Infra", "Context"],
-  },
-  {
-    title: "Ship the proof",
-    result: "02",
-    body: "Turn demos into working systems with real users, measurable impact, and boring operational paths.",
-    tags: ["Agents", "Evals", "Launches"],
-  },
-  {
-    title: "Make it last",
-    result: "03",
-    body: "Leave the team with cleaner services, runbooks, cost wins, and enough context to keep moving.",
-    tags: ["Memory", "On-call", "Handoff"],
-  },
-];
-
-const storyBeats = [
-  ["London", "Senior engineer where product, infra and AI agents meet."],
-  ["Mode", "Find leverage. Ship proof. Make it last."],
-  ["Signal", "Crypto payments, marketplaces, cloud platforms and systems that stay up."],
-];
-
-function SignalPortrait() {
-  const signals = [
-    ["8.5x", "faster Polygon buys"],
-    ["109", "MoonPay skills stars"],
-    ["300+", "Whatify weekly users"],
-    ["2x", "CSAT at Deliveroo"],
-  ];
-
-  return (
-    <aside className="signal-frame h-[320px] max-w-full p-3 sm:h-[430px] sm:p-4 lg:h-[460px] lg:self-center xl:h-[500px]">
-      <div className="relative z-10 grid h-full grid-rows-1 gap-3 sm:grid-rows-[1fr_auto]">
-        <div className="relative min-h-0 overflow-hidden border border-ink bg-ink text-paper">
-          <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:32px_32px]" />
-          <div className="absolute -right-20 -top-20 h-52 w-52 bg-accent/70 blur-3xl" />
-          <div className="absolute -bottom-20 left-8 h-60 w-60 bg-ok/45 blur-3xl" />
-          <div className="absolute left-4 top-4 mono text-[10px] uppercase tracking-[0.24em] text-paper/70">
-            Aashir Javed / impact log
-          </div>
-          <div className="relative z-10 flex h-full flex-col justify-end p-4 sm:p-5">
-            <div className="grid grid-cols-2 gap-2">
-              {signals.map(([value, label]) => (
-                <div key={label} className="border border-paper/20 bg-paper/5 p-3 backdrop-blur-sm">
-                  <div className="display text-[clamp(2rem,6vw,3.8rem)] leading-none text-paper">{value}</div>
-                  <div className="mt-2 mono text-[9px] uppercase tracking-[0.18em] text-paper/60">{label}</div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 display max-w-[9ch] text-[clamp(2.2rem,6vw,4rem)] leading-[0.86] text-paper">
-              signal over portrait
-            </div>
-          </div>
-        </div>
-        <div className="hidden border border-ink bg-paper sm:grid sm:grid-cols-3">
-          {storyBeats.map(([label, value]) => (
-            <div key={label} className="border-b border-ink p-3 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0">
-              <div className="mono text-[10px] uppercase tracking-[0.2em] text-accent">{label}</div>
-              <div className="mt-2 text-[12px] leading-snug text-ink-2">{value}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </aside>
-  );
-}
-
-function ArchitectureBrief({ className = "" }: { className?: string }) {
-  const rows = [
-    ["AI that moves money", "Agent skills, local models, eval loops"],
-    ["Systems that pay back", "Auth, platform foundations, cloud cost, latency"],
-    ["Products with signal", "Whatify, public launches, measurable usage"],
-  ];
-
-  return (
-    <aside className={`border-t border-ink pt-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0 ${className}`}>
-      <div className="mono text-[11px] uppercase tracking-[0.22em] text-accent">Field brief</div>
-      <div className="mt-6 space-y-5">
-        {rows.map(([label, value]) => (
-          <div key={label} className="border-b border-rule-soft pb-5 last:border-b-0 last:pb-0">
-            <div className="display text-2xl leading-none text-ink">{label}</div>
-            <div className="mt-2 text-sm leading-relaxed text-ink-2">{value}</div>
-          </div>
-        ))}
-      </div>
-    </aside>
-  );
-}
+import Link from "next/link";
+import { Console } from "@/components/console";
+import { Effects } from "@/components/effects";
+import { Footer } from "@/components/footer";
+import { Rail } from "@/components/rail";
+import { Section } from "@/components/section";
+import { Tier } from "@/components/tier";
+import { TrackedLink } from "@/components/tracked-link";
+import { background, credentials, evidence, formats, offers, principles } from "@/data/content";
+import { site } from "@/data/site";
 
 export default function Home() {
-  const recentPosts = [...blogPosts]
-    .sort((a, b) => (a.date < b.date ? 1 : -1))
-    .slice(0, 3);
-
-  const fmtDate = (iso: string) => {
-    const d = new Date(iso);
-    return d.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-  };
-
   return (
     <>
-      <PersonSchema />
-      <WebsiteSchema />
-      <Container size="wide">
-        <section className="grid gap-8 pb-12 sm:pb-16 lg:min-h-[calc(100svh-10rem)] lg:grid-cols-[minmax(0,1fr)_340px] lg:items-center xl:grid-cols-[minmax(0,1fr)_380px]">
-          <div className="flex flex-col justify-between border-y border-ink py-8 sm:py-10">
-            <div>
-              <Eyebrow className="mb-8">
-              <span className="inline-flex items-center gap-2 leading-relaxed">
-                <span className="inline-block h-2 w-2 bg-ok" aria-hidden />
-                London · MoonPay · crypto payments · AI agents
-              </span>
-              </Eyebrow>
-              <h1 className="display max-w-[11ch] text-[clamp(2.65rem,10.5vw,4.7rem)] leading-[0.88] tracking-[-0.035em] text-ink sm:text-[clamp(3.3rem,7.2vw,6.1rem)] sm:leading-[0.84]">
-                Backend and AI systems that move real product metrics.
-              </h1>
-            </div>
-            <div className="mt-8 grid gap-8 sm:mt-10 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-end">
-              <div>
-                <p className="lede max-w-[30ch] text-[1.08rem] leading-snug text-ink sm:text-[clamp(1.15rem,2.4vw,1.75rem)] sm:leading-[1.28]">
-                  Senior engineer building crypto payment rails, LLM agent workflows, eval systems and platform services across MoonPay, Motorway, Deliveroo and Zalando.
-                </p>
-                <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
-                  <LinkButton href="/projects">See proof</LinkButton>
-                  <LinkButton href="/contact" variant="ghost">Send context</LinkButton>
+      <Effects />
+      <Rail />
+      <main id="main" className="mx-auto max-w-wide px-4 sm:px-8 lg:px-12 xl:px-0">
+        <section id="top" data-rail="00" aria-labelledby="positioning" className="pt-10 md:pt-20">
+          <div className="max-w-[880px]">
+            <p className="mono flex flex-wrap items-center gap-x-2 text-mute">
+              <span aria-hidden className="inline-block h-[7px] w-[7px] rounded-full bg-clear" />
+              <span>London</span>
+              <span aria-hidden>·</span>
+              <span>{site.role}</span>
+            </p>
+            <h1 id="positioning" className="display mt-6 text-[42px] sm:text-[56px] lg:text-[72px]">
+              {site.positioning}
+            </h1>
+            <p className="mt-6 max-w-[56ch] text-ink-2">{site.support}</p>
+            <Console />
+          </div>
+        </section>
+
+        <Section
+          id="help"
+          number="01"
+          title="Where I help"
+          intro="Three kinds of work. Each one ends with something your auditor, your LPs and your engineers can all read."
+        >
+          <ol>
+            {offers.map((o, i) => (
+              <li key={o.title} className="grid gap-3 border-t border-rule py-8 first:border-t-0 first:pt-0 md:grid-cols-[96px_1fr] md:gap-0">
+                <span className="label pt-2 text-mute">{`0${i + 1}`.slice(-2)}</span>
+                <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] lg:gap-12">
+                  <div>
+                    <h3 className="display text-[26px] md:text-[30px]">{o.title}</h3>
+                    <p className="mt-2 italic text-ink-2">{o.promise}</p>
+                  </div>
+                  <div>
+                    <p className="text-[17px] leading-[1.55] text-ink-2">{o.included}</p>
+                    <p className="mono mt-4 text-mute">
+                      Evidence:{" "}
+                      {o.evidence.map((e, j) => (
+                        <span key={e.label}>
+                          <Link href={e.href} className="link text-ink">
+                            {e.label}
+                          </Link>
+                          {j < o.evidence.length - 1 ? ", " : ""}
+                        </span>
+                      ))}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <ArchitectureBrief className="hidden lg:block" />
-            </div>
+              </li>
+            ))}
+          </ol>
+        </Section>
+
+        <Section
+          id="evidence"
+          number="02"
+          title="Evidence"
+          intro="Each row carries a label. Verified means you can open it. Private means it exists and I can show it on a call. Employer means scope only. Reported means my figure, from my CV."
+        >
+          <div className="label hidden grid-cols-[96px_minmax(0,0.9fr)_minmax(0,1.4fr)_96px] gap-6 border-b border-rule pb-3 text-mute md:grid">
+            <span />
+            <span>What</span>
+            <span>Outcome</span>
+            <span className="text-right">Tier</span>
           </div>
-          <Reveal>
-            <SignalPortrait />
-          </Reveal>
-        </section>
-
-        <Reveal>
-          <div className="border-y border-ink py-7 sm:py-9">
-            <div className="mb-5 flex items-center justify-between gap-4">
-              <p className="mono text-[11px] uppercase tracking-[0.22em] text-ink-mute">
-                Experience across
-              </p>
-              <p className="hidden text-sm text-ink-mute sm:block">Fintech, marketplaces, logistics, fashion commerce and enterprise cloud.</p>
-            </div>
-            <LogoMarquee />
-          </div>
-        </Reveal>
-
-        <Reveal>
-          <section className="grid border-y border-ink py-0 sm:grid-cols-3">
-            <Stat value="8.5×" label="Faster Polygon buys" className="border-b border-ink p-4 sm:border-b-0 sm:border-r sm:p-6" />
-            <Stat value="+15%" label="Platform volume" className="border-b border-ink p-4 sm:border-b-0 sm:border-r sm:p-6" />
-            <Stat value="300+" label="Weekly Whatify users" className="p-4 sm:p-6" />
-          </section>
-        </Reveal>
-
-        <section className="pt-8 sm:pt-16">
-          <Reveal>
-            <SectionLabel
-              number="01"
-              title="Operating"
-              italic="mode"
-              description="How I turn vague technical surface area into shipped work."
-            />
-          </Reveal>
-          <Reveal>
-            <div className="grid gap-4 md:grid-cols-3">
-              {services.map((service) => (
-                <article key={service.title} className="group border border-ink bg-surface/80 p-5 transition-transform duration-300 hover:-translate-y-1 sm:p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="display text-6xl leading-none text-accent">{service.result}</div>
-                    <span className="h-8 w-8 border border-ink bg-paper transition-colors group-hover:bg-ok" aria-hidden />
+          <ul>
+            {evidence.map((row) => {
+              const external = row.href?.startsWith("http");
+              const name = row.href ? (
+                <a
+                  href={row.href}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noreferrer" : undefined}
+                  className="link"
+                >
+                  {row.what}
+                  {external ? <span aria-hidden className="text-mute"> ↗</span> : null}
+                </a>
+              ) : (
+                row.what
+              );
+              return (
+                <li
+                  key={row.what}
+                  className="grid gap-2 border-b border-rule py-5 md:grid-cols-[96px_minmax(0,0.9fr)_minmax(0,1.4fr)_96px] md:gap-6"
+                >
+                  <span className="hidden md:block" />
+                  <div>
+                    <div className="flex items-baseline justify-between gap-4">
+                      <h3 className="text-[19px] leading-snug md:text-[20px]">{name}</h3>
+                      <span className="md:hidden">
+                        <Tier tier={row.tier} />
+                      </span>
+                    </div>
+                    <p className="mt-1 text-[16px] leading-[1.5] text-mute">{row.context}</p>
                   </div>
-                  <h3 className="mt-8 display text-4xl leading-[0.88] text-ink">{service.title}</h3>
-                  <p className="mt-4 text-sm leading-relaxed text-ink-2">{service.body}</p>
-                  <div className="mt-5 flex flex-wrap gap-1.5">
-                    {service.tags.map((tag) => (
-                  <Pill key={tag}>{tag}</Pill>
-                    ))}
-                  </div>
-                </article>
-              ))}
-            </div>
-          </Reveal>
-        </section>
+                  <p className="text-[17px] leading-[1.55] text-ink-2">{row.outcome}</p>
+                  <span className="hidden justify-end pt-1 md:flex">
+                    <Tier tier={row.tier} />
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </Section>
 
-        <section className="pt-20 sm:pt-24">
-          <Reveal>
-            <SectionLabel
-              number="02"
-              title="Recent"
-              italic="evidence"
-              description="Recent work with numbers attached."
-              action={<ArrowLink href="/projects">All work</ArrowLink>}
-            />
-          </Reveal>
-          <Reveal>
-            <div className="grid gap-4 lg:grid-cols-3">
-              {recentWork.map((w) => (
-                <WorkRow key={w.company} item={w} />
-              ))}
-            </div>
-          </Reveal>
-        </section>
-
-        <section className="pt-20 sm:pt-24">
-          <Reveal>
-            <SectionLabel number="03" title="Public" italic="proof" description="Links, launches and public artifacts." />
-          </Reveal>
-          <Reveal>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <NotableCard
-                kind="shipped"
-                title="Moonlog Volume 02"
-                href="https://www.linkedin.com/pulse/moonlog-volume-02-moonpay-vo1ae/"
-                meta="MoonPay"
-                description="Product and engineering launches across Buy/Sell, MoonPay Balance and Polygon purchase performance."
-                stats={[{ label: "Polygon", value: "8.5×" }, { label: "Markets", value: "US·UK·EU" }]}
-              />
-              <NotableCard
-                kind="build"
-                title="alchemy-infra"
-                href="https://github.com/aashirjaved/alchemy-infra"
-                meta="Open source"
-                description="Infrastructure-as-TypeScript skill for agents with strict secret hygiene and repeatable setup."
-                stats={[{ label: "Benchmark", value: "+15.5pp" }, { label: "Stars", value: "2" }]}
-              />
-              <NotableCard
-                kind="build"
-                title="Whatify"
-                href="https://whatify.ai"
-                meta="Side product"
-                description="Public-data financial-class diagnosis for income, wealth, place and household context."
-                stats={[{ label: "Weekly users", value: "300+" }]}
-              />
-              <NotableCard
-                kind="win"
-                title="AI Agentic Hackathon"
-                href="https://www.linkedin.com/posts/adam-ferguson-7259b6121_two-months-ago-aashir-javed-omer-bresinski-share-7437869877543129088-3Z8q"
-                meta="MoonPay"
-                description="Won popular vote by pairing working automation with a crisp product story."
-                stats={[{ label: "Result", value: "Win" }]}
-              />
-            </div>
-          </Reveal>
-        </section>
-
-        <section className="pt-20 sm:pt-24">
-          <Reveal>
-            <SectionLabel
-              number="04"
-              title="Writing"
-              italic="notes"
-              description="Short reads from production."
-              action={<ArrowLink href="/writing">Archive</ArrowLink>}
-            />
-          </Reveal>
-          <Reveal>
+        <Section id="engagement" number="03" title="Engagement" intro="Three formats. Start with the first one.">
+          <ol>
+            {formats.map((f) => (
+              <li key={f.name} className="grid gap-2 border-t border-rule py-6 first:border-t-0 first:pt-0 md:grid-cols-[96px_minmax(0,0.9fr)_minmax(0,1.4fr)] md:gap-6">
+                <span className="hidden md:block" />
+                <div>
+                  <h3 className="display text-[24px] md:text-[26px]">{f.name}</h3>
+                  <p className="mono mt-1 text-mute">{f.terms}</p>
+                </div>
+                <p className="text-[17px] leading-[1.55] text-ink-2">{f.body}</p>
+              </li>
+            ))}
+          </ol>
+          <div className="mt-12 grid gap-4 md:grid-cols-[96px_1fr]">
+            <span className="label pt-3 text-mute">Rules</span>
             <div>
-              {recentPosts.map((p) => (
-                <PostRow
-                  key={p.slug}
-                  href={`/writing/${p.slug}`}
-                  title={p.title}
-                  date={fmtDate(p.date)}
-                  readingTime={p.readingTime.replace(" min read", " min")}
-                  tags={p.tags.slice(0, 2)}
-                  featured={p.featured}
-                />
-              ))}
+              <p className="display text-[30px] italic md:text-[40px]">{principles.lead}</p>
+              <ul className="mt-5 space-y-1 text-ink-2">
+                {principles.rest.map((p) => (
+                  <li key={p}>{p}</li>
+                ))}
+              </ul>
+              <p className="mono mt-6 text-mute">{principles.not}</p>
             </div>
-          </Reveal>
-        </section>
+          </div>
+        </Section>
 
-        <Reveal>
-          <section className="py-20 sm:py-28">
-            <div className="signal-frame bg-ink p-6 text-paper sm:p-10">
-              <p className="mono text-[11px] uppercase tracking-[0.22em] text-paper/55">Next step</p>
-              <p className="mt-5 display max-w-[13ch] text-[clamp(3rem,9vw,6rem)] leading-[0.9]">
-                Bring me the product metric hiding inside the hard system.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <LinkButton href="mailto:me@aashir.net">Email →</LinkButton>
-                <LinkButton href="/resume" variant="ghost">Résumé</LinkButton>
+        <Section id="background" number="04" title="Background">
+          <ul>
+            {background.map((b) => (
+              <li key={b.where} className="grid gap-1 border-b border-rule py-4 first:border-t md:grid-cols-[96px_160px_200px_1fr] md:gap-6">
+                <span className="hidden md:block" />
+                <span className="mono pt-1 text-mute">{b.years}</span>
+                <span className="text-[18px]">{b.where}</span>
+                <span className="text-[17px] leading-[1.55] text-ink-2">{b.what}</span>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-6 grid md:grid-cols-[96px_1fr]">
+            <span />
+            <p className="mono text-mute">
+              {credentials}{" "}
+              <Link href="/cv" className="link text-ink">
+                Full CV
+              </Link>
+            </p>
+          </div>
+        </Section>
+
+        <Section id="contact" number="05" title="Contact" intro="Send the context. I reply within two working days.">
+          <div className="grid gap-8 md:grid-cols-[96px_1fr]">
+            <span className="hidden md:block" />
+            <div>
+              <TrackedLink
+                event="email_click"
+                href={`mailto:${site.email}`}
+                className="display link text-[34px] md:text-[52px]"
+              >
+                {site.email}
+              </TrackedLink>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <TrackedLink
+                  event="book_call_click"
+                  href={site.booking}
+                  className="mono rounded-[6px] bg-ink px-4 py-2.5 text-paper transition-opacity hover:opacity-85"
+                >
+                  Book a diagnostic call
+                </TrackedLink>
+                <a href={site.links.linkedin} target="_blank" rel="noreferrer" className="mono link px-2 py-2.5">
+                  LinkedIn ↗
+                </a>
+                <a href={site.links.github} target="_blank" rel="noreferrer" className="mono link px-2 py-2.5">
+                  GitHub ↗
+                </a>
               </div>
+              <p className="mono mt-6 max-w-[64ch] text-mute">
+                Useful to include: what you are building, where you are in it, and whether you need advice, a build, or both.
+              </p>
             </div>
-          </section>
-        </Reveal>
+          </div>
+        </Section>
 
         <Footer />
-      </Container>
+      </main>
     </>
   );
 }

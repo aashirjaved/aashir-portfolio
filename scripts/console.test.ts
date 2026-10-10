@@ -3,7 +3,7 @@ import { match } from "../lib/match.ts";
 
 const cases: [string, string | null][] = [
   // chips must map to themselves
-  ...chips.map((c) => [c.chip as string, c.id] as [string, string]),
+  ...chips.map((c) => [c.question, c.id] as [string, string]),
   ["do you do kyc for investors", "build-onboarding"],
   ["Could you build investor onboarding for our fund?", "build-onboarding"],
   ["we need KYB and UBO checks for borrowers", "build-onboarding"],
@@ -65,5 +65,5 @@ const falseConfident = nonsense.filter(([q]) => match(q, intents) !== null).leng
 const rate = pass / cases.length;
 console.log(`console matcher: ${pass}/${cases.length} (${(rate * 100).toFixed(0)}%), false confident on nonsense: ${falseConfident}`);
 if (fails.length) console.log(fails.join("\n"));
-const chipFails = chips.filter((c) => match(c.chip as string, intents)?.id !== c.id).length;
+const chipFails = chips.filter((c) => match(c.question, intents)?.id !== c.id).length;
 if (rate < 0.9 || falseConfident > 0 || chipFails > 0) process.exit(1);

@@ -68,7 +68,9 @@ const fail = (m) => { failures++; log("FAIL", m); };
     const words = (await item.locator("p[aria-hidden]").innerText()).split(/\s+/).length;
     const ev = await item.locator("ul a").allInnerTexts();
     log(`chip "${label}" -> "${q.replace(/^>\s*/, "")}" ${words} words in ${ms}ms, evidence: ${ev.join(", ")}`);
-    if (!q.includes(label)) fail(`chip question mismatch ${label}`);
+    if (!q.trim()) fail(`chip ${label} produced no question`);
+    const pts = await item.locator("ul[aria-hidden] li").count();
+    if (pts < 1) fail(`answer for ${label} has no points`);
     if (words > 90) fail(`answer over 90 words for ${label}: ${words}`);
   }
   await page.screenshot({ path: `${OUT}/console-mobile-after-chips.png`, fullPage: false });
@@ -79,8 +81,7 @@ const fail = (m) => { failures++; log("FAIL", m); };
     await page.fill("#ask", q);
     await page.press("#ask", "Enter");
     await page.waitForFunction(() => !document.querySelector(".caret"), null, { timeout: 8000 });
-    const ledger = await page.locator("text=Session record").locator("..").locator("li").last().innerText();
-    return ledger.trim().split(/\s+/).pop();
+    return (await page.locator("li[data-intent]").last().getAttribute("data-intent")) || "";
   }
   const r1 = await typed("do you do kyc for investors");
   log("typed kyc ->", r1); if (r1 !== "build-onboarding") fail("kyc question routed to " + r1);

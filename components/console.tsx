@@ -72,7 +72,7 @@ function Reveal({ text, instant, onDone }: { text: string; instant: boolean; onD
   }, [done, onDone]);
 
   return (
-    <p aria-hidden className="max-w-[62ch] text-[18px] leading-[1.55] text-ink md:text-[19px]">
+    <p aria-hidden className="max-w-[56ch] text-[17px] font-medium leading-[1.45] text-ink md:text-[18px]">
       {words.slice(0, count).join(" ")}
       {!done ? <span className="caret" /> : null}
     </p>
@@ -81,17 +81,17 @@ function Reveal({ text, instant, onDone }: { text: string; instant: boolean; onD
 
 function EvidenceRow({ items }: { items: Evidence[] }) {
   return (
-    <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+    <ul className="mt-4 flex flex-wrap gap-2">
       {items.map((e) => {
         const external = e.href.startsWith("http");
         return (
-          <li key={e.label} className="flex items-center gap-2">
+          <li key={e.label} className="flex items-center gap-2 rounded-full border border-rule bg-surface py-1 pl-3 pr-1.5">
             <a
               href={e.href}
               target={external ? "_blank" : undefined}
               rel={external ? "noreferrer" : undefined}
               onClick={() => send("evidence_click", { href: e.href, tier: e.tier ?? "none" })}
-              className="mono link text-ink"
+              className="text-[13px] font-medium text-ink hover:text-clear"
             >
               {e.label}
               {external ? <span aria-hidden> ↗</span> : null}
@@ -107,15 +107,32 @@ function EvidenceRow({ items }: { items: Evidence[] }) {
 function TurnView({ turn, instant, latest }: { turn: Turn; instant: boolean; latest: boolean }) {
   const [done, setDone] = useState(instant || !latest);
   const finish = useCallback(() => setDone(true), []);
+  const points = turn.intent.points ?? [];
   return (
-    <li className="rise border-t border-rule py-6 first:border-t-0 first:pt-2">
-      <p className="mono mb-3 text-mute">
-        <span aria-hidden className="text-clear">&gt; </span>
+    <li data-intent={turn.intent.id} className="rise card mt-3 p-5 first:mt-0 sm:p-6">
+      <p className="mono mb-3 flex items-center gap-2 text-mute">
+        <span aria-hidden className="text-clear">&gt;</span>
         {turn.question}
       </p>
       <Reveal text={turn.intent.answer} instant={instant || !latest} onDone={finish} />
-      <p className="sr-only">{turn.intent.answer}</p>
-      <div className={`transition-opacity duration-200 ${done ? "opacity-100" : "opacity-0"}`}>
+      <p className="sr-only">
+        {turn.intent.answer} {points.join(". ")}
+      </p>
+      {points.length ? (
+        <ul aria-hidden className="mt-3 space-y-2">
+          {points.map((pt, i) => (
+            <li
+              key={pt}
+              className={`flex gap-3 text-[15px] text-ink-2 transition-all duration-500 ${done ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0"}`}
+              style={{ transitionDelay: done ? `${i * 90}ms` : "0ms" }}
+            >
+              <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-clear" />
+              {pt}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      <div className={`transition-opacity duration-500 ${done ? "opacity-100" : "opacity-0"}`} style={{ transitionDelay: done ? `${points.length * 90}ms` : "0ms" }}>
         <EvidenceRow items={turn.intent.evidence} />
       </div>
     </li>
@@ -146,7 +163,7 @@ export function Console() {
     };
     setTurns((prev) => [...prev, turn]);
     setValue("");
-    setAnnounce(intent.answer);
+    setAnnounce(`${intent.answer} ${(intent.points ?? []).join(". ")}`);
     send("console_ask", { intent: intent.id, matched, source });
     // Bring the start of the new answer into view so it is read from the first word.
     requestAnimationFrame(() => {
@@ -190,15 +207,15 @@ export function Console() {
   const shown = turns.slice(hidden);
 
   return (
-    <div className="mt-10 md:mt-12">
+    <div className="mt-8">
       <form onSubmit={onSubmit} role="search" aria-label="Ask about Aashir">
         <label htmlFor="ask" className="sr-only">
           What do you want to know about me?
         </label>
-        <div className="flex items-center gap-2 rounded-[6px] border border-ink/70 bg-paper-2 py-1.5 pl-3 pr-1.5 sm:pl-4 transition-colors focus-within:border-ink">
-          <span aria-hidden className="mono text-clear">
-            &gt;
-          </span>
+        <div className="flex items-center gap-2 rounded-2xl border border-rule bg-surface py-2 pl-4 pr-2 sm:gap-3 shadow-[0_12px_40px_-24px_rgba(16,18,17,0.4)] transition-colors focus-within:border-ink/40">
+          <svg aria-hidden width="18" height="18" viewBox="0 0 24 24" fill="none" className="hidden shrink-0 text-clear sm:block">
+            <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z" fill="currentColor" />
+          </svg>
           <input
             ref={inputRef}
             id="ask"
@@ -211,14 +228,18 @@ export function Console() {
             spellCheck={false}
             enterKeyHint="send"
             maxLength={200}
-            className="min-w-0 flex-1 bg-transparent py-2 text-[16px] text-ink outline-none placeholder:text-mute sm:text-[17px] md:text-[19px]"
+            className="min-w-0 flex-1 bg-transparent py-2 text-[16px] text-ink outline-none placeholder:text-mute md:text-[17px]"
           />
           <button
             type="submit"
             disabled={!value.trim()}
-            className="mono shrink-0 rounded-[4px] bg-ink px-3 py-2 text-paper transition-opacity disabled:opacity-30"
+            aria-label="Ask"
+            className="flex h-9 shrink-0 items-center justify-center rounded-xl bg-ink px-3 text-[14px] font-medium text-paper transition-opacity disabled:opacity-25 sm:px-4"
           >
-            Ask
+            <span className="hidden sm:inline">Ask</span>
+            <svg aria-hidden width="16" height="16" viewBox="0 0 24 24" fill="none" className="sm:hidden">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </button>
         </div>
       </form>
@@ -231,8 +252,8 @@ export function Console() {
           <li key={c.id} className="shrink-0">
             <button
               type="button"
-              onClick={() => submit(c.chip as string, "chip")}
-              className="mono whitespace-nowrap rounded-full border border-rule px-3 py-1.5 text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink"
+              onClick={() => submit(c.question, "chip")}
+              className="whitespace-nowrap rounded-full border border-rule bg-surface px-3.5 py-1.5 text-[13px] text-ink-2 transition-colors hover:border-ink/30 hover:text-ink"
             >
               {c.chip}
             </button>
@@ -240,10 +261,7 @@ export function Console() {
         ))}
       </ul>
 
-      <p className="mono mt-4 text-mute">
-        Answers are written by me and cite their evidence.
-        <span className="hidden md:inline"> Press / to ask.</span>
-      </p>
+      <p className="mono mt-3 hidden text-mute md:block">Press / to ask</p>
 
       <div aria-live="polite" className="sr-only">
         {announce}
@@ -252,7 +270,7 @@ export function Console() {
       {turns.length ? (
         <div className="mt-8">
           {hidden > 0 ? (
-            <button type="button" onClick={() => setExpanded(true)} className="mono link mb-2 text-mute">
+            <button type="button" onClick={() => setExpanded(true)} className="mono link mb-3 text-mute">
               Show {hidden} earlier {hidden === 1 ? "answer" : "answers"}
             </button>
           ) : null}
@@ -261,18 +279,6 @@ export function Console() {
               <TurnView key={t.key} turn={t} instant={reduced} latest={i === shown.length - 1} />
             ))}
           </ol>
-          <div className="mono mt-2 border-t border-dashed border-rule pt-3 text-mute">
-            <p className="label mb-1.5">Session record</p>
-            <ol>
-              {turns.map((t) => (
-                <li key={t.key} className="flex gap-4">
-                  <span>{t.time}</span>
-                  <span>asked</span>
-                  <span className={t.matched ? "text-ink-2" : ""}>{t.intent.id}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
         </div>
       ) : null}
     </div>

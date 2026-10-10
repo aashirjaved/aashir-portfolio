@@ -6,6 +6,19 @@ Copy in this document is final draft v1 and follows the copy rules in section 9.
 
 ---
 
+## Visual redesign (10 October 2026, after review)
+
+Feedback on v2: too much text, read like a newspaper, not visual or animated enough. Changes:
+
+- **Type and surfaces.** Geist and Geist Mono replace the serif. Rounded cards on a soft surface replace hairlines and tables.
+- **Hero.** Headline, one line, the question box, and an animated screening run. An example investor, borrower or wallet passes identity, sanctions, PEP, ownership and risk checks, then waits for a reviewer to approve. It loops through three examples and shows the final state under reduced motion.
+- **Console answers.** One short sentence, three points that fade in, and evidence chips. Suggested questions show short labels.
+- **Sections.** A stats strip, three service cards with small looping illustrations, six proof cards with tier chips, a three step process, a company strip and a dark contact band. Sections fade in on scroll.
+- **Case notes.** A facts grid, four "what it does" cards and a dark call to action, instead of paragraphs.
+- Sections 6.1 to 6.4 and 7 above describe v2 and are superseded where they conflict with this.
+
+---
+
 ## Implementation status (10 October 2026)
 
 Phases 1 to 6 are built in this branch. Decisions taken while building, where the plan left a choice or turned out to be wrong:

@@ -1,208 +1,194 @@
 import Link from "next/link";
 import { Console } from "@/components/console";
-import { Effects } from "@/components/effects";
 import { Footer } from "@/components/footer";
-import { Rail } from "@/components/rail";
-import { Section } from "@/components/section";
+import { Reveal } from "@/components/reveal";
+import { ScreeningRun } from "@/components/screening-run";
+import { ServiceIcon } from "@/components/service-icon";
 import { Tier } from "@/components/tier";
 import { TrackedLink } from "@/components/tracked-link";
-import { background, credentials, evidence, formats, offers, principles } from "@/data/content";
+import { companies, proof, rule, services, stats, steps } from "@/data/content";
 import { site } from "@/data/site";
+
+function SectionHead({ eyebrow, title }: { eyebrow: string; title: string }) {
+  return (
+    <div data-reveal className="mb-8 md:mb-10">
+      <p className="eyebrow">{eyebrow}</p>
+      <h2 className="h-section mt-3 text-[30px] md:text-[40px]">{title}</h2>
+    </div>
+  );
+}
 
 export default function Home() {
   return (
     <>
-      <Effects />
-      <Rail />
-      <main id="main" className="mx-auto max-w-wide px-4 sm:px-8 lg:px-12 xl:px-0">
-        <section id="top" data-rail="00" aria-labelledby="positioning" className="pt-10 md:pt-20">
-          <div className="max-w-[880px]">
-            <p className="mono flex flex-wrap items-center gap-x-2 text-mute">
-              <span aria-hidden className="inline-block h-[7px] w-[7px] rounded-full bg-clear" />
-              <span>London</span>
-              <span aria-hidden>·</span>
-              <span>{site.role}</span>
+      <Reveal />
+      <main id="main">
+        {/* Hero */}
+        <section id="top" className="mx-auto grid max-w-wide grid-cols-1 items-center gap-10 px-4 pb-16 pt-10 sm:px-8 md:pt-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14 lg:pb-24 lg:pt-20">
+          <div className="min-w-0">
+            <p className="inline-flex items-center gap-2 rounded-full border border-rule bg-surface px-3 py-1 text-[13px] text-ink-2">
+              <span className="pulse anim h-2 w-2 rounded-full bg-clear" aria-hidden />
+              Available for advisory and build work
             </p>
-            <h1 id="positioning" className="display mt-6 text-[42px] sm:text-[56px] lg:text-[72px]">
-              {site.positioning}
-            </h1>
-            <p className="mt-6 max-w-[56ch] text-ink-2">{site.support}</p>
+            <h1 className="h-display mt-6 text-[40px] sm:text-[52px] lg:text-[60px]">{site.positioning}</h1>
+            <p className="mt-5 max-w-[46ch] text-[17px] text-ink-2 md:text-[18px]">{site.support}</p>
             <Console />
+          </div>
+          <div className="min-w-0 lg:pl-2">
+            <ScreeningRun />
           </div>
         </section>
 
-        <Section
-          id="help"
-          number="01"
-          title="Where I help"
-          intro="Three kinds of work. Each one ends with something your auditor, your LPs and your engineers can all read."
-        >
-          <ol>
-            {offers.map((o, i) => (
-              <li key={o.title} className="grid gap-3 border-t border-rule py-8 first:border-t-0 first:pt-0 md:grid-cols-[96px_1fr] md:gap-0">
-                <span className="label pt-2 text-mute">{`0${i + 1}`.slice(-2)}</span>
-                <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] lg:gap-12">
-                  <div>
-                    <h3 className="display text-[26px] md:text-[30px]">{o.title}</h3>
-                    <p className="mt-2 italic text-ink-2">{o.promise}</p>
-                  </div>
-                  <div>
-                    <p className="text-[17px] leading-[1.55] text-ink-2">{o.included}</p>
-                    <p className="mono mt-4 text-mute">
-                      Evidence:{" "}
-                      {o.evidence.map((e, j) => (
-                        <span key={e.label}>
-                          <Link href={e.href} className="link text-ink">
-                            {e.label}
-                          </Link>
-                          {j < o.evidence.length - 1 ? ", " : ""}
-                        </span>
-                      ))}
-                    </p>
-                  </div>
-                </div>
+        {/* Stats */}
+        <section aria-label="Track record" className="border-y border-rule bg-surface/60">
+          <ul className="mx-auto grid max-w-wide grid-cols-2 px-4 sm:px-8 md:grid-cols-4">
+            {stats.map((s, i) => (
+              <li
+                key={s.label}
+                data-reveal
+                style={{ ["--delay" as string]: `${i * 80}ms` }}
+                className={`py-7 md:py-9 ${i % 2 === 1 ? "pl-5 md:pl-6" : ""} ${i > 0 ? "md:border-l md:border-rule md:pl-6" : ""} ${i === 2 ? "pl-0" : ""}`}
+              >
+                <p className="h-display text-[34px] md:text-[42px]">{s.value}</p>
+                <p className="mt-1 text-[13px] text-mute">{s.label}</p>
               </li>
             ))}
-          </ol>
-        </Section>
+          </ul>
+        </section>
 
-        <Section
-          id="evidence"
-          number="02"
-          title="Evidence"
-          intro="Each row carries a label. Verified means you can open it. Private means it exists and I can show it on a call. Employer means scope only. Reported means my figure, from my CV."
-        >
-          <div className="label hidden grid-cols-[96px_minmax(0,0.9fr)_minmax(0,1.4fr)_96px] gap-6 border-b border-rule pb-3 text-mute md:grid">
-            <span />
-            <span>What</span>
-            <span>Outcome</span>
-            <span className="text-right">Tier</span>
-          </div>
-          <ul>
-            {evidence.map((row) => {
-              const external = row.href?.startsWith("http");
-              const name = row.href ? (
-                <a
-                  href={row.href}
-                  target={external ? "_blank" : undefined}
-                  rel={external ? "noreferrer" : undefined}
-                  className="link"
-                >
-                  {row.what}
-                  {external ? <span aria-hidden className="text-mute"> ↗</span> : null}
-                </a>
-              ) : (
-                row.what
-              );
+        {/* Services */}
+        <section id="help" className="mx-auto max-w-wide px-4 pt-20 sm:px-8 md:pt-28">
+          <SectionHead eyebrow="What I do" title="Three ways I help." />
+          <ul className="grid gap-4 md:grid-cols-3">
+            {services.map((s, i) => (
+              <li
+                key={s.title}
+                data-reveal
+                style={{ ["--delay" as string]: `${i * 90}ms` }}
+                className="card flex flex-col p-6 transition-transform duration-300 hover:-translate-y-1"
+              >
+                <div className="rounded-2xl bg-paper px-5 py-2">
+                  <ServiceIcon kind={s.icon} />
+                </div>
+                <h3 className="mt-6 text-[20px] font-semibold tracking-tight">{s.title}</h3>
+                <p className="mt-1.5 text-[15px] text-ink-2">{s.line}</p>
+                <ul className="mt-5 flex flex-wrap gap-1.5">
+                  {s.tags.map((t) => (
+                    <li key={t} className="mono rounded-full bg-surface-2 px-2.5 py-1 text-ink-2">
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Proof */}
+        <section id="work" className="mx-auto max-w-wide px-4 pt-20 sm:px-8 md:pt-28">
+          <SectionHead eyebrow="Proof" title="Built, shipped, running." />
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {proof.map((p, i) => {
+              const external = p.href.startsWith("http");
               return (
-                <li
-                  key={row.what}
-                  className="grid gap-2 border-b border-rule py-5 md:grid-cols-[96px_minmax(0,0.9fr)_minmax(0,1.4fr)_96px] md:gap-6"
-                >
-                  <span className="hidden md:block" />
-                  <div>
-                    <div className="flex items-baseline justify-between gap-4">
-                      <h3 className="text-[19px] leading-snug md:text-[20px]">{name}</h3>
-                      <span className="md:hidden">
-                        <Tier tier={row.tier} />
-                      </span>
+                <li key={p.name} data-reveal style={{ ["--delay" as string]: `${(i % 3) * 80}ms` }}>
+                  <a
+                    href={p.href}
+                    target={external ? "_blank" : undefined}
+                    rel={external ? "noreferrer" : undefined}
+                    className="card group flex h-full flex-col p-6 transition-all duration-300 hover:-translate-y-1 hover:border-ink/25"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="mono text-mute">{p.tag}</span>
+                      <Tier tier={p.tier} />
                     </div>
-                    <p className="mt-1 text-[16px] leading-[1.5] text-mute">{row.context}</p>
-                  </div>
-                  <p className="text-[17px] leading-[1.55] text-ink-2">{row.outcome}</p>
-                  <span className="hidden justify-end pt-1 md:flex">
-                    <Tier tier={row.tier} />
-                  </span>
+                    <h3 className="mt-5 text-[21px] font-semibold tracking-tight md:mt-8 md:text-[22px]">{p.name}</h3>
+                    <p className="mt-1.5 flex-1 text-[15px] text-ink-2">{p.line}</p>
+                    <span className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-ink md:mt-6">
+                      {external ? "Open" : "See how it works"}
+                      <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">
+                        {external ? "↗" : "→"}
+                      </span>
+                    </span>
+                  </a>
                 </li>
               );
             })}
           </ul>
-        </Section>
+          <p data-reveal className="mono mt-5 text-mute">
+            verified: public · private: shown on a call · employer: scope only · reported: from my CV
+          </p>
+        </section>
 
-        <Section id="engagement" number="03" title="Engagement" intro="Three formats. Start with the first one.">
-          <ol>
-            {formats.map((f) => (
-              <li key={f.name} className="grid gap-2 border-t border-rule py-6 first:border-t-0 first:pt-0 md:grid-cols-[96px_minmax(0,0.9fr)_minmax(0,1.4fr)] md:gap-6">
-                <span className="hidden md:block" />
-                <div>
-                  <h3 className="display text-[24px] md:text-[26px]">{f.name}</h3>
-                  <p className="mono mt-1 text-mute">{f.terms}</p>
+        {/* Process */}
+        <section id="process" className="mx-auto max-w-wide px-4 pt-20 sm:px-8 md:pt-28">
+          <SectionHead eyebrow="How we work" title="Start small. Decide fast." />
+          <ol className="relative grid gap-4 md:grid-cols-3">
+            <span aria-hidden data-reveal className="absolute left-[16%] right-[16%] top-[38px] hidden h-px origin-left bg-rule md:block" />
+            {steps.map((s, i) => (
+              <li key={s.name} data-reveal style={{ ["--delay" as string]: `${i * 120}ms` }} className="relative">
+                <div className="card h-full p-6 text-center">
+                  <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-ink text-[14px] font-semibold text-paper">
+                    {i + 1}
+                  </span>
+                  <h3 className="mt-5 text-[20px] font-semibold tracking-tight">{s.name}</h3>
+                  <p className="mono mt-1 text-clear">{s.terms}</p>
+                  <p className="mt-3 text-[15px] text-ink-2">{s.line}</p>
                 </div>
-                <p className="text-[17px] leading-[1.55] text-ink-2">{f.body}</p>
               </li>
             ))}
           </ol>
-          <div className="mt-12 grid gap-4 md:grid-cols-[96px_1fr]">
-            <span className="label pt-3 text-mute">Rules</span>
-            <div>
-              <p className="display text-[30px] italic md:text-[40px]">{principles.lead}</p>
-              <ul className="mt-5 space-y-1 text-ink-2">
-                {principles.rest.map((p) => (
-                  <li key={p}>{p}</li>
-                ))}
-              </ul>
-              <p className="mono mt-6 text-mute">{principles.not}</p>
-            </div>
-          </div>
-        </Section>
+          <p data-reveal className="mt-10 text-center text-[20px] font-medium tracking-tight md:text-[24px]">
+            “{rule}”
+          </p>
+        </section>
 
-        <Section id="background" number="04" title="Background">
-          <ul>
-            {background.map((b) => (
-              <li key={b.where} className="grid gap-1 border-b border-rule py-4 first:border-t md:grid-cols-[96px_160px_200px_1fr] md:gap-6">
-                <span className="hidden md:block" />
-                <span className="mono pt-1 text-mute">{b.years}</span>
-                <span className="text-[18px]">{b.where}</span>
-                <span className="text-[17px] leading-[1.55] text-ink-2">{b.what}</span>
+        {/* Companies */}
+        <section aria-label="Experience" className="mx-auto max-w-wide px-4 pt-20 sm:px-8 md:pt-28">
+          <p data-reveal className="eyebrow text-center">Nine years at</p>
+          <ul className="mt-6 grid grid-cols-3 gap-y-6 md:grid-cols-6">
+            {companies.map((c, i) => (
+              <li key={c.name} data-reveal style={{ ["--delay" as string]: `${i * 60}ms` }} className="text-center">
+                <p className="text-[18px] font-semibold tracking-tight text-ink/80">{c.name}</p>
+                <p className="mono mt-0.5 text-mute">{c.years}</p>
               </li>
             ))}
           </ul>
-          <div className="mt-6 grid md:grid-cols-[96px_1fr]">
-            <span />
-            <p className="mono text-mute">
-              {credentials}{" "}
-              <Link href="/cv" className="link text-ink">
-                Full CV
-              </Link>
-            </p>
-          </div>
-        </Section>
+          <p data-reveal className="mt-6 text-center">
+            <Link href="/cv" className="link text-[14px] text-ink-2">
+              Full CV
+            </Link>
+          </p>
+        </section>
 
-        <Section id="contact" number="05" title="Contact" intro="Send the context. I reply within two working days.">
-          <div className="grid gap-8 md:grid-cols-[96px_1fr]">
-            <span className="hidden md:block" />
-            <div>
+        {/* Contact */}
+        <section id="contact" className="mx-auto max-w-wide px-4 pt-20 sm:px-8 md:pt-28">
+          <div data-reveal className="relative overflow-hidden rounded-[28px] bg-ink px-6 py-12 text-paper sm:px-12 md:py-16">
+            <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-paper/10" />
+            <div aria-hidden className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full border border-paper/10" />
+            <p className="eyebrow !text-paper/60">Contact</p>
+            <h2 className="h-section mt-3 max-w-[18ch] text-[32px] md:text-[48px]">Building onboarding, risk or AI for a fund?</h2>
+            <p className="mt-4 text-[16px] text-paper/70">Send the context. I reply within two working days.</p>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <TrackedLink
+                event="book_call_click"
+                href={site.booking}
+                className="rounded-full bg-paper px-5 py-3 text-[14px] font-medium text-ink transition-opacity hover:opacity-90"
+              >
+                Book a diagnostic call
+              </TrackedLink>
               <TrackedLink
                 event="email_click"
                 href={`mailto:${site.email}`}
-                className="display link text-[34px] md:text-[52px]"
+                className="rounded-full border border-paper/25 px-5 py-3 text-[14px] font-medium text-paper transition-colors hover:border-paper/60"
               >
                 {site.email}
               </TrackedLink>
-              <div className="mt-8 flex flex-wrap items-center gap-3">
-                <TrackedLink
-                  event="book_call_click"
-                  href={site.booking}
-                  className="mono rounded-[6px] bg-ink px-4 py-2.5 text-paper transition-opacity hover:opacity-85"
-                >
-                  Book a diagnostic call
-                </TrackedLink>
-                <a href={site.links.linkedin} target="_blank" rel="noreferrer" className="mono link px-2 py-2.5">
-                  LinkedIn ↗
-                </a>
-                <a href={site.links.github} target="_blank" rel="noreferrer" className="mono link px-2 py-2.5">
-                  GitHub ↗
-                </a>
-              </div>
-              <p className="mono mt-6 max-w-[64ch] text-mute">
-                Useful to include: what you are building, where you are in it, and whether you need advice, a build, or both.
-              </p>
             </div>
           </div>
-        </Section>
-
-        <Footer />
+        </section>
       </main>
+      <Footer />
     </>
   );
 }

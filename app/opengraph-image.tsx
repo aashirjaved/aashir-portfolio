@@ -8,7 +8,7 @@ export const contentType = "image/png";
 
 export default async function OG() {
   const font = await readFile(
-    join(process.cwd(), "node_modules/@fontsource/newsreader/files/newsreader-latin-400-normal.woff"),
+    join(process.cwd(), "node_modules/@fontsource/geist/files/geist-latin-600-normal.woff"),
   );
   return new ImageResponse(
     (
@@ -22,14 +22,14 @@ export default async function OG() {
           background: "#F5F3EC",
           color: "#111311",
           padding: "72px 80px",
-          fontFamily: "Newsreader",
+          fontFamily: "Geist",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 30, color: "#686C65" }}>
-          <div style={{ width: 12, height: 12, borderRadius: 12, background: "#1B7F5A" }} />
+        <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 30, color: "#626660" }}>
+          <div style={{ width: 12, height: 12, borderRadius: 12, background: "#158054" }} />
           Aashir Javed · London
         </div>
-        <div style={{ fontSize: 76, lineHeight: 1.05, letterSpacing: -1, maxWidth: 980 }}>
+        <div style={{ fontSize: 72, lineHeight: 1.04, letterSpacing: -2.5, maxWidth: 980 }}>
           Compliance and risk infrastructure for crypto and private credit.
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 28, color: "#3E423E" }}>
@@ -38,6 +38,6 @@ export default async function OG() {
         </div>
       </div>
     ),
-    { ...size, fonts: [{ name: "Newsreader", data: font, style: "normal", weight: 400 }] },
+    { ...size, fonts: [{ name: "Geist", data: font, style: "normal", weight: 600 }] },
   );
 }

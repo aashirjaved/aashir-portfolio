@@ -7,7 +7,7 @@ export const contentType = "image/png";
 
 export default async function Icon() {
   const font = await readFile(
-    join(process.cwd(), "node_modules/@fontsource/newsreader/files/newsreader-latin-500-normal.woff"),
+    join(process.cwd(), "node_modules/@fontsource/geist/files/geist-latin-600-normal.woff"),
   );
   return new ImageResponse(
     (
@@ -22,12 +22,12 @@ export default async function Icon() {
           color: "#F5F3EC",
           borderRadius: 12,
           fontSize: 40,
-          fontFamily: "Newsreader",
+          fontFamily: "Geist",
         }}
       >
         AJ
       </div>
     ),
-    { ...size, fonts: [{ name: "Newsreader", data: font, style: "normal", weight: 500 }] },
+    { ...size, fonts: [{ name: "Geist", data: font, style: "normal", weight: 600 }] },
   );
 }

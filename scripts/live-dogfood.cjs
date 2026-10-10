@@ -89,6 +89,38 @@ const fail = (m) => { failures++; log("FAIL", m); };
   await page.locator("ol > li.rise").last().locator("a", { hasText: "Contact" }).first().click();
   await ctx.close();
 
+
+  // 2b. A prospect's journey: ask, follow evidence to a case note, reach the booking link.
+  {
+    const j = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+    const jp = await j.newPage();
+    const beacons = [];
+    jp.on("request", (r) => { if (/\/_vercel\/insights\/(event|view)/.test(r.url())) beacons.push(r.url().split("/").pop() + ":" + (r.postData() || "").slice(0, 120)); });
+    const insights = [];
+    jp.on("response", (r) => { if (r.url().includes("/_vercel/insights/script.js")) insights.push(r.status()); });
+    await jp.goto(BASE + "/", { waitUntil: "networkidle" });
+    await jp.locator('[aria-label="Suggested questions"] button', { hasText: "onboarding" }).click();
+    const kleido = jp.locator("ol > li.rise").last().locator("a", { hasText: "Kleido" });
+    await kleido.waitFor({ state: "visible" });
+    await kleido.click();
+    await jp.waitForURL(/\/work\/kleido$/);
+    const book = jp.locator("a", { hasText: "Book a diagnostic call" }).first();
+    const href = await book.getAttribute("href");
+    log("journey: chip -> Kleido case note ->", jp.url().replace(BASE, ""), "booking href", href.slice(0, 60));
+    if (!href.startsWith("mailto:me@aashir.net?subject=Diagnostic%20call")) fail("booking link wrong: " + href);
+    await book.evaluate((a) => a.addEventListener("click", (e) => e.preventDefault(), { once: true }));
+    await book.click();
+    await jp.waitForTimeout(2500);
+    log("analytics script status:", insights.join(",") || "not requested", "beacons sent:", beacons.length);
+    for (const b of beacons) log("  beacon", b);
+    if (process.env.EXPECT_ANALYTICS === "1") {
+      if (!insights.includes(200)) fail("Vercel analytics script not served");
+      if (!beacons.some((b) => b.includes("console_ask"))) fail("console_ask event not sent");
+      if (!beacons.some((b) => b.includes("book_call_click"))) fail("book_call_click event not sent");
+    }
+    await j.close();
+  }
+
   // "/" shortcut on desktop, reduced motion instant answer
   const d = await browser.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: "reduce" });
   const dp = await d.newPage();

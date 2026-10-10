@@ -103,7 +103,11 @@ const fail = (m) => { failures++; log("FAIL", m); };
     await j.addInitScript(() => Object.defineProperty(Navigator.prototype, "webdriver", { get: () => false }));
     const jp = await j.newPage();
     const beacons = [];
-    jp.on("request", (r) => { if (/\/_vercel\/insights\/(event|view)/.test(r.url())) beacons.push(r.url().split("/").pop() + ":" + (r.postData() || "").slice(0, 120)); });
+    jp.on("request", (r) => { if (/\/_vercel\/insights\/(event|view)/.test(r.url())) {
+      let body = {};
+      try { body = JSON.parse(r.postData() || "{}"); } catch {}
+      beacons.push(`${r.url().split("/").pop()} ${body.en || ""} ${body.dp || body.p || ""} ${body.ed ? JSON.stringify(body.ed) : ""}`.trim());
+    } });
     const insights = [];
     jp.on("response", (r) => { if (r.url().includes("/_vercel/insights/script.js")) insights.push(r.status()); });
     await jp.goto(BASE + "/", { waitUntil: "networkidle" });

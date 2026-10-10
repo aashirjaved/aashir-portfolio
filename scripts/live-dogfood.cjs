@@ -204,7 +204,7 @@ const fail = (m) => { failures++; log("FAIL", m); };
   await p2.screenshot({ path: `${OUT}/kleido-390.png`, fullPage: true });
   await p2.goto(BASE + "/cv", { waitUntil: "networkidle" });
   await p2.emulateMedia({ media: "print" });
-  await p2.pdf({ path: `${OUT}/cv.pdf`, format: "A4", margin: { top: "14mm", bottom: "14mm", left: "16mm", right: "16mm" } });
+  if (engine === "chromium") await p2.pdf({ path: `${OUT}/cv.pdf`, format: "A4", margin: { top: "14mm", bottom: "14mm", left: "16mm", right: "16mm" } });
   await browser.close();
   log(failures ? `DOGFOOD: ${failures} failure(s)` : "DOGFOOD: all checks passed");
   process.exit(failures ? 1 : 0);

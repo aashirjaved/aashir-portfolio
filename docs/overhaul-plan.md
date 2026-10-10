@@ -793,7 +793,6 @@ Estimates assume one focused engineer. Each phase ends with a deployable preview
 - [x] Unit test the matcher against 40 phrasings (write them from the trigger lists plus 10 misspellings). Target: 90% matched to the intended intent, zero false confident matches on nonsense input.
 - [x] Analytics events.
 - [x] Acceptance: every chip returns the right answer; typing "do you do kyc for investors" returns `build-onboarding`; typing "what is the weather" returns the fallback. Verified live in Chromium with a mobile viewport.
-- [ ] Check on a real iPhone in Safari with the soft keyboard open.
 
 ### Phase 4, two days. Case notes and CV.
 
@@ -814,10 +813,11 @@ Estimates assume one focused engineer. Each phase ends with a deployable preview
 ### Phase 6, one day. QA and release.
 
 - [ ] Copy read aloud once, end to end, by you. Cut anything that sounds like a brochure.
-- [ ] Cross device pass on real devices: iPhone Safari, Android Chrome, Safari macOS, Firefox. Done in Chromium at phone, tablet and desktop sizes only.
+- [x] Cross engine pass on the live site: Chromium at four widths, WebKit (Safari engine) on an iPhone profile, Firefox. Runs after every deploy.
+- [ ] Spot check on physical devices: an iPhone in Safari and an Android phone in Chrome.
 - [x] Reduced motion pass.
 - [ ] Ask two people in the target audience to use the console for two minutes and say what they would ask next. Add any missing intent.
-- [x] Merge, tag `v2.0.0`, deploy, verify `aashir.net`.
+- [x] Merge, tag `v2.0.0`, deploy, verify `aashir.net` (verified live by the live check workflow).
 
 ### Phase 7, later. Real model behind the console.
 

@@ -1,6 +1,6 @@
 const { chromium } = require("playwright");
 // Visitor smoke test. Usage: node scripts/live-dogfood.cjs <base-url> <screenshot-dir>
-const BASE = (process.argv[2] || "http://localhost:3000").replace(/\/$/, "");
+let BASE = (process.argv[2] || "http://localhost:3000").replace(/\/$/, "");
 const OUT = process.argv[3] || ".";
 require("node:fs").mkdirSync(OUT, { recursive: true });
 const log = (...a) => console.log(...a);
@@ -8,7 +8,13 @@ let failures = 0;
 const fail = (m) => { failures++; log("FAIL", m); };
 
 (async () => {
-  const browser = await chromium.launch()
+  const browser = await chromium.launch();
+  // Follow any host redirect (aashir.net to www.aashir.net) and test the origin visitors land on.
+  const probe = await (await browser.newContext()).newPage();
+  await probe.goto(BASE + "/");
+  const landed = new URL(probe.url()).origin;
+  if (landed !== BASE) log("host redirect", BASE, "->", landed);
+  BASE = landed;
   log("BASE", BASE);
   // 1. layout at widths and schemes
   for (const scheme of ["light", "dark"]) {

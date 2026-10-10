@@ -1,6 +1,6 @@
 export const site = {
   name: "Aashir Javed",
-  url: "https://aashir.net",
+  url: "https://www.aashir.net",
   email: "me@aashir.net",
   location: "London",
   role: "Senior Engineer, Identity Platform, MoonPay",

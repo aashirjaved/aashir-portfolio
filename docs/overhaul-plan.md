@@ -847,17 +847,30 @@ Only after the hardcoded version has run for a few weeks and the analytics show 
 
 The site is the second click. The first is LinkedIn, and the third is GitHub.
 
+Updated 11 October 2026 to match the live site: first person, you as the subject, MoonPay as employer only. Paste these as they are.
+
 LinkedIn headline (current: "LLMs | Fintech | Web3 | Cloud | Full-stack"):
 
-> Compliance and risk infrastructure for crypto and private credit · Identity Platform, MoonPay · Advisory and build work
+> Senior Software Engineer · I build AI agents that work inside regulated finance · Open to advisory
 
-LinkedIn about, first two lines:
+LinkedIn about:
 
-> I build the part of a financial product that decides who may transact, where, and under what limits. KYC, sanctions screening, risk rules, authorisation, and the AI that prepares the file without making the call.
+> I build AI agents that work inside regulated finance.
+>
+> Nine years as a software engineer in fintech and crypto. I build agent harnesses (tools, memory, evals, guardrails) and the KYC, risk and payment systems they run alongside. I keep a person in charge of every decision the agent prepares.
+>
+> Day job: senior software engineer at MoonPay, on identity features.
+> On the side: Kleido, a sanctions and AML review platform live for a UK agency. An on-prem ID document reader. Magzi, a self hosted agent.
+>
+> Open to advisory and build work with private credit, DeFi and fintech teams. aashir.net
+
+LinkedIn experience entry for MoonPay, one line:
+
+> Senior Software Engineer on the identity team. Sign-in, KYC and risk features, plus agent tooling and the public agent skills.
 
 GitHub profile README, first line, replacing "Building production AI agents at the edge of crypto payments":
 
-> Compliance and risk infrastructure for crypto and private credit. Identity Platform at MoonPay. Builds Kleido, an AML review platform, and Magzi, a self hosted agent.
+> I build AI agents that work inside regulated finance. Senior software engineer. Builds Kleido, an AML review platform, and Magzi, a self hosted agent.
 
 Remove the streak widget and the skill icons. Keep the three links.
 
@@ -867,7 +880,7 @@ Remove the streak widget and the skill icons. Keep the three links.
 
 1. DNS result from 1.1.
 2. May the site name Lips MK, or should it say "a UK lettings agency"?
-3. Confirm the MoonPay scope sentence is acceptable to publish: "KYC, compliance, risk, authentication and authorisation, geolocation based rules engine".
+3. MoonPay is described as employer only: "sign-in, KYC and risk features". Confirm that is acceptable to publish.
 4. Cal.com or Calendly, and which calendar.
 5. Do prices go on the page, or only on the call? Default is on the call.
 6. Keep the Godzilla game at an unlisted `/play`, or remove it?

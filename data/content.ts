@@ -42,7 +42,7 @@ export const proof: ProofCard[] = [
   { name: "Magzi", line: "My agent harness: tools, memory, evals and self-tested code.", tier: "private", href: "/work/magzi", tag: "Agents" },
   { name: "Kleido", line: "Sanctions and AML review, live on a customer's own hardware.", tier: "private", href: "/work/kleido", tag: "Compliance" },
   { name: "ID Document Reader", line: "Passports, licences and bank statements, verified offline.", tier: "private", href: "/work/id-reader", tag: "KYC" },
-  { name: "MoonPay Identity", line: "Auth, KYC tiers, risk scoring and jurisdiction rules.", tier: "employer", href: "/work/moonpay", tag: "Crypto" },
+  { name: "Identity work", line: "As an engineer at MoonPay: sign-in, KYC and risk features.", tier: "employer", href: "/work/moonpay", tag: "Day job" },
   { name: "moonpay/skills", line: "Public skills that let AI agents move money.", tier: "verified", href: "https://github.com/moonpay/skills", tag: "Open source" },
   { name: "Whatify", line: "Financial diagnosis from public data. 300+ weekly users.", tier: "verified", href: "https://whatify.ai", tag: "Product" },
 ];
@@ -63,7 +63,7 @@ export const companies = [
 ];
 
 export const background: { years: string; where: string; what: string }[] = [
-  { years: "2025 to now", where: "MoonPay, London", what: "Senior Engineer, Identity Platform. KYC, compliance, risk, authentication, authorisation, jurisdiction rules." },
+  { years: "2025 to now", where: "MoonPay, London", what: "Senior Software Engineer on the identity team. Work on sign-in, KYC and risk features." },
   { years: "2024 to 2025", where: "Motorway, London", what: "Senior Engineer, Core Engineering. Auth split, Motorway Pro, 15% lower annual AWS cost." },
   { years: "2022 to 2024", where: "Deliveroo, London", what: "Software Engineer II, Customer Care. Agents in production, incident game days for 100+ engineers." },
   { years: "2021 to 2022", where: "Zalando, Helsinki", what: "Software Engineer, Fulfilment. Warehouse gateway at 1000+ requests a second, 15% lower latency." },
@@ -127,22 +127,22 @@ export const cases: CaseNote[] = [
   },
   {
     slug: "moonpay",
-    title: "MoonPay Identity",
-    dek: "Who may transact, where, and under what limits.",
+    title: "Identity work at MoonPay",
+    dek: "My day job, as a senior software engineer on the identity team.",
     tier: "employer",
     facts: [
-      ["Status", "Current"],
-      ["Team", "Identity Platform"],
-      ["Licences", "NY BitLicense, MiCA, FCA"],
+      ["Role", "Senior Software Engineer"],
+      ["Team", "Identity"],
       ["Since", "2025"],
+      ["Detail", "Internal, not shared"],
     ],
     does: [
-      "Authentication, KYC tiers and risk scoring",
-      "Sanctions screening and jurisdiction rules",
-      "Balancing conversion, fraud risk and compliance",
-      "Hackathon win and a live agent demo at the AI x Crypto meetup",
+      "I work on sign-in and authentication features",
+      "I work on KYC and risk checks in onboarding",
+      "I build with AI agents and contributed to the public agent skills",
+      "Our team won the popular vote at the internal AI hackathon",
     ],
-    transfers: "How a regulated crypto business keeps its controls moving at scale.",
+    transfers: "Hands-on experience shipping identity and onboarding features in a regulated product.",
   },
   {
     slug: "magzi",

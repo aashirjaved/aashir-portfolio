@@ -28,7 +28,7 @@ export const tierNote: Record<Tier, string> = {
 
 const kleido: Evidence = { label: "Kleido", href: "/work/kleido", tier: "private" };
 const reader: Evidence = { label: "ID Document Reader", href: "/work/id-reader", tier: "private" };
-const moonpay: Evidence = { label: "MoonPay scope", href: "/work/moonpay", tier: "employer" };
+const moonpay: Evidence = { label: "Identity work", href: "/work/moonpay", tier: "employer" };
 const magzi: Evidence = { label: "Magzi", href: "/work/magzi", tier: "private" };
 const skills: Evidence = { label: "moonpay/skills", href: "https://github.com/moonpay/skills", tier: "verified" };
 const engagement: Evidence = { label: "Engagement", href: "/#engagement" };
@@ -41,8 +41,8 @@ export const intents: Intent[] = [
     chip: "Compliance work",
     phrases: ["shipped in compliance", "track record", "what have you built", "what have you shipped", "compliance experience"],
     words: ["shipped", "compliance", "aml", "sanctions", "screening", "built", "proof", "portfolio", "work", "examples"],
-    answer: "Kleido, a live sanctions and AML platform, plus the identity platform at MoonPay.",
-    points: ["Kleido screens sanctions, PEP, ownership and adverse media, nightly", "An on-prem reader verifies passports, licences and bank statements", "At MoonPay: KYC, risk, auth and jurisdiction rules"],
+    answer: "Kleido, a live sanctions and AML platform I built, plus identity work in my day job.",
+    points: ["Kleido screens sanctions, PEP, ownership and adverse media, nightly", "An on-prem reader verifies passports, licences and bank statements", "As an engineer at MoonPay, I work on KYC, risk and sign-in"],
     evidence: [kleido, reader, moonpay],
   },
   {
@@ -99,7 +99,7 @@ export const intents: Intent[] = [
     question: "What is your experience in crypto and DeFi?",
     phrases: ["on chain", "smart contract", "crypto experience", "experience in crypto", "defi experience"],
     words: ["defi", "crypto", "onchain", "blockchain", "web3", "wallet", "wallets", "stablecoin", "stablecoins", "ethereum", "solana", "bitcoin", "moonpay"],
-    answer: "Crypto payments at MoonPay since 2025, on the identity side.",
+    answer: "I have worked as an engineer at MoonPay since 2025, on identity features.",
     points: ["Who may hold the token, and where", "What happens when a sanctioned wallet appears", "Off-chain records that match on-chain state"],
     evidence: [moonpay, skills],
   },
@@ -109,7 +109,7 @@ export const intents: Intent[] = [
     phrases: ["rules engine", "risk engine", "risk rules", "access control"],
     words: ["risk", "rules", "rule", "limits", "geolocation", "geo", "geofencing", "jurisdiction", "jurisdictions", "authorisation", "authorization", "authz", "authn", "authentication", "auth", "permissions", "fraud", "eligibility"],
     answer: "Yes, rules a compliance officer can read and change.",
-    points: ["Eligibility, limits, geography and jurisdiction", "Jurisdiction rules at MoonPay", "Auth split at Motorway lifted conversion 7%"],
+    points: ["Eligibility, limits, geography and jurisdiction", "Identity and risk features in my day job", "Auth split at Motorway lifted conversion 7%"],
     evidence: [moonpay, { label: "Motorway", href: "/#background", tier: "reported" }],
   },
   {
@@ -127,7 +127,7 @@ export const intents: Intent[] = [
     phrases: ["who are you", "about you", "where have you worked", "tell me about yourself"],
     words: ["background", "cv", "resume", "career", "history", "worked", "education", "degree", "deliveroo", "zalando", "motorway"],
     answer: "Senior engineer in London, nine years in regulated and high volume systems.",
-    points: ["Now: MoonPay identity platform", "Before: Motorway, Deliveroo, Zalando, Nordcloud", "Computer engineering at NUST, AWS certified"],
+    points: ["Now: senior software engineer at MoonPay", "Before: Motorway, Deliveroo, Zalando, Nordcloud", "Computer engineering at NUST, AWS certified"],
     evidence: [{ label: "Background", href: "/#background" }, { label: "CV", href: "/cv" }],
   },
   {

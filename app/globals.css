@@ -151,7 +151,7 @@
     animation: blink 1s steps(1) infinite;
   }
 
-  /* Headline lines slide up out of a mask on load. */
+  /* Headline lines rise into place on load. They are painted from the first frame so the headline sets LCP early. */
   .line {
     display: block;
     overflow: hidden;
@@ -160,9 +160,8 @@
   }
   .line > span {
     display: block;
-    transform: translateY(108%);
-    animation: line-up 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    animation-delay: calc(var(--i, 0) * 110ms + 80ms);
+    animation: line-up 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+    animation-delay: calc(var(--i, 0) * 70ms);
   }
 
   .fade-in {
@@ -200,7 +199,7 @@
 @keyframes blink { 50% { opacity: 0; } }
 @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @keyframes slide { from { transform: translateX(-10px); } to { transform: none; } }
-@keyframes line-up { to { transform: translateY(0); } }
+@keyframes line-up { from { opacity: 0.01; transform: translateY(0.2em); } }
 @keyframes fade-in { to { opacity: 1; } }
 @keyframes pulse-ring {
   0% { box-shadow: 0 0 0 0 rgb(var(--clear) / 0.5); }

@@ -40,7 +40,7 @@ jobs:
             echo "== $u"
             curl -sS -o /tmp/body.html -D - -L --max-redirs 5 "$u" | grep -iE "^(HTTP|server|location|x-vercel-id|x-github-request-id|age)" || true
             echo "title: $(grep -o '<title>[^<]*' /tmp/body.html | head -1)"
-            grep -q "Compliance and risk infrastructure for crypto and private credit" /tmp/body.html && echo "NEW SITE: yes" || echo "NEW SITE: no"
+            grep -q "I build AI agents" /tmp/body.html && echo "NEW SITE: yes" || { echo "NEW SITE: no"; exit 1; }
           done
       - uses: actions/setup-node@v4
         with:

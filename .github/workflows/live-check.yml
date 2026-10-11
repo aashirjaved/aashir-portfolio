@@ -67,6 +67,13 @@ jobs:
               const s = Object.fromEntries(Object.entries(d.categories).map(([k, v]) => [k, Math.round(v.score * 100)]));
               console.log(JSON.stringify(s), "LCP", d.audits["largest-contentful-paint"].displayValue, "CLS", d.audits["cumulative-layout-shift"].displayValue);
             }
+            const d0 = runs[1];
+            const el = d0.audits["largest-contentful-paint-element"]?.details?.items?.[0]?.items?.[0]?.node;
+            console.log("LCP element", el?.snippet, el?.selector);
+            const bd = d0.audits["lcp-breakdown-insight"]?.details?.items?.[0]?.items;
+            console.log("LCP breakdown", JSON.stringify(bd?.map(i => [i.subpart, Math.round(i.duration)])));
+            const shifts = d0.audits["layout-shifts"]?.details?.items ?? [];
+            console.log("Layout shifts", JSON.stringify(shifts.map(i => [i.node?.snippet?.slice(0, 80), i.score])));
             const lcp = runs.map(d => d.audits["largest-contentful-paint"].numericValue).sort((a, b) => a - b)[1];
             const a11y = Math.min(...runs.map(d => d.categories.accessibility.score));
             console.log("median LCP ms", Math.round(lcp));

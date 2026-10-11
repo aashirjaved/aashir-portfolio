@@ -26,8 +26,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F5F3EC" },
-    { media: "(prefers-color-scheme: dark)", color: "#0E0E0C" },
+    { media: "(prefers-color-scheme: light)", color: "#F8F7F3" },
+    { media: "(prefers-color-scheme: dark)", color: "#090909" },
   ],
 };
 
@@ -46,7 +46,15 @@ const person = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-GB" className={`${sans.variable} ${mono.variable}`}>
+    <html lang="en-GB" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+      <head>
+        <script
+          // Apply a saved theme before first paint so there is no flash.
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`,
+          }}
+        />
+      </head>
       <body className="min-h-screen bg-paper text-ink">
         <a
           href="#main"

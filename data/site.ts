@@ -4,9 +4,9 @@ export const site = {
   email: "me@aashir.net",
   location: "London",
   role: "Senior Software Engineer at MoonPay",
-  positioning: "I build AI agents that work inside regulated finance.",
+  positioning: "I build AI agents for regulated finance.",
   support:
-    "Senior software engineer. Agent harnesses, KYC, risk and payments, with nine years in fintech and crypto.",
+    "Senior software engineer in London. I build agent harnesses and the KYC, risk and payment systems around them.",
   description:
     "Aashir Javed, senior software engineer in London. I build AI agent harnesses and the KYC, risk and payment systems around them. Nine years in fintech and crypto.",
   links: {

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Footer } from "@/components/footer";
 import { PrintButton } from "@/components/print-button";
-import { background, credentials, proof } from "@/data/content";
+import { background, credentials, work } from "@/data/content";
 import { site } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -15,7 +15,7 @@ const skills =
   "TypeScript, Go, Rust, Python. Cloudflare Workers, AWS, PostgreSQL, Kubernetes, Terraform. KYC and KYB, sanctions and PEP screening, authentication and authorisation, rules engines, agents with retrieval, tool use and evaluation.";
 
 export default function CV() {
-  const selected = proof.filter((e) => e.tier !== "reported").slice(0, 5);
+  const selected = work.filter((e) => e.tier !== "reported").map((e) => ({ name: e.name, line: e.outcome, tier: e.tier }));
   return (
     <main id="main" data-cv className="mx-auto max-w-[680px] px-4 pt-10 sm:px-8 md:pt-16 print:max-w-none print:px-0 print:pt-0">
       <div className="flex items-start justify-between gap-6">
@@ -31,7 +31,7 @@ export default function CV() {
           </p>
         </div>
         <Image
-          src="/me.png"
+          src="/me.webp"
           alt="Aashir Javed"
           width={96}
           height={100}

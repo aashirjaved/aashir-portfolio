@@ -1,6 +1,6 @@
 # Aashir Javed
 
-I build AI agents that work inside regulated finance. Senior software engineer in London, currently employed at MoonPay on the identity team. I build agent harnesses (tools, memory, evals, guardrails) and the KYC, risk and payment systems they run alongside. Available for advisory and build work with private credit, DeFi and fintech teams.
+I build AI agents for regulated finance. Senior software engineer in London, currently employed at MoonPay on the identity team. I build agent harnesses (tools, memory, evals, guardrails) and the KYC, risk and payment systems they run alongside. Available for advisory and build work with private credit, DeFi and fintech teams.
 
 ## What I do
 

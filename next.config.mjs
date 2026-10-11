@@ -6,8 +6,8 @@ const nextConfig = {
   async redirects() {
     return [
       { source: "/resume", destination: "/cv", permanent: true },
-      { source: "/projects", destination: "/#evidence", permanent: true },
-      { source: "/experience", destination: "/#background", permanent: true },
+      { source: "/projects", destination: "/#work", permanent: true },
+      { source: "/experience", destination: "/#about", permanent: true },
       { source: "/about", destination: "/", permanent: true },
       { source: "/contact", destination: "/#contact", permanent: true },
       { source: "/writing/:path*", destination: "/", permanent: true },

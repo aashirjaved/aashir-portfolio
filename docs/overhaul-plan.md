@@ -6,7 +6,20 @@ Copy in this document is final draft v1 and follows the copy rules in section 9.
 
 ---
 
-## Visual redesign (10 October 2026, after review)
+## Visual redesign v3 (11 October 2026, design brief)
+
+Feedback on v2.5: still not what was asked. Reference sites were a giant-type dark portfolio and a bento portfolio. v3 follows the brief: immediate clarity, type as the hero, work first, motion with purpose, dark and light.
+
+- **Hero.** Uppercase Geist headline at display size: "I build AI agents for regulated finance." One sentence under it, two buttons, the question box. On the right, one terminal types `harness init`, then `harness run`, and opens out into four terminals running agents: KYC onboarding, payment risk scoring, ledger reconciliation, and a code agent that keeps changes only when tests pass. The data is illustrative and labelled as such. Under reduced motion it shows the four finished windows.
+- **Work.** Bento grid. Kleido is the large card with the animated agent run. ID Document Reader and Magzi are cards. Motorway (+7%), Deliveroo (2x) and identity work are stat or outcome cards. Each card is one outcome line and tags.
+- **Case studies.** Headline, challenge, role, three key decisions, outcome, facts, in that order. Identity work is written as the employee's work, not the employer's.
+- **About, process, contact.** About is 62 words with four stats. Process is three cards. Contact is a giant "Let's work together." band.
+- **Theme.** Dark by default with a light theme and a toggle, one green accent, no photo on the home page. The terminals stay dark in both themes.
+- Earlier sections on look and feel are superseded where they conflict with this.
+
+---
+
+## Visual redesign v2.5 (10 October 2026, after review)
 
 Feedback on v2: too much text, read like a newspaper, not visual or animated enough. Changes:
 

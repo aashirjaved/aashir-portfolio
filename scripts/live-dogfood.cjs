@@ -189,7 +189,7 @@ const fail = (m) => { failures++; log("FAIL", m); };
     }
   }
   log("internal links checked:", [...hrefs].filter((h) => h.startsWith("/")).length, "external:", [...hrefs].filter((h) => h.startsWith("http")).join(" "));
-  for (const [from, to] of [["/resume", "/cv"], ["/projects", "/#evidence"], ["/experience", "/#background"], ["/contact", "/#contact"], ["/writing", "/"], ["/about", "/"]]) {
+  for (const [from, to] of [["/resume", "/cv"], ["/projects", "/#work"], ["/experience", "/#about"], ["/contact", "/#contact"], ["/writing", "/"], ["/about", "/"]]) {
     const r = await p2.request.get(BASE + from, { maxRedirects: 0 });
     const loc = r.headers()["location"];
     if (r.status() < 300 || r.status() > 399 || !loc || !loc.endsWith(to)) fail(`redirect ${from} gave ${r.status()} ${loc}`);

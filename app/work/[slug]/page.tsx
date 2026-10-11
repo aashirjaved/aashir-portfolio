@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/footer";
 import { Reveal } from "@/components/reveal";
+import { ScreeningRun } from "@/components/screening-run";
 import { Tier } from "@/components/tier";
 import { TrackedLink } from "@/components/tracked-link";
 import { cases } from "@/data/content";
@@ -20,10 +21,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!c) return {};
   return {
     title: c.title,
-    description: `${c.dek} ${c.transfers}`,
+    description: c.headline,
     alternates: { canonical: `/work/${c.slug}` },
-    openGraph: { title: `${c.title}. ${c.dek}`, description: c.transfers, url: `${site.url}/work/${c.slug}` },
+    openGraph: { title: `${c.title}. ${c.headline}`, description: c.challenge, url: `${site.url}/work/${c.slug}` },
   };
+}
+
+function Block({ label, children, delay = 0 }: { label: string; children: React.ReactNode; delay?: number }) {
+  return (
+    <section data-reveal style={{ ["--delay" as string]: `${delay}ms` }} className="grid gap-4 border-t border-rule py-10 md:grid-cols-[200px_1fr] md:gap-10 md:py-14">
+      <h2 className="label text-mute">{label}</h2>
+      <div>{children}</div>
+    </section>
+  );
 }
 
 export default async function CasePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -35,66 +45,103 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
   return (
     <>
       <Reveal />
-      <main id="main" className="mx-auto max-w-[860px] px-4 pt-10 sm:px-8 md:pt-16">
-        <Link href="/#work" className="text-[14px] text-mute transition-colors hover:text-ink">
-          ← All work
+      <main id="main" className="mx-auto max-w-[1320px] px-5 pt-8 sm:px-10 md:pt-14">
+        <Link href="/#work" className="label text-mute transition-colors hover:text-ink">
+          ← Selected work
         </Link>
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          <h1 className="h-display text-[40px] md:text-[56px]">{c.title}</h1>
+
+        <div className="mt-10 flex flex-wrap items-center gap-3">
+          <span className="label text-mute">{c.tag}</span>
           <Tier tier={c.tier} />
         </div>
-        <p className="mt-3 text-[18px] text-ink-2 md:text-[20px]">{c.dek}</p>
+        <h1 className="display mt-5 text-[clamp(40px,9vw,128px)]">{c.title}</h1>
+        <p className="mt-8 max-w-[24ch] text-[28px] font-medium leading-[1.12] tracking-tight md:text-[48px]">
+          {c.headline}
+        </p>
 
-        <dl className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4">
-          {c.facts.map(([k, v], i) => (
-            <div key={k} data-reveal style={{ ["--delay" as string]: `${i * 70}ms` }} className="card p-4">
-              <dt className="mono text-mute">{k}</dt>
-              <dd className="mt-1.5 text-[14px] font-medium">{v}</dd>
+        <div className="mt-14 grid gap-4 md:grid-cols-3">
+          {c.outcome.map((o, i) => (
+            <div key={o.label} data-reveal style={{ ["--delay" as string]: `${i * 90}ms` }} className="card p-7">
+              <p className="display text-[56px] text-clear md:text-[80px]">{o.value}</p>
+              <p className="mt-3 text-[15px] text-ink-2">{o.label}</p>
             </div>
           ))}
-        </dl>
+        </div>
 
-        <section className="mt-12">
-          <p data-reveal className="eyebrow">What it does</p>
-          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-            {c.does.map((d, i) => (
-              <li key={d} data-reveal style={{ ["--delay" as string]: `${i * 70}ms` }} className="card flex gap-3 p-5">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-clear-soft text-clear">
-                  <svg aria-hidden width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2 5 8.5l4.5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                </span>
-                <span className="text-[15px]">{d}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
+        {c.slug === "kleido" ? (
+          <div data-reveal className="card mt-4 grid items-center gap-8 p-6 md:grid-cols-2 md:p-10">
+            <div>
+              <p className="eyebrow">What a run looks like</p>
+              <p className="mt-3 text-[22px] font-medium leading-snug tracking-tight md:text-[28px]">
+                Every check logged. A person approves.
+              </p>
+              <p className="mt-2 text-[14px] text-mute">Illustration with example names, not real data.</p>
+            </div>
+            <div className="rounded-[20px] bg-surface-2 p-4">
+              <ScreeningRun bare />
+            </div>
+          </div>
+        ) : null}
 
-        <section data-reveal className="mt-12 rounded-[24px] bg-ink p-7 text-paper md:p-10">
-          <p className="eyebrow !text-paper/60">What transfers to a fund</p>
-          <p className="h-section mt-3 text-[24px] md:text-[30px]">{c.transfers}</p>
-          <div className="mt-7 flex flex-wrap gap-3">
+        <div className="mt-16">
+          <Block label="Challenge">
+            <p className="max-w-[40ch] text-[20px] leading-snug text-ink-2 md:text-[26px]">{c.challenge}</p>
+          </Block>
+          <Block label="My role">
+            <p className="max-w-[40ch] text-[20px] leading-snug md:text-[26px]">{c.role}</p>
+          </Block>
+          <Block label="Key decisions">
+            <ol className="grid gap-4 md:grid-cols-3">
+              {c.decisions.map((d, i) => (
+                <li key={d.title} className="card p-6">
+                  <p className="display text-[40px] text-mute">{`0${i + 1}`}</p>
+                  <h3 className="mt-5 text-[20px] font-bold tracking-tight">{d.title}</h3>
+                  <p className="mt-2 text-[15px] text-ink-2">{d.body}</p>
+                </li>
+              ))}
+            </ol>
+          </Block>
+          <Block label="Details">
+            <dl className="grid gap-4 sm:grid-cols-2">
+              {c.facts.map(([k, v]) => (
+                <div key={k} className="border-l border-rule pl-5">
+                  <dt className="label text-mute">{k}</dt>
+                  <dd className="mt-1 text-[18px]">{v}</dd>
+                </div>
+              ))}
+            </dl>
+          </Block>
+        </div>
+
+        <section data-reveal className="mt-8 rounded-[32px] bg-clear p-8 text-paper md:p-14">
+          <p className="max-w-[16ch] text-[34px] font-bold leading-[1.02] tracking-tight md:text-[64px]">
+            Working on something like this?
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
             <TrackedLink
               event="book_call_click"
               data={{ from: c.slug }}
               href={site.booking}
-              className="rounded-full bg-paper px-5 py-3 text-[14px] font-medium text-ink transition-opacity hover:opacity-90"
+              className="label rounded-full bg-paper px-6 py-4 text-ink transition-opacity hover:opacity-90"
             >
               Book a diagnostic call
             </TrackedLink>
-            <Link href="/" className="rounded-full border border-paper/25 px-5 py-3 text-[14px] font-medium text-paper hover:border-paper/60">
+            <Link href="/" className="label rounded-full border border-paper/40 px-6 py-4 text-paper hover:border-paper">
               Ask another question
             </Link>
           </div>
-          {c.tier === "private" ? <p className="mt-5 text-[13px] text-paper/60">The code is private. I can walk you through it on a call.</p> : null}
+          {c.tier === "private" ? <p className="mt-6 text-[14px] opacity-80">The code is private. I can walk you through it on a call.</p> : null}
         </section>
 
-        <nav aria-label="Other work" className="mt-12">
-          <p className="eyebrow">More work</p>
-          <ul className="mt-4 grid gap-3 sm:grid-cols-3">
+        <nav aria-label="More work" className="mt-20">
+          <p className="label text-mute">More work</p>
+          <ul className="mt-5 grid gap-4 sm:grid-cols-3">
             {others.map((o) => (
               <li key={o.slug}>
-                <Link href={`/work/${o.slug}`} className="card group block h-full p-5 transition-all hover:-translate-y-0.5 hover:border-ink/25">
-                  <p className="text-[16px] font-semibold tracking-tight">{o.title}</p>
-                  <p className="mt-1 text-[13px] text-ink-2">{o.dek}</p>
+                <Link href={`/work/${o.slug}`} className="card group block h-full p-6 transition-all duration-500 hover:-translate-y-1 hover:border-ink/30">
+                  <p className="label text-mute">{o.tag}</p>
+                  <p className="mt-6 text-[22px] font-bold tracking-tight">{o.title}</p>
+                  <p className="mt-2 text-[15px] text-ink-2">{o.headline}</p>
                 </Link>
               </li>
             ))}

@@ -55,7 +55,7 @@ const subjects: Subject[] = [
 const STEP_MS = 650;
 const START_MS = 500;
 
-export function ScreeningRun() {
+export function ScreeningRun({ bare = false }: { bare?: boolean }) {
   const [index, setIndex] = useState(0);
   const [tick, setTick] = useState(0);
   const [reduced, setReduced] = useState(false);
@@ -96,7 +96,7 @@ export function ScreeningRun() {
   const progress = reduced ? 1 : Math.min(1, Math.max(0, (elapsed - START_MS) / (n * STEP_MS)));
 
   return (
-    <figure aria-label="Example of an agent running onboarding checks that end with a human approval" className="card relative overflow-hidden p-5 shadow-[0_30px_80px_-40px_rgba(16,18,17,0.35)] sm:p-6">
+    <figure aria-label="Example of an agent running onboarding checks that end with a human approval" className={bare ? "relative" : "card relative overflow-hidden p-5 sm:p-6"}>
       <div className="flex items-center justify-between">
         <span className="eyebrow flex items-center gap-2">
           <span className="pulse anim inline-block h-2 w-2 rounded-full bg-clear" aria-hidden />

@@ -1,51 +1,89 @@
 import type { Tier } from "./console";
 
-export type ServiceIcon = "onboarding" | "rules" | "ai";
-
-export const services: { title: string; line: string; icon: ServiceIcon; tags: string[] }[] = [
-  {
-    title: "Agent harnesses",
-    line: "Agents with tools, memory and evals, shipped to production.",
-    icon: "ai",
-    tags: ["Tool use", "Evals", "Guardrails"],
-  },
-  {
-    title: "Onboarding and KYC",
-    line: "Investor and borrower onboarding that passes audit.",
-    icon: "onboarding",
-    tags: ["KYC / KYB", "Sanctions", "Accreditation"],
-  },
-  {
-    title: "Risk and rules",
-    line: "Rules a regulator can read and you can change.",
-    icon: "rules",
-    tags: ["Eligibility", "Jurisdictions", "AuthZ"],
-  },
-];
-
-export const stats: { value: string; label: string; tier: Tier }[] = [
-  { value: "9 yrs", label: "regulated, high volume systems", tier: "reported" },
-  { value: "+7%", label: "conversion from an auth split", tier: "reported" },
-  { value: "2×", label: "CSAT with agents in production", tier: "reported" },
-  { value: "300+", label: "weekly users on a side product", tier: "verified" },
-];
-
-export interface ProofCard {
+export interface WorkCard {
   name: string;
-  line: string;
+  outcome: string;
+  detail: string;
+  tags: string[];
   tier: Tier;
-  href: string;
-  tag: string;
+  href?: string;
+  stat?: string;
+  kind: "feature" | "card" | "stat";
 }
 
-export const proof: ProofCard[] = [
-  { name: "Magzi", line: "My agent harness: tools, memory, evals and self-tested code.", tier: "private", href: "/work/magzi", tag: "Agents" },
-  { name: "Kleido", line: "Sanctions and AML review, live on a customer's own hardware.", tier: "private", href: "/work/kleido", tag: "Compliance" },
-  { name: "ID Document Reader", line: "Passports, licences and bank statements, verified offline.", tier: "private", href: "/work/id-reader", tag: "KYC" },
-  { name: "Identity work", line: "As an engineer at MoonPay: sign-in, KYC and risk features.", tier: "employer", href: "/work/moonpay", tag: "Day job" },
-  { name: "moonpay/skills", line: "Public skills that let AI agents move money.", tier: "verified", href: "https://github.com/moonpay/skills", tag: "Open source" },
-  { name: "Whatify", line: "Financial diagnosis from public data. 300+ weekly users.", tier: "verified", href: "https://whatify.ai", tag: "Product" },
+// Selected work. Outcome first, then the detail.
+export const work: WorkCard[] = [
+  {
+    kind: "feature",
+    name: "Kleido",
+    outcome: "A UK agency screens every landlord and tenant in one run, then again every night.",
+    detail: "Sanctions, PEP, ownership and adverse media. Live on the customer's own hardware.",
+    tags: ["Compliance", "Product", "2026"],
+    tier: "private",
+    href: "/work/kleido",
+  },
+  {
+    kind: "card",
+    name: "ID Document Reader",
+    outcome: "Passports and bank statements verified without leaving the building.",
+    detail: "Every field says how it was verified. Runs with networking off.",
+    tags: ["KYC", "Python", "2026"],
+    tier: "private",
+    href: "/work/id-reader",
+  },
+  {
+    kind: "card",
+    name: "Magzi",
+    outcome: "An agent that keeps its own code only when the tests pass.",
+    detail: "A self hosted agent harness with memory, evals and a supervisor.",
+    tags: ["Agents", "Rust", "2026"],
+    tier: "private",
+    href: "/work/magzi",
+  },
+  {
+    kind: "stat",
+    name: "Motorway",
+    stat: "+7%",
+    outcome: "Top of funnel conversion after splitting authentication from authorisation.",
+    detail: "Led the move to separate AuthN and AuthZ services.",
+    tags: ["Auth", "2025"],
+    tier: "reported",
+  },
+  {
+    kind: "stat",
+    name: "Deliveroo",
+    stat: "2×",
+    outcome: "Customer satisfaction once agents ran the care flow.",
+    detail: "Agents and fine tuned models on Go services, in production.",
+    tags: ["Agents", "2024"],
+    tier: "reported",
+  },
+  {
+    kind: "card",
+    name: "Identity work",
+    outcome: "Sign-in, KYC and risk features, shipped as an engineer at MoonPay.",
+    detail: "My day job since 2025.",
+    tags: ["Day job", "2025"],
+    tier: "employer",
+    href: "/work/moonpay",
+  },
 ];
+
+export const alsoBuilt = [
+  { name: "moonpay/skills", href: "https://github.com/moonpay/skills", note: "public agent skills" },
+  { name: "alchemy-infra", href: "https://github.com/aashirjaved/alchemy-infra", note: "infra as TypeScript for agents" },
+  { name: "Whatify", href: "https://whatify.ai", note: "300+ weekly users" },
+];
+
+export const stats: { value: string; label: string }[] = [
+  { value: "9", label: "years in fintech and crypto" },
+  { value: "+7%", label: "conversion, auth split" },
+  { value: "2×", label: "CSAT, agent-led care" },
+  { value: "300+", label: "weekly users, side product" },
+];
+
+export const about =
+  "I'm Aashir, a senior software engineer based in London. I build AI agents and the KYC, risk and payment systems around them. My work sits between engineering and compliance. Over nine years I have shipped in fintech and crypto, from marketplaces to a live AML platform. I keep a person in charge of every decision an agent prepares.";
 
 export const steps = [
   { name: "Call", terms: "45 min · free", line: "A written view of what to build, buy or skip." },
@@ -53,18 +91,11 @@ export const steps = [
   { name: "Lead", terms: "1 to 3 days a week", line: "I own one workstream with your team." },
 ];
 
-export const companies = [
-  { name: "MoonPay", years: "2025 to now" },
-  { name: "Motorway", years: "2024" },
-  { name: "Deliveroo", years: "2022" },
-  { name: "Zalando", years: "2021" },
-  { name: "Nordcloud", years: "2020" },
-  { name: "CARE", years: "2017" },
-];
+export const companies = ["MoonPay", "Motorway", "Deliveroo", "Zalando", "Nordcloud", "CARE"];
 
 export const background: { years: string; where: string; what: string }[] = [
   { years: "2025 to now", where: "MoonPay, London", what: "Senior Software Engineer on the identity team. Work on sign-in, KYC and risk features." },
-  { years: "2024 to 2025", where: "Motorway, London", what: "Senior Engineer, Core Engineering. Auth split, Motorway Pro, 15% lower annual AWS cost." },
+  { years: "2024 to 2025", where: "Motorway, London", what: "Senior Software Engineer, Core Engineering. Auth split, Motorway Pro, 15% lower annual AWS cost." },
   { years: "2022 to 2024", where: "Deliveroo, London", what: "Software Engineer II, Customer Care. Agents in production, incident game days for 100+ engineers." },
   { years: "2021 to 2022", where: "Zalando, Helsinki", what: "Software Engineer, Fulfilment. Warehouse gateway at 1000+ requests a second, 15% lower latency." },
   { years: "2020 to 2021", where: "Nordcloud, Helsinki", what: "Cloud Developer. Moved a transport client off a PHP monolith across AWS, Azure and GCP." },
@@ -79,88 +110,110 @@ export const rule = "The system prepares the file. A person makes the call.";
 export interface CaseNote {
   slug: string;
   title: string;
-  dek: string;
-  tier: Tier;
+  tag: string;
+  headline: string;
+  challenge: string;
+  role: string;
+  decisions: { title: string; body: string }[];
+  outcome: { value: string; label: string }[];
   facts: [string, string][];
-  does: string[];
-  transfers: string;
+  tier: Tier;
 }
 
 export const cases: CaseNote[] = [
   {
     slug: "kleido",
     title: "Kleido",
-    dek: "Sanctions and AML review for UK lettings agencies.",
-    tier: "private",
+    tag: "Compliance · 2026",
+    headline: "A UK agency screens every landlord and tenant in one run, then again every night.",
+    challenge:
+      "Letting agents must show that nobody on a file is sanctioned, politically exposed or hiding behind a company. They were doing it with spreadsheets and a subscription they half trusted.",
+    role: "Sole engineer. Product, backend, the screening pipeline and the appliance release.",
+    decisions: [
+      { title: "Checks are immutable", body: "A new run writes new checks, so the file is the audit trail." },
+      { title: "People make the call", body: "The system prepares the file. Staff decide every concern." },
+      { title: "It runs on their hardware", body: "An appliance with its own database keeps client data in the building." },
+    ],
+    outcome: [
+      { value: "Live", label: "for one UK agency" },
+      { value: "Nightly", label: "re-screening of everyone cleared" },
+      { value: "4", label: "sources in one run" },
+    ],
     facts: [
-      ["Status", "Live for one agency"],
-      ["Runs on", "Customer hardware"],
       ["Stack", "TypeScript, Go, PostgreSQL"],
-      ["Role", "Sole engineer"],
+      ["Status", "Live, private repository"],
     ],
-    does: [
-      "Open a case, add the people, collect their papers",
-      "Screen sanctions, PEP, company ownership and adverse media in one run",
-      "Re-screen everyone who cleared, every night",
-      "Immutable checks, human decisions, OFSI-ready reports",
-    ],
-    transfers: "Investor and borrower onboarding with a file a regulator can read.",
+    tier: "private",
   },
   {
     slug: "id-reader",
     title: "ID Document Reader",
-    dek: "Document intelligence that never leaves the building.",
-    tier: "private",
+    tag: "KYC · 2026",
+    headline: "Passports, licences and bank statements verified without leaving the building.",
+    challenge:
+      "KYC needs data from identity documents. Sending passports to a cloud vendor is a risk many teams cannot take.",
+    role: "Sole engineer. Document pipeline, verification rules and the API.",
+    decisions: [
+      { title: "Say how each field was verified", body: "Checksum, cross-check or cryptographic proof, labelled per field." },
+      { title: "Read the name twice", body: "The printed and machine readable names are cross-checked. A mismatch goes to review." },
+      { title: "No network, no logs", body: "One container with networking off. Nothing about a document is logged." },
+    ],
+    outcome: [
+      { value: "0", label: "network calls at runtime" },
+      { value: "5", label: "verification tiers per field" },
+      { value: "5", label: "document types read" },
+    ],
     facts: [
-      ["Status", "Demo on request"],
-      ["Runs on", "One container, no network"],
       ["Stack", "Python, OpenCV, ONNX"],
-      ["Role", "Sole engineer"],
+      ["Status", "Private, demo on request"],
     ],
-    does: [
-      "Reads passports, licences, bank statements and deeds",
-      "Labels every field with how it was verified",
-      "Cross-checks the printed name against the machine readable zone",
-      "Verifies passport chips against trusted anchors",
-    ],
-    transfers: "KYC document capture with no cloud vendor in the data path.",
-  },
-  {
-    slug: "moonpay",
-    title: "Identity work at MoonPay",
-    dek: "My day job, as a senior software engineer on the identity team.",
-    tier: "employer",
-    facts: [
-      ["Role", "Senior Software Engineer"],
-      ["Team", "Identity"],
-      ["Since", "2025"],
-      ["Detail", "Internal, not shared"],
-    ],
-    does: [
-      "I work on sign-in and authentication features",
-      "I work on KYC and risk checks in onboarding",
-      "I build with AI agents and contributed to the public agent skills",
-      "Our team won the popular vote at the internal AI hackathon",
-    ],
-    transfers: "Hands-on experience shipping identity and onboarding features in a regulated product.",
+    tier: "private",
   },
   {
     slug: "magzi",
     title: "Magzi",
-    dek: "A self hosted agent that has to be right without supervision.",
-    tier: "private",
+    tag: "Agents · 2026",
+    headline: "An agent that keeps its own code only when the tests pass.",
+    challenge:
+      "An always-on agent for a small business cannot be babysat, and one confident wrong answer costs trust.",
+    role: "Sole engineer. Agent loop, memory, tools, channels and the supervisor.",
+    decisions: [
+      { title: "Records first, model second", body: "Every turn pulls from its own stores. The model only does the thinking." },
+      { title: "Self-written code is gated", body: "It is kept only when a real interpreter or compiler passes its test." },
+      { title: "Scrub before sending", body: "Names and numbers become placeholders before any model sees them." },
+    ],
+    outcome: [
+      { value: "1", label: "Rust binary" },
+      { value: "2", label: "channels, WhatsApp and Telegram" },
+      { value: "Daily", label: "use" },
+    ],
     facts: [
-      ["Status", "Running daily"],
-      ["Runs on", "One Rust binary"],
-      ["Channels", "WhatsApp, Telegram"],
-      ["Role", "Sole engineer"],
+      ["Stack", "Rust, SQLite"],
+      ["Status", "Running daily, private repository"],
     ],
-    does: [
-      "Answers from its own records first, the model second",
-      "Keeps self-written code only when its own test passes",
-      "Turns production errors into tested repair tasks",
-      "Scrubs names and numbers before anything reaches a model",
+    tier: "private",
+  },
+  {
+    slug: "moonpay",
+    title: "Identity work",
+    tag: "Day job · 2025",
+    headline: "Shipping sign-in, KYC and risk features as an engineer at MoonPay.",
+    challenge:
+      "People have to get through sign-in and verification quickly without weakening fraud or compliance checks.",
+    role: "Senior software engineer on the identity team.",
+    decisions: [
+      { title: "Sign-in", body: "I work on authentication features." },
+      { title: "KYC and risk", body: "I work on verification and risk checks in onboarding." },
+      { title: "Agents", body: "I build with AI agents and contributed to the public agent skills." },
     ],
-    transfers: "Operations agents that log everything and fail safely.",
+    outcome: [
+      { value: "2025", label: "joined the team" },
+      { value: "Win", label: "popular vote, internal AI hackathon" },
+    ],
+    facts: [
+      ["Role", "Senior Software Engineer"],
+      ["Detail", "Internal, not shared"],
+    ],
+    tier: "employer",
   },
 ];

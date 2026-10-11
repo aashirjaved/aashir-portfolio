@@ -207,7 +207,7 @@ export function Console() {
   const shown = turns.slice(hidden);
 
   return (
-    <div className="mt-8">
+    <div className="mt-6">
       <form onSubmit={onSubmit} role="search" aria-label="Ask about Aashir">
         <label htmlFor="ask" className="sr-only">
           What do you want to know about me?
@@ -261,7 +261,7 @@ export function Console() {
         ))}
       </ul>
 
-      <p className="mono mt-3 hidden text-mute md:block">Press / to ask</p>
+      
 
       <div aria-live="polite" className="sr-only">
         {announce}

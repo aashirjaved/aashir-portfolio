@@ -1,6 +1,6 @@
 # Aashir Javed
 
-I build AI agents that work inside regulated finance. Senior software engineer on the Identity Platform team at MoonPay, London. I build agent harnesses (tools, memory, evals, guardrails) and the KYC, risk and payment systems they run alongside. Available for advisory and build work with private credit, DeFi and fintech teams.
+I build AI agents that work inside regulated finance. Senior software engineer in London, currently employed at MoonPay on the identity team. I build agent harnesses (tools, memory, evals, guardrails) and the KYC, risk and payment systems they run alongside. Available for advisory and build work with private credit, DeFi and fintech teams.
 
 ## What I do
 
@@ -14,7 +14,7 @@ Tiers: verified means public, private means real and shown on a call, employer m
 
 - Kleido (private): sanctions and AML review for UK lettings agencies, live for one agency on its own hardware. https://aashir.net/work/kleido
 - ID Document Reader (private): on-prem document intelligence for passports, licences, bank statements and chip reads, with per-field verification tiers. https://aashir.net/work/id-reader
-- MoonPay Identity Platform (employer): authentication, KYC tiers, risk scoring, sanctions screening, jurisdiction rules. https://aashir.net/work/moonpay
+- Identity work at MoonPay (employer): as an engineer on the identity team, working on sign-in, KYC and risk features. https://aashir.net/work/moonpay
 - Magzi (private): self hosted agent in Rust with retrieval first answers and test-gated self written code. https://aashir.net/work/magzi
 - moonpay/skills (verified): https://github.com/moonpay/skills
 - alchemy-infra (verified): https://github.com/aashirjaved/alchemy-infra

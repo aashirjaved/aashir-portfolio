@@ -96,11 +96,11 @@ export function ScreeningRun() {
   const progress = reduced ? 1 : Math.min(1, Math.max(0, (elapsed - START_MS) / (n * STEP_MS)));
 
   return (
-    <figure aria-label="Example of an automated screening run that ends with a human approval" className="card relative overflow-hidden p-5 shadow-[0_30px_80px_-40px_rgba(16,18,17,0.35)] sm:p-6">
+    <figure aria-label="Example of an agent running onboarding checks that end with a human approval" className="card relative overflow-hidden p-5 shadow-[0_30px_80px_-40px_rgba(16,18,17,0.35)] sm:p-6">
       <div className="flex items-center justify-between">
         <span className="eyebrow flex items-center gap-2">
           <span className="pulse anim inline-block h-2 w-2 rounded-full bg-clear" aria-hidden />
-          Screening run
+          Agent run · onboarding
         </span>
         <span className="mono text-mute">example</span>
       </div>
@@ -145,7 +145,7 @@ export function ScreeningRun() {
       </div>
 
       <div className="mt-4 flex items-center justify-between gap-3">
-        <span className="mono min-w-0 truncate text-mute">{allDone ? "Every check logged" : "Running checks…"}</span>
+        <span className="mono min-w-0 truncate text-mute">{allDone ? "Agent done · every step logged" : "Agent running checks…"}</span>
         <span
           className={`mono shrink-0 whitespace-nowrap rounded-full px-2.5 py-1 transition-all duration-300 ${
             approved ? "bg-clear text-white dark:text-black" : allDone ? "bg-surface-2 text-ink" : "bg-transparent text-transparent"

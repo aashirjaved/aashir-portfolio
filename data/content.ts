@@ -4,6 +4,12 @@ export type ServiceIcon = "onboarding" | "rules" | "ai";
 
 export const services: { title: string; line: string; icon: ServiceIcon; tags: string[] }[] = [
   {
+    title: "Agent harnesses",
+    line: "Agents with tools, memory and evals, shipped to production.",
+    icon: "ai",
+    tags: ["Tool use", "Evals", "Guardrails"],
+  },
+  {
     title: "Onboarding and KYC",
     line: "Investor and borrower onboarding that passes audit.",
     icon: "onboarding",
@@ -14,12 +20,6 @@ export const services: { title: string; line: string; icon: ServiceIcon; tags: s
     line: "Rules a regulator can read and you can change.",
     icon: "rules",
     tags: ["Eligibility", "Jurisdictions", "AuthZ"],
-  },
-  {
-    title: "AI in operations",
-    line: "Agents that prepare the file. People decide.",
-    icon: "ai",
-    tags: ["Documents", "Monitoring", "Evals"],
   },
 ];
 
@@ -39,10 +39,10 @@ export interface ProofCard {
 }
 
 export const proof: ProofCard[] = [
+  { name: "Magzi", line: "My agent harness: tools, memory, evals and self-tested code.", tier: "private", href: "/work/magzi", tag: "Agents" },
   { name: "Kleido", line: "Sanctions and AML review, live on a customer's own hardware.", tier: "private", href: "/work/kleido", tag: "Compliance" },
   { name: "ID Document Reader", line: "Passports, licences and bank statements, verified offline.", tier: "private", href: "/work/id-reader", tag: "KYC" },
   { name: "MoonPay Identity", line: "Auth, KYC tiers, risk scoring and jurisdiction rules.", tier: "employer", href: "/work/moonpay", tag: "Crypto" },
-  { name: "Magzi", line: "A self hosted agent that proves its own code before keeping it.", tier: "private", href: "/work/magzi", tag: "Agents" },
   { name: "moonpay/skills", line: "Public skills that let AI agents move money.", tier: "verified", href: "https://github.com/moonpay/skills", tag: "Open source" },
   { name: "Whatify", line: "Financial diagnosis from public data. 300+ weekly users.", tier: "verified", href: "https://whatify.ai", tag: "Product" },
 ];

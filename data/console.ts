@@ -70,7 +70,7 @@ export const intents: Intent[] = [
     question: "Where does AI belong in underwriting?",
     chip: "AI in underwriting",
     phrases: ["where does ai belong", "ai in underwriting", "ai agents", "language model", "machine learning"],
-    words: ["ai", "underwriting", "llm", "llms", "agent", "agents", "agentic", "model", "models", "automation", "automate", "gpt", "claude", "ml"],
+    words: ["ai", "harness", "harnesses", "underwriting", "llm", "llms", "agent", "agents", "agentic", "model", "models", "automation", "automate", "gpt", "claude", "ml"],
     answer: "In preparation, never in the decision.",
     points: ["Read documents, extract fields, flag gaps, draft the memo", "A person approves the borrower, the investor, the exception", "Every agent ships with evals, a log and a fallback"],
     evidence: [reader, magzi, { label: "Deliveroo care automation", href: "/#background", tier: "reported" }],

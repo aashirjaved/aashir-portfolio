@@ -4,11 +4,11 @@ export const site = {
   email: "me@aashir.net",
   location: "London",
   role: "Senior Engineer, Identity Platform, MoonPay",
-  positioning: "Compliance and risk infrastructure for crypto and private credit.",
+  positioning: "I build AI agents that work inside regulated finance.",
   support:
-    "KYC, sanctions, risk rules and AI agents, built at MoonPay scale. Ask me anything below.",
+    "Senior software engineer. Agent harnesses, KYC, risk and payments, with nine years in fintech and crypto, now at MoonPay.",
   description:
-    "Senior engineer on MoonPay's identity platform. KYC, sanctions screening, risk rules and authorisation. Advisory and build work for private credit, DeFi and fintech teams. London.",
+    "Aashir Javed, senior software engineer in London. I build AI agent harnesses and the KYC, risk and payment systems around them. Nine years in fintech and crypto, now at MoonPay.",
   links: {
     linkedin: "https://www.linkedin.com/in/aashirjaved/",
     github: "https://github.com/aashirjaved",

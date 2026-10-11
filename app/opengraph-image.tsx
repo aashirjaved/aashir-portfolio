@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
-export const alt = "Aashir Javed. Compliance and risk infrastructure for crypto and private credit.";
+export const alt = "Aashir Javed. I build AI agents that work inside regulated finance.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -30,10 +30,10 @@ export default async function OG() {
           Aashir Javed · London
         </div>
         <div style={{ fontSize: 72, lineHeight: 1.04, letterSpacing: -2.5, maxWidth: 980 }}>
-          Compliance and risk infrastructure for crypto and private credit.
+          I build AI agents that work inside regulated finance.
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 28, color: "#3E423E" }}>
-          <span>KYC · sanctions · risk rules · authorisation · AI agents</span>
+          <span>Agent harnesses · KYC · risk · payments</span>
           <span>aashir.net</span>
         </div>
       </div>

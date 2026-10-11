@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Console } from "@/components/console";
 import { Footer } from "@/components/footer";
@@ -26,10 +27,16 @@ export default function Home() {
         {/* Hero */}
         <section id="top" className="mx-auto grid max-w-wide grid-cols-1 items-center gap-10 px-4 pb-16 pt-10 sm:px-8 md:pt-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14 lg:pb-24 lg:pt-20">
           <div className="min-w-0">
-            <p className="inline-flex items-center gap-2 rounded-full border border-rule bg-surface px-3 py-1 text-[13px] text-ink-2">
-              <span className="pulse anim h-2 w-2 rounded-full bg-clear" aria-hidden />
-              Available for advisory and build work
-            </p>
+            <div className="inline-flex items-center gap-3 rounded-full border border-rule bg-surface py-1 pl-1 pr-4">
+              <span className="relative">
+                <Image src="/me.png" alt="" width={36} height={36} priority className="h-9 w-9 rounded-full object-cover" />
+                <span className="pulse anim absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-surface bg-clear" aria-hidden />
+              </span>
+              <span className="leading-tight">
+                <span className="block text-[14px] font-semibold">Aashir Javed</span>
+                <span className="block text-[12px] text-mute">Senior Software Engineer · open to advisory</span>
+              </span>
+            </div>
             <h1 className="h-display mt-6 text-[40px] sm:text-[52px] lg:text-[60px]">{site.positioning}</h1>
             <p className="mt-5 max-w-[46ch] text-[17px] text-ink-2 md:text-[18px]">{site.support}</p>
             <Console />
@@ -167,7 +174,7 @@ export default function Home() {
             <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-paper/10" />
             <div aria-hidden className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full border border-paper/10" />
             <p className="eyebrow !text-paper/60">Contact</p>
-            <h2 className="h-section mt-3 max-w-[18ch] text-[32px] md:text-[48px]">Building onboarding, risk or AI for a fund?</h2>
+            <h2 className="h-section mt-3 max-w-[18ch] text-[32px] md:text-[48px]">Building AI agents or fintech systems?</h2>
             <p className="mt-4 text-[16px] text-paper/70">Send the context. I reply within two working days.</p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <TrackedLink

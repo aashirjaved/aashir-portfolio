@@ -1,6 +1,6 @@
 # Aashir Javed
 
-Compliance and risk infrastructure for crypto and private credit. Senior Engineer on the Identity Platform team at MoonPay, London. Available for advisory and build work with private credit, DeFi and fintech teams.
+I build AI agents that work inside regulated finance. Senior software engineer on the Identity Platform team at MoonPay, London. I build agent harnesses (tools, memory, evals, guardrails) and the KYC, risk and payment systems they run alongside. Available for advisory and build work with private credit, DeFi and fintech teams.
 
 ## What I do
 

@@ -63,7 +63,7 @@ export default function Home() {
           <div className="mx-auto flex min-h-[calc(100svh-72px)] max-w-[1320px] flex-col px-5 pb-8 pt-6 sm:px-10 lg:pt-10">
             <div className="flex flex-1 flex-col justify-center gap-10 py-4 xl:grid xl:grid-cols-[minmax(0,1fr)_560px] xl:items-center xl:gap-10 xl:py-2">
               <div>
-              <p className="fade-in label flex items-center gap-2.5 text-ink-2" style={{ ["--d" as string]: "100ms" }}>
+              <p className="label flex items-center gap-2.5 text-ink-2">
                 <span className="pulse anim h-2 w-2 rounded-full bg-clear" aria-hidden />
                 London · Open to select projects
               </p>

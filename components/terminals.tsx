@@ -337,7 +337,7 @@ export function Terminals() {
           </Chrome>
         </div>
         <div
-          className={`-mx-5 flex snap-x gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:absolute sm:inset-0 sm:mx-0 sm:grid sm:grid-cols-2 sm:grid-rows-2 sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden ${
+          className={`-mx-5 flex snap-x gap-3 overflow-x-auto px-5 [scrollbar-width:none] sm:absolute sm:inset-0 sm:mx-0 sm:grid sm:grid-cols-2 sm:grid-rows-2 sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden ${
             split ? "" : "max-sm:hidden sm:pointer-events-none"
           }`}
         >

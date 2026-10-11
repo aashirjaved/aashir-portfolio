@@ -154,6 +154,7 @@
   /* Headline lines rise into place on load. They are painted from the first frame so the headline sets LCP early. */
   .line {
     display: block;
+    white-space: nowrap;
     overflow: hidden;
     padding-bottom: 0.06em;
     margin-bottom: -0.06em;

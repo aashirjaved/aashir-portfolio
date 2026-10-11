@@ -74,7 +74,7 @@ export default function Home() {
                   </span>
                 ))}
               </h1>
-              <p className="fade-in mt-6 max-w-[34ch] text-[20px] leading-snug text-ink-2 md:text-[24px]" style={{ ["--d" as string]: "800ms" }}>
+              <p className="mt-6 max-w-[21em] text-[20px] leading-snug text-ink-2 md:text-[24px]">
                 {site.support}
               </p>
               <div className="fade-in mt-6 flex flex-wrap gap-3" style={{ ["--d" as string]: "950ms" }}>
